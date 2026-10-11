@@ -1,0 +1,17 @@
+{
+  "name": "@motchi/config",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./typescript": "./tsconfig.base.json",
+    "./security": "./src/security.ts",
+    "./metadata": "./src/metadata.ts"
+  },
+  "peerDependencies": {
+    "next": ">=16 <17"
+  },
+  "dependencies": {
+    "@motchi/brand": "*"
+  }
+}

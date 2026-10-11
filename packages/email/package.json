@@ -1,0 +1,14 @@
+{
+  "name": "@motchi/email",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./validation": "./src/validation.ts"
+  },
+  "dependencies": {
+    "server-only": "^0.0.1",
+    "@motchi/brand": "*"
+  }
+}

@@ -1,0 +1,77 @@
+import { contactEmail } from "@motchi/brand";
+import { Container, Eyebrow } from "./primitives";
+export function PrivacyNotice() {
+  return (
+    <Container className="py-section">
+      <article className="max-w-reading">
+        <Eyebrow>Your information</Eyebrow>
+        <h1 className="text-section font-medium">Privacy notice</h1>
+        <div className="mt-10 space-y-8 leading-relaxed text-muted">
+          <section>
+            <h2 className="mb-3 text-xl font-semibold text-foreground">
+              When you contact us
+            </h2>
+            <p>
+              We collect the name, email address, company, area of interest,
+              message, and any website URL you choose to provide. We use this
+              information to respond, understand your needs, and discuss a
+              possible engagement. Please avoid sending sensitive or
+              confidential information through the form.
+            </p>
+          </section>
+          <section>
+            <h2 className="mb-3 text-xl font-semibold text-foreground">
+              How enquiries are handled
+            </h2>
+            <p>
+              Enquiries and acknowledgements are sent through Brevo to our
+              business inbox and the email address you provide. Our hosting
+              provider processes requests to operate and protect the website.
+              These providers may process information outside your country. We
+              do not sell your enquiry information or use it to subscribe you to
+              marketing.
+            </p>
+          </section>
+          <section>
+            <h2 className="mb-3 text-xl font-semibold text-foreground">
+              Storage and access
+            </h2>
+            <p>
+              Enquiries are retained in our business email system as needed to
+              respond, manage an engagement, and meet applicable obligations.
+              Temporary abuse-prevention records expire after an hour. You can
+              ask about access, correction, or deletion by contacting us;
+              applicable obligations may require us to retain some information.
+            </p>
+          </section>
+          <section>
+            <h2 className="mb-3 text-xl font-semibold text-foreground">
+              Browser storage
+            </h2>
+            <p>
+              The website does not include advertising or analytics trackers. A
+              session-storage flag remembers whether the short brand
+              introduction has played in your current browser session. Core
+              content and enquiry forms work without JavaScript.
+            </p>
+          </section>
+          <section>
+            <h2 className="mb-3 text-xl font-semibold text-foreground">
+              Questions
+            </h2>
+            <p>
+              Contact{" "}
+              <a
+                href={`mailto:${contactEmail}`}
+                className="text-primary underline underline-offset-4"
+              >
+                {contactEmail}
+              </a>{" "}
+              with privacy questions.
+            </p>
+          </section>
+        </div>
+      </article>
+    </Container>
+  );
+}

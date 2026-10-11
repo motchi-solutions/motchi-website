@@ -1,108 +1,87 @@
-# Mitchi Motcho Websites
+# Motchi Solutions
 
-🚀 **Mitchi Motcho Websites** is a local, community-driven web development service, focused on building **modern, stress-free websites for small businesses**.
-This repository powers our own site (`motchi.ca`) — designed with a **warm, trustworthy aesthetic** that reflects our mission: *we handle the tech so you can focus on your business.*
+Motchi makes technology accessible to businesses through practical advice, implementation, and continued support. This npm monorepo contains three related, independently deployed Next.js App Router sites.
 
----
+| App | Domain | Local URL |
+| --- | --- | --- |
+| `@motchi/solutions` | https://motchi.ca | http://localhost:3000 |
+| `@motchi/websites` | https://websites.motchi.ca | http://localhost:3001 |
+| `@motchi/consulting` | https://consulting.motchi.ca | http://localhost:3002 |
 
-## 🌟 Features
-
-* **Coming Soon landing page** with responsive design
-* **Custom Tailwind v4 theme** with Mitchi Motcho brand colors
-* **Responsive Navbar & Footer** (with hamburger menu on mobile via [`hamburger-react`](https://github.com/luukdv/hamburger-react))
-* **Contact Page** with smart email handling:
-
-  * On phones → opens `mailto:`
-  * On desktops → copies email to clipboard with toast feedback
-* Reusable **utility classes** (`btn`, `card`, `sectionKicker`, etc.)
-* Mobile-friendly, accessible, and designed for small business clarity
-
----
-
-## 🎨 Brand Colors (from `globals.css`)
-
-* `background` → `#FDFBF8` (cream)
-* `foreground` → `#333333` (charcoal)
-* `highlight` → `#E37A6D` (coral)
-* `highlight-dark` → `#7A3B3B` (garnet)
-* `highlight-light` → `#F2E6DC` (beige)
-
-Use them directly in Tailwind as:
-
-```html
-bg-background text-foreground
-bg-highlight hover:bg-highlight-dark
-text-highlight-dark
+```text
+apps/{solutions,websites,consulting}/
+  src/app/               Pages, metadata routes, contact POST endpoint
+  src/components/        Branch-specific sections
+  src/content/           Typed branch content where applicable
+  public/brand/          Approved logo assets
+packages/
+  ui/src/                Shared shell, primitives, contact/privacy content
+  brand/src/             Semantic CSS tokens and family configuration
+  email/src/             Server-only delivery, pure validation and templates
+  config/                TypeScript base, security headers, metadata helpers
+tests/                   Node-native utility and submission tests
+docs/                    Maintenance and launch guidance
+.github/                 CI and repository templates
 ```
 
----
+## Local setup
 
-## 🛠️ Tech Stack
-
-* [Next.js 15+](https://nextjs.org/) (App Router)
-* [Tailwind CSS v4](https://tailwindcss.com/)
-* [hamburger-react](https://github.com/luukdv/hamburger-react) for mobile nav
-* TypeScript (recommended)
-
----
-
-## ⚙️ Getting Started
-
-### 1. Clone the repository
+Use Node 24 (`.nvmrc`) and npm 11 or newer. Run commands from the repository root. For a fresh clone with the committed lockfile:
 
 ```bash
-git clone https://github.com/your-username/mitchi-motcho-websites.git
-cd mitchi-motcho-websites
+npm ci
+npm run dev:solutions
 ```
 
-### 2. Install dependencies
+Open another terminal for each additional app:
 
 ```bash
-npm install
-# or
-yarn install
+npm run dev:websites
+npm run dev:consulting
 ```
 
-### 3. Run the development server
+When package manifests change, run `npm install` to update the single root lockfile. Do not install independently inside apps. The root `npm run dev` starts Solutions.
 
 ```bash
-npm run dev
-# or
-yarn dev
+npm run lint
+npm run typecheck
+npm test
+npm run build
+npm run format
 ```
 
-Navigate to [http://localhost:3000](http://localhost:3000) to see the site.
+A full build builds all three apps sequentially. `npm run build --workspace=@motchi/websites` builds just that app. `npm run start --workspace=@motchi/websites` serves its completed production build on port 3001. Type checking uses lightweight Next route type generation, without compiling production assets.
 
----
+## Contact configuration
 
-## 📂 Project Structure
+Copy `.env.example` to each app's `.env.local` and fill:
 
-```
-app/
-  ├── page.tsx          # Coming Soon page
-  ├── contact/          # Contact page
-  │   └── page.tsx
-components/
-  ├── Navbar.tsx
-  └── Footer.tsx
-public/
-  └── logo.png          # Mitchi Motcho logo
-styles/
-  └── globals.css       # Tailwind v4 theme + utilities
-```
+- `BREVO_API_KEY`: transactional-email API key, server only.
+- `CONTACT_FROM_EMAIL`: Brevo-verified sender address.
+- `CONTACT_TO_EMAIL`: business inbox receiving enquiries.
+- `CONTACT_FORM_SECRET`: stable secret of at least 32 characters. Generate locally with `node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"`.
 
----
+Do not put production secrets in Git. Without email configuration, forms report unavailability and direct email remains usable. In production, an absent/short form secret disables the online form. Development has an ephemeral fallback secret for local layout testing. Actual submissions send real email when configured: test only with addresses you control.
 
-## 📬 Contact
+## Deployment
 
-💡 Want to learn more or work with us?
+Deploy each app as a separate Next.js project sharing this repository and lockfile; Vercel is a straightforward option. Set app roots and domains independently. Provide the four server environment variables to each environment. See [Deployment](docs/DEPLOYMENT.md). No hosting or email service has been configured by this implementation.
 
-* Website: [motchi.ca](https://motchi.ca)
-* Email: [contact@motchi.ca](mailto:contact@motchi.ca)
+## Content and assets awaiting approval
 
----
+- Approved MS/MW/MC SVG or PNG logos: current wordmarks are ordinary text; temporary geometric favicon is not a monogram.
+- Approved portfolio screenshots, image alternative text, project URLs, and confirmed service descriptions; current visuals explicitly say “Screenshot placeholder”.
+- Pop Tips and Motchi Verify / MTV names, status, descriptions, and launch URLs. Current records are planned, unavailable products.
+- Consulting case studies only after completion and publication permission.
+- Business contact address, privacy/retention practices, final copy, and legal review.
+- License choice: the existing **GPLv3** license has been preserved. Public visibility does not change its obligations. Confirm the intended license before publishing new work.
 
-## 📄 License
+## Developer documentation
 
-This project is licensed under the GNU V3 License.
+- [Architecture](docs/ARCHITECTURE.md) · [Brand system](docs/BRAND_SYSTEM.md)
+- [Development](docs/DEVELOPMENT.md) · [Deployment](docs/DEPLOYMENT.md)
+- [Email](docs/EMAIL.md) · [Security](docs/SECURITY.md)
+- [Accessibility](docs/ACCESSIBILITY.md) · [SEO](docs/SEO.md)
+- [Contributing](docs/CONTRIBUTING.md) · [GitHub setup checklist](docs/GITHUB_SETUP.md)
 
+Read [SECURITY.md](SECURITY.md) for reporting issues. Browser testing, full production builds, provider delivery, and DNS/HTTPS verification must be completed before launch; utility tests alone do not establish production readiness.

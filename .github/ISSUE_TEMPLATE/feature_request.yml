@@ -1,0 +1,13 @@
+name: Feature request
+description: Describe a business need or improvement.
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Proposed behavior and any constraints

@@ -1,28 +1,33 @@
 {
-  "name": "mitchimotcho_website",
+  "name": "motchi",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
-    "start": "next start",
-    "lint": "eslint"
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=24 <25",
+    "npm": ">=11"
   },
-  "dependencies": {
-    "hamburger-react": "^2.5.2",
-    "next": "15.5.0",
-    "react": "19.1.0",
-    "react-dom": "19.1.0"
+  "scripts": {
+    "dev": "npm run dev --workspace=@motchi/solutions",
+    "dev:solutions": "npm run dev --workspace=@motchi/solutions",
+    "dev:websites": "npm run dev --workspace=@motchi/websites",
+    "dev:consulting": "npm run dev --workspace=@motchi/consulting",
+    "build": "npm run build --workspaces --if-present",
+    "lint": "biome check .",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "node --conditions=react-server --test tests/*.test.mjs",
+    "format": "biome format --write ."
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.5.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "@biomejs/biome": "2.4.2"
   }
 }

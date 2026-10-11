@@ -1,0 +1,4 @@
+# Copy to .github/CODEOWNERS and replace with real GitHub usernames/teams.
+# * @your-maintainer
+# /packages/email/ @your-security-reviewer
+# /.github/workflows/ @your-maintainer

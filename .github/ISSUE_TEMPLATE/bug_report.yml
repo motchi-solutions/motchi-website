@@ -1,0 +1,23 @@
+name: Bug report
+description: Report a reproducible website or repository problem.
+body:
+  - type: markdown
+    attributes:
+      value: "Do not post secrets or personal enquiry data. Report security issues privately using SECURITY.md."
+  - type: dropdown
+    id: app
+    attributes:
+      label: Affected area
+      options: [Solutions, Websites, Consulting, Shared tooling]
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps, expected behavior, and actual behavior
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser, viewport, or Node/npm versions

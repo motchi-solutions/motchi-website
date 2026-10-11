@@ -1,0 +1,135 @@
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--brand-primary);
+  --color-secondary: var(--brand-secondary);
+  --color-accent: var(--brand-accent);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-surface: var(--surface);
+  --color-inverse: var(--inverse);
+  --font-sans: Arial, Helvetica, system-ui, sans-serif;
+  --font-display: Georgia, "Times New Roman", serif;
+  --container-shell: 80rem;
+  --container-reading: 42rem;
+  --spacing-section: clamp(4rem, 8vw, 8rem);
+  --text-hero: clamp(2.75rem, 6vw, 6rem);
+  --text-hero--line-height: 1.04;
+  --text-section: clamp(2rem, 4vw, 3.75rem);
+  --text-section--line-height: 1.12;
+}
+:root {
+  --gold: #d4af7c;
+  --burgundy: #5b0202;
+  --cream: #f4f0e6;
+  --charcoal: #171313;
+  --brand-primary: var(--burgundy);
+  --brand-secondary: var(--charcoal);
+  --brand-accent: var(--gold);
+  --background: var(--cream);
+  --foreground: var(--charcoal);
+  --inverse: var(--cream);
+  --muted: #655d55;
+  --border: #d7cfc1;
+  --surface: #fcfaf5;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+}
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--background);
+  color: var(--foreground);
+}
+::selection {
+  background: var(--brand-accent);
+  color: var(--charcoal);
+}
+:focus-visible {
+  outline: 3px solid var(--brand-primary);
+  outline-offset: 5px;
+}
+.bg-primary :focus-visible,
+.bg-secondary :focus-visible {
+  outline-color: var(--brand-accent);
+}
+input,
+select,
+textarea {
+  font: inherit;
+}
+textarea {
+  resize: vertical;
+}
+@keyframes motchi-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes motchi-trace {
+  from {
+    stroke-dashoffset: 650;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.brand-arrive {
+  animation: motchi-arrive 600ms ease-out both;
+}
+.flow-trace {
+  stroke-dasharray: 650;
+  animation: motchi-trace 1800ms ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    /* biome-ignore lint/complexity/noImportantStyles: Reduced-motion preferences override every enhancement. */
+    animation: none !important;
+    /* biome-ignore lint/complexity/noImportantStyles: Reduced-motion preferences override every enhancement. */
+    transition: none !important;
+  }
+}
+
+[data-branch="consulting"] {
+  --background: #f0ebdf;
+  --surface: #f8f5ed;
+}
+[data-branch="websites"] {
+  --background: #f8f5ee;
+  --surface: #ffffff;
+}
+@keyframes intro-line {
+  from {
+    transform: scaleX(0);
+    opacity: 1;
+  }
+  70% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+.intro-line {
+  transform-origin: left;
+  animation: intro-line 850ms ease-in-out both;
+}

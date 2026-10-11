@@ -1,4 +1,4 @@
-import { contactEmail } from "@motchi/brand";
+import { contactEmail } from "@motchi/config/sites";
 import { Container, Eyebrow } from "./primitives";
 export function PrivacyNotice() {
   return (

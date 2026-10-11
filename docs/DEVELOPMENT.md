@@ -27,7 +27,7 @@ Products: edit `apps/solutions/src/content/products.ts`. Available records requi
 
 Projects: edit `apps/websites/src/content/projects.ts`. Records have a stable ID, title, industry, services, description, website/case-study URLs, optional technologies/featured metadata, treatment, approved colour overrides, and named desktop/mobile/logo/hero/motion assets. The Work page alternates layouts by sequence, not by client identity. Null URLs and missing assets remain clearly labelled placeholders. See [MEDIA_ASSETS.md](MEDIA_ASSETS.md) for locations and examples.
 
-Environment files belong in each app directory, not only the repository root. Never check in values. If switching a port/domain, update scripts, family config, metadata, tests, and contact origin policy together.
+Environment files belong in each app directory, not only the repository root. Never check in values. If switching a port/domain, update the site URL overrides and scripts consistently; metadata and contact origin policy use the same resolved config.
 
 ## Verification
 
@@ -53,4 +53,10 @@ Prettier is the only formatter. `.prettierrc` uses standard defaults; `.prettier
 
 ## Adding pages
 
-Add the route in its owning app, export `pageMetadata`, and update `publicRoutes` and relevant navigation in `packages/brand/src/navigation.ts`. Keep homepage summaries short and link to the deeper route. Existing anchors need an identifiable heading and sticky-header offset. Verify desktop/mobile navigation, direct entry, refresh, unknown routes, metadata, and sitemap. Keep project case-study links absent until a real approved page exists.
+Add the route in its owning app, export `pageMetadata`, and update `publicRoutes` and relevant navigation in `packages/config/src/navigation.ts`. Keep homepage summaries short and link to the deeper route. Existing anchors need an identifiable heading and sticky-header offset. Verify desktop/mobile navigation, direct entry, refresh, unknown routes, metadata, and sitemap. Keep project case-study links absent until a real approved page exists.
+
+## Configuration and processes
+
+Read [CONFIGURATION.md](CONFIGURATION.md) before setting domains or email credentials. Local sister links default to the three local app ports; production uses published domains. Overrides are server-only and must be available at build and runtime. Restart development servers after changing environment variables.
+
+Edit branch processes in `apps/*/src/content/process.ts`; each step has a stable ID, title, concise summary, and optional-detail bullet list. Keep basic meaning in the summary. All branches use `InteractiveSteps`. Websites service scope lives in `content/services.ts`; detailed project records can optionally supply `details` while homepage previews stay concise. Test touch/keyboard, resizing, reduced motion, and native no-JavaScript disclosure after content changes.

@@ -399,3 +399,75 @@ p {
 [id] {
   scroll-margin-top: 1.5rem;
 }
+
+/* Shared process disclosure keeps every concise stage visible. */
+.step-journey {
+  display: grid;
+  gap: 1.5rem;
+}
+.step-stage {
+  display: flex;
+  gap: 1rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+}
+.step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--background);
+  color: var(--brand-primary);
+  font-size: var(--type-caption);
+}
+.step-stage[data-selected="true"] .step-number {
+  border-color: var(--brand-primary);
+  background: var(--brand-primary);
+  color: var(--inverse);
+}
+.step-control {
+  transition: color var(--motion-fast) var(--ease-standard);
+}
+.step-control:is(:hover, :focus-visible) {
+  color: var(--brand-primary);
+}
+.step-chevron {
+  transition: transform var(--motion-fast) var(--ease-standard);
+}
+.step-control[aria-expanded="true"] .step-chevron {
+  transform: rotate(180deg);
+}
+.step-detail {
+  animation: menu-arrive var(--motion-fast) var(--ease-standard) both;
+}
+@media (min-width: 1024px) {
+  [data-steps][data-enhanced="true"] .step-stage {
+    display: block;
+    border-top: 0;
+    position: relative;
+  }
+  [data-steps][data-enhanced="true"] .step-stage::before {
+    content: "";
+    position: absolute;
+    top: 2.75rem;
+    left: 0;
+    right: -1.5rem;
+    height: 1px;
+    background: var(--border);
+  }
+  [data-steps][data-enhanced="true"] .step-stage:last-child::before {
+    right: 0;
+  }
+  [data-steps][data-enhanced="true"] .step-number {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1rem;
+  }
+  [data-steps][data-enhanced="true"] .step-control {
+    font-size: 1.125rem;
+  }
+}

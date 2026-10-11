@@ -1,6 +1,8 @@
-import { family } from "@motchi/brand";
+import { getSites } from "@motchi/config/env";
+
 import { ButtonLink, Section, SectionHeading } from "@motchi/ui";
 export function Businesses() {
+  const family = getSites();
   return (
     <Section id="businesses">
       <SectionHeading
@@ -25,7 +27,7 @@ export function Businesses() {
             Business websites · Booking · Integrations
           </p>
           <div className="mt-auto">
-            <ButtonLink href={family.websites.domain}>
+            <ButtonLink href={family.websites.url}>
               Explore Motchi Websites
             </ButtonLink>
           </div>
@@ -44,7 +46,7 @@ export function Businesses() {
             AI · Data · Digital systems · Adoption
           </p>
           <div className="mt-auto">
-            <ButtonLink href={family.consulting.domain} light>
+            <ButtonLink href={family.consulting.url} light>
               Explore Motchi Consulting
             </ButtonLink>
           </div>

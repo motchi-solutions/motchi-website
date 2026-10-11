@@ -1,3 +1,5 @@
+import { services } from "@/content/services";
+import { processSteps } from "@/content/process";
 import { AnimatedLink, ContactCTA, Eyebrow, Section } from "@motchi/ui";
 import type { Metadata } from "next";
 import { Hero } from "@/components/hero";
@@ -27,25 +29,35 @@ export default function Home() {
               the structure.
             </p>
             <ul className="mt-7 divide-y divide-border">
-              <li>
-                <AnimatedLink
-                  href="/services"
-                  arrow
-                  className="min-h-16 w-full justify-between"
-                >
-                  Explore Our Services
-                </AnimatedLink>
-              </li>
-              <li>
-                <AnimatedLink
-                  href="/process"
-                  arrow
-                  className="min-h-16 w-full justify-between"
-                >
-                  See How We Work
-                </AnimatedLink>
-              </li>
+              {services.map((service) => (
+                <li key={service.id} className="py-5">
+                  <h3 className="text-h3 font-medium">{service.title}</h3>
+                  <p className="mt-2 leading-relaxed text-muted">
+                    {service.summary}
+                  </p>
+                </li>
+              ))}
             </ul>
+            <AnimatedLink
+              href="/services"
+              arrow
+              className="mt-5 min-h-12 text-primary"
+            >
+              Explore Our Services
+            </AnimatedLink>
+            <div className="mt-8 border-t border-border pt-6">
+              <h3 className="text-h3 font-medium">From Brief to Support</h3>
+              <p className="mt-3 text-small leading-relaxed text-muted">
+                {processSteps.map((step) => step.title).join(" → ")}
+              </p>
+              <AnimatedLink
+                href="/process"
+                arrow
+                className="mt-3 min-h-12 text-primary"
+              >
+                See How We Work
+              </AnimatedLink>
+            </div>
           </div>
         </div>
       </Section>

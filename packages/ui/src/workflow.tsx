@@ -1,4 +1,6 @@
-import { family } from "@motchi/brand";
+import { SiteLink } from "./site-link";
+import { getSites } from "@motchi/config/env";
+
 import { Arrow } from "./icons";
 import { MediaFrame } from "./media";
 import { Reveal } from "./reveal";
@@ -38,17 +40,18 @@ export function Workflow({
   );
 }
 export function SystemGraphic() {
+  const family = getSites();
   const directions = [
     {
       name: "Websites",
       description: "Your business, online.",
-      href: family.websites.domain,
+      href: family.websites.url,
       external: true,
     },
     {
       name: "Consulting",
       description: "Your systems, working better.",
-      href: family.consulting.domain,
+      href: family.consulting.url,
       external: true,
     },
     {
@@ -93,7 +96,7 @@ export function SystemGraphic() {
             <ul className="mt-8 space-y-4">
               {directions.map((direction, i) => (
                 <li key={direction.name}>
-                  <a
+                  <SiteLink
                     href={direction.href}
                     className="button-link flow-node flex min-h-14 items-center sm:min-h-20 justify-between gap-4 border border-inverse/20 bg-secondary p-4 hover:bg-primary"
                   >
@@ -107,7 +110,7 @@ export function SystemGraphic() {
                       </p>
                     </div>
                     <Arrow external={direction.external} />
-                  </a>
+                  </SiteLink>
                 </li>
               ))}
             </ul>

@@ -1,8 +1,11 @@
 "use client";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 // HTML is visible until an observer is installed. No-JS and failed enhancement stay readable.
 export function MotionEnhancements() {
+  const pathname = usePathname();
   useEffect(() => {
+    if (!pathname) return;
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (preference.matches || !("IntersectionObserver" in window)) return;
     const targets = Array.from(
@@ -45,6 +48,6 @@ export function MotionEnhancements() {
       document.removeEventListener("focusin", revealFocus);
       preference.removeEventListener("change", revealAll);
     };
-  }, []);
+  }, [pathname]);
   return null;
 }

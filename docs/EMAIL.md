@@ -30,3 +30,7 @@ Test Gmail/Outlook/Apple Mail, narrow screens, long names/URLs, images disabled,
 Per-process limits: 3 submissions per email hash/hour and 60 total/hour; maps have bounded size. Signed tokens, strict origins, honeypot, and body limits reduce abuse but do not prove visitor identity. An attacker may generate different emails or reach different instances. Set an edge IP/rate rule before production. Do not trust arbitrary `X-Forwarded-For`; use a hosting-verified signal if adding IP logic. CAPTCHA can be added as a server verification step before sending, if observed abuse warrants it. Use a shared store/queue for durable limits, retries, and replay handling at higher volume.
 
 Development without a configured form secret uses a process-shared temporary secret, including across page/API module copies and hot reload. This enables local native form validation while retaining the production secret requirement. Never use the development fallback as a production configuration.
+
+## Deployment-aware configuration
+
+Sender, inbox, API key, and signing secret are read through `getServerEnv()` before delivery. Missing/invalid email setup produces a controlled configuration result, not a successful send. Template footer links use the same validated Solutions origin as the site configuration. Production overrides reject localhost/HTTP; development can use local defaults. See [CONFIGURATION.md](CONFIGURATION.md). HTML attributes and user values remain escaped.

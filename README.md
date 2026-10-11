@@ -86,3 +86,5 @@ Deploy each app as a separate Next.js project sharing this repository and lockfi
 - [Contributing](docs/CONTRIBUTING.md) · [GitHub setup checklist](docs/GITHUB_SETUP.md)
 
 Read [SECURITY.md](SECURITY.md) for reporting issues. Browser review has covered the current layout and progressive enhancements; screen-reader/zoom review, final-asset media checks, full production builds, provider delivery, and DNS/HTTPS verification remain launch requirements. See the review record in docs/ACCESSIBILITY.md; utility tests alone do not establish production readiness.
+
+Configuration and environment setup: [docs/CONFIGURATION.md](docs/CONFIGURATION.md). All app `.env.local` files use the tracked root `.env.example`; public marketing content stays in source.

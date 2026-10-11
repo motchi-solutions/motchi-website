@@ -1,3 +1,4 @@
+import { SiteLink } from "./site-link";
 import type { ComponentProps, ReactNode } from "react";
 import { Arrow } from "./icons";
 import { Reveal } from "./reveal";
@@ -65,14 +66,14 @@ export function ButtonLink({
       : "border-primary bg-primary text-inverse hover:bg-secondary";
   const external = typeof href === "string" && /^https?:/.test(href);
   return (
-    <a
+    <SiteLink
       href={href}
       {...rest}
       className={`button-link inline-flex min-h-12 max-w-full items-center justify-between gap-5 border px-6 py-3 text-button font-semibold ${color} ${className}`}
     >
       <span>{children}</span>
       <Arrow external={external} />
-    </a>
+    </SiteLink>
   );
 }
 export function AnimatedLink({
@@ -83,13 +84,13 @@ export function AnimatedLink({
   ...props
 }: ComponentProps<"a"> & { external?: boolean; arrow?: boolean }) {
   return (
-    <a
+    <SiteLink
       {...props}
       className={`animated-link inline-flex items-center gap-3 ${className}`}
     >
       <span>{children}</span>
       {(external || arrow) && <Arrow external={external} />}
-    </a>
+    </SiteLink>
   );
 }
 export function SectionHeading({

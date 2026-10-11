@@ -6,12 +6,17 @@
   "exports": {
     "./typescript": "./tsconfig.base.json",
     "./security": "./src/security.ts",
-    "./metadata": "./src/metadata.ts"
+    "./metadata": "./src/metadata.ts",
+    "./sites": "./src/sites.ts",
+    "./navigation": "./src/navigation.ts",
+    "./env": "./src/env.ts",
+    "./validation": "./src/validation.ts"
   },
   "peerDependencies": {
     "next": ">=16 <17"
   },
   "dependencies": {
-    "@motchi/brand": "*"
+    "@motchi/brand": "*",
+    "server-only": "^0.0.1"
   }
 }

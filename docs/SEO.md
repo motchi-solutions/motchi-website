@@ -11,3 +11,5 @@ Solutions emits Organization JSON-LD. Branches emit ProfessionalService with a p
 Before launch: inspect rendered title/description/canonical, robots, sitemap, social image routes, icon, and JSON-LD. Validate structured data, verify Google Search Console/Bing site ownership, and submit each sitemap. Confirm permanent canonical-domain redirects and HTTPS. Review actual performance in a browser and collect field Core Web Vitals after sufficient traffic; do not publish unmeasured scores.
 
 Official metadata documentation: https://nextjs.org/docs/app/api-reference/functions/generate-metadata
+
+All URL-bearing metadata now resolves through `getSites()`. Production defaults live in `packages/config/src/sites.ts`; server-only origin overrides cover staging/local deployments. Noncanonical origins are noindexed and disallowed in robots. Set overrides consistently at build and runtime, since marketing HTML can be statically generated. Do not use noindex as authentication.

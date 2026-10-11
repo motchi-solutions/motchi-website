@@ -1,33 +1,19 @@
+import { ConfigurationError } from "@motchi/config/env";
+import { contactMessage } from "@motchi/email/feedback";
 import { ContactForm } from "./contact-form";
 import { Toast } from "./toast";
-import { type Branch, contactEmail, family } from "@motchi/brand";
+import { sites as family, contactEmail } from "@motchi/config/sites";
+import type { Branch } from "@motchi/brand";
 import { createContactToken } from "@motchi/email";
-import { type ContactInput, interests } from "@motchi/email/validation";
+import {
+  type ContactInput,
+  interests,
+  contactLimits,
+  contactFieldErrors as fieldErrors,
+} from "@motchi/email/validation";
 import { MailIcon } from "./icons";
 import { AnimatedLink, Container, Eyebrow } from "./primitives";
 
-const messages: Record<string, string> = {
-  sent: "Thank you. Your enquiry has been sent. We typically respond within 2–3 business days.",
-  partial:
-    "Your enquiry has been sent, but we could not send your confirmation email. There is no need to submit again. We typically respond within 2–3 business days.",
-  invalid:
-    "Your enquiry was not sent. Check the fields below and re-enter your details. You can also email us directly.",
-  expired:
-    "This form has expired or was submitted too quickly. Please re-enter your details and try again.",
-  unavailable:
-    "We could not confirm delivery. Please email us directly rather than submitting again.",
-  limited:
-    "Too many enquiries have been submitted. Please try again later or email us directly.",
-  busy: "A submission is already being processed or the service is busy. Please wait before trying again.",
-};
-const fieldErrors: Record<keyof ContactInput, string> = {
-  name: "Enter a name of up to 100 characters, without line breaks.",
-  email: "Enter a valid email address.",
-  company: "Use up to 150 characters without line breaks.",
-  interest: "Choose an area of interest.",
-  message: "Enter 10–5,000 characters.",
-  website: "Enter a complete http or https URL without account credentials.",
-};
 export function ContactPageContent({
   branch,
   status,
@@ -37,16 +23,20 @@ export function ContactPageContent({
   status?: string;
   fields?: string;
 }) {
-  const message = status ? messages[status] : undefined;
+  const message = contactMessage(status);
   const sent = status === "sent" || status === "partial";
   let token: string | null = null;
   try {
     token = createContactToken();
-  } catch {
-    /* Unconfigured deployments retain direct email access. */
+  } catch (error) {
+    console.error("Contact form unavailable", {
+      branch,
+      category:
+        error instanceof ConfigurationError ? error.category : "INTERNAL_ERROR",
+    });
   }
   const invalidFields = new Set(
-    fields.split(",").filter((key) => key in fieldErrors),
+    fields.split(",").filter((key) => Object.hasOwn(fieldErrors, key)),
   );
   const inputClass =
     "form-control mt-2 min-h-12 w-full rounded-none border border-border bg-background px-4 py-3 text-base";
@@ -134,7 +124,7 @@ export function ContactPageContent({
                     {...props("name")}
                     autoComplete="name"
                     required
-                    maxLength={100}
+                    maxLength={contactLimits.name}
                     className={inputClass}
                   />
                   {error("name")}
@@ -148,7 +138,7 @@ export function ContactPageContent({
                     type="email"
                     autoComplete="email"
                     required
-                    maxLength={254}
+                    maxLength={contactLimits.email}
                     className={inputClass}
                   />
                   {error("email")}
@@ -161,7 +151,7 @@ export function ContactPageContent({
                 <input
                   {...props("company")}
                   autoComplete="organization"
-                  maxLength={150}
+                  maxLength={contactLimits.company}
                   className={inputClass}
                 />
                 {error("company")}
@@ -199,7 +189,7 @@ export function ContactPageContent({
                     type="url"
                     autoComplete="url"
                     placeholder="https://"
-                    maxLength={500}
+                    maxLength={contactLimits.website}
                     className={inputClass}
                   />
                   {error("website")}
@@ -213,8 +203,8 @@ export function ContactPageContent({
                   {...props("message")}
                   rows={6}
                   required
-                  minLength={10}
-                  maxLength={5000}
+                  minLength={contactLimits.messageMin}
+                  maxLength={contactLimits.messageMax}
                   className={inputClass}
                 />
                 {error("message")}

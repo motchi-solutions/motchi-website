@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import test from "node:test";
-import { navigation, publicRoutes } from "../packages/brand/src/navigation.ts";
+import { navigation, publicRoutes } from "../packages/config/src/navigation.ts";
 
 test("public navigation resolves to real pages included in each sitemap", () => {
   for (const [branch, items] of Object.entries(navigation)) {

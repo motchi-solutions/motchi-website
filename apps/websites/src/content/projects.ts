@@ -13,6 +13,7 @@ export type Project = {
   url: string | null;
   caseStudyUrl?: string;
   technologies?: string[];
+  details?: { heading: string; description: string }[];
   featured?: boolean;
   // These default treatments use Motchi colours, not claimed client brand palettes.
   treatment: "paper" | "burgundy" | "ink";

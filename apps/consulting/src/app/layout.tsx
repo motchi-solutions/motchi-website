@@ -1,4 +1,4 @@
-import { navigation } from "@motchi/brand";
+import { navigation } from "@motchi/config/navigation";
 import { organizationSchema, siteMetadata } from "@motchi/config/metadata";
 import { Footer, Header, MotionEnhancements } from "@motchi/ui";
 import { fontVariables } from "@motchi/ui/fonts";

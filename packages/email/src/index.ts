@@ -1,9 +1,16 @@
 import "server-only";
 import { createHash, randomBytes } from "node:crypto";
-import { family } from "@motchi/brand";
+import {
+  ConfigurationError,
+  getFormSecret,
+  getServerEnv,
+  getSites,
+  type ServerEnv,
+} from "@motchi/config/env";
+import type { ContactStatus } from "./feedback.ts";
 import { createLimiter, signToken, verifyToken } from "./abuse.ts";
 import { acknowledgement, notification } from "./templates.ts";
-import { type ContactBranch, isEmail, validateContact } from "./validation.ts";
+import { type ContactBranch, validateContact } from "./validation.ts";
 
 const emailLimit = createLimiter(3, 3_600_000);
 const globalLimit = createLimiter(60, 3_600_000);
@@ -11,26 +18,14 @@ const submissions = new Map<
   string,
   { expires: number; state: "pending" | "sent" | "partial" }
 >();
-// Development page/API bundles and hot reload can load this module independently.
-// Keep their temporary secret in the same server process; production never uses it.
-const developmentState = globalThis as typeof globalThis & {
-  __motchiDevelopmentFormSecret?: string;
-};
-function formSecret(): string {
-  const secret = process.env.CONTACT_FORM_SECRET;
-  if (secret && secret.length >= 32) return secret;
-  if (process.env.NODE_ENV === "production")
-    throw new Error("CONTACT_FORM_SECRET must contain at least 32 characters.");
-  developmentState.__motchiDevelopmentFormSecret ??=
-    randomBytes(32).toString("hex");
-  return developmentState.__motchiDevelopmentFormSecret;
-}
 export function createContactToken(): string {
-  return signToken(formSecret(), Date.now(), randomBytes(16).toString("hex"));
+  return signToken(
+    getFormSecret(),
+    Date.now(),
+    randomBytes(16).toString("hex"),
+  );
 }
-async function sendMail(payload: object): Promise<void> {
-  const key = process.env.BREVO_API_KEY;
-  if (!key) throw new Error("Brevo is not configured.");
+async function sendMail(payload: object, key: string): Promise<void> {
   const result = await fetch("https://api.brevo.com/v3/smtp/email", {
     method: "POST",
     headers: {
@@ -72,16 +67,13 @@ async function limitedForm(request: Request): Promise<FormData> {
   for (const [key, value] of params) form.append(key, value);
   return form;
 }
-export async function handleContact(
+async function submitContact(
   request: Request,
   branch: ContactBranch,
 ): Promise<Response> {
-  const site = family[branch];
-  const origin =
-    process.env.NODE_ENV === "production"
-      ? site.domain
-      : new URL(request.url).origin;
-  const finish = (status: string, fields = "") => {
+  const site = getSites()[branch];
+  const origin = site.url;
+  const finish = (status: ContactStatus, fields = "") => {
     const url = new URL("/contact", origin);
     url.searchParams.set("status", status);
     if (fields) url.searchParams.set("fields", fields);
@@ -102,13 +94,19 @@ export async function handleContact(
   } catch {
     return finish("invalid");
   }
+  if (form.getAll("token").length !== 1 || form.getAll("fax").length > 1)
+    return finish("invalid");
   if (form.get("fax")) return finish("sent");
   const token = form.get("token");
   try {
-    if (typeof token !== "string" || !verifyToken(formSecret(), token))
+    if (typeof token !== "string" || !verifyToken(getFormSecret(), token))
       return finish("expired");
   } catch {
-    return finish("unavailable");
+    console.error("Contact configuration unavailable", {
+      branch,
+      category: "CONFIGURATION_ERROR",
+    });
+    return finish("configuration");
   }
   const { input, errors } = validateContact(form, branch);
   if (Object.keys(errors).length)
@@ -123,44 +121,89 @@ export async function handleContact(
     .update(input.email.toLowerCase())
     .digest("hex");
   if (!emailLimit(emailHash) || !globalLimit("all")) return finish("limited");
-  const from = process.env.CONTACT_FROM_EMAIL ?? "";
-  const to = process.env.CONTACT_TO_EMAIL ?? "";
-  if (!isEmail(from) || !isEmail(to) || !process.env.BREVO_API_KEY)
-    return finish("unavailable");
+  let environment: ServerEnv;
+  try {
+    environment = getServerEnv();
+  } catch (error) {
+    console.error("Contact configuration unavailable", {
+      branch,
+      category:
+        error instanceof ConfigurationError ? error.category : "INTERNAL_ERROR",
+    });
+    return finish("configuration");
+  }
+  const { fromEmail: from, toEmail: to, apiKey } = environment.contact;
+  const homeUrl = environment.sites.solutions.url;
   submissions.set(id, { expires: Date.now() + 3_600_000, state: "pending" });
   const sender = { email: from, name: site.name };
   try {
-    await sendMail({
-      sender,
-      to: [{ email: to }],
-      replyTo: { email: input.email, name: input.name },
-      ...notification(input, site.name),
-      headers: { "Idempotency-Key": `enquiry-${id}` },
-    });
+    await sendMail(
+      {
+        sender,
+        to: [{ email: to }],
+        replyTo: { email: input.email, name: input.name },
+        ...notification(input, site.name, homeUrl),
+        headers: { "Idempotency-Key": `enquiry-${id}` },
+      },
+      apiKey,
+    );
   } catch {
     submissions.delete(id);
     console.error("Contact notification failed", {
       branch,
+      category: "EMAIL_PROVIDER_ERROR",
       reference: id.slice(0, 12),
     });
     return finish("unavailable");
   }
   submissions.set(id, { expires: Date.now() + 3_600_000, state: "partial" });
   try {
-    await sendMail({
-      sender,
-      to: [{ email: input.email, name: input.name }],
-      replyTo: { email: to, name: site.name },
-      ...acknowledgement(input.name, site.name),
-      headers: { "Idempotency-Key": `ack-${id}` },
-    });
+    await sendMail(
+      {
+        sender,
+        to: [{ email: input.email, name: input.name }],
+        replyTo: { email: to, name: site.name },
+        ...acknowledgement(input.name, site.name, homeUrl),
+        headers: { "Idempotency-Key": `ack-${id}` },
+      },
+      apiKey,
+    );
     submissions.set(id, { expires: Date.now() + 3_600_000, state: "sent" });
     return finish("sent");
   } catch {
     console.error("Contact acknowledgement failed", {
       branch,
+      category: "EMAIL_PROVIDER_ERROR",
       reference: id.slice(0, 12),
     });
     return finish("partial");
+  }
+}
+
+export async function handleContact(
+  request: Request,
+  branch: ContactBranch,
+): Promise<Response> {
+  try {
+    return await submitContact(request, branch);
+  } catch (error) {
+    console.error("Contact request failed", {
+      branch,
+      category:
+        error instanceof ConfigurationError ? error.category : "INTERNAL_ERROR",
+      reference: randomBytes(6).toString("hex"),
+    });
+    // Source-controlled production fallback avoids reflecting an untrusted request Host.
+    const { sites } = await import("@motchi/config/sites");
+    const url = new URL("/contact", sites[branch].url);
+    url.searchParams.set(
+      "status",
+      error instanceof ConfigurationError ? "configuration" : "unavailable",
+    );
+    url.hash = "contact-form";
+    return new Response(null, {
+      status: 303,
+      headers: { Location: url.href, "Cache-Control": "no-store" },
+    });
   }
 }

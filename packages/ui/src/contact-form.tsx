@@ -24,50 +24,50 @@ export function ContactForm({ children }: { children: ReactNode }) {
   }, [pending]);
   return (
     <>
-    <form
-      action="/api/contact"
-      method="post"
-      className="space-y-6"
-      aria-busy={pending || undefined}
-      onSubmit={(event) => {
-        if (submitted.current) {
-          event.preventDefault();
-          return;
-        }
-        submitted.current = true;
-        setPending(true);
-      }}
-    >
-      {children}
-      <button
-        type="submit"
-        aria-disabled={pending || undefined}
-        className="button-link inline-flex min-h-12 w-full cursor-pointer items-center justify-between gap-5 bg-primary px-7 py-3 text-button font-semibold text-inverse hover:bg-secondary aria-disabled:cursor-wait sm:w-auto"
+      <form
+        action="/api/contact"
+        method="post"
+        className="space-y-6"
+        aria-busy={pending || undefined}
+        onSubmit={(event) => {
+          if (submitted.current) {
+            event.preventDefault();
+            return;
+          }
+          submitted.current = true;
+          setPending(true);
+        }}
       >
-        <span className="grid">
-          <span
-            className={
-              pending
-                ? "invisible col-start-1 row-start-1"
-                : "col-start-1 row-start-1"
-            }
-          >
-            Send Enquiry
+        {children}
+        <button
+          type="submit"
+          aria-disabled={pending || undefined}
+          className="button-link inline-flex min-h-12 w-full cursor-pointer items-center justify-between gap-5 bg-primary px-7 py-3 text-button font-semibold text-inverse hover:bg-secondary aria-disabled:cursor-wait sm:w-auto"
+        >
+          <span className="grid">
+            <span
+              className={
+                pending
+                  ? "invisible col-start-1 row-start-1"
+                  : "col-start-1 row-start-1"
+              }
+            >
+              Send Enquiry
+            </span>
+            <span
+              aria-hidden={!pending}
+              className={
+                pending
+                  ? "col-start-1 row-start-1"
+                  : "invisible col-start-1 row-start-1"
+              }
+            >
+              Sending…
+            </span>
           </span>
-          <span
-            aria-hidden={!pending}
-            className={
-              pending
-                ? "col-start-1 row-start-1"
-                : "invisible col-start-1 row-start-1"
-            }
-          >
-            Sending…
-          </span>
-        </span>
-        <Arrow />
-      </button>
-    </form>
+          <Arrow />
+        </button>
+      </form>
       <output
         aria-live="polite"
         className="block min-h-6 text-small text-muted"

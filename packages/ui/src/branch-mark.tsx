@@ -1,9 +1,11 @@
-import { type Branch, family, logos } from "@motchi/brand";
+import { SiteLink } from "./site-link";
+import { sites as family } from "@motchi/config/sites";
+import { type Branch, logos } from "@motchi/brand";
 import Image from "next/image";
 export function BranchMark({ branch }: { branch: Branch }) {
   const logo = logos[branch];
   return (
-    <a
+    <SiteLink
       href="/"
       className="brand-mark inline-flex min-h-12 items-center gap-3"
       aria-label={`${family[branch].name} home`}
@@ -26,6 +28,6 @@ export function BranchMark({ branch }: { branch: Branch }) {
           {branch}
         </span>
       </span>
-    </a>
+    </SiteLink>
   );
 }

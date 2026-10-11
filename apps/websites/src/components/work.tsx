@@ -50,10 +50,27 @@ export function Work({ featuredOnly = false }: { featuredOnly?: boolean }) {
                     <li key={service}>{service}</li>
                   ))}
                 </ul>
-                {project.technologies && (
+                {!featuredOnly && project.technologies && (
                   <p className="mt-3 text-xs text-muted">
                     {project.technologies.join(" · ")}
                   </p>
+                )}
+                {!featuredOnly && !!project.details?.length && (
+                  <details className="mt-5">
+                    <summary className="inline-flex min-h-11 cursor-pointer items-center text-small text-primary">
+                      Project Details
+                    </summary>
+                    <dl className="mt-4 space-y-4">
+                      {project.details.map((detail) => (
+                        <div key={detail.heading}>
+                          <dt className="font-medium">{detail.heading}</dt>
+                          <dd className="mt-2 text-small leading-relaxed text-muted">
+                            {detail.description}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </details>
                 )}
                 <div className="mt-7 flex flex-wrap items-center gap-4">
                   {project.url && (

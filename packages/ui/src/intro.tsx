@@ -1,5 +1,6 @@
 "use client";
-import { type Branch, family, introLogos } from "@motchi/brand";
+import { sites as family } from "@motchi/config/sites";
+import { type Branch, introLogos } from "@motchi/brand";
 import Image from "next/image";
 import type { CSSProperties } from "react";
 import { useEffect, useState } from "react";

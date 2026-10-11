@@ -1,11 +1,18 @@
-import { type Branch, family } from "@motchi/brand";
+import type { Branch } from "@motchi/brand";
+import { getSites } from "./env.ts";
+import { organization, sites as productionSites } from "./sites.ts";
 import type { Metadata } from "next";
 export function siteMetadata(branch: Branch): Metadata {
+  const family = getSites();
   const site = family[branch];
   return {
-    metadataBase: new URL(site.domain),
+    metadataBase: new URL(site.url),
     title: { default: site.name, template: `%s | ${site.name}` },
     description: site.description,
+    robots:
+      site.url === productionSites[branch].url
+        ? undefined
+        : { index: false, follow: false },
     openGraph: {
       type: "website",
       locale: "en_CA",
@@ -26,14 +33,16 @@ export function siteMetadata(branch: Branch): Metadata {
   };
 }
 export function organizationSchema(branch: Branch) {
+  const family = getSites();
   const site = family[branch];
   return {
     "@context": "https://schema.org",
     "@type": branch === "solutions" ? "Organization" : "ProfessionalService",
-    "@id": `${site.domain}/#organization`,
+    "@id": `${site.url}/#organization`,
     name: site.name,
-    url: site.domain,
-    email: "contact@motchi.ca",
+    url: site.url,
+    email: organization.contactEmail,
+    areaServed: organization.serviceRegion,
     description: site.description,
     ...(branch === "solutions"
       ? {}
@@ -41,7 +50,7 @@ export function organizationSchema(branch: Branch) {
           parentOrganization: {
             "@type": "Organization",
             name: family.solutions.name,
-            url: family.solutions.domain,
+            url: family.solutions.url,
           },
         }),
   };

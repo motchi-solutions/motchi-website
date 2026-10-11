@@ -1,4 +1,7 @@
-import { type Branch, contactEmail, family } from "@motchi/brand";
+import { SiteLink } from "./site-link";
+import { getSites } from "@motchi/config/env";
+import { contactEmail, organization } from "@motchi/config/sites";
+import type { Branch } from "@motchi/brand";
 import { BranchMark } from "./branch-mark";
 import { HeaderEnhancements } from "./header-enhancements";
 import { Arrow, MailIcon } from "./icons";
@@ -29,13 +32,13 @@ export function Header({
             <ul className="flex items-center gap-7 text-sm">
               {items.map((item) => (
                 <li key={item.href}>
-                  <a
+                  <SiteLink
                     className={`nav-link inline-flex min-h-12 items-center ${item.href === "/contact" ? "nav-contact gap-4 border border-border px-5 font-semibold" : ""}`}
                     href={item.href}
                   >
                     {item.label}
                     {item.href === "/contact" && <Arrow />}
-                  </a>
+                  </SiteLink>
                 </li>
               ))}
             </ul>
@@ -47,6 +50,7 @@ export function Header({
   );
 }
 export function Footer({ branch }: { branch: Branch }) {
+  const family = getSites();
   return (
     <footer className="border-t border-border py-14">
       <Container>
@@ -67,7 +71,7 @@ export function Footer({ branch }: { branch: Branch }) {
               {Object.entries(family).map(([key, site]) => (
                 <li key={key}>
                   <AnimatedLink
-                    href={site.domain}
+                    href={site.url}
                     external
                     className="min-h-11 text-sm"
                   >
@@ -81,22 +85,24 @@ export function Footer({ branch }: { branch: Branch }) {
             <p className="mb-4 text-xs font-semibold tracking-widest uppercase text-muted">
               A conversation, first
             </p>
-            <a
+            <SiteLink
               className="animated-link inline-flex min-h-12 items-center gap-3 text-sm"
               href={`mailto:${contactEmail}`}
             >
               <MailIcon />
               <span>{contactEmail}</span>
-            </a>
+            </SiteLink>
             <p className="mt-5 text-sm leading-relaxed text-muted">
-              Based in Toronto, Canada.
+              Based in {organization.locationLabel}.
               <br />
-              Working with businesses everywhere.
+              {organization.serviceRegion}.
             </p>
           </div>
         </div>
         <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6 text-xs text-muted">
-          <p>© {new Date().getFullYear()} Motchi Solutions</p>
+          <p>
+            © {new Date().getFullYear()} {organization.displayName}
+          </p>
           <div className="flex gap-6">
             <AnimatedLink href="/privacy" className="min-h-11">
               Privacy

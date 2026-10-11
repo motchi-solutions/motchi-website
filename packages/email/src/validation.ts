@@ -1,3 +1,21 @@
+import { isEmail } from "@motchi/config/validation";
+export { isEmail } from "@motchi/config/validation";
+export const contactLimits = {
+  name: 100,
+  email: 254,
+  company: 150,
+  website: 500,
+  messageMin: 10,
+  messageMax: 5000,
+} as const;
+export const contactFieldErrors = {
+  name: `Enter a name of up to ${contactLimits.name} characters, without line breaks.`,
+  email: "Enter a valid email address.",
+  company: `Use up to ${contactLimits.company} characters without line breaks.`,
+  interest: "Choose an area of interest.",
+  message: `Enter ${contactLimits.messageMin}–${contactLimits.messageMax.toLocaleString("en-CA")} characters.`,
+  website: "Enter a complete http or https URL without account credentials.",
+} as const;
 export const interests = {
   solutions: ["Websites", "Consulting", "Products", "Something else"],
   websites: [
@@ -34,34 +52,15 @@ function hasControls(value: string, multiline = false): boolean {
     );
   });
 }
-export function isEmail(value: string): boolean {
-  if (value.length > 254 || hasControls(value)) return false;
-  const parts = value.split("@");
-  if (parts.length !== 2) return false;
-  const [local, domain] = parts;
-  if (
-    local.length > 64 ||
-    !/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*$/i.test(
-      local,
-    )
-  )
-    return false;
-  const labels = domain.split(".");
-  return (
-    labels.length >= 2 &&
-    labels.every(
-      (label) =>
-        label.length <= 63 && /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i.test(label),
-    )
-  );
-}
 export function validateContact(
   form: FormData,
   branch: ContactBranch,
 ): { input: ContactInput; errors: ContactErrors } {
   const value = (key: string) => {
     const item = form.get(key);
-    return typeof item === "string" ? item.trim() : "";
+    return typeof item === "string"
+      ? item.trim().normalize("NFC").replace(/\r\n?/g, "\n")
+      : "";
   };
   const input = {
     name: value("name"),
@@ -72,33 +71,44 @@ export function validateContact(
     website: value("website"),
   };
   const errors: ContactErrors = {};
-  if (!input.name || input.name.length > 100 || hasControls(input.name))
-    errors.name = "Enter a name of up to 100 characters.";
-  if (!isEmail(input.email)) errors.email = "Enter a valid email address.";
-  if (input.company.length > 150 || hasControls(input.company))
-    errors.company = "Use up to 150 characters without line breaks.";
-  if (!(interests[branch] as readonly string[]).includes(input.interest))
-    errors.interest = "Choose an area of interest.";
   if (
-    input.message.length < 10 ||
-    input.message.length > 5000 ||
+    !input.name ||
+    input.name.length > contactLimits.name ||
+    hasControls(input.name)
+  )
+    errors.name = contactFieldErrors.name;
+  if (!isEmail(input.email)) errors.email = contactFieldErrors.email;
+  if (
+    input.company.length > contactLimits.company ||
+    hasControls(input.company)
+  )
+    errors.company = contactFieldErrors.company;
+  if (!(interests[branch] as readonly string[]).includes(input.interest))
+    errors.interest = contactFieldErrors.interest;
+  if (
+    input.message.length < contactLimits.messageMin ||
+    input.message.length > contactLimits.messageMax ||
     hasControls(input.message, true)
   )
-    errors.message = "Enter a message between 10 and 5,000 characters.";
+    errors.message = contactFieldErrors.message;
   if (input.website) {
     try {
       const url = new URL(input.website);
       if (
-        input.website.length > 500 ||
+        input.website.length > contactLimits.website ||
         !["https:", "http:"].includes(url.protocol) ||
         url.username ||
         url.password ||
         hasControls(input.website)
       )
-        errors.website = "Enter an http or https website URL.";
+        errors.website = contactFieldErrors.website;
     } catch {
-      errors.website = "Enter a complete website URL, including https://.";
+      errors.website = contactFieldErrors.website;
     }
+  }
+  for (const field of Object.keys(input) as (keyof ContactInput)[]) {
+    if (form.getAll(field).length > 1)
+      errors[field] = contactFieldErrors[field];
   }
   if (branch !== "websites") input.website = "";
   return { input, errors };

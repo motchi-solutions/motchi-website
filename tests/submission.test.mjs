@@ -119,6 +119,50 @@ test("native contact submission handles validation, delivery, partial failure, a
       },
     );
     await t.test(
+      "staging overrides govern accepted origins and email links together",
+      async () => {
+        calls = [];
+        process.env.SOLUTIONS_URL = "https://motchi.staging.example";
+        try {
+          assert.equal(
+            status(await handleContact(makeRequest(), "solutions")),
+            "invalid",
+          );
+          assert.equal(calls.length, 0);
+          const original = makeRequest();
+          const response = await handleContact(
+            new Request("https://motchi.staging.example/api/contact", {
+              method: "POST",
+              headers: {
+                origin: "https://motchi.staging.example",
+                "content-type": "application/x-www-form-urlencoded",
+              },
+              body: await original.text(),
+            }),
+            "solutions",
+          );
+          assert.equal(status(response), "sent");
+          assert.equal(
+            new URL(response.headers.get("location")).origin,
+            "https://motchi.staging.example",
+          );
+          assert.equal(calls.length, 2);
+          assert.ok(
+            calls.every((mail) =>
+              mail.htmlContent.includes(
+                'href="https://motchi.staging.example"',
+              ),
+            ),
+          );
+          assert.ok(
+            calls[1].textContent.includes("https://motchi.staging.example"),
+          );
+        } finally {
+          delete process.env.SOLUTIONS_URL;
+        }
+      },
+    );
+    await t.test(
       "acknowledgement failure reports that enquiry was sent and avoids a resend",
       async () => {
         calls = [];
@@ -155,7 +199,7 @@ test("native contact submission handles validation, delivery, partial failure, a
         delete process.env.BREVO_API_KEY;
         assert.equal(
           status(await handleContact(makeRequest(), "solutions")),
-          "unavailable",
+          "configuration",
         );
         assert.equal(calls.length, 1);
       },

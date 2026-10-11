@@ -29,3 +29,9 @@ See root SECURITY.md for the private reporting route. Confirm the monitored addr
 ## User-facing failures
 
 Rendering errors use route and root error boundaries with generic messages; only Next's opaque digest may be shown for support. Never render `error.message`, stack traces, or provider payloads. Next's server reporting retains unexpected error diagnostics; contact logs continue to contain only branch and an opaque reference. Contact sending feedback uses native navigation, does not persist submitted values, and never treats a client timeout as proof that delivery failed. Validation errors remain attached to fields; success notifications supplement permanent server feedback.
+
+## Environment boundaries
+
+Deployment URL resolution and all delivery credentials are centralized in the guarded `@motchi/config/env` module. Browser-safe `sites`/navigation exports contain only source-controlled public facts. Production site overrides must be credential-free HTTPS origins and cannot be loopback URLs. The same resolved branch origin governs metadata, rendered links, and accepted contact POST origin; configured overrides never broaden the origin check to arbitrary hosts. Configuration exceptions contain only variable names, and users receive controlled status messages.
+
+Duplicate contact fields are rejected; normalized input still passes authoritative server validation. All anti-abuse limits, signing, escaping, and provider calls remain server-side. Failure logs distinguish configuration, provider, and unexpected internal errors without raw errors or submitted messages. The existing bounded process-memory rate/replay limitations and required hosting edge rules remain unchanged.

@@ -1,3 +1,5 @@
+import { capabilities } from "@/content/capabilities";
+import { engagement } from "@/content/process";
 import { AnimatedLink, ContactCTA, Eyebrow, Section } from "@motchi/ui";
 import type { Metadata } from "next";
 import { Hero } from "@/components/hero";
@@ -17,6 +19,11 @@ export default function Home() {
                 Is Getting in the Way.
               </span>
             </h2>
+            <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-3 text-small text-primary">
+              {capabilities.map((capability) => (
+                <li key={capability.id}>{capability.title}</li>
+              ))}
+            </ul>
             <AnimatedLink
               href="/capabilities"
               arrow
@@ -70,9 +77,8 @@ export default function Home() {
           </div>
           <div>
             <p className="max-w-lg text-body-lg leading-relaxed text-muted">
-              Understand, assess, design, implement, adopt, support, improve. We
-              agree on the scope and stay involved through the stages your team
-              needs.
+              {engagement.map((step) => step.title).join(" → ")}. We agree on
+              the scope and stay involved through the stages your team needs.
             </p>
             <AnimatedLink
               href="/approach"

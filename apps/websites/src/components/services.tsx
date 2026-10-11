@@ -1,3 +1,4 @@
+import { services } from "@/content/services";
 import { Eyebrow, Section } from "@motchi/ui";
 export function Services() {
   return (
@@ -18,30 +19,28 @@ export function Services() {
           </p>
         </div>
         <div className="lg:col-span-3">
-          {[
-            [
-              "Design & Development",
-              "A new site or a considered redesign. Clear structure, your own visual identity, and layouts that work across screens.",
-            ],
-            [
-              "Booking & Connected Flows",
-              "Help customers book, buy, or get in touch. Connect the website with the tools your business already uses.",
-            ],
-            [
-              "Performance & Continued Support",
-              "Build accessibility, performance, and SEO into the foundations. Stay supported through hosting, maintenance, and future changes.",
-            ],
-          ].map(([title, description], i) => (
+          {services.map((service, i) => (
             <article
-              key={title}
+              key={service.id}
+              id={service.id}
               className="grid grid-cols-[2rem_1fr] gap-4 border-t border-border py-7"
             >
               <span className="pt-1 text-xs text-primary">0{i + 1}</span>
               <div>
-                <h3 className="text-xl font-semibold">{title}</h3>
+                <h3 className="text-xl font-semibold">{service.title}</h3>
                 <p className="mt-3 max-w-lg leading-relaxed text-muted">
-                  {description}
+                  {service.summary}
                 </p>
+                <details className="mt-4">
+                  <summary className="inline-flex min-h-11 cursor-pointer items-center text-small text-primary">
+                    Explore the Scope
+                  </summary>
+                  <ul className="mt-3 space-y-3 text-small leading-relaxed text-muted">
+                    {service.details.map((detail) => (
+                      <li key={detail}>{detail}</li>
+                    ))}
+                  </ul>
+                </details>
               </div>
             </article>
           ))}

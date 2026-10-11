@@ -1,7 +1,10 @@
 "use client";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 export function HeaderEnhancements() {
+  const pathname = usePathname();
   useEffect(() => {
+    if (!pathname) return;
     const header = document.querySelector<HTMLElement>("[data-header]");
     if (!header) return;
     const links = Array.from(
@@ -48,6 +51,6 @@ export function HeaderEnhancements() {
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
     };
-  }, []);
+  }, [pathname]);
   return null;
 }

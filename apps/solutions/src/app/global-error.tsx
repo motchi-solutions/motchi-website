@@ -1,4 +1,5 @@
 "use client";
+import { contactEmail } from "@motchi/config/sites";
 // Root-layout failures cannot depend on the shared shell, fonts, or styles.
 export default function GlobalError({ reset }: { reset: () => void }) {
   return (
@@ -15,7 +16,7 @@ export default function GlobalError({ reset }: { reset: () => void }) {
         <main>
           <h1>We Couldn’t Load This Page</h1>
           <p>
-            Please try again, or email contact@motchi.ca. If you were sending an
+            Please try again, or email {contactEmail}. If you were sending an
             enquiry, check for confirmation before submitting again.
           </p>
           <button
@@ -27,7 +28,7 @@ export default function GlobalError({ reset }: { reset: () => void }) {
           </button>
           <p>
             <a href="/">Back to Home</a> ·{" "}
-            <a href="mailto:contact@motchi.ca">Email Motchi</a>
+            <a href={`mailto:${contactEmail}`}>Email Motchi</a>
           </p>
         </main>
       </body>

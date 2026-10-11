@@ -1,5 +1,6 @@
 export const capabilities = [
   {
+    id: "ai",
     title: "AI Consulting",
     problem: "Where would AI actually help?",
     description:
@@ -12,6 +13,7 @@ export const capabilities = [
     ],
   },
   {
+    id: "databricks",
     title: "Databricks Consulting",
     problem: "Make the platform work for your team.",
     description:
@@ -24,6 +26,7 @@ export const capabilities = [
     ],
   },
   {
+    id: "data-analytics",
     title: "Data & Analytics",
     problem: "Get from scattered data to useful answers.",
     description:
@@ -36,6 +39,7 @@ export const capabilities = [
     ],
   },
   {
+    id: "website-digital",
     title: "Website & Digital Consulting",
     problem: "Connect the customer journey with the work behind it.",
     description:
@@ -48,6 +52,7 @@ export const capabilities = [
     ],
   },
   {
+    id: "technology-strategy",
     title: "Technology Strategy",
     problem: "Choose a direction before committing to a platform.",
     description:
@@ -60,6 +65,7 @@ export const capabilities = [
     ],
   },
   {
+    id: "implementation-adoption",
     title: "Implementation & Adoption",
     problem: "Move from an agreed plan to everyday use.",
     description:
@@ -70,42 +76,5 @@ export const capabilities = [
       "Team Adoption",
       "Continued Improvement",
     ],
-  },
-] as const;
-export const engagement = [
-  {
-    title: "Understand",
-    description:
-      "Listen to the people doing the work. Agree on the business problem and what needs to change.",
-  },
-  {
-    title: "Assess",
-    description:
-      "Review the current systems, constraints, and opportunities before choosing a direction.",
-  },
-  {
-    title: "Design",
-    description:
-      "Set out an appropriate solution, clear responsibilities, and a practical implementation plan.",
-  },
-  {
-    title: "Implement",
-    description:
-      "Build the working solution, with your team involved in the decisions that matter.",
-  },
-  {
-    title: "Adopt",
-    description:
-      "Help people bring the solution into daily work, with guidance and room for questions.",
-  },
-  {
-    title: "Support",
-    description:
-      "Stay available for maintenance, troubleshooting, and the questions that follow delivery.",
-  },
-  {
-    title: "Improve",
-    description:
-      "Refine the solution as your business grows and the needs become clearer.",
   },
 ] as const;

@@ -13,7 +13,8 @@ export function Capabilities() {
       <div>
         {capabilities.map((capability, i) => (
           <article
-            key={capability.title}
+            key={capability.id}
+            id={capability.id}
             className="capability-row grid gap-5 border-t border-border px-5 py-8 sm:px-7 lg:grid-cols-12 lg:gap-10"
           >
             <div className="flex items-baseline gap-4 lg:col-span-4">

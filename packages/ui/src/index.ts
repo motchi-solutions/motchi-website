@@ -18,3 +18,5 @@ export { Footer, Header, type NavItem } from "./shell";
 export { SystemGraphic, Workflow } from "./workflow";
 
 export { PageHero } from "./page-hero";
+
+export { InteractiveSteps, type ProcessStep } from "./interactive-steps";

@@ -1,4 +1,5 @@
 "use client";
+import { SiteLink } from "./site-link";
 import { useEffect, useRef, useState } from "react";
 import { Arrow } from "./icons";
 export type NavItem = { label: string; href: string };
@@ -81,7 +82,7 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
         <ul>
           {items.map((item) => (
             <li key={item.href}>
-              <a
+              <SiteLink
                 href={item.href}
                 className="nav-link flex min-h-12 items-center justify-between px-3 text-base"
                 onClick={() => {
@@ -90,7 +91,7 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
               >
                 {item.label}
                 <Arrow external className="text-muted" />
-              </a>
+              </SiteLink>
             </li>
           ))}
         </ul>

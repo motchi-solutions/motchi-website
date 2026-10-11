@@ -1,5 +1,5 @@
 "use client";
-import { contactEmail } from "@motchi/brand";
+import { contactEmail } from "@motchi/config/sites";
 export function ErrorState({
   reset,
   reference,

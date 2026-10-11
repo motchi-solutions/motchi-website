@@ -6,12 +6,12 @@ Three independent Next.js App Router applications share npm workspaces. Each app
 
 Shared packages export TypeScript source directly. Next transpiles them through `transpilePackages`, so there is no separate package-build pipeline. Apps use strict TypeScript and a single root lockfile. Node 24 runs TypeScript-only utility modules in tests using native type stripping; these modules avoid enums and other transpilation-dependent syntax.
 
-| Package          | Responsibility                                                                               | Boundary                                                                         |
-| ---------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `@motchi/brand`  | Family names/domains, approved asset paths, palette, typography, CSS tokens                  | No application or email imports                                                  |
-| `@motchi/ui`     | Server-rendered navigation/footer, layout primitives, process graphic, forms, privacy notice | No branch-specific content                                                       |
-| `@motchi/email`  | Validation, signed tokens, rate limits, escaped email templates, Brevo POST handling         | Public entry is guarded by `server-only`; `/validation` is safe for shared types |
-| `@motchi/config` | TypeScript defaults, HTTP security headers, metadata/schema helpers                          | References family configuration; imports Next metadata types only                |
+| Package          | Responsibility                                                                                                   | Boundary                                                                                  |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `@motchi/brand`  | Approved asset paths, palette, typography, CSS tokens                                                            | No application or email imports                                                           |
+| `@motchi/ui`     | Server-rendered navigation/footer, layout primitives, process graphic, forms, privacy notice                     | No branch-specific content                                                                |
+| `@motchi/email`  | Validation, signed tokens, rate limits, escaped email templates, Brevo POST handling                             | Public entry is guarded by `server-only`; `/validation` is safe for shared types          |
+| `@motchi/config` | Site/organization/navigation config, validated server env, TypeScript/security defaults, metadata/schema helpers | Browser-safe source exports are separate from guarded server environment/metadata modules |
 
 The contact component uses the email server entry, so UI's main barrel is intended for Server Components. Import a focused safe module if future client components need primitives. Client components handle the session intro, mobile-menu enhancement, header active/scroll state, the single reveal observer, optional video/GIF controls, contact sending feedback, notifications, and error recovery. CSS handles the transitions and paths. The menu still uses native details/summary without JavaScript; media uses static posters or native controls as its fallback.
 
@@ -47,7 +47,7 @@ Development form signing uses a process-shared temporary secret so independently
 - Websites: `/`, `/work`, `/services`, `/process`, `/contact`, `/privacy`. The homepage shows featured projects and directs visitors to deeper pages. About remains a concise identified homepage section.
 - Consulting: `/`, `/capabilities`, `/approach`, `/contact`, `/privacy`. The homepage summarizes business problems and links to detailed scopes and the engagement lifecycle. About remains an identified section.
 
-`packages/brand/src/navigation.ts` owns desktop/mobile navigation and public route lists. Sitemaps use those lists. New routes use `pageMetadata` for canonicals and matching social titles/descriptions. Navigation state considers only linked section IDs, so unrelated sections cannot accidentally clear the current page. Shared `PageHero` establishes inner-page hierarchy; business-specific detail stays in app components. Individual case-study routes are deliberately deferred until approved content provides sufficient substance.
+`packages/config/src/navigation.ts` owns desktop/mobile navigation and public route lists. Sitemaps use those lists. New routes use `pageMetadata` for canonicals and matching social titles/descriptions. Navigation state considers only linked section IDs, so unrelated sections cannot accidentally clear the current page. Shared `PageHero` establishes inner-page hierarchy; business-specific detail stays in app components. Individual case-study routes are deliberately deferred until approved content provides sufficient substance.
 
 ## Feedback and error boundaries
 
@@ -56,3 +56,15 @@ Development form signing uses a process-shared temporary secret so independently
 `Toast` provides supplemental, polite live feedback after success. The full server result stays visible. Notifications have a close button, a seven-second timeout paused on hover/focus, reduced-motion support, and focus restoration when dismissed by keyboard. They are not used for field errors or essential instructions.
 
 Each app has `error.tsx` using the focused client-safe `@motchi/ui/error-state` export and a self-contained `global-error.tsx` for root-layout failures. Neither displays raw errors. Existing not-found pages remain distinct. Expected contact validation/provider outcomes use server messages, not thrown rendering errors. Static marketing routes have no artificial skeletons.
+
+## Progressive disclosure
+
+`InteractiveSteps` is the shared client interaction for the four-stage Solutions, six-stage Websites, and seven-stage Consulting journeys. Apps own typed process content; the UI owns selection and responsive disclosure. Stage titles and one-sentence summaries are always server-rendered and visible. Native `details` provide optional detail without JavaScript. Enhancement replaces those controls with desktop selection buttons and one adjacent detail panel, or mobile disclosure buttons with inline regions. Focus and mouse hover select desktop stages; click/tap and keyboard activation control mobile details. Relationships and states use `aria-controls`, `aria-pressed`, or `aria-expanded` as appropriate. Reduced motion suppresses transition effects.
+
+Websites' homepage names core services and the full brief-to-support journey; Consulting's homepage names all core capabilities and its engagement journey. These remain understandable without opening anything. Service scope uses native disclosure, and optional structured project detail appears only on the full Work page. No new empty project routes or additional framework dependencies were introduced.
+
+## Application vs identity configuration
+
+`packages/config` owns `sites.ts`, navigation, environment validation, and deployment-aware URLs. `packages/brand` owns visual identity only. Client-safe source configuration contains public identity facts; `@motchi/config/env` uses a server-only marker and is consumed only by server-rendered links, metadata, and email handling. No public environment variables are required. See [CONFIGURATION.md](CONFIGURATION.md).
+
+`SiteLink` uses Next Link for internal routes with prefetch disabled and ordinary anchors for fragments, mailto, and sister domains. New tabs are opt-in and receive safe rel attributes. Header/motion effects respond to pathname changes because the root shell persists during internal navigation. Dynamic contact tokens continue to be generated on the server rather than prefetched into a static page.

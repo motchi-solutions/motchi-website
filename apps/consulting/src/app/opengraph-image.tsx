@@ -1,9 +1,11 @@
-import { family, palette } from "@motchi/brand";
+import { getSites } from "@motchi/config/env";
+import { palette } from "@motchi/brand";
 import { ImageResponse } from "next/og";
 export const alt = "Consulting by Motchi";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export default function SocialImage() {
+  const family = getSites();
   return new ImageResponse(
     <div
       style={{
@@ -32,7 +34,7 @@ export default function SocialImage() {
         {"From business problem to working solution."}
       </div>
       <div style={{ display: "flex", fontSize: 24 }}>
-        {family.consulting.domain.replace("https://", "")}
+        {family.consulting.url.replace(/^https?:\/\//, "")}
       </div>
     </div>,
     size,

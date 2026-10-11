@@ -46,3 +46,13 @@ Native input constraints and server validation remain independent. The client fo
 ## Reference decisions
 
 The navigation uses disclosure semantics, not an application menu role: [WAI-ARIA navigation guidance](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/). Form enhancement observes a real submit event after native validation: [MDN submit event](https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/submit_event). Unexpected rendering failures follow [Next.js error handling](https://nextjs.org/docs/app/getting-started/error-handling). Formatting follows [Prettier's local installation guidance](https://prettier.io/docs/install).
+
+## Process exploration
+
+Every stage title and concise summary stays visible. Server HTML includes native details/summary for deeper information. After enhancement, desktop buttons use pressed state and control a common labelled panel; mouse hover and keyboard focus select stages. Mobile buttons expose expanded state and control a matching labelled inline region; Enter/Space and touch toggle details. Selection never traps focus. The full journey remains visible at every breakpoint, and reduced motion affects only presentation. Deep details contain text, so changing the selected stage cannot hide focused form fields or links.
+
+Route navigation now uses Next Link where appropriate. Persistent layout effects re-evaluate current navigation and reveal targets on pathname changes. Native forms and server errors remain independent of client navigation.
+
+## Second-pass verification — 2026-10-11
+
+Local Chrome checks passed for all three process journeys: desktop keyboard selection, mobile keyboard expansion/collapse, matching control/panel relationships, reduced motion, native no-JavaScript details and contact validation, and internal route navigation. All eight widths listed above were checked without horizontal overflow. Desktop and mobile screenshots were reviewed. All 21 automated tests, lint, formatting, and workspace type checks passed. Production compilation, live Brevo delivery, screen-reader testing, zoom checks, and final approved media remain release checks.

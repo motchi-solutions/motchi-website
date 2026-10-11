@@ -11,13 +11,19 @@ const submissions = new Map<
   string,
   { expires: number; state: "pending" | "sent" | "partial" }
 >();
-const localSecret = randomBytes(32).toString("hex");
+// Development page/API bundles and hot reload can load this module independently.
+// Keep their temporary secret in the same server process; production never uses it.
+const developmentState = globalThis as typeof globalThis & {
+  __motchiDevelopmentFormSecret?: string;
+};
 function formSecret(): string {
   const secret = process.env.CONTACT_FORM_SECRET;
   if (secret && secret.length >= 32) return secret;
   if (process.env.NODE_ENV === "production")
     throw new Error("CONTACT_FORM_SECRET must contain at least 32 characters.");
-  return localSecret;
+  developmentState.__motchiDevelopmentFormSecret ??=
+    randomBytes(32).toString("hex");
+  return developmentState.__motchiDevelopmentFormSecret;
 }
 export function createContactToken(): string {
   return signToken(formSecret(), Date.now(), randomBytes(16).toString("hex"));

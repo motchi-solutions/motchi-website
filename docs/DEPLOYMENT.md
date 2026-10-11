@@ -4,10 +4,10 @@
 
 Create three Next.js projects in Vercel (or another host with a supported Node.js runtime). All use the same Git repository and root npm lockfile; they deploy independently.
 
-| Project | Root directory | Production domain |
-| --- | --- | --- |
-| Solutions | `apps/solutions` | `motchi.ca` |
-| Websites | `apps/websites` | `websites.motchi.ca` |
+| Project    | Root directory    | Production domain      |
+| ---------- | ----------------- | ---------------------- |
+| Solutions  | `apps/solutions`  | `motchi.ca`            |
+| Websites   | `apps/websites`   | `websites.motchi.ca`   |
 | Consulting | `apps/consulting` | `consulting.motchi.ca` |
 
 On Vercel, select the Next.js preset, use the app root, and enable source files outside the root directory so shared packages are included. Let its npm workspace detection install from the root lockfile. Confirm install logs use the single root workspace. The app build is `npm run build` in that app, not the root aggregate script. If using your own pipeline, run `npm ci` at repository root followed by `npm run build --workspace=@motchi/<branch>`.

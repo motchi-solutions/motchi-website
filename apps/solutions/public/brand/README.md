@@ -1,4 +1,7 @@
-# Solutions brand assets
-Place approved SVG/PNG logos here, then set the corresponding path in `packages/brand/src/index.ts`.
-Current identity uses ordinary text, not a recreated monogram. The geometric favicon is a temporary neutral marker; replace it in `src/app/icon.svg` with approved artwork.
-Keep source artwork and export sizes documented. SVG must not contain scripts, external references, or embedded secrets.
+# Approved Brand Assets
+
+Add approved `ms-logo.svg` (or PNG) here and configure the matching `logos` slot in `packages/brand/src/index.ts`. Preserve intrinsic dimensions. The existing wordmark is a placeholder, not a recreated monogram.
+
+The CSS family intro needs all three approved marks (`ms-logo.svg`, `mw-logo.svg`, `mc-logo.svg`) copied into every app's public/brand directory and configured in `introLogos`. No intro GIF or video is required.
+
+See [MEDIA_ASSETS.md](../../../../docs/MEDIA_ASSETS.md) for the complete asset and accessibility requirements.

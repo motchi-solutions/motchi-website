@@ -16,18 +16,20 @@
     "dev:websites": "npm run dev --workspace=@motchi/websites",
     "dev:consulting": "npm run dev --workspace=@motchi/consulting",
     "build": "npm run build --workspaces --if-present",
-    "lint": "biome check .",
+    "lint": "biome lint .",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "node --conditions=react-server --test tests/*.test.mjs",
-    "format": "biome format --write ."
+    "format": "prettier . --write",
+    "format:check": "prettier . --check"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.4.2",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "prettier": "3.9.10",
     "tailwindcss": "^4",
-    "typescript": "^5",
-    "@biomejs/biome": "2.4.2"
+    "typescript": "^5"
   }
 }

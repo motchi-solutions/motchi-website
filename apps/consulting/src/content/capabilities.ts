@@ -1,67 +1,74 @@
 export const capabilities = [
   {
-    title: "AI consulting",
+    title: "AI Consulting",
+    problem: "Where would AI actually help?",
     description:
-      "Find useful opportunities for AI, assess the trade-offs, and plan responsible adoption.",
+      "Separate useful opportunities from unnecessary complexity. Plan responsible adoption and build practical tools into the workflows that need them.",
     areas: [
-      "Opportunity assessment",
-      "Workflow automation",
-      "Internal tooling",
-      "Practical AI integration",
+      "Opportunity Assessment",
+      "Workflow Automation",
+      "Internal Tooling",
+      "AI Integration",
     ],
   },
   {
-    title: "Databricks consulting",
+    title: "Databricks Consulting",
+    problem: "Make the platform work for your team.",
     description:
-      "Support a data platform that fits your architecture, governance needs, and team.",
+      "Help implement or operate Databricks with the data engineering, architecture, and governance your business needs. Review how the platform is used and where it can work better.",
     areas: [
-      "Implementation & support",
-      "Data engineering",
-      "Architecture & optimization",
-      "Governance & analytics enablement",
+      "Platform Implementation & Support",
+      "Data Engineering",
+      "Architecture & Optimization",
+      "Governance & Analytics Enablement",
     ],
   },
   {
-    title: "Data & analytics",
+    title: "Data & Analytics",
+    problem: "Get from scattered data to useful answers.",
     description:
-      "Connect business questions with dependable data and useful reporting.",
+      "Work through the sources, pipelines, and reporting behind your business questions. Build a dependable foundation for the decisions your team makes.",
     areas: [
-      "Analytics strategy",
-      "Pipelines & platforms",
-      "Reporting & dashboards",
-      "Cloud data architecture",
+      "Analytics Strategy",
+      "Data Pipelines & Platforms",
+      "Reporting & Dashboards",
+      "Cloud Data Architecture",
     ],
   },
   {
-    title: "Website & digital",
-    description: "Make digital systems and customer journeys work together.",
+    title: "Website & Digital Consulting",
+    problem: "Connect the customer journey with the work behind it.",
+    description:
+      "Review how your website, online flows, and internal systems fit together. Simplify the steps that create friction for customers or your team.",
     areas: [
-      "Digital strategy",
-      "Customer journeys",
-      "Website systems",
-      "Workflows & integrations",
+      "Digital Strategy",
+      "Customer Journeys",
+      "Website Systems",
+      "Workflows & Integrations",
     ],
   },
   {
-    title: "Technology strategy",
+    title: "Technology Strategy",
+    problem: "Choose a direction before committing to a platform.",
     description:
-      "Make informed decisions before committing to a platform or a major change.",
+      "Clarify requirements, compare the options, and plan a sensible architecture. Make the trade-offs understandable before they become expensive to change.",
     areas: [
       "Requirements",
       "Architecture",
-      "Vendor & platform evaluation",
+      "Vendor & Platform Evaluation",
       "Modernization",
     ],
   },
   {
-    title: "Implementation & adoption",
+    title: "Implementation & Adoption",
+    problem: "Move from an agreed plan to everyday use.",
     description:
-      "Turn a recommendation into something your team can use and improve.",
+      "Build the solution with your team, support the handover, and stay available while people learn to use it. Improve it as the real needs become clearer.",
     areas: [
-      "Implementation planning",
-      "Delivery support",
-      "Team adoption",
-      "Continued improvement",
+      "Implementation Planning",
+      "Delivery Support",
+      "Team Adoption",
+      "Continued Improvement",
     ],
   },
 ] as const;
@@ -69,34 +76,36 @@ export const engagement = [
   {
     title: "Understand",
     description:
-      "The business context, the people involved, and the problem to solve.",
+      "Listen to the people doing the work. Agree on the business problem and what needs to change.",
   },
   {
     title: "Assess",
     description:
-      "The current systems, constraints, and opportunities worth pursuing.",
+      "Review the current systems, constraints, and opportunities before choosing a direction.",
   },
   {
     title: "Design",
-    description: "An appropriate solution and a clear implementation plan.",
+    description:
+      "Set out an appropriate solution, clear responsibilities, and a practical implementation plan.",
   },
   {
     title: "Implement",
     description:
-      "Working systems, with decisions and progress communicated clearly.",
+      "Build the working solution, with your team involved in the decisions that matter.",
   },
   {
     title: "Adopt",
     description:
-      "Practical support as your people bring the solution into everyday use.",
+      "Help people bring the solution into daily work, with guidance and room for questions.",
   },
   {
     title: "Support",
     description:
-      "Help with the questions and maintenance that follow delivery.",
+      "Stay available for maintenance, troubleshooting, and the questions that follow delivery.",
   },
   {
     title: "Improve",
-    description: "Refine the solution as your needs and understanding evolve.",
+    description:
+      "Refine the solution as your business grows and the needs become clearer.",
   },
 ] as const;

@@ -4,22 +4,25 @@ export function Businesses() {
   return (
     <Section id="businesses">
       <SectionHeading
-        eyebrow="The Motchi family"
-        title="Two ways to move your business forward."
+        eyebrow="Motchi Businesses"
+        title="Start with What Your Business Needs."
       >
-        Focused businesses, connected by a shared approach: understand what
-        matters, make it work, and keep it working.
+        A website people can use. Systems your team can rely on. Two focused
+        branches, with the same commitment to making technology manageable.
       </SectionHeading>
       <div className="grid gap-6 md:grid-cols-2">
-        <article className="flex flex-col border border-border bg-surface p-7 sm:p-10">
+        <article className="branch-link flex flex-col border border-border bg-surface p-7 sm:p-10">
           <p className="text-xs tracking-widest uppercase text-primary">
-            01 / Your presence online
+            01 / Be understood online
           </p>
           <h3 className="mt-8 text-3xl font-medium">Motchi Websites</h3>
-          <p className="mt-5 mb-10 max-w-md leading-relaxed text-muted">
-            Websites shaped around your brand and the way your customers
-            interact with your business. From the first impression to the next
-            booking.
+          <p className="mt-5 mb-8 max-w-md leading-relaxed text-muted">
+            A website should reflect your business and help customers do what
+            they came to do. We design around your brand, your audience, and the
+            next step.
+          </p>
+          <p className="mb-8 text-sm text-primary">
+            Business websites · Booking · Integrations
           </p>
           <div className="mt-auto">
             <ButtonLink href={family.websites.domain}>
@@ -27,14 +30,18 @@ export function Businesses() {
             </ButtonLink>
           </div>
         </article>
-        <article className="flex flex-col bg-secondary p-7 text-inverse sm:p-10">
+        <article className="branch-link flex flex-col border border-secondary bg-secondary p-7 text-inverse sm:p-10">
           <p className="text-xs tracking-widest uppercase text-accent">
-            02 / Your technology in practice
+            02 / Put technology to work
           </p>
           <h3 className="mt-8 text-3xl font-medium">Motchi Consulting</h3>
-          <p className="mt-5 mb-10 max-w-md leading-relaxed text-inverse/80">
-            A practical partner for AI, data, digital systems, and technology
-            strategy. From a business question to implementation and adoption.
+          <p className="mt-5 mb-8 max-w-md leading-relaxed text-inverse/80">
+            When a workflow, platform, or technology decision is holding you
+            back, we help work through it and carry the plan into
+            implementation.
+          </p>
+          <p className="mb-8 text-sm text-accent">
+            AI · Data · Digital systems · Adoption
           </p>
           <div className="mt-auto">
             <ButtonLink href={family.consulting.domain} light>

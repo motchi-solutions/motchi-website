@@ -1,76 +1,94 @@
-import { Section, SectionHeading } from "@motchi/ui";
-import Image from "next/image";
+import {
+  AnimatedLink,
+  ButtonLink,
+  Eyebrow,
+  Reveal,
+  Section,
+  SectionHeading,
+} from "@motchi/ui";
 import { projects } from "@/content/projects";
-export function Work() {
+import { ProjectPreview } from "./project-preview";
+export function Work({ featuredOnly = false }: { featuredOnly?: boolean }) {
   return (
     <Section id="work">
       <SectionHeading
-        eyebrow="Selected website work"
-        title="Different businesses. Distinct directions."
+        eyebrow="Selected Website Work"
+        title="The Business Sets the Direction."
       >
-        Restaurant, beauty, project, and professional-business examples.
-        Approved screenshots and project links are being prepared.
+        Food, beauty, project work, and professional services. Each needs its
+        own voice and its own customer journey.
       </SectionHeading>
-      <div className="grid gap-x-8 gap-y-14 md:grid-cols-2">
-        {projects.map((project, index) => (
-          <article key={project.title}>
-            {project.images.length ? (
-              <div className="overflow-hidden border border-border">
-                <Image
-                  src={project.images[0].src}
-                  alt={project.images[0].alt}
-                  width={project.images[0].width}
-                  height={project.images[0].height}
-                  sizes="(min-width: 768px) 50vw, 100vw"
-                  className="h-auto w-full"
-                />
-              </div>
-            ) : (
+      <div className="space-y-16 lg:space-y-24">
+        {(featuredOnly
+          ? projects.filter((project) => project.featured)
+          : projects
+        ).map((project, index) => (
+          <Reveal key={project.id}>
+            <article
+              id={`project-${project.id}`}
+              className="grid items-center gap-8 lg:grid-cols-12 lg:gap-12"
+            >
               <div
-                className={`flex aspect-[4/3] flex-col justify-between border border-border p-6 sm:p-10 ${index === 3 ? "bg-secondary text-inverse" : index === 1 ? "bg-primary text-inverse" : "bg-surface"}`}
+                className={`min-w-0 lg:col-span-7 ${index % 2 === 1 ? "lg:order-2" : ""}`}
               >
-                <span className="text-xs tracking-widest uppercase">
-                  {project.industry}
-                </span>
-                <p
-                  className={`max-w-xs text-3xl tracking-tight sm:text-4xl ${index === 1 || index === 3 ? "font-display italic" : "font-semibold"}`}
-                >
+                <ProjectPreview project={project} />
+              </div>
+              <div
+                className={`lg:col-span-5 ${index % 2 === 1 ? "lg:order-1" : ""}`}
+              >
+                <Eyebrow>
+                  {String(index + 1).padStart(2, "0")} / {project.industry}
+                </Eyebrow>
+                <h3 className="text-3xl font-medium tracking-tight sm:text-4xl">
                   {project.title}
+                </h3>
+                <p className="mt-5 max-w-md leading-relaxed text-muted">
+                  {project.description}
                 </p>
-                <div className="flex flex-wrap items-center justify-between gap-3 border-t border-current/25 pt-4 text-xs">
-                  <span>Screenshot placeholder</span>
-                  <span aria-hidden="true">0{index + 1}</span>
+                <ul className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-sm text-primary">
+                  {project.services.map((service) => (
+                    <li key={service}>{service}</li>
+                  ))}
+                </ul>
+                {project.technologies && (
+                  <p className="mt-3 text-xs text-muted">
+                    {project.technologies.join(" · ")}
+                  </p>
+                )}
+                <div className="mt-7 flex flex-wrap items-center gap-4">
+                  {project.url && (
+                    <ButtonLink href={project.url} secondary>
+                      Visit {project.title}
+                    </ButtonLink>
+                  )}
+                  {project.caseStudyUrl && (
+                    <AnimatedLink
+                      href={project.caseStudyUrl}
+                      className="min-h-12 text-sm"
+                    >
+                      Read the Case Study
+                    </AnimatedLink>
+                  )}
+                  {!project.url && (
+                    <p className="text-xs text-muted">
+                      Approved screenshots and project link to follow.
+                    </p>
+                  )}
                 </div>
               </div>
-            )}
-            <div className="mt-6 flex items-start justify-between gap-4">
-              <h3 className="text-2xl font-medium">{project.title}</h3>
-              {project.featured && (
-                <span className="border border-border px-2 py-1 text-xs text-muted">
-                  Featured
-                </span>
-              )}
-            </div>
-            <p className="mt-3 text-xs tracking-wide text-primary">
-              {project.services.join(" · ")}
-            </p>
-            <p className="mt-4 max-w-lg leading-relaxed text-muted">
-              {project.description}
-            </p>
-            {project.url && (
-              <a
-                href={project.url}
-                className="mt-3 inline-flex min-h-12 items-center text-sm underline underline-offset-4"
-              >
-                Visit {project.title}{" "}
-                <span aria-hidden="true" className="ml-2">
-                  ↗
-                </span>
-              </a>
-            )}
-          </article>
+            </article>
+          </Reveal>
         ))}
       </div>
+      {featuredOnly && (
+        <AnimatedLink
+          href="/work"
+          arrow
+          className="mt-10 min-h-12 text-primary"
+        >
+          View All Projects
+        </AnimatedLink>
+      )}
     </Section>
   );
 }

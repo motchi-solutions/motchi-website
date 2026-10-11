@@ -25,3 +25,7 @@ No personal form values are included in redirect URLs. Error output is controlle
 ## Disclosure
 
 See root SECURITY.md for the private reporting route. Confirm the monitored address and enable GitHub private vulnerability reporting before public launch. Do not use public issues for exploitable details or credentials.
+
+## User-facing failures
+
+Rendering errors use route and root error boundaries with generic messages; only Next's opaque digest may be shown for support. Never render `error.message`, stack traces, or provider payloads. Next's server reporting retains unexpected error diagnostics; contact logs continue to contain only branch and an opaque reference. Contact sending feedback uses native navigation, does not persist submitted values, and never treats a client timeout as proof that delivery failed. Validation errors remain attached to fields; success notifications supplement permanent server feedback.

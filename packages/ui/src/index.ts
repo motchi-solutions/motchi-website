@@ -1,5 +1,10 @@
+export { BranchMark } from "./branch-mark";
 export { ContactPageContent } from "./contact";
+export { Arrow, MailIcon } from "./icons";
+export { MediaFrame, ProjectMedia } from "./media";
+export { MotionEnhancements } from "./motion";
 export {
+  AnimatedLink,
   ButtonLink,
   ContactCTA,
   Container,
@@ -8,5 +13,8 @@ export {
   SectionHeading,
 } from "./primitives";
 export { PrivacyNotice } from "./privacy";
+export { Reveal } from "./reveal";
 export { Footer, Header, type NavItem } from "./shell";
 export { SystemGraphic, Workflow } from "./workflow";
+
+export { PageHero } from "./page-hero";

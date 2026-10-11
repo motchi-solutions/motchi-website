@@ -1,6 +1,6 @@
 # SEO
 
-Each app uses a distinct family name, domain, description, metadataBase, Open Graph defaults, and Twitter/X summary card. Home, contact, and privacy define their own canonicals. Contact result query strings are noindexed and canonicalize to `/contact`. Never use a blanket home canonical in the root layout for every route.
+Each app uses a distinct family name, domain, description, metadataBase, Open Graph defaults, and Twitter/X summary card. Home, focused content routes, contact, and privacy define their own canonicals. Focused routes use `pageMetadata` for matching page/social titles, descriptions, and canonical URLs. Contact result query strings are noindexed and canonicalize to `/contact`. Never use a blanket home canonical in the root layout for every route.
 
 `robots.ts` allows production content and disallows API crawling. `sitemap.ts` lists real page routes only. It omits fake modification dates. New public pages must be added deliberately. Robots is not access control; use hosting restrictions/noindex headers for previews.
 

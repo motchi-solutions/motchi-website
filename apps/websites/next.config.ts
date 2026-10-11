@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 
 const config: NextConfig = {
   poweredByHeader: false,
+  // Shared packages expose source; each branch still builds independently.
   transpilePackages: [
     "@motchi/ui",
     "@motchi/brand",

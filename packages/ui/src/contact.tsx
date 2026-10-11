@@ -1,7 +1,10 @@
+import { ContactForm } from "./contact-form";
+import { Toast } from "./toast";
 import { type Branch, contactEmail, family } from "@motchi/brand";
 import { createContactToken } from "@motchi/email";
 import { type ContactInput, interests } from "@motchi/email/validation";
-import { Container, Eyebrow } from "./primitives";
+import { MailIcon } from "./icons";
+import { AnimatedLink, Container, Eyebrow } from "./primitives";
 
 const messages: Record<string, string> = {
   sent: "Thank you. Your enquiry has been sent. We typically respond within 2–3 business days.",
@@ -46,7 +49,7 @@ export function ContactPageContent({
     fields.split(",").filter((key) => key in fieldErrors),
   );
   const inputClass =
-    "mt-2 min-h-12 w-full rounded-none border border-border bg-surface px-4 py-3 text-base";
+    "form-control mt-2 min-h-12 w-full rounded-none border border-border bg-background px-4 py-3 text-base";
   const props = (field: keyof ContactInput) => ({
     id: field,
     name: field,
@@ -67,33 +70,43 @@ export function ContactPageContent({
       <div className="grid gap-12 lg:grid-cols-2 lg:gap-24">
         <div>
           <Eyebrow>{family[branch].name} / Contact</Eyebrow>
-          <h1 className="text-section font-medium tracking-tight">
-            Tell us what you have in mind.
+          <h1 className="text-h2 font-medium tracking-tight">
+            Tell Us What You’re Working On.
           </h1>
           <p className="mt-6 max-w-md text-lg leading-relaxed text-muted">
-            A clear problem, an early idea, or a question about where to start.
-            We’d like to hear it.
+            You don’t need a finished brief. A few words about your business and
+            what you need are a good place to start.
           </p>
           <p className="mt-8 max-w-md leading-relaxed">
             We typically respond with next steps or an initial quote within{" "}
             <strong>2–3 business days</strong>.
           </p>
           <a
-            className="mt-8 inline-flex min-h-12 items-center underline underline-offset-4"
+            className="animated-link mt-8 inline-flex min-h-12 items-center gap-3"
             href={`mailto:${contactEmail}`}
           >
-            {contactEmail}
+            <MailIcon />
+            <span>{contactEmail}</span>
           </a>
           <p className="mt-8 max-w-md text-sm leading-relaxed text-muted">
             Share only what we need to understand your enquiry. Please leave out
             passwords, sensitive personal information, and confidential records.
           </p>
         </div>
-        <div id="contact-form">
-          <h2 className="sr-only">Send an enquiry</h2>
+        <div
+          id="contact-form"
+          className="border border-border bg-surface p-5 sm:p-8 lg:p-10"
+        >
+          <h2 className="mb-2 text-h3 font-medium">Start a Conversation</h2>
+          <p className="mb-8 text-sm leading-relaxed text-muted">
+            A short introduction is enough. We’ll work through the details
+            together.
+          </p>
           {message && (
             <div
-              role={sent ? "status" : "alert"}
+              id="contact-result"
+              tabIndex={-1}
+              role={sent ? undefined : "alert"}
               className="mb-8 border-l-4 border-primary bg-surface p-5 leading-relaxed"
             >
               <p>{message}</p>
@@ -106,7 +119,7 @@ export function ContactPageContent({
             </p>
           )}
           {token && !sent && (
-            <form action="/api/contact" method="post" className="space-y-6">
+            <ContactForm>
               <input type="hidden" name="token" value={token} />
               <div hidden aria-hidden="true">
                 <label htmlFor="fax">Leave this field empty</label>
@@ -156,7 +169,7 @@ export function ContactPageContent({
               <div>
                 <label htmlFor="interest" className="text-sm font-semibold">
                   {branch === "consulting"
-                    ? "Area of interest"
+                    ? "Area of Interest"
                     : "What can we help with?"}{" "}
                   <span className="font-normal">(required)</span>
                 </label>
@@ -178,7 +191,7 @@ export function ContactPageContent({
               {branch === "websites" && (
                 <div>
                   <label htmlFor="website" className="text-sm font-semibold">
-                    Existing website URL{" "}
+                    Existing Website URL{" "}
                     <span className="font-normal">(optional)</span>
                   </label>
                   <input
@@ -213,24 +226,18 @@ export function ContactPageContent({
                 </a>
                 .
               </p>
-              <button
-                type="submit"
-                className="min-h-12 cursor-pointer bg-primary px-7 py-3 text-sm font-semibold text-inverse hover:bg-secondary"
-              >
-                Send enquiry{" "}
-                <span aria-hidden="true" className="ml-6">
-                  ↗
-                </span>
-              </button>
-            </form>
+            </ContactForm>
           )}
           {sent && (
-            <a
-              href="/"
-              className="inline-flex min-h-12 items-center underline underline-offset-4"
-            >
+            <Toast
+              message="Message Sent. The delivery details are shown in the form."
+              returnFocusId="contact-result"
+            />
+          )}
+          {sent && (
+            <AnimatedLink href="/" className="min-h-12">
               Return to {family[branch].name}
-            </a>
+            </AnimatedLink>
           )}
         </div>
       </div>

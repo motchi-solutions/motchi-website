@@ -1,7 +1,7 @@
-import { family } from "@motchi/brand";
+import { family, publicRoutes } from "@motchi/brand";
 import type { MetadataRoute } from "next";
 export default function sitemap(): MetadataRoute.Sitemap {
-  return ["", "/contact", "/privacy"].map((path) => ({
-    url: `${family.consulting.domain}${path}`,
+  return publicRoutes.consulting.map((path) => ({
+    url: new URL(path, family.consulting.domain).href,
   }));
 }

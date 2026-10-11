@@ -1,51 +1,76 @@
+import type {
+  GifAsset,
+  ImageAsset,
+  MediaAsset,
+  VideoAsset,
+} from "@motchi/brand";
 export type Project = {
+  id: string;
   title: string;
   industry: string;
   services: string[];
   description: string;
   url: string | null;
-  images: { src: string; alt: string; width: number; height: number }[];
+  caseStudyUrl?: string;
   technologies?: string[];
   featured?: boolean;
+  // These default treatments use Motchi colours, not claimed client brand palettes.
+  treatment: "paper" | "burgundy" | "ink";
+  colors?: { background: string; foreground: string };
+  media: {
+    desktop?: ImageAsset;
+    mobile?: ImageAsset;
+    logo?: ImageAsset;
+    hero?: MediaAsset;
+    motion?: VideoAsset | GifAsset;
+  };
 };
-// URLs, screenshots, and any technology details await owner confirmation.
+// Add approved media under public/media/projects/<id>/ and confirm URLs before publishing.
 export const projects: Project[] = [
   {
+    id: "vietbites",
     title: "VietBites",
     industry: "Restaurant / food",
-    services: ["Brand presentation", "Customer-facing website"],
+    services: ["Brand Presentation", "Customer-Facing Website"],
     description:
-      "A restaurant example focused on presenting the brand and helping customers explore the business.",
+      "A restaurant’s website should make its character clear and help customers find their next step. VietBites is one example of that direction.",
     url: null,
-    images: [],
+    media: {},
+    treatment: "paper",
     featured: true,
   },
   {
+    id: "vee-nails",
     title: "Vee’s Nails Studio",
     industry: "Beauty / services",
-    services: ["Website", "Booking experience"],
+    services: ["Website", "Booking Experience"],
     description:
-      "A service-business example bringing the website and booking journey together.",
+      "For a beauty studio, the customer journey continues beyond the homepage. This work brings the website and booking experience together.",
     url: null,
-    images: [],
+    media: {},
+    treatment: "burgundy",
     featured: true,
   },
   {
+    id: "lai-project",
     title: "Lai Project",
     industry: "Project showcase",
-    services: ["Website presentation"],
+    services: ["Website Presentation"],
     description:
-      "Another example of our website work. Project details and approved imagery will be added here.",
+      "Another direction in the Motchi portfolio. Approved project details and imagery will be shared here.",
     url: null,
-    images: [],
+    media: {},
+    treatment: "paper",
   },
   {
+    id: "kamanda",
     title: "Kamanda",
     industry: "Professional / corporate",
-    services: ["Website design", "Development"],
+    services: ["Website Design", "Development"],
     description:
-      "A professional-business example with a distinct, premium design direction.",
+      "A professional-business website with a more restrained, premium direction. A different business calls for a different visual language.",
     url: null,
-    images: [],
+    media: {},
+    treatment: "ink",
   },
 ];

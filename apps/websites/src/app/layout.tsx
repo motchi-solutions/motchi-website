@@ -1,29 +1,22 @@
+import { navigation } from "@motchi/brand";
 import { organizationSchema, siteMetadata } from "@motchi/config/metadata";
-import { Footer, Header } from "@motchi/ui";
+import { Footer, Header, MotionEnhancements } from "@motchi/ui";
+import { fontVariables } from "@motchi/ui/fonts";
 import type { ReactNode } from "react";
 import "./globals.css";
 export const metadata = siteMetadata("websites");
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" data-branch="websites">
+    <html lang="en" data-branch="websites" className={fontVariables}>
       <body>
+        <MotionEnhancements />
         <a
           href="#main-content"
           className="sr-only fixed top-3 left-3 z-50 bg-primary px-5 py-3 text-inverse focus:not-sr-only"
         >
           Skip to content
         </a>
-        <Header
-          branch="websites"
-          items={[
-            { label: "Home", href: "/" },
-            { label: "Work", href: "/#work" },
-            { label: "Services", href: "/#services" },
-            { label: "Process", href: "/#process" },
-            { label: "About", href: "/#about" },
-            { label: "Contact", href: "/contact" },
-          ]}
-        />
+        <Header branch="websites" items={navigation.websites} />
         <main id="main-content" tabIndex={-1}>
           {children}
         </main>

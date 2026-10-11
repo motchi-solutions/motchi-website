@@ -4,12 +4,12 @@ export function PrivacyNotice() {
   return (
     <Container className="py-section">
       <article className="max-w-reading">
-        <Eyebrow>Your information</Eyebrow>
-        <h1 className="text-section font-medium">Privacy notice</h1>
+        <Eyebrow>Your Information</Eyebrow>
+        <h1 className="text-h2 font-medium">Privacy Notice</h1>
         <div className="mt-10 space-y-8 leading-relaxed text-muted">
           <section>
             <h2 className="mb-3 text-xl font-semibold text-foreground">
-              When you contact us
+              When You Contact Us
             </h2>
             <p>
               We collect the name, email address, company, area of interest,
@@ -21,7 +21,7 @@ export function PrivacyNotice() {
           </section>
           <section>
             <h2 className="mb-3 text-xl font-semibold text-foreground">
-              How enquiries are handled
+              How Enquiries Are Handled
             </h2>
             <p>
               Enquiries and acknowledgements are sent through Brevo to our
@@ -34,7 +34,7 @@ export function PrivacyNotice() {
           </section>
           <section>
             <h2 className="mb-3 text-xl font-semibold text-foreground">
-              Storage and access
+              Storage and Access
             </h2>
             <p>
               Enquiries are retained in our business email system as needed to
@@ -46,7 +46,7 @@ export function PrivacyNotice() {
           </section>
           <section>
             <h2 className="mb-3 text-xl font-semibold text-foreground">
-              Browser storage
+              Browser Storage
             </h2>
             <p>
               The website does not include advertising or analytics trackers. A

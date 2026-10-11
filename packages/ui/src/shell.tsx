@@ -1,26 +1,12 @@
-import { type Branch, contactEmail, family, logos } from "@motchi/brand";
-import Image from "next/image";
+import { type Branch, contactEmail, family } from "@motchi/brand";
+import { BranchMark } from "./branch-mark";
+import { HeaderEnhancements } from "./header-enhancements";
+import { Arrow, MailIcon } from "./icons";
 import { Introduction } from "./intro";
-import { Container } from "./primitives";
-export type NavItem = { label: string; href: string };
-function Brand({ branch }: { branch: Branch }) {
-  const logo = logos[branch];
-  return (
-    <a
-      href="/"
-      className="inline-flex min-h-12 items-center gap-3"
-      aria-label={`${family[branch].name} home`}
-    >
-      {logo && <Image src={logo} width={42} height={42} alt="" priority />}
-      <span className="brand-arrive flex flex-col">
-        <span className="text-xl font-semibold tracking-tight">
-          Motchi<span className="text-primary">.</span>
-        </span>
-        <span className="text-xs tracking-widest uppercase">{branch}</span>
-      </span>
-    </a>
-  );
-}
+import { MobileMenu, type NavItem } from "./mobile-menu";
+import { AnimatedLink, Container } from "./primitives";
+
+export type { NavItem } from "./mobile-menu";
 export function Header({
   branch,
   items,
@@ -29,50 +15,32 @@ export function Header({
   items: NavItem[];
 }) {
   return (
-    <header className="relative z-20 border-b border-border bg-background">
-      <Introduction />
+    <header
+      data-header
+      data-scrolled="false"
+      className="site-header sticky top-0 z-30 border-b border-border bg-background"
+    >
+      <HeaderEnhancements />
+      <Introduction branch={branch} />
       <Container>
         <div className="flex min-h-24 items-center justify-between gap-4">
-          <Brand branch={branch} />
+          <BranchMark branch={branch} />
           <nav aria-label="Main navigation" className="hidden lg:block">
             <ul className="flex items-center gap-7 text-sm">
               {items.map((item) => (
                 <li key={item.href}>
                   <a
-                    className={`inline-flex min-h-12 items-center hover:text-primary ${item.href === "/contact" ? "border border-border px-5 font-semibold" : ""}`}
+                    className={`nav-link inline-flex min-h-12 items-center ${item.href === "/contact" ? "nav-contact gap-4 border border-border px-5 font-semibold" : ""}`}
                     href={item.href}
                   >
                     {item.label}
+                    {item.href === "/contact" && <Arrow />}
                   </a>
                 </li>
               ))}
             </ul>
           </nav>
-          <details className="group relative lg:hidden">
-            <summary className="flex min-h-12 cursor-pointer list-none items-center gap-3 border border-border px-4 text-sm">
-              Menu{" "}
-              <span aria-hidden="true" className="group-open:rotate-45">
-                +
-              </span>
-            </summary>
-            <nav
-              aria-label="Mobile navigation"
-              className="absolute right-0 top-full mt-3 w-64 max-w-[calc(100vw-2.5rem)] border border-border bg-surface p-3 shadow-lg"
-            >
-              <ul>
-                {items.map((item) => (
-                  <li key={item.href}>
-                    <a
-                      className="flex min-h-12 items-center px-3 text-sm hover:bg-background"
-                      href={item.href}
-                    >
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </details>
+          <MobileMenu items={items} />
         </div>
       </Container>
     </header>
@@ -80,60 +48,62 @@ export function Header({
 }
 export function Footer({ branch }: { branch: Branch }) {
   return (
-    <footer className="border-t border-border py-12">
+    <footer className="border-t border-border py-14">
       <Container>
         <div className="grid gap-10 md:grid-cols-3">
           <div>
-            <Brand branch={branch} />
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">
-              Practical technology.
-              <br />A partner for what comes next.
+            <BranchMark branch={branch} />
+            <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted">
+              Understand the problem.
+              <br />
+              Build what fits. Stay available.
             </p>
           </div>
           <nav aria-label="Motchi family">
-            <p className="mb-4 text-xs font-bold tracking-widest uppercase">
+            <p className="mb-4 text-xs font-semibold tracking-widest uppercase text-muted">
               The Motchi family
             </p>
-            <ul className="space-y-1">
+            <ul>
               {Object.entries(family).map(([key, site]) => (
                 <li key={key}>
-                  <a
+                  <AnimatedLink
                     href={site.domain}
-                    className="inline-flex min-h-10 items-center text-sm hover:underline"
+                    external
+                    className="min-h-11 text-sm"
                   >
                     {site.name}
-                    <span className="sr-only"> website</span>
-                  </a>
+                  </AnimatedLink>
                 </li>
               ))}
             </ul>
           </nav>
           <div>
-            <p className="mb-4 text-xs font-bold tracking-widest uppercase">
-              Let’s talk
+            <p className="mb-4 text-xs font-semibold tracking-widest uppercase text-muted">
+              A conversation, first
             </p>
             <a
-              className="inline-flex min-h-10 items-center text-sm underline underline-offset-4"
+              className="animated-link inline-flex min-h-12 items-center gap-3 text-sm"
               href={`mailto:${contactEmail}`}
             >
-              {contactEmail}
+              <MailIcon />
+              <span>{contactEmail}</span>
             </a>
-            <p className="mt-4 text-sm leading-relaxed text-muted">
-              Proudly Canadian.
+            <p className="mt-5 text-sm leading-relaxed text-muted">
+              Based in Toronto, Canada.
               <br />
-              Working with businesses globally.
+              Working with businesses everywhere.
             </p>
           </div>
         </div>
-        <div className="mt-12 flex flex-wrap justify-between gap-4 border-t border-border pt-6 text-xs text-muted">
+        <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6 text-xs text-muted">
           <p>© {new Date().getFullYear()} Motchi Solutions</p>
           <div className="flex gap-6">
-            <a href="/privacy" className="underline underline-offset-4">
+            <AnimatedLink href="/privacy" className="min-h-11">
               Privacy
-            </a>
-            <a href="/contact" className="underline underline-offset-4">
+            </AnimatedLink>
+            <AnimatedLink href="/contact" className="min-h-11">
               Contact
-            </a>
+            </AnimatedLink>
           </div>
         </div>
       </Container>

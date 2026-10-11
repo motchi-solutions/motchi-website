@@ -3,33 +3,33 @@ export function Approach() {
   return (
     <Section id="how-we-work">
       <SectionHeading
-        eyebrow="How we work"
-        title="From a first idea to everyday use."
+        eyebrow="How We Work"
+        title="The Handover Isn’t the Finish Line."
       >
-        We stay involved through the decisions, the implementation, and the
-        questions that come after launch.
+        We help you make the decision, build what fits, and put it to use. Then
+        we stay available as questions come up and your business changes.
       </SectionHeading>
       <Workflow
         steps={[
           {
             title: "Understand",
             description:
-              "Start with your business, your people, and the problem worth solving.",
+              "Listen to the people doing the work. Find the problem behind the request.",
           },
           {
             title: "Plan",
             description:
-              "Choose a practical direction, with clear scope and next steps.",
+              "Agree on a practical approach, a clear scope, and what success should look like.",
           },
           {
             title: "Build",
             description:
-              "Turn the plan into working technology, with communication along the way.",
+              "Implement the solution and keep you involved in the decisions that matter.",
           },
           {
             title: "Support",
             description:
-              "Help your team adopt it, maintain it, and improve it over time.",
+              "Help your team use it, keep it working, and improve it when the need changes.",
           },
         ]}
       />

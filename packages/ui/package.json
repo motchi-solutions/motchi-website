@@ -4,11 +4,15 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./fonts": "./src/fonts.ts",
+    "./media": "./src/media.tsx",
+    "./error-state": "./src/error-state.tsx"
   },
   "dependencies": {
     "@motchi/brand": "*",
-    "@motchi/email": "*"
+    "@motchi/email": "*",
+    "react-icons": "5.7.0"
   },
   "peerDependencies": {
     "next": ">=16 <17",

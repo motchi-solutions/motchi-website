@@ -15,7 +15,8 @@ export {
 export { PrivacyNotice } from "./privacy";
 export { Reveal } from "./reveal";
 export { Footer, Header, type NavItem } from "./shell";
-export { SystemGraphic, Workflow } from "./workflow";
+export { Workflow } from "./workflow";
+export { SystemGraphic } from "./system-graphic";
 
 export { PageHero } from "./page-hero";
 

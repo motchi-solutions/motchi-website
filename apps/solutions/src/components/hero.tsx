@@ -1,10 +1,4 @@
-import {
-  AnimatedLink,
-  ButtonLink,
-  Container,
-  Eyebrow,
-  SystemGraphic,
-} from "@motchi/ui";
+import { ButtonLink, Container, Eyebrow, SystemGraphic } from "@motchi/ui";
 export function Hero() {
   return (
     <section className="py-hero">
@@ -33,14 +27,6 @@ export function Hero() {
               <ButtonLink href="/contact" secondary>
                 Talk to Us
               </ButtonLink>
-            </div>
-            <div className="mt-9 flex flex-wrap gap-x-6 gap-y-1 text-sm text-muted">
-              <AnimatedLink href="#businesses" className="min-h-11">
-                Websites & Consulting
-              </AnimatedLink>
-              <AnimatedLink href="#products" className="min-h-11">
-                Products in Progress
-              </AnimatedLink>
             </div>
           </div>
           <SystemGraphic />

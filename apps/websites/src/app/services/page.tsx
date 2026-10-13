@@ -1,5 +1,11 @@
 import { pageMetadata } from "@motchi/config/metadata";
-import { ContactCTA, PageHero, Section, SectionHeading } from "@motchi/ui";
+import {
+  ContactCTA,
+  PageHero,
+  Reveal,
+  Section,
+  SectionHeading,
+} from "@motchi/ui";
 import { Services } from "@/components/services";
 export const metadata = pageMetadata(
   "Website Services",
@@ -11,16 +17,16 @@ export default function Page() {
     <>
       <PageHero
         eyebrow="Website Services"
-        title="A Website That Works Beyond the Homepage"
+        title="Website Design, Booking, and Support"
       >
-        From a new website to a better booking flow, we agree on the customer
-        journey and the scope before choosing the tools.
+        Build a new website, improve an existing one, or make booking easier. We
+        agree on the pages, features, and support you need before work begins.
       </PageHero>
       <Services />
       <Section>
         <SectionHeading
           eyebrow="Agreeing the Scope"
-          title="Start with the Essentials"
+          title="What Does Your Website Need?"
         >
           We work out what needs to launch now and what can wait. Hosting,
           maintenance, integrations, and ongoing changes are discussed
@@ -37,18 +43,20 @@ export default function Page() {
               "Identify where visitors get stuck and decide what is worth keeping or changing.",
             ],
             [
-              "Connected Customer Flows",
+              "Booking and Connected Tools",
               "Map booking, enquiries, or purchases into the tools and responsibilities behind them.",
             ],
           ].map(([title, text]) => (
-            <article key={title} className="border-t border-border pt-6">
-              <h3 className="text-h3 font-medium">{title}</h3>
-              <p className="mt-4 leading-relaxed text-muted">{text}</p>
-            </article>
+            <Reveal key={title} className="service-card-reveal flex">
+              <article className="w-full border-t border-border pt-6">
+                <h3 className="text-h3 font-medium">{title}</h3>
+                <p className="mt-4 leading-relaxed text-muted">{text}</p>
+              </article>
+            </Reveal>
           ))}
         </div>
       </Section>
-      <ContactCTA title="Let’s Discuss Your Website" />
+      <ContactCTA title="Let's Discuss Your Website" />
     </>
   );
 }

@@ -9,15 +9,13 @@ export const metadata = pageMetadata(
 export default function Page() {
   return (
     <>
-      <PageHero
-        eyebrow="Our Work"
-        title="Different Businesses. Different Directions."
-      >
-        Selected website work across food, beauty, projects, and professional
-        services. Each business deserves its own voice.
+      <PageHero eyebrow="Our Work" title="Our Website Projects">
+        Explore website projects for restaurants, beauty businesses, and
+        professional services. See the needs, design choices, and features
+        behind each project.
       </PageHero>
       <Work />
-      <ContactCTA title="Let’s Discuss Your Website" />
+      <ContactCTA title="Let's Discuss Your Website" />
     </>
   );
 }

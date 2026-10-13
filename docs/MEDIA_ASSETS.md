@@ -1,6 +1,6 @@
 # Media assets
 
-Use authentic, approved assets. No client screenshots, logos, project photography, or monograms have been invented. Current portfolio imagery and favicon remain placeholders. Assets belong to each deployed app's public folder; paths in configuration begin at `/`.
+Use authentic, approved assets. No client screenshots, logos, project photography, or monograms have been invented. Current portfolio imagery remains placeholder content; approved favicon/app-icon assets are integrated separately. Assets belong to each deployed app's public folder; paths in configuration begin at `/`.
 
 ## Exact locations
 
@@ -29,14 +29,14 @@ apps/websites/public/media/projects/
     preview.gif
 ```
 
-The final filenames under `kamanda/` illustrate the same optional files supported in every project folder. PNG/JPEG/SVG are also supported where appropriate; change the configured path to match. Keep all currently absent fields absent instead of pointing at missing files. Approved favicons replace each app's `src/app/icon.svg`; do not use the temporary circle as finalized brand artwork.
+The final filenames under `kamanda/` illustrate the same optional files supported in every project folder. PNG/JPEG/SVG are also supported where appropriate; change the configured path to match. Keep all currently absent fields absent instead of pointing at missing files. Approved favicons are present in each app's `src/app/`; see [ICONS.md](ICONS.md).
 
 ## Logos
 
-Use clean SVG with a correct viewBox, no scripts, embedded credentials, or external references. A transparent PNG at 256×256 or larger is a fallback for a square monogram. Preserve intrinsic aspect ratio. In `packages/brand/src/index.ts`, replace the matching null slot:
+SVG is the canonical web format. Preserve the supplied artwork and intrinsic aspect ratio. All three approved marks are present in every app's `public/brand/` directory and configured in `packages/brand/src/index.ts`:
 
 ```ts
-solutions: { src: "/brand/ms-logo.svg", width: 64, height: 64 }
+solutions: { src: "/brand/ms-logo.svg", width: 1095, height: 1095 }
 // websites uses /brand/mw-logo.svg; consulting uses /brand/mc-logo.svg.
 ```
 
@@ -46,7 +46,7 @@ solutions: { src: "/brand/ms-logo.svg", width: 64, height: 64 }
 
 The intro uses CSS transforms, opacity, and a clipping reveal. No GIF or video is needed. It shows the three family identities, lets the current branch grow toward the centre, then reveals the existing page underneath. It never owns or delays the actual page content. Pointer, keyboard, and scroll input dismiss it immediately; reduced motion, unavailable session storage, late hydration, and repeat visits skip it. Its maximum duration is 1.6 seconds.
 
-Set `introLogos` in `packages/brand/src/index.ts` to the three approved SVG/PNG assets. Each app must contain all three files at the same public paths because each deploys independently. `logos` controls header/footer identity separately. Until assets arrive, the introduction uses plain Motchi wordmarks with branch names, not invented MS/MW/MC artwork. The same-origin, per-tab session policy remains intentional; there is no cross-domain tracking cookie.
+`introLogos` currently shares the approved `logos` configuration in `packages/brand/src/index.ts`. Each app contains all three SVG files at the same public paths because each deploys independently. This avoids cross-origin dependencies. Missing logo slots retain text identity rather than invented artwork. The same-origin, per-tab session policy remains intentional; there is no cross-domain tracking cookie.
 
 ## Portfolio configuration
 

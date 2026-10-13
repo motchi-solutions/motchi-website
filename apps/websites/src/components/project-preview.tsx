@@ -30,7 +30,7 @@ export function ProjectPreview({ project }: { project: Project }) {
           <span>{project.industry}</span>
           <span>{asset ? "Project preview" : "Media placeholder"}</span>
         </div>
-        <div className="relative flex aspect-[16/11] items-center p-6 sm:p-10 lg:p-12">
+        <div className="relative flex aspect-16/11 items-center p-6 sm:p-10 lg:p-12">
           {asset ? (
             <div
               className={`w-full ${project.media.mobile ? "pr-8 sm:pr-10" : ""}`}

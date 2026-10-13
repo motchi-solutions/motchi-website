@@ -17,7 +17,16 @@ export const contactFieldErrors = {
   website: "Enter a complete http or https URL without account credentials.",
 } as const;
 export const interests = {
-  solutions: ["Websites", "Consulting", "Products", "Something else"],
+  solutions: [
+    "Websites",
+    "AI",
+    "Data",
+    "Cloud",
+    "Automation",
+    "Consulting",
+    "Products",
+    "Something else",
+  ],
   websites: [
     "New website",
     "Website redesign",

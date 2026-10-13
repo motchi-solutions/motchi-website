@@ -5,12 +5,16 @@ export function Approach() {
     <Section id="how-we-work">
       <SectionHeading
         eyebrow="How We Work"
-        title="The Handover Isn’t the Finish Line"
+        title="The Handover Isn't the Finish Line"
       >
         Understand the business, build what fits, and help people use it. Then
         stay available as questions arise and needs change.
       </SectionHeading>
-      <InteractiveSteps id="solutions-process" steps={processSteps} />
+      <InteractiveSteps
+        id="solutions-process"
+        steps={processSteps}
+        singleSelection
+      />
     </Section>
   );
 }

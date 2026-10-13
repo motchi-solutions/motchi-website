@@ -13,7 +13,7 @@ export function ErrorState({
         Something Went Wrong
       </p>
       <h1 className="max-w-reading text-h1 font-medium tracking-tight">
-        We Couldn’t Load This Page
+        We Couldn't Load This Page
       </h1>
       <p className="mt-6 max-w-lg text-body-lg leading-relaxed text-muted">
         Please try again, or email us directly if you need a hand. If you were

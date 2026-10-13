@@ -8,6 +8,7 @@ export function BranchMark({ branch }: { branch: Branch }) {
     <SiteLink
       href="/"
       className="brand-mark inline-flex min-h-12 items-center gap-3"
+      data-branch={branch}
       aria-label={`${family[branch].name} home`}
     >
       {logo && (
@@ -17,15 +18,15 @@ export function BranchMark({ branch }: { branch: Branch }) {
           height={logo.height}
           alt=""
           priority
-          className="h-12 w-auto max-w-20 object-contain"
+          className="h-11 w-11 object-contain"
         />
       )}
       <span className="flex flex-col">
         <span className="text-2xl font-semibold leading-none tracking-tight">
-          Motchi<span className="text-primary">.</span>
+          MOTCHI
         </span>
-        <span className="mt-1.5 text-xs tracking-widest uppercase">
-          {branch}
+        <span className="branch-label mt-1.5 text-sm font-medium tracking-wide">
+          {family[branch].shortName}
         </span>
       </span>
     </SiteLink>

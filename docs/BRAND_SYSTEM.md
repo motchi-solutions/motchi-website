@@ -37,3 +37,35 @@ Use Tailwind's regular four-pixel spacing scale. `py-hero` ranges 3–6rem, `py-
 ## Media assets
 
 See [MEDIA_ASSETS.md](MEDIA_ASSETS.md) for exact logo, intro, screenshot, client-logo, and optional animation locations, dimensions, and typed configuration examples. Approved assets are configured without changing page structure.
+
+## Family identity and approved assets
+
+The master wordmark is MOTCHI, followed by a visually secondary, readable branch name. The header combines the supplied monogram with this text; homepage heroes explicitly identify the branch. Solutions uses a connected toolkit with restrained geometric personality; Websites and Consulting retain their quieter treatments.
+
+SVG is the canonical logo format. Every app contains `ms-logo.svg`, `mw-logo.svg`, and `mc-logo.svg` in `public/brand/`. The single configuration lives in `packages/brand/src/index.ts`. Local copies support the shared family intro without cross-origin asset dependencies. Preserve the approved artwork.
+
+## Navigation and route motion
+
+Solutions navigation consistently leads to pages: Home, Services, Products, About, and Contact. Homepage branch previews remain useful shortcuts and use the approved logos. Capability hover/focus highlights a tool; clicking or activating its button reveals details.
+
+Each app uses a server-rendered route template for a brief content entrance. The shared branded loading fallback appears only while Next is actually loading a route, with a short visual delay to avoid flashes on quick visits. There is no artificial navigation delay or minimum display time; the fallback disappears as soon as content is ready. Reduced motion shows static states. These changes do not extend the existing first-visit intro.
+
+## Solutions motion refinement
+
+The hero toolkit enters as one group instead of animating each capability box independently. Its curved connectors trace in the same brief sequence. The Solutions process allows one stage or none selected, changes only on deliberate activation, and measures the step positions so its travelling marker follows both horizontal and stacked layouts. Reduced motion uses immediate state changes.
+
+## Mobile controls
+
+The toolkit retains a circular layout from 360px upward; narrower screens use a two-column list with its description first in both visual and keyboard order. Detail panels have a separate surface and spacing. A named button covers each whole process stage, including its number and summary; clicking the active stage collapses it. The native disclosure menu uses three lines, a restrained panel reveal, and a clear current-page surface, with reduced-motion alternatives.
+
+## Shared motion policy
+
+Controls use the fast/base tokens; menu entry uses 320ms and shared reveals use 480ms. Entrances use shared easing, small translations, and opacity. The mobile menu is a fixed overlay with stable header height and reserved scrollbar space. It sits directly below the header, with a distinct Contact CTA. Its links enter as one group; closing the disclosure animates briefly, while navigation and Escape close promptly.
+
+Avoid overlapping animations, animated layout dimensions, clipping reveals, and replaying completed section entrances. Reveal enhancement waits for hydration and respects changes to reduced-motion preferences. Content is visible without JavaScript. No navigation is held for an animation. See [web.dev's animation guidance](https://web.dev/articles/animations-guide).
+
+## Responsive rhythm and affordances
+
+Shared section/hero spacing scales from 3rem to 6rem. Controls use a 4px corner radius; framed surfaces use 6px. Keep circular identity marks circular. Footer groups stack on phones, use two columns on tablets, and three on desktop, with 44px minimum link targets. A static capability instruction identifies the next action; selected details reveal briefly without flashing, and reduced motion suppresses the reveal.
+
+All layouts declare `data-scroll-behavior="smooth"`, allowing Next to manage route scrolling independently of smooth in-page anchors. Anchor offsets clear the sticky header.

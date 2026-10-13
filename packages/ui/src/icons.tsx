@@ -9,6 +9,7 @@ export function Arrow({
   const Icon = external ? LuArrowUpRight : LuArrowRight;
   return (
     <Icon
+      data-direction={external ? "up-right" : "right"}
       aria-hidden="true"
       focusable="false"
       className={`interaction-arrow h-4 w-4 shrink-0 ${className}`}

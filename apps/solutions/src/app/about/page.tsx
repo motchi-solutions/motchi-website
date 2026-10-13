@@ -8,20 +8,17 @@ export const metadata = pageMetadata(
 export default function AboutPage() {
   return (
     <>
-      <PageHero eyebrow="About Motchi" title="Technology with People in Mind">
-        We make technology easier to choose, easier to use, and easier to
-        manage. The business comes first.
+      <PageHero eyebrow="About Motchi" title="About Motchi Solutions">
+        We help businesses build better websites and make technology easier to
+        use. Based in Toronto and working globally, we bring advice,
+        development, and ongoing support together.
       </PageHero>
       <Section className="bg-secondary text-inverse">
         <div className="grid gap-12 lg:grid-cols-2">
           <div>
             <Eyebrow light>Why Motchi</Eyebrow>
             <h2 className="max-w-md text-h2 font-medium tracking-tight">
-              Less to Manage.
-              <br />
-              <span className="font-display italic text-accent">
-                More Room to Work.
-              </span>
+              How We Support Your Business
             </h2>
           </div>
           <ol className="space-y-8">
@@ -32,7 +29,7 @@ export default function AboutPage() {
               ],
               [
                 "Keep the Conversation Clear",
-                "Know what’s being built, why a decision matters, and what happens next. Ask questions without needing to learn the jargon.",
+                "Know what's being built, why a decision matters, and what happens next. Ask questions without needing to learn the jargon.",
               ],
               [
                 "Keep Support Within Reach",
@@ -57,11 +54,7 @@ export default function AboutPage() {
           <div>
             <Eyebrow>About Motchi</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
-              Technology Is Our Work.
-              <br />
-              <span className="font-display italic text-primary">
-                Your Business Is the Point.
-              </span>
+              Who We Work With
             </h2>
           </div>
           <div className="space-y-6 text-lg leading-relaxed text-muted">
@@ -71,8 +64,13 @@ export default function AboutPage() {
               useful technology affordable and accessible to businesses.
             </p>
             <p>
-              We’re based in Toronto, proudly Canadian, and work with businesses
-              globally. Wherever you’re starting, we start by listening.
+              A small business should feel comfortable asking for help. A larger
+              organization should find the technical depth and reliability it
+              needs. Not every problem calls for an expensive solution.
+            </p>
+            <p>
+              We're based in Toronto, proudly Canadian, and work with businesses
+              globally. Wherever you're starting, we start by listening.
             </p>
           </div>
         </div>

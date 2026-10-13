@@ -2,34 +2,33 @@ import { AnimatedLink, ButtonLink, Container, Eyebrow } from "@motchi/ui";
 import { projects } from "@/content/projects";
 export function Hero() {
   return (
-    <section className="py-hero">
+    <section className="family-hero py-hero">
       <Container>
         <div className="grid gap-12 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-8">
-            <Eyebrow>Motchi Websites</Eyebrow>
+          <div className="family-hero-intro lg:col-span-8">
+            <Eyebrow>MOTCHI WEBSITES</Eyebrow>
             <h1 className="text-display font-medium tracking-tight">
-              A Website That
-              <br />
-              Feels Like
-              <br />
+              A Website That <br className="hidden lg:block" />
+              Feels Like <br className="hidden lg:block" />
               <span className="font-display italic text-primary">
                 Your Business.
               </span>
             </h1>
             <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted">
-              Your website should sound like you, make sense to your customers,
-              and help them take the next step. We design and build around that.
+              Give customers a clear picture of your business and an easy way to
+              enquire, book, or buy. We design and build a website that reflects
+              your identity and supports those goals.
             </p>
-            <div className="mt-9 flex flex-wrap gap-3">
+            <div className="family-hero-actions mt-9 flex flex-wrap gap-3">
               <ButtonLink href="/work">Explore Our Work</ButtonLink>
               <ButtonLink href="/contact" secondary>
                 Discuss Your Website
               </ButtonLink>
             </div>
           </div>
-          <div className="lg:col-span-4">
+          <div className="family-hero-secondary lg:col-span-4">
             <p className="mb-5 text-xs tracking-widest uppercase text-muted">
-              Different businesses. Different directions.
+              Explore Our Website Projects
             </p>
             <ul className="grid grid-cols-2 gap-x-5 lg:block">
               {projects.map((project) => (

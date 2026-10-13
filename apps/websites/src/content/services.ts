@@ -9,7 +9,7 @@ export const services = [
     id: "design-development",
     title: "Design & Development",
     summary:
-      "New websites and considered redesigns, built around your brand and customers.",
+      "A new website or a redesign that reflects your business and helps customers find what they need.",
     details: [
       "Page structure, content planning, and responsive visual design.",
       "Development and review of the agreed pages and customer journeys.",
@@ -21,7 +21,7 @@ export const services = [
     summary:
       "Connect booking, enquiries, and purchases with the tools behind your business.",
     details: [
-      "Map the customer flow and agree on the tools and handover points.",
+      "Plan the steps customers take and how booking or enquiry details reach your team.",
       "Implement the agreed integrations with clear ownership and access requirements.",
     ],
   },
@@ -32,7 +32,7 @@ export const services = [
       "Accessibility, performance, and SEO foundations, with support after launch.",
     details: [
       "Review agreed accessibility, performance, and search foundations before launch.",
-      "Discuss hosting, maintenance, and future changes as explicit parts of the scope.",
+      "Agree on hosting, maintenance, and what support is included after launch.",
     ],
   },
 ] satisfies WebsiteService[];

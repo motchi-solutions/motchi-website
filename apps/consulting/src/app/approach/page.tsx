@@ -1,5 +1,11 @@
 import { pageMetadata } from "@motchi/config/metadata";
-import { ContactCTA, PageHero, Section, SectionHeading } from "@motchi/ui";
+import {
+  ContactCTA,
+  PageHero,
+  Reveal,
+  Section,
+  SectionHeading,
+} from "@motchi/ui";
 import { Approach } from "@/components/approach";
 export const metadata = pageMetadata(
   "Our Approach",
@@ -9,18 +15,15 @@ export const metadata = pageMetadata(
 export default function Page() {
   return (
     <>
-      <PageHero
-        eyebrow="Our Approach"
-        title="From the First Question to Everyday Use"
-      >
-        An implementation-focused relationship, with clear responsibilities and
-        support through the stages your business needs.
+      <PageHero eyebrow="Our Approach" title="How We Work With Your Team">
+        See how we review your needs, agree on a plan, and put it into practice.
+        We make responsibilities clear and help your team use what we build.
       </PageHero>
       <Approach />
       <Section className="border-t border-border">
         <SectionHeading
           eyebrow="A Practical Engagement"
-          title="Agree on the Work Before the Tools"
+          title="What We Agree Before Starting"
         >
           We clarify the problem, decision-makers, constraints, and
           responsibilities together. Scope and support are agreed for each
@@ -41,14 +44,16 @@ export default function Page() {
               "An agreed handover and support arrangement, with room to review what needs improving.",
             ],
           ].map(([title, text]) => (
-            <article key={title} className="border-t border-border pt-6">
-              <h3 className="text-h3 font-medium">{title}</h3>
-              <p className="mt-4 leading-relaxed text-muted">{text}</p>
-            </article>
+            <Reveal key={title} className="service-card-reveal flex">
+              <article className="w-full border-t border-border pt-6">
+                <h3 className="text-h3 font-medium">{title}</h3>
+                <p className="mt-4 leading-relaxed text-muted">{text}</p>
+              </article>
+            </Reveal>
           ))}
         </div>
       </Section>
-      <ContactCTA title="Start with Your Business" />
+      <ContactCTA title="Tell Us What You Need Help With" />
     </>
   );
 }

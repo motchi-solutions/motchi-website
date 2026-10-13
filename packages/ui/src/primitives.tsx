@@ -103,7 +103,7 @@ export function SectionHeading({
   children?: ReactNode;
 }) {
   return (
-    <div className="mb-12 max-w-reading">
+    <div className="section-heading mb-12 max-w-reading">
       <Eyebrow>{eyebrow}</Eyebrow>
       <h2 className="text-h2 font-medium tracking-tight">{title}</h2>
       {children && (
@@ -115,7 +115,7 @@ export function SectionHeading({
   );
 }
 export function ContactCTA({
-  title = "Let’s Start With Your Business",
+  title = "How Can We Help Your Business?",
 }: {
   title?: string;
 }) {
@@ -123,16 +123,16 @@ export function ContactCTA({
     <Section className="cta-section relative overflow-hidden bg-primary text-inverse">
       <div className="relative flex flex-col justify-between gap-8 md:flex-row md:items-end">
         <div className="max-w-2xl">
-          <Eyebrow light>A Conversation, First</Eyebrow>
+          <Eyebrow light>Let's Talk</Eyebrow>
           <h2 className="text-h2 font-medium tracking-tight">{title}</h2>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-inverse/80">
-            Tell us what you’re working on. We typically respond with next steps
+            Tell us what you're working on. We typically respond with next steps
             or an initial quote within 2–3 business days.
           </p>
         </div>
         <div className="shrink-0">
           <ButtonLink href="/contact" light>
-            Talk to Motchi
+            Contact Us
           </ButtonLink>
         </div>
       </div>

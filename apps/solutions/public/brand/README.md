@@ -1,7 +1,9 @@
-# Approved Brand Assets
+# Approved Motchi Logos
 
-Add approved `ms-logo.svg` (or PNG) here and configure the matching `logos` slot in `packages/brand/src/index.ts`. Preserve intrinsic dimensions. The existing wordmark is a placeholder, not a recreated monogram.
+SVG is the canonical web format. Each app contains all three supplied family marks in `public/brand/`:
 
-The CSS family intro needs all three approved marks (`ms-logo.svg`, `mw-logo.svg`, `mc-logo.svg`) copied into every app's public/brand directory and configured in `introLogos`. No intro GIF or video is required.
+- `ms-logo.svg` — Motchi Solutions
+- `mw-logo.svg` — Motchi Websites
+- `mc-logo.svg` — Motchi Consulting
 
-See [MEDIA_ASSETS.md](../../../../docs/MEDIA_ASSETS.md) for the complete asset and accessibility requirements.
+Configure dimensions and local URLs in `packages/brand/src/index.ts`. Keeping the complete family in every app allows local public asset resolution and the shared family intro without cross-origin dependencies between sister sites. Use the supplied SVGs; do not redraw them. Header marks have empty alt text because the adjacent wordmark and home-link label already identify the branch.

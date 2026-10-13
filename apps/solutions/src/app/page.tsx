@@ -12,9 +12,12 @@ export default function Home() {
       <Businesses />
       <Products />
       <Approach />
-      <Section id="about" className="border-t border-border">
-        <div className="grid gap-8 lg:grid-cols-2">
-          <div>
+      <Section
+        id="about"
+        className="about-summary-section border-t border-border"
+      >
+        <div className="about-summary grid gap-8 lg:grid-cols-2">
+          <div className="about-summary-heading">
             <Eyebrow>About Motchi</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
               Toronto Roots.
@@ -24,7 +27,7 @@ export default function Home() {
               </span>
             </h2>
           </div>
-          <div>
+          <div className="about-summary-content">
             <p className="max-w-lg text-body-lg leading-relaxed text-muted">
               We make useful technology affordable and accessible. Based in
               Toronto and working globally, we bring advice, implementation, and
@@ -35,7 +38,7 @@ export default function Home() {
               arrow
               className="mt-6 min-h-12 text-primary"
             >
-              Meet Motchi
+              Learn More About Motchi
             </AnimatedLink>
           </div>
         </div>

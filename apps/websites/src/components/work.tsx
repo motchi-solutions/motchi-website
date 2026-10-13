@@ -13,7 +13,7 @@ export function Work({ featuredOnly = false }: { featuredOnly?: boolean }) {
     <Section id="work">
       <SectionHeading
         eyebrow="Selected Website Work"
-        title="The Business Sets the Direction."
+        title="Websites for Different Businesses"
       >
         Food, beauty, project work, and professional services. Each needs its
         own voice and its own customer journey.

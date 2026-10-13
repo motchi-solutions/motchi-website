@@ -1,7 +1,9 @@
 import { ContactPageContent } from "@motchi/ui";
 import type { Metadata } from "next";
 export const dynamic = "force-dynamic";
-type Props = { searchParams: Promise<{ status?: string; fields?: string }> };
+type Props = {
+  searchParams: Promise<{ status?: string; fields?: string; topic?: string }>;
+};
 export async function generateMetadata({
   searchParams,
 }: Props): Promise<Metadata> {
@@ -13,8 +15,13 @@ export async function generateMetadata({
   };
 }
 export default async function Contact({ searchParams }: Props) {
-  const { status, fields } = await searchParams;
+  const { status, fields, topic } = await searchParams;
   return (
-    <ContactPageContent branch="solutions" status={status} fields={fields} />
+    <ContactPageContent
+      branch="solutions"
+      status={status}
+      fields={fields}
+      topic={topic}
+    />
   );
 }

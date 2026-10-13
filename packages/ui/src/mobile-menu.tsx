@@ -12,10 +12,48 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
     const node = details.current;
     if (!node) return;
     setOpen(node.open);
-    const close = (restore = false) => {
-      node.open = false;
-      if (restore) node.querySelector("summary")?.focus();
+    let closing: Animation | undefined;
+    const summary = node.querySelector("summary");
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const close = (restore = false, animate = false) => {
+      closing?.cancel();
+      closing = undefined;
+      const finish = () => {
+        closing = undefined;
+        node.open = false;
+        if (restore) summary?.focus();
+      };
+      const panel = node.querySelector<HTMLElement>(".mobile-panel");
+      if (animate && panel && !preference.matches) {
+        const duration = Number.parseFloat(
+          getComputedStyle(node).getPropertyValue("--motion-fast"),
+        );
+        closing = panel.animate(
+          [
+            { opacity: 1, transform: "translateY(0)" },
+            { opacity: 0, transform: "translateY(-4px)" },
+          ],
+          {
+            duration,
+            easing: getComputedStyle(node)
+              .getPropertyValue("--ease-reveal")
+              .trim(),
+          },
+        );
+        closing.onfinish = finish;
+      } else finish();
     };
+    const toggle = (event: MouseEvent) => {
+      if (node.open) {
+        event.preventDefault();
+        close(false, true);
+      }
+    };
+    const reduce = () => {
+      if (preference.matches && closing) close();
+    };
+    summary?.addEventListener("click", toggle);
+    preference.addEventListener("change", reduce);
     const keyboard = (event: KeyboardEvent) => {
       if (event.key === "Escape" && node.open) {
         event.preventDefault();
@@ -39,6 +77,9 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
     document.addEventListener("focusin", outside);
     desktop.addEventListener("change", resize);
     return () => {
+      closing?.cancel();
+      summary?.removeEventListener("click", toggle);
+      preference.removeEventListener("change", reduce);
       document.removeEventListener("keydown", keyboard);
       document.removeEventListener("pointerdown", outside);
       document.removeEventListener("focusin", outside);
@@ -69,12 +110,13 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
         <span className="hamburger" aria-hidden="true">
           <span />
           <span />
+          <span />
         </span>
       </summary>
       <nav
         id="mobile-navigation"
         aria-label="Mobile navigation"
-        className="mobile-panel absolute right-0 top-full mt-4 w-72 max-w-[calc(100vw-2.5rem)] border border-border bg-surface p-4 shadow-lg"
+        className="mobile-panel w-72 max-w-[calc(100vw-2.5rem)] border border-border bg-surface p-4 shadow-lg"
       >
         <p className="px-3 pt-2 pb-3 text-xs tracking-widest uppercase text-muted">
           Explore Motchi
@@ -84,13 +126,16 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
             <li key={item.href}>
               <SiteLink
                 href={item.href}
-                className="nav-link flex min-h-12 items-center justify-between px-3 text-base"
+                className={`nav-link flex min-h-12 items-center justify-between px-3 text-base ${item.href === "/contact" ? "mobile-contact-cta" : ""}`}
                 onClick={() => {
                   if (details.current) details.current.open = false;
                 }}
               >
                 {item.label}
-                <Arrow external className="text-muted" />
+                <Arrow
+                  external={/^(https?:)?\/\//.test(item.href)}
+                  className="text-muted"
+                />
               </SiteLink>
             </li>
           ))}

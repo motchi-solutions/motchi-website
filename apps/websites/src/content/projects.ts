@@ -34,7 +34,7 @@ export const projects: Project[] = [
     industry: "Restaurant / food",
     services: ["Brand Presentation", "Customer-Facing Website"],
     description:
-      "A restaurant’s website should make its character clear and help customers find their next step. VietBites is one example of that direction.",
+      "A restaurant's website should make its character clear and help customers find their next step. VietBites is one example of that direction.",
     url: null,
     media: {},
     treatment: "paper",
@@ -42,7 +42,7 @@ export const projects: Project[] = [
   },
   {
     id: "vee-nails",
-    title: "Vee’s Nails Studio",
+    title: "Vee's Nails Studio",
     industry: "Beauty / services",
     services: ["Website", "Booking Experience"],
     description:

@@ -1,13 +1,23 @@
 import { navigation } from "@motchi/config/navigation";
-import { organizationSchema, siteMetadata } from "@motchi/config/metadata";
+import {
+  organizationSchema,
+  siteMetadata,
+  siteViewport,
+} from "@motchi/config/metadata";
 import { Footer, Header, MotionEnhancements } from "@motchi/ui";
 import { fontVariables } from "@motchi/ui/fonts";
 import type { ReactNode } from "react";
 import "./globals.css";
 export const metadata = siteMetadata("solutions");
+export const viewport = siteViewport;
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" data-branch="solutions" className={fontVariables}>
+    <html
+      data-scroll-behavior="smooth"
+      lang="en"
+      data-branch="solutions"
+      className={fontVariables}
+    >
       <body>
         <MotionEnhancements />
         <a

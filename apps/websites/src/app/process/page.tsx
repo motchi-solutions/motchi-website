@@ -9,19 +9,15 @@ export const metadata = pageMetadata(
 export default function Page() {
   return (
     <>
-      <PageHero
-        eyebrow="Our Process"
-        title="Clear Decisions, from Brief to Launch"
-      >
-        You know what happens next, where your input matters, and what is
-        included. We agree on milestones around the work your website actually
-        needs.
+      <PageHero eyebrow="Our Process" title="How We Build Your Website">
+        See how we plan, design, build, and launch your website. Each step makes
+        clear what we do, where your input is needed, and what happens next.
       </PageHero>
       <Process />
       <Section className="border-t border-border">
         <SectionHeading
           eyebrow="Before We Begin"
-          title="A Shared Definition of Ready"
+          title="What We Agree Before Starting"
         >
           A clear brief keeps the work proportionate. These are the decisions we
           make together.
@@ -48,7 +44,7 @@ export default function Page() {
           ))}
         </dl>
       </Section>
-      <ContactCTA title="Let’s Discuss Your Website" />
+      <ContactCTA title="Let's Discuss Your Website" />
     </>
   );
 }

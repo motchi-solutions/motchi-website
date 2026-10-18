@@ -13,7 +13,7 @@
     "./validation": "./src/validation.ts"
   },
   "peerDependencies": {
-    "next": ">=16 <17"
+    "next": "^16.4.1"
   },
   "dependencies": {
     "@motchi/brand": "*",

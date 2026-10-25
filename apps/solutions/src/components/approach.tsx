@@ -3,12 +3,9 @@ import { processSteps } from "@/content/process";
 export function Approach() {
   return (
     <Section id="how-we-work">
-      <SectionHeading
-        eyebrow="How We Work"
-        title="The Handover Isn't the Finish Line"
-      >
-        Understand the business, build what fits, and help people use it. Then
-        stay available as questions arise and needs change.
+      <SectionHeading eyebrow="How We Work" title="Your Project, Step by Step">
+        We learn what your business needs, agree on a plan, build the solution,
+        and support your team after launch.
       </SectionHeading>
       <InteractiveSteps
         id="solutions-process"

@@ -1,16 +1,20 @@
+import styles from "./businesses.module.css";
 import Image from "next/image";
 import { logos } from "@motchi/brand";
 import { getSites } from "@motchi/config/env";
 
 import { ButtonLink, Reveal, Section, SectionHeading } from "@motchi/ui";
-export function Businesses() {
+export function Businesses({
+  textured = false,
+  title = "Websites and Technology Consulting",
+}: {
+  textured?: boolean;
+  title?: string;
+}) {
   const family = getSites();
   return (
-    <Section id="businesses">
-      <SectionHeading
-        eyebrow="Our Services"
-        title="What Would Help Your Business Move Forward?"
-      >
+    <Section id="businesses" className={textured ? styles.textured : ""}>
+      <SectionHeading eyebrow="Our Services" title={title}>
         Reach your customers with a better website. Help your team with better
         systems. Our two branches bring focused expertise and practical support.
       </SectionHeading>
@@ -34,9 +38,9 @@ export function Businesses() {
               <h3 className="text-3xl font-medium">Motchi Websites</h3>
             </div>
             <p className="mt-5 mb-8 max-w-md leading-relaxed text-muted">
-              A website should reflect your business and help customers do what
-              they came to do. We design around your brand, your audience, and
-              the next step.
+              An affordable website shaped around your business, customers, and
+              budget. We agree on what matters now, with maintenance options to
+              keep supporting you after launch.
             </p>
             <p className="mb-8 text-sm text-primary">
               Business websites · Booking · Integrations
@@ -67,9 +71,9 @@ export function Businesses() {
               <h3 className="text-3xl font-medium">Motchi Consulting</h3>
             </div>
             <p className="mt-5 mb-8 max-w-md leading-relaxed text-inverse/80">
-              When a workflow, platform, or technology decision is holding you
-              back, we help work through it and carry the plan into
-              implementation.
+              When a process, platform, or technology decision is holding you
+              back, we help you understand the options and put a practical plan
+              to work.
             </p>
             <p className="mb-8 text-sm text-accent">
               AI · Data · Digital systems · Adoption

@@ -4,6 +4,7 @@ export const contactLimits = {
   name: 100,
   email: 254,
   company: 150,
+  budget: 100,
   website: 500,
   messageMin: 10,
   messageMax: 5000,
@@ -13,6 +14,7 @@ export const contactFieldErrors = {
   email: "Enter a valid email address.",
   company: `Use up to ${contactLimits.company} characters without line breaks.`,
   interest: "Choose an area of interest.",
+  budget: "Use up to 100 characters without line breaks.",
   message: `Enter ${contactLimits.messageMin}–${contactLimits.messageMax.toLocaleString("en-CA")} characters.`,
   website: "Enter a complete http or https URL without account credentials.",
 } as const;
@@ -51,6 +53,7 @@ export type ContactInput = {
   interest: string;
   message: string;
   website: string;
+  budget: string;
 };
 export type ContactErrors = Partial<Record<keyof ContactInput, string>>;
 function hasControls(value: string, multiline = false): boolean {
@@ -78,6 +81,7 @@ export function validateContact(
     interest: value("interest"),
     message: value("message"),
     website: value("website"),
+    budget: value("budget"),
   };
   const errors: ContactErrors = {};
   if (
@@ -100,6 +104,8 @@ export function validateContact(
     hasControls(input.message, true)
   )
     errors.message = contactFieldErrors.message;
+  if (input.budget.length > contactLimits.budget || hasControls(input.budget))
+    errors.budget = contactFieldErrors.budget;
   if (input.website) {
     try {
       const url = new URL(input.website);
@@ -120,5 +126,10 @@ export function validateContact(
       errors[field] = contactFieldErrors[field];
   }
   if (branch !== "websites") input.website = "";
+  if (
+    branch !== "websites" &&
+    !(branch === "solutions" && input.interest === "Websites")
+  )
+    input.budget = "";
   return { input, errors };
 }

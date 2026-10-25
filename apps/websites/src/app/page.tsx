@@ -15,7 +15,7 @@ export default function Home() {
           <div>
             <Eyebrow>Built Around Your Business</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
-              Website Services for Your Business
+              Design, Integrations, and Ongoing Care
             </h2>
           </div>
           <div>
@@ -44,7 +44,9 @@ export default function Home() {
               Explore Our Services
             </AnimatedLink>
             <div className="mt-8 border-t border-border pt-6">
-              <h3 className="text-h3 font-medium">From Brief to Support</h3>
+              <h3 className="text-h3 font-medium">
+                From Planning to Website Care
+              </h3>
               <p className="mt-3 text-small leading-relaxed text-muted">
                 {processSteps.map((step) => step.title).join(" → ")}
               </p>
@@ -67,7 +69,7 @@ export default function Home() {
           <div className="about-summary-heading">
             <Eyebrow>About Motchi Websites</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
-              About Motchi Websites
+              Design That Reflects Your Business
             </h2>
           </div>
           <div className="about-summary-content">
@@ -85,7 +87,7 @@ export default function Home() {
           </div>
         </div>
       </Section>
-      <ContactCTA title="What Should Your Website Do for You?" />
+      <ContactCTA title="Let's Plan Your Website" />
     </>
   );
 }

@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     "./typescript": "./tsconfig.base.json",
+    "./dev-origins": "./src/dev-origins.ts",
     "./security": "./src/security.ts",
     "./metadata": "./src/metadata.ts",
     "./sites": "./src/sites.ts",

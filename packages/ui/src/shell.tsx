@@ -1,3 +1,4 @@
+import { LuArrowUp } from "react-icons/lu";
 import { SiteLink } from "./site-link";
 import { getSites } from "@motchi/config/env";
 import { contactEmail, organization } from "@motchi/config/sites";
@@ -5,7 +6,6 @@ import type { Branch } from "@motchi/brand";
 import { BranchMark } from "./branch-mark";
 import { HeaderEnhancements } from "./header-enhancements";
 import { Arrow, MailIcon } from "./icons";
-import { Introduction } from "./intro";
 import { MobileMenu, type NavItem } from "./mobile-menu";
 import { AnimatedLink, ButtonLink, Container } from "./primitives";
 
@@ -24,7 +24,6 @@ export function Header({
       className="site-header sticky top-0 z-30 border-b border-border bg-background"
     >
       <HeaderEnhancements />
-      <Introduction branch={branch} />
       <Container>
         <div className="flex min-h-24 items-center justify-between gap-4">
           <BranchMark branch={branch} />
@@ -102,23 +101,35 @@ export function Footer({ branch }: { branch: Branch }) {
               <span className="min-w-0 wrap-break-word">{contactEmail}</span>
             </SiteLink>
             <p className="mt-5 text-sm leading-relaxed text-muted">
-              Based in {organization.locationLabel}.
+              Based in {organization.location}.
               <br />
               {organization.serviceRegion}.
             </p>
           </div>
         </div>
-        <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-border pt-6 text-xs text-muted sm:flex-row sm:items-center">
+        <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-border pt-6 text-sm text-muted sm:flex-row sm:items-center">
           <p>
             © {new Date().getFullYear()} {organization.displayName}
           </p>
-          <div className="flex gap-6">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
             <AnimatedLink href="/privacy" className="min-h-11">
               Privacy
             </AnimatedLink>
             <AnimatedLink href="/contact" className="min-h-11">
               Contact
             </AnimatedLink>
+            <a
+              href="#page-top"
+              className="inline-flex min-h-11 items-center gap-2 text-primary underline-offset-4 hover:underline focus-visible:underline"
+            >
+              Back to top
+              <LuArrowUp
+                className="interaction-arrow h-4 w-4 shrink-0"
+                data-direction="up"
+                aria-hidden="true"
+                focusable="false"
+              />
+            </a>
           </div>
         </div>
       </Container>

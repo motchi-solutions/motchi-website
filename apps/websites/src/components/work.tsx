@@ -1,3 +1,4 @@
+import Image from "next/image";
 import {
   AnimatedLink,
   ButtonLink,
@@ -13,7 +14,11 @@ export function Work({ featuredOnly = false }: { featuredOnly?: boolean }) {
     <Section id="work">
       <SectionHeading
         eyebrow="Selected Website Work"
-        title="Websites for Different Businesses"
+        title={
+          featuredOnly
+            ? "Recent Website Projects"
+            : "See Each Website in Detail"
+        }
       >
         Food, beauty, project work, and professional services. Each needs its
         own voice and its own customer journey.
@@ -39,6 +44,16 @@ export function Work({ featuredOnly = false }: { featuredOnly?: boolean }) {
                 <Eyebrow>
                   {String(index + 1).padStart(2, "0")} / {project.industry}
                 </Eyebrow>
+                {project.media.logo && (
+                  <Image
+                    src={project.media.logo.src}
+                    alt=""
+                    width={project.media.logo.width}
+                    height={project.media.logo.height}
+                    sizes="48px"
+                    className="mb-4 h-12 w-12 object-contain"
+                  />
+                )}
                 <h3 className="text-3xl font-medium tracking-tight sm:text-4xl">
                   {project.title}
                 </h3>
@@ -72,7 +87,7 @@ export function Work({ featuredOnly = false }: { featuredOnly?: boolean }) {
                     </dl>
                   </details>
                 )}
-                <div className="mt-7 flex flex-wrap items-center gap-4">
+                <div className="mt-7 flex flex-wrap items-center gap-4 empty:hidden">
                   {project.url && (
                     <ButtonLink href={project.url} secondary>
                       Visit {project.title}
@@ -85,11 +100,6 @@ export function Work({ featuredOnly = false }: { featuredOnly?: boolean }) {
                     >
                       Read the Case Study
                     </AnimatedLink>
-                  )}
-                  {!project.url && (
-                    <p className="text-xs text-muted">
-                      Approved screenshots and project link to follow.
-                    </p>
                   )}
                 </div>
               </div>

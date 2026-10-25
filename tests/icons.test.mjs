@@ -26,7 +26,7 @@ test("manifest identities match supplied PNG dimensions and honest icon purposes
     );
     assert.equal(manifest.start_url, "/");
     assert.equal(manifest.display, "standalone");
-    assert.equal(manifest.background_color, "#F4F0E6");
+    assert.equal(manifest.background_color, "#F6F2E9");
     assert.equal(manifest.theme_color, "#5B0202");
     for (const icon of manifest.icons) {
       const bytes = readFileSync(`apps/${branch}/public${icon.src}`);

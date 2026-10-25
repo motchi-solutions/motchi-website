@@ -26,7 +26,7 @@ docs/                    Maintenance and launch guidance
 
 ## Local setup
 
-Use Node 24 (`.nvmrc`) and npm 11 or newer. Run commands from the repository root. For a fresh clone with the committed lockfile:
+Use Node 26.12 or newer within Node 26 (`.nvmrc`) and npm 11 or newer. Run commands from the repository root. For a fresh clone with the committed lockfile:
 
 ```bash
 npm ci

@@ -25,3 +25,7 @@ export { InteractiveSteps, type ProcessStep } from "./interactive-steps";
 export { RouteLoading } from "./route-loading";
 
 export { PageEntry } from "./page-entry";
+
+export { HeroBrand } from "./hero-brand";
+
+export { Introduction } from "./intro";

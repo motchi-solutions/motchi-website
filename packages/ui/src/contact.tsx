@@ -1,6 +1,7 @@
 import { resolveCapability } from "./capability-content";
 import { ConfigurationError } from "@motchi/config/env";
 import { contactMessage } from "@motchi/email/feedback";
+import { WebsiteBudget } from "./website-budget";
 import { ContactForm } from "./contact-form";
 import { Toast } from "./toast";
 import { sites as family, contactEmail } from "@motchi/config/sites";
@@ -28,6 +29,12 @@ export function ContactPageContent({
 }) {
   const capability =
     branch === "solutions" ? resolveCapability(topic) : undefined;
+  const initialInterest =
+    capability?.interest ??
+    (branch === "solutions" &&
+    (topic === "Something else" || topic === "Products")
+      ? topic
+      : "");
   const message = contactMessage(status);
   const sent = status === "sent" || status === "partial";
   let token: string | null = null;
@@ -93,7 +100,7 @@ export function ContactPageContent({
           className="border border-border bg-surface p-5 sm:p-8 lg:p-10"
         >
           <h2 className="mb-2 text-h3 font-medium">
-            {capability ? capability.action : "Start a Conversation"}
+            {capability ? capability.action : "Tell Us About Your Project"}
           </h2>
           <p className="mb-8 text-sm leading-relaxed text-muted">
             A short introduction is enough. We'll work through the details
@@ -163,28 +170,36 @@ export function ContactPageContent({
                 />
                 {error("company")}
               </div>
-              <div>
-                <label htmlFor="interest" className="text-sm font-semibold">
-                  {branch === "consulting"
-                    ? "Area of Interest"
-                    : "What can we help with?"}{" "}
-                  <span className="font-normal">(required)</span>
-                </label>
-                <select
-                  {...props("interest")}
-                  required
-                  defaultValue={capability?.interest ?? ""}
-                  className={inputClass}
-                >
-                  <option value="" disabled>
-                    Select an option
-                  </option>
-                  {interests[branch].map((interest) => (
-                    <option key={interest}>{interest}</option>
-                  ))}
-                </select>
-                {error("interest")}
-              </div>
+              <WebsiteBudget
+                branch={branch}
+                initialInterest={initialInterest}
+                error={
+                  invalidFields.has("budget") ? fieldErrors.budget : undefined
+                }
+              >
+                <div>
+                  <label htmlFor="interest" className="text-sm font-semibold">
+                    {branch === "consulting"
+                      ? "Area of Interest"
+                      : "What can we help with?"}{" "}
+                    <span className="font-normal">(required)</span>
+                  </label>
+                  <select
+                    {...props("interest")}
+                    required
+                    defaultValue={initialInterest}
+                    className={inputClass}
+                  >
+                    <option value="" disabled>
+                      Select an option
+                    </option>
+                    {interests[branch].map((interest) => (
+                      <option key={interest}>{interest}</option>
+                    ))}
+                  </select>
+                  {error("interest")}
+                </div>
+              </WebsiteBudget>
               {branch === "websites" && (
                 <div>
                   <label htmlFor="website" className="text-sm font-semibold">

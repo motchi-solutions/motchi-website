@@ -109,3 +109,43 @@ test("email validation rejects malformed addresses and permits common plus addre
     assert.equal(isEmail(email), false, email);
   }
 });
+
+test("optional website budgets are bounded, scoped, and delivered safely", () => {
+  const website = validateContact(form({ budget: "CAD 149–500" }), "websites");
+  assert.deepEqual(website.errors, {});
+  assert.equal(website.input.budget, "CAD 149–500");
+  assert.ok(
+    notification(website.input, "Motchi Websites").textContent.includes(
+      "CAD 149–500",
+    ),
+  );
+  assert.equal(validateContact(form(), "websites").input.budget, "");
+  assert.equal(
+    validateContact(
+      form({ interest: "Websites", budget: "Not sure yet" }),
+      "solutions",
+    ).input.budget,
+    "Not sure yet",
+  );
+  assert.equal(
+    validateContact(form({ interest: "AI", budget: "500" }), "solutions").input
+      .budget,
+    "",
+  );
+  assert.ok(
+    validateContact(form({ budget: "a".repeat(101) }), "websites").errors
+      .budget,
+  );
+  assert.ok(
+    validateContact(form({ budget: "100\n200" }), "websites").errors.budget,
+  );
+  const repeated = form({ budget: "500" });
+  repeated.append("budget", "1000");
+  assert.ok(validateContact(repeated, "websites").errors.budget);
+  const unsafe = validateContact(form({ budget: "<script>" }), "websites");
+  assert.ok(
+    !notification(unsafe.input, "Motchi Websites").htmlContent.includes(
+      "<script>",
+    ),
+  );
+});

@@ -31,15 +31,15 @@ export default function Home() {
           <ol className="divide-y divide-border border-t border-border">
             {[
               [
-                "An Unclear Decision",
+                "Choose the Right Technology",
                 "Compare AI, platforms, and technology options against your real requirements.",
               ],
               [
-                "Work That Takes Too Long",
+                "Reduce Repetitive Work",
                 "Connect data, simplify workflows, and help existing systems work better together.",
               ],
               [
-                "A Plan That Needs Delivery",
+                "Put Your Plan Into Practice",
                 "Turn an agreed approach into working software, adoption, and continued support.",
               ],
             ].map(([title, text], i) => (
@@ -92,7 +92,7 @@ export default function Home() {
           <div className="about-summary-heading">
             <Eyebrow>About Motchi Consulting</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
-              About Motchi Consulting
+              Advice That Leads to Action
             </h2>
           </div>
           <div className="about-summary-content">
@@ -110,7 +110,7 @@ export default function Home() {
           </div>
         </div>
       </Section>
-      <ContactCTA title="Tell Us What You Need Help With" />
+      <ContactCTA title="Let's Plan Your Next Step" />
     </>
   );
 }

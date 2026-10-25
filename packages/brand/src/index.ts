@@ -31,6 +31,6 @@ export const introLogos = logos;
 export const palette = {
   gold: "#D4AF7C",
   burgundy: "#5B0202",
-  cream: "#F4F0E6",
+  cream: "#F6F2E9",
   charcoal: "#171313",
 } as const;

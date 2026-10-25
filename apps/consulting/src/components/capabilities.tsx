@@ -5,7 +5,7 @@ export function Capabilities() {
     <Section id="capabilities">
       <SectionHeading
         eyebrow="Where We Can Help"
-        title="How We Can Help Your Business"
+        title="AI, Data, and Technology Services"
       >
         Sometimes the answer is a new system. Sometimes it's a better use of
         what you already have. The business problem leads the conversation.

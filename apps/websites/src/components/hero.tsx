@@ -1,4 +1,4 @@
-import { AnimatedLink, ButtonLink, Container, Eyebrow } from "@motchi/ui";
+import { AnimatedLink, ButtonLink, Container, HeroBrand } from "@motchi/ui";
 import { projects } from "@/content/projects";
 export function Hero() {
   return (
@@ -6,23 +6,23 @@ export function Hero() {
       <Container>
         <div className="grid gap-12 lg:grid-cols-12 lg:items-end">
           <div className="family-hero-intro lg:col-span-8">
-            <Eyebrow>MOTCHI WEBSITES</Eyebrow>
+            <HeroBrand branch="websites" />
             <h1 className="text-display font-medium tracking-tight">
-              A Website That <br className="hidden lg:block" />
-              Feels Like <br className="hidden lg:block" />
+              Websites Built <br className="hidden lg:block" />
+              Around <br className="hidden lg:block" />
               <span className="font-display italic text-primary">
                 Your Business.
               </span>
             </h1>
             <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted">
-              Give customers a clear picture of your business and an easy way to
-              enquire, book, or buy. We design and build a website that reflects
-              your identity and supports those goals.
+              An affordable, responsive website built around your business, your
+              customers, and your budget. Start with what you need today, with
+              maintenance options to keep your website cared for after launch.
             </p>
             <div className="family-hero-actions mt-9 flex flex-wrap gap-3">
               <ButtonLink href="/work">Explore Our Work</ButtonLink>
               <ButtonLink href="/contact" secondary>
-                Discuss Your Website
+                Start a Project
               </ButtonLink>
             </div>
           </div>

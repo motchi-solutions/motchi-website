@@ -1,22 +1,21 @@
-import { ButtonLink, Container, Eyebrow } from "@motchi/ui";
+import { ButtonLink, Container, HeroBrand } from "@motchi/ui";
 export function Hero() {
   return (
     <section className="family-hero relative overflow-hidden bg-primary py-hero text-inverse">
       <Container>
         <div className="grid gap-12 lg:grid-cols-12 lg:items-end">
           <div className="family-hero-intro relative lg:col-span-8">
-            <Eyebrow light>MOTCHI CONSULTING</Eyebrow>
+            <HeroBrand branch="consulting" light />
             <h1 className="text-display font-medium tracking-tight">
-              Technology Should <br className="hidden lg:block" />
-              Solve the Problem. <br className="hidden lg:block" />
+              Technology Advice. <br className="hidden lg:block" />
               <span className="font-display italic text-accent">
-                Not Become One.
+                Hands-On Support.
               </span>
             </h1>
             <p className="mt-7 max-w-xl text-lg leading-relaxed text-inverse/80">
-              Get practical help with the systems, data, and decisions holding
-              your team back. We work with you from understanding the problem to
-              implementing a solution and helping people use it.
+              Practical technology consulting and hands-on implementation for
+              AI, data, and business systems. We start with what your team
+              needs, then help put the right solution to work.
             </p>
             <div className="family-hero-actions mt-9 flex flex-wrap gap-3">
               <ButtonLink href="/contact" light>

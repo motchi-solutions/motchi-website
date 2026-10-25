@@ -45,3 +45,11 @@ export type SiteConfig = {
   description: string;
 };
 export type Sites = Record<Branch, SiteConfig>;
+
+export const websiteStarter = {
+  price: "CAD $149",
+  description:
+    "A focused one-page website using your supplied text and images, with responsive design and a simple contact link.",
+  terms:
+    "Final scope and revision allowance are agreed before work begins. Extra pages, booking, payments, and integrations are quoted separately. Applicable taxes, domain, hosting, and ongoing care are additional.",
+} as const;

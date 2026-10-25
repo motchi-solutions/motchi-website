@@ -1,5 +1,5 @@
 import { pageMetadata } from "@motchi/config/metadata";
-import { ContactCTA, PageHero } from "@motchi/ui";
+import { ButtonLink, ContactCTA, PageHero } from "@motchi/ui";
 import { Work } from "@/components/work";
 export const metadata = pageMetadata(
   "Our Work",
@@ -9,13 +9,16 @@ export const metadata = pageMetadata(
 export default function Page() {
   return (
     <>
-      <PageHero eyebrow="Our Work" title="Our Website Projects">
-        Explore website projects for restaurants, beauty businesses, and
-        professional services. See the needs, design choices, and features
-        behind each project.
+      <PageHero
+        eyebrow="Our Work"
+        title="Website Projects for Real Businesses"
+        actions={<ButtonLink href="/contact">Start a Project</ButtonLink>}
+      >
+        See how each website fits its business, brand, and customers. Explore
+        the designs on desktop and mobile.
       </PageHero>
       <Work />
-      <ContactCTA title="Let's Discuss Your Website" />
+      <ContactCTA title="Let's Plan Your Website" />
     </>
   );
 }

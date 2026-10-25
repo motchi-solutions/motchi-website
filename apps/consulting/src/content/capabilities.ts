@@ -4,7 +4,7 @@ export const capabilities = [
     title: "AI Consulting",
     problem: "Where would AI actually help?",
     description:
-      "Separate useful opportunities from unnecessary complexity. Plan responsible adoption and build practical tools into the workflows that need them.",
+      "Find where AI can help your team and plan its use around your data and responsibilities. Review provider data use, access controls, and human oversight before integrating it into everyday work.",
     areas: [
       "Opportunity Assessment",
       "Workflow Automation",
@@ -17,7 +17,7 @@ export const capabilities = [
     title: "Databricks Consulting",
     problem: "Make the platform work for your team.",
     description:
-      "Help implement or operate Databricks with the data engineering, architecture, and governance your business needs. Review how the platform is used and where it can work better.",
+      "Implement or improve Databricks with data engineering, architecture, and governance shaped around your business. Review access permissions, data ownership, and storage and processing locations as part of the platform plan.",
     areas: [
       "Platform Implementation & Support",
       "Data Engineering",
@@ -30,7 +30,7 @@ export const capabilities = [
     title: "Data & Analytics",
     problem: "Get from scattered data to useful answers.",
     description:
-      "Work through the sources, pipelines, and reporting behind your business questions. Build a dependable foundation for the decisions your team makes.",
+      "Connect sources, pipelines, and reporting to the questions your team needs answered. Plan data security, governance, and residency alongside analytics, with clear ownership, access rules, and retention expectations.",
     areas: [
       "Analytics Strategy",
       "Data Pipelines & Platforms",

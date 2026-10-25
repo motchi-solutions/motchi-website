@@ -5,7 +5,7 @@ export function Approach() {
     <Section id="approach" className="bg-surface">
       <SectionHeading
         eyebrow="How We Work"
-        title="From Planning to Working Systems"
+        title="Your Consulting Project, Step by Step"
       >
         We work alongside your team through implementation, adoption, and
         continued support. Every engagement has an agreed scope and clear

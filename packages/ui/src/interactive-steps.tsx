@@ -1,9 +1,11 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { LuMousePointerClick } from "react-icons/lu";
 export type ProcessStep = {
   id: string;
   title: string;
   summary: string;
+  detailHeading?: string;
   details: readonly string[];
 };
 function StepDetails({ step }: { step: ProcessStep }) {
@@ -31,11 +33,13 @@ export function InteractiveSteps({
   steps: readonly ProcessStep[];
   singleSelection?: boolean;
 }) {
+  const [interacted, setInteracted] = useState(false);
   const [enhanced, setEnhanced] = useState(false);
   const [desktop, setDesktop] = useState(false);
   const [selected, setSelected] = useState<number | null>(
     singleSelection ? 0 : null,
   );
+  const [markerTravels, setMarkerTravels] = useState(false);
   const [outgoing, setOutgoing] = useState<number | null>(null);
   useEffect(() => {
     if (outgoing === null) return;
@@ -54,6 +58,7 @@ export function InteractiveSteps({
     return () => media.removeEventListener("change", update);
   }, [singleSelection]);
   const track = useRef<HTMLDivElement>(null);
+  const lastMarkerIndex = useRef(0);
   const [geometry, setGeometry] = useState<{
     x: number;
     y: number;
@@ -62,7 +67,7 @@ export function InteractiveSteps({
     endX: number;
     endY: number;
   }>();
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!singleSelection || !enhanced) return;
     const node = track.current;
     if (!node) return;
@@ -76,7 +81,8 @@ export function InteractiveSteps({
           y: rect.top - bounds.top + rect.height / 2,
         };
       };
-      const active = center(selected ?? 0);
+      if (selected !== null) lastMarkerIndex.current = selected;
+      const active = center(lastMarkerIndex.current);
       const start = center(0);
       const end = center(numbers.length - 1);
       setGeometry({
@@ -101,6 +107,16 @@ export function InteractiveSteps({
       data-desktop={desktop}
       data-single-selection={singleSelection}
     >
+      {singleSelection && enhanced && (
+        <p
+          className="step-interaction-hint"
+          data-dismissed={interacted}
+          aria-hidden={interacted}
+        >
+          <LuMousePointerClick aria-hidden="true" />
+          <span>Select a step to explore our process.</span>
+        </p>
+      )}
       <div ref={track} className="step-track">
         <ol
           className="step-journey"
@@ -126,8 +142,20 @@ export function InteractiveSteps({
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <h3 id={titleId} className="text-h3 font-semibold">
+                    <h3
+                      id={titleId}
+                      className="step-title-with-toggle text-h3 font-semibold"
+                    >
                       {step.title}
+                      {enhanced && (
+                        <span
+                          className="step-disclosure-icon"
+                          aria-hidden="true"
+                        >
+                          <span className="step-disclosure-horizontal" />
+                          <span className="step-disclosure-vertical" />
+                        </span>
+                      )}
                     </h3>
                     <p
                       id={summaryId}
@@ -145,6 +173,7 @@ export function InteractiveSteps({
                       aria-controls={desktop ? `${id}-panel` : detailId}
                       aria-expanded={selected === index}
                       onClick={() => {
+                        setInteracted(true);
                         const next = selected === index ? null : index;
                         const animate =
                           desktop &&
@@ -153,6 +182,7 @@ export function InteractiveSteps({
                           !window.matchMedia("(prefers-reduced-motion: reduce)")
                             .matches;
                         setOutgoing(animate ? selected : null);
+                        setMarkerTravels(selected !== null && next !== null);
                         setSelected(next);
                       }}
                     />
@@ -195,8 +225,9 @@ export function InteractiveSteps({
               />
             </svg>
             <span
-              hidden={selected === null}
               aria-hidden="true"
+              data-visible={selected !== null}
+              data-travelling={markerTravels}
               className="step-travel-marker"
               style={{
                 transform: `translate(${geometry.x - 24}px, ${geometry.y - 24}px)`,
@@ -224,7 +255,7 @@ export function InteractiveSteps({
                 </p>
               )}
               <h3 className="mb-5 text-h3 font-medium text-primary">
-                {steps[outgoing].title}: In Practice
+                {steps[outgoing].detailHeading ?? steps[outgoing].title}
               </h3>
               <StepDetails step={steps[outgoing]} />
             </div>
@@ -240,7 +271,7 @@ export function InteractiveSteps({
                 id={`${id}-panel-title`}
                 className="mb-5 text-h3 font-medium text-primary"
               >
-                {current.title}: In Practice
+                {current.detailHeading ?? current.title}
               </h3>
               <StepDetails step={current} />
             </div>

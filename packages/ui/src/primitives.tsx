@@ -59,10 +59,10 @@ export function ButtonLink({
 }: ComponentProps<"a"> & { secondary?: boolean; light?: boolean }) {
   const color = light
     ? secondary
-      ? "border-inverse/40 text-inverse hover:bg-inverse/10"
-      : "border-inverse bg-inverse text-primary hover:border-accent hover:bg-accent"
+      ? "border-inverse/40 text-inverse hover:border-inverse hover:bg-inverse/15"
+      : "button-light border-inverse bg-inverse text-primary hover:border-accent hover:bg-accent"
     : secondary
-      ? "border-border text-foreground hover:bg-surface"
+      ? "border-border text-foreground hover:border-primary hover:bg-primary/5 hover:text-primary"
       : "border-primary bg-primary text-inverse hover:bg-secondary";
   const external = typeof href === "string" && /^https?:/.test(href);
   return (
@@ -103,7 +103,7 @@ export function SectionHeading({
   children?: ReactNode;
 }) {
   return (
-    <div className="section-heading mb-12 max-w-reading">
+    <div className="section-heading mb-8 max-w-reading">
       <Eyebrow>{eyebrow}</Eyebrow>
       <h2 className="text-h2 font-medium tracking-tight">{title}</h2>
       {children && (
@@ -115,7 +115,7 @@ export function SectionHeading({
   );
 }
 export function ContactCTA({
-  title = "How Can We Help Your Business?",
+  title = "Let's Plan Your Next Step",
 }: {
   title?: string;
 }) {

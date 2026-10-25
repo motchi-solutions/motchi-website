@@ -1,5 +1,6 @@
 import { pageMetadata } from "@motchi/config/metadata";
 import {
+  ButtonLink,
   ContactCTA,
   PageHero,
   Reveal,
@@ -15,15 +16,20 @@ export const metadata = pageMetadata(
 export default function Page() {
   return (
     <>
-      <PageHero eyebrow="Our Approach" title="How We Work With Your Team">
-        See how we review your needs, agree on a plan, and put it into practice.
-        We make responsibilities clear and help your team use what we build.
+      <PageHero
+        eyebrow="Our Approach"
+        title="How We Plan and Deliver Your Project"
+        actions={<ButtonLink href="/contact">Discuss Your Project</ButtonLink>}
+      >
+        Understand the problem. Build the solution. Help your team use it. We
+        work with you through implementation, adoption, and agreed ongoing
+        support.
       </PageHero>
       <Approach />
       <Section className="border-t border-border">
         <SectionHeading
-          eyebrow="A Practical Engagement"
-          title="What We Agree Before Starting"
+          eyebrow="Before We Begin"
+          title="Your Scope, Responsibilities, and Support"
         >
           We clarify the problem, decision-makers, constraints, and
           responsibilities together. Scope and support are agreed for each
@@ -32,15 +38,15 @@ export default function Page() {
         <div className="grid gap-8 md:grid-cols-3">
           {[
             [
-              "A Clear Starting Point",
+              "Your Goals and Constraints",
               "The current process, what is getting in the way, and what a useful improvement would look like.",
             ],
             [
-              "Shared Responsibilities",
+              "Access, Approvals, and Ownership",
               "The people, access, and approvals needed to move from a recommendation to implementation.",
             ],
             [
-              "Support That Fits",
+              "Handover and Ongoing Support",
               "An agreed handover and support arrangement, with room to review what needs improving.",
             ],
           ].map(([title, text]) => (
@@ -53,7 +59,7 @@ export default function Page() {
           ))}
         </div>
       </Section>
-      <ContactCTA title="Tell Us What You Need Help With" />
+      <ContactCTA title="Let's Plan Your Next Step" />
     </>
   );
 }

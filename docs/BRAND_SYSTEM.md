@@ -1,6 +1,6 @@
 # Brand system
 
-The Motchi family shares a foundation: gold `#D4AF7C`, burgundy `#5B0202`, cream `#F4F0E6`, and charcoal `#171313`. The approved MS/MW/MC monograms will share a recognizable gold M. Do not construct replacement monograms in CSS, text, or SVG. Until supplied, the sites use ordinary Motchi wordmarks and an explicitly temporary geometric favicon.
+The Motchi family shares a foundation: gold `#D4AF7C`, burgundy `#5B0202`, cream `#F6F2E9`, and charcoal `#171313`. The approved MS/MW/MC monograms will share a recognizable gold M. Do not construct replacement monograms in CSS, text, or SVG. Until supplied, the sites use ordinary Motchi wordmarks and an explicitly temporary geometric favicon.
 
 ## Identity and visual rhythm
 
@@ -18,11 +18,11 @@ Fluid hero type ranges from 2.625rem to 5.5rem; section headings from 2rem to 3.
 
 ## Shared motion
 
-The token system defines `--motion-fast` (180ms), `--motion-base` (260ms), `--motion-slow` (600ms), `--motion-intro` (1600ms), `--ease-standard`, and `--ease-emphasized`. Use these for changes in colour, underline, arrows, media, and entrances; do not add arbitrary durations across branches.
+The token system defines `--motion-fast` (210ms), `--motion-base` (320ms), `--motion-slow` (750ms), `--motion-intro` (3800ms), `--ease-standard`, and `--ease-emphasized`. Use these for changes in colour, underline, arrows, media, and entrances; do not add arbitrary durations across branches.
 
 `Section` wraps a shared server-rendered `Reveal`. HTML is visible initially. A single `MotionEnhancements` observer marks only offscreen blocks pending, reveals them on entry, and reveals focused content together with its ancestors. No-JavaScript or unsupported observers leave content visible. The reduced-motion override disables all animations/transitions, clears pending visual states, and stops smooth scrolling. Do not animate every paragraph.
 
-The introduction shows all three branches, selects the current branch, and opens into the existing hero. It uses `intro.css`, no media download. It lasts at most 1.6 seconds and immediately yields to pointer, keyboard, or scroll input. Reduced motion, restricted storage, late hydration, and repeat visits skip it. Session storage is scoped to each origin and tab. Approved logo slots replace plain wordmarks; no monograms are invented.
+The full-screen entry shows all three approved identities, emphasizes and centres the current branch, then expands it into a radial reveal of the server-rendered page. It uses `intro.css`, lasts 3.8 seconds, and immediately yields to pointer, keyboard, wheel, or scroll input. Reduced motion skips it. Each new document or reload plays it; root-layout persistence prevents replay during same-app navigation. There is no playback storage record. CSS ends the overlay independently of hydration. No monograms are recreated.
 
 ## Editorial rules
 
@@ -40,7 +40,7 @@ See [MEDIA_ASSETS.md](MEDIA_ASSETS.md) for exact logo, intro, screenshot, client
 
 ## Family identity and approved assets
 
-The master wordmark is MOTCHI, followed by a visually secondary, readable branch name. The header combines the supplied monogram with this text; homepage heroes explicitly identify the branch. Solutions uses a connected toolkit with restrained geometric personality; Websites and Consulting retain their quieter treatments.
+The master wordmark is MOTCHI, followed by a visually secondary, readable branch name. Header and footer branch labels all use burgundy text and the same thin gold left separator. The header combines the supplied monogram with this text; homepage heroes explicitly identify the branch. Solutions uses a connected toolkit with restrained geometric personality; Websites and Consulting retain their quieter treatments.
 
 SVG is the canonical logo format. Every app contains `ms-logo.svg`, `mw-logo.svg`, and `mc-logo.svg` in `public/brand/`. The single configuration lives in `packages/brand/src/index.ts`. Local copies support the shared family intro without cross-origin asset dependencies. Preserve the approved artwork.
 
@@ -69,3 +69,5 @@ Avoid overlapping animations, animated layout dimensions, clipping reveals, and 
 Shared section/hero spacing scales from 3rem to 6rem. Controls use a 4px corner radius; framed surfaces use 6px. Keep circular identity marks circular. Footer groups stack on phones, use two columns on tablets, and three on desktop, with 44px minimum link targets. A static capability instruction identifies the next action; selected details reveal briefly without flashing, and reduced motion suppresses the reveal.
 
 All layouts declare `data-scroll-behavior="smooth"`, allowing Next to manage route scrolling independently of smooth in-page anchors. Anchor offsets clear the sticky header.
+
+The entry holds the family long enough to recognise it, fades the unselected identities completely before centring the selected branch, briefly holds the centred lockup, then enlarges the monogram while the text dissolves and the radial aperture reveals the page. Total duration remains below three seconds. Solutions' process uses a quiet pointer hint above the steps until the first deliberate selection; the hint reserves its space when dismissed.

@@ -9,7 +9,7 @@ export function Products() {
         <div className="lg:col-span-2">
           <Eyebrow>Motchi Products</Eyebrow>
           <h2 className="text-h2 font-medium tracking-tight">
-            What We're Working On
+            Ideas Taking Shape
           </h2>
           <p className="mt-6 max-w-sm leading-relaxed text-muted">
             These products are still in development. We will share more about

@@ -11,19 +11,19 @@ export function PrivacyNotice() {
         <div className="mt-10 space-y-8 leading-relaxed text-muted">
           <section>
             <h2 className="mb-3 text-xl font-semibold text-foreground">
-              When You Contact Us
+              Information You Share
             </h2>
             <p>
               We collect the name, email address, company, area of interest,
-              message, and any website URL you choose to provide. We use this
-              information to respond, understand your needs, and discuss a
-              possible engagement. Please avoid sending sensitive or
-              confidential information through the form.
+              message, and any website URL or project budget you choose to
+              provide. We use this information to respond, understand your
+              needs, and discuss a possible engagement. Please avoid sending
+              sensitive or confidential information through the form.
             </p>
           </section>
           <section>
             <h2 className="mb-3 text-xl font-semibold text-foreground">
-              How Enquiries Are Handled
+              How Your Information Is Handled
             </h2>
             <p>
               Enquiries and acknowledgements are sent through Brevo to our
@@ -36,7 +36,7 @@ export function PrivacyNotice() {
           </section>
           <section>
             <h2 className="mb-3 text-xl font-semibold text-foreground">
-              Storage and Access
+              Keeping and Accessing Your Information
             </h2>
             <p>
               Enquiries are retained in our business email system as needed to
@@ -48,18 +48,18 @@ export function PrivacyNotice() {
           </section>
           <section>
             <h2 className="mb-3 text-xl font-semibold text-foreground">
-              Browser Storage
+              Tracking and Browser Storage
             </h2>
             <p>
-              The website does not include advertising or analytics trackers. A
-              session-storage flag remembers whether the short brand
-              introduction has played in your current browser session. Core
-              content and enquiry forms work without JavaScript.
+              The website does not include advertising or analytics trackers.
+              The short, decorative brand introduction plays on a new page load
+              and does not store a playback record in your browser. Core content
+              and enquiry forms work without JavaScript.
             </p>
           </section>
           <section>
             <h2 className="mb-3 text-xl font-semibold text-foreground">
-              Questions
+              Privacy Questions
             </h2>
             <p>
               Contact{" "}

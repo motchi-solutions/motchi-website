@@ -1,20 +1,16 @@
 import { pageMetadata } from "@motchi/config/metadata";
-import { ContactCTA, PageHero } from "@motchi/ui";
-import { Products } from "@/components/products";
+import { ContactCTA } from "@motchi/ui";
+import { ProductsHero } from "@/components/products-hero";
 export const metadata = pageMetadata(
-  "Motchi Products",
+  "Products",
   "Explore the products and features we are developing. See what is planned and its current status.",
   "/products",
 );
 export default function Page() {
   return (
     <>
-      <PageHero eyebrow="Motchi Products" title="Products We're Developing">
-        Take a look at the products and features we are working on. These are
-        still being developed and are not yet available to use.
-      </PageHero>
-      <Products />
-      <ContactCTA />
+      <ProductsHero />
+      <ContactCTA title="Have a Question About a Product?" />
     </>
   );
 }

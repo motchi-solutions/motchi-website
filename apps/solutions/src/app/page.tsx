@@ -20,18 +20,18 @@ export default function Home() {
           <div className="about-summary-heading">
             <Eyebrow>About Motchi</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
-              Toronto Roots.
+              Practical Technology.
               <br />
               <span className="font-display italic text-primary">
-                A Wider Perspective.
+                Support Within Reach.
               </span>
             </h2>
           </div>
           <div className="about-summary-content">
             <p className="max-w-lg text-body-lg leading-relaxed text-muted">
-              We make useful technology affordable and accessible. Based in
-              Toronto and working globally, we bring advice, implementation, and
-              continued support into one practical relationship.
+              We make useful technology accessible to businesses of different
+              sizes. Clear advice, help building the solution, and ongoing
+              support make it easier to choose what fits your needs and budget.
             </p>
             <AnimatedLink
               href="/about"

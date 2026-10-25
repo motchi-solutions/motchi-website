@@ -7,7 +7,7 @@ export function Services() {
         <div className="lg:col-span-2">
           <Eyebrow>Website Services</Eyebrow>
           <h2 className="text-h2 font-medium tracking-tight">
-            How We Can Help With Your Website
+            Choose the Services You Need
           </h2>
           <p className="mt-6 max-w-sm leading-relaxed text-muted">
             A useful website connects what customers need with what your team

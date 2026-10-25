@@ -4,7 +4,7 @@ import {
   siteMetadata,
   siteViewport,
 } from "@motchi/config/metadata";
-import { Footer, Header, MotionEnhancements } from "@motchi/ui";
+import { Footer, Header, Introduction, MotionEnhancements } from "@motchi/ui";
 import { fontVariables } from "@motchi/ui/fonts";
 import type { ReactNode } from "react";
 import "./globals.css";
@@ -18,7 +18,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       data-branch="solutions"
       className={fontVariables}
     >
-      <body>
+      <body id="page-top">
+        <Introduction branch="solutions" />
         <MotionEnhancements />
         <a
           href="#main-content"

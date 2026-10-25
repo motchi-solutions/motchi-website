@@ -24,6 +24,7 @@ export function notification(
     ["Email", input.email],
     ["Company", input.company || "Not provided"],
     ["Interest", input.interest],
+    ...(input.budget ? [["Website budget (CAD)", input.budget]] : []),
     ["Existing website", input.website || "Not provided"],
   ];
   return {

@@ -1,0 +1,623 @@
+.hero {
+  position: relative;
+  isolation: isolate;
+  background: radial-gradient(
+    ellipse at 90% 15%,
+    color-mix(in srgb, var(--brand-accent) 12%, transparent),
+    transparent 55%
+  );
+}
+.explorer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0;
+  min-width: 0;
+}
+.navigationHint {
+  display: none;
+  margin-top: 0.75rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+@media (max-width: 767px) {
+  .explorer {
+    touch-action: pan-y pinch-zoom;
+  }
+  .navigationHint {
+    display: block;
+    text-align: center;
+  }
+}
+.prompt {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+.prompt svg {
+  color: var(--brand-primary);
+  flex-shrink: 0;
+}
+.options {
+  position: sticky;
+  top: 6rem;
+  z-index: 10;
+  padding-block: 0.75rem;
+  background: var(--background);
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+.options button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.875rem 0.75rem;
+  min-width: 0;
+  font-size: 0.875rem;
+  min-height: 3.5rem;
+  border: 1px solid transparent;
+  border-bottom: 2px solid var(--border);
+  border-radius: var(--radius-control) var(--radius-control) 0 0;
+  background: var(--surface);
+  color: var(--foreground);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    background-color 320ms ease,
+    border-color 320ms ease,
+    color 320ms ease;
+}
+.options svg {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--brand-primary);
+}
+.options button:hover {
+  border-color: var(--brand-primary);
+}
+.options button[aria-selected="true"] {
+  background: var(--brand-primary);
+  border-color: var(--brand-primary);
+  color: var(--inverse);
+}
+.options :where(button[aria-selected="true"]) svg {
+  color: var(--brand-accent);
+}
+.possibility {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  margin-top: 1.25rem;
+  align-items: center;
+}
+.visual {
+  scroll-margin-top: 1rem;
+  min-width: 0;
+  padding: 0 1rem 1rem;
+}
+.scene {
+  text-align: center;
+  animation: scene-arrive 650ms ease both;
+}
+.sculpture {
+  position: relative;
+  isolation: isolate;
+  width: min(100%, 25rem);
+  aspect-ratio: 9 / 7;
+  margin-inline: auto;
+}
+.halo {
+  position: absolute;
+  z-index: -1;
+  inset: 10% 18%;
+  border: 1px solid var(--brand-accent);
+  border-radius: 50%;
+  opacity: 0.4;
+}
+.petal {
+  position: absolute;
+  top: 23%;
+  left: 24%;
+  width: 52%;
+  height: 54%;
+  border-radius: 65% 35% 65% 35%;
+  transform-origin: 50% 50%;
+  background: linear-gradient(
+    145deg,
+    var(--brand-accent),
+    color-mix(in srgb, var(--brand-accent) 10%, var(--surface))
+  );
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--brand-accent) 35%, transparent);
+  animation: unfurl 950ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.petal:nth-of-type(1) {
+  --turn: -45deg;
+  --shift: -24%;
+  transform: rotate(var(--turn)) translateY(var(--shift));
+}
+.petal:nth-of-type(2) {
+  --turn: 75deg;
+  --shift: -24%;
+  transform: rotate(var(--turn)) translateY(var(--shift));
+  animation-delay: 70ms;
+  background: linear-gradient(
+    145deg,
+    var(--surface),
+    color-mix(in srgb, var(--brand-accent) 45%, var(--surface))
+  );
+}
+.petal:nth-of-type(3) {
+  --turn: 195deg;
+  --shift: -24%;
+  transform: rotate(var(--turn)) translateY(var(--shift));
+  animation-delay: 140ms;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--brand-primary) 75%, var(--brand-accent)),
+    var(--brand-primary)
+  );
+}
+.scene[data-goal="Automation"] .petal {
+  border-radius: 28% 72% 28% 72%;
+}
+.scene[data-goal="Data"] .petal {
+  border-radius: 50%;
+  --shift: -32%;
+}
+.thread {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.thread path {
+  stroke: var(--brand-accent);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 950;
+  stroke-dashoffset: 0;
+  animation: trace 1100ms ease 120ms both;
+}
+.emblem {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 5.5rem;
+  height: 5.5rem;
+  transform: translate(-50%, -50%);
+  color: var(--brand-primary);
+  background: #fff;
+  border: 1px solid color-mix(in srgb, var(--brand-accent) 35%, transparent);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 28px -22px var(--charcoal);
+  pointer-events: none;
+  overflow: hidden;
+  animation: emblem-arrive 1000ms ease 100ms both;
+}
+.emblem svg {
+  width: 3rem;
+  height: 3rem;
+  margin-top: 0.5rem;
+  animation: icon-arrive 1200ms cubic-bezier(0.22, 1, 0.36, 1) 220ms both;
+}
+.visualTitle {
+  min-block-size: 2lh;
+  margin-top: 0.75rem;
+  font-weight: 600;
+}
+.path {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  position: relative;
+  gap: 0.75rem;
+}
+.path::before {
+  content: "";
+  position: absolute;
+  top: 0.875rem;
+  left: 16.66%;
+  right: 16.66%;
+  height: 1px;
+  background: var(--brand-accent);
+  transform-origin: left;
+  animation: connect 800ms ease both;
+}
+.path > div {
+  position: relative;
+  min-width: 0;
+}
+.path span {
+  display: grid;
+  place-items: center;
+  position: relative;
+  margin-inline: auto;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid var(--brand-accent);
+  border-radius: 50%;
+  background: var(--background);
+  color: var(--brand-primary);
+  font-size: 0.75rem;
+}
+.path p {
+  min-block-size: 3lh;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-top: 0.5rem;
+}
+.copy {
+  display: grid;
+  padding: 1rem 0;
+  min-width: 0;
+}
+.copyReveal {
+  grid-area: 1 / 1;
+  min-width: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 450ms var(--ease-reveal),
+    visibility 0s 450ms;
+}
+.copyReveal[data-active="true"] {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+
+@media (min-width: 1024px) {
+  .options {
+    position: static;
+  }
+  .possibility {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 5rem);
+  }
+  .copy {
+    padding: 0;
+  }
+}
+
+@keyframes scene-arrive {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes unfurl {
+  from {
+    opacity: 0;
+    transform: rotate(calc(var(--turn) - 30deg)) translateY(0) scale(0.65);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(var(--turn)) translateY(var(--shift)) scale(1);
+  }
+}
+@keyframes trace {
+  from {
+    stroke-dashoffset: 950;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes emblem-arrive {
+  from {
+    opacity: 0;
+    scale: 0.85;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+@keyframes copy-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes connect {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@media (max-width: 767px) {
+  .options {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.375rem;
+  }
+  .options button {
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.375rem;
+    padding: 0.625rem 0.25rem;
+    min-width: 0;
+    width: 100%;
+    font-size: 0.875rem;
+    text-align: center;
+    border-radius: var(--radius-control);
+  }
+  .options svg {
+    width: 1rem;
+    height: 1rem;
+  }
+  .fullLabel {
+    display: none;
+  }
+  .shortLabel {
+    display: inline;
+  }
+  .possibility {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .visual {
+    padding: 0;
+  }
+  .sculpture {
+    max-width: 21rem;
+  }
+  .copy {
+    order: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scene,
+  .petal,
+  .thread path,
+  .emblem,
+  .copyReveal,
+  .path::before {
+    animation: none;
+  }
+  .copyReveal,
+  .options button {
+    transition: none;
+  }
+}
+
+.frameDots {
+  position: absolute;
+  top: 0.625rem;
+  left: 0.625rem;
+  display: flex;
+  gap: 0.2rem;
+}
+.frameDots i {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--brand-accent);
+}
+.globe {
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+}
+.meridian {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: globe-turn 2200ms ease-in-out 400ms both;
+}
+.scene[data-goal="Automation"] .emblem svg {
+  animation-name: workflow-arrive;
+}
+.scene[data-goal="Data"] .emblem svg {
+  animation: chart-draw 1500ms ease 400ms both;
+}
+@keyframes icon-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes workflow-arrive {
+  from {
+    opacity: 0;
+    transform: rotate(-18deg) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+  }
+}
+@keyframes globe-turn {
+  0%,
+  100% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(0.2);
+  }
+}
+@keyframes chart-draw {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .emblem svg,
+  .meridian,
+  .scene[data-goal="Data"] .emblem svg {
+    animation: none;
+  }
+}
+
+.shortLabel {
+  display: none;
+}
+@media (max-width: 767px) {
+  .shortLabel {
+    display: inline;
+  }
+}
+.workflow {
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.workflowFirst {
+  fill: var(--brand-primary);
+  animation: workflow-release 2200ms ease 400ms both;
+}
+.workflowLast {
+  fill: var(--brand-primary);
+  animation: workflow-complete 2200ms ease 400ms both;
+}
+.workflowProgress {
+  stroke: none;
+  fill: var(--brand-accent);
+  animation: workflow-transfer 2200ms ease 400ms both;
+}
+@keyframes workflow-release {
+  0%,
+  25% {
+    fill: var(--brand-primary);
+  }
+  55%,
+  100% {
+    fill: transparent;
+  }
+}
+@keyframes workflow-complete {
+  0%,
+  65% {
+    fill: transparent;
+  }
+  90%,
+  100% {
+    fill: var(--brand-primary);
+  }
+}
+@keyframes workflow-transfer {
+  0%,
+  25% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  35% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  55% {
+    opacity: 1;
+    transform: translate(0, 10px);
+  }
+  75% {
+    opacity: 1;
+    transform: translate(10px, 13px);
+  }
+  90%,
+  100% {
+    opacity: 0;
+    transform: translate(14px, 13px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .workflowFirst,
+  .workflowLast,
+  .workflowProgress {
+    animation: none;
+  }
+  .workflowFirst {
+    fill: transparent;
+  }
+  .workflowProgress {
+    opacity: 0;
+  }
+}
+
+.compass {
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+}
+.compassNeedle {
+  transform-box: view-box;
+  transform-origin: center;
+  animation: compass-navigate 2400ms ease-in-out 500ms both;
+}
+@keyframes compass-navigate {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  22% {
+    transform: rotate(-24deg);
+  }
+  46% {
+    transform: rotate(18deg);
+  }
+  68% {
+    transform: rotate(-8deg);
+  }
+  85% {
+    transform: rotate(3deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .compassNeedle {
+    animation: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .sculpture {
+    width: min(100%, 26rem);
+    aspect-ratio: 9 / 7;
+  }
+  .visualTitle {
+    min-block-size: 1lh;
+  }
+  .path {
+    margin-top: 0.75rem;
+  }
+  .path p {
+    min-block-size: 2lh;
+  }
+  .visual {
+    padding-bottom: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .prompt {
+    margin-bottom: 0.5rem;
+  }
+  .options {
+    padding-block: 0.5rem;
+  }
+}

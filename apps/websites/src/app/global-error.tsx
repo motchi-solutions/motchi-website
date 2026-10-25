@@ -14,7 +14,7 @@ export default function GlobalError({ reset }: { reset: () => void }) {
         }}
       >
         <main>
-          <h1>We Couldn’t Load This Page</h1>
+          <h1>We Couldn't Load This Page</h1>
           <p>
             Please try again, or email {contactEmail}. If you were sending an
             enquiry, check for confirmation before submitting again.

@@ -4,8 +4,8 @@ export function Approach() {
   return (
     <Section id="approach" className="bg-surface">
       <SectionHeading
-        eyebrow="From Idea to Everyday Use"
-        title="Carry the Plan Through"
+        eyebrow="How We Work"
+        title="Your Consulting Project, Step by Step"
       >
         We work alongside your team through implementation, adoption, and
         continued support. Every engagement has an agreed scope and clear

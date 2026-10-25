@@ -1,0 +1,32 @@
+.textured {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: radial-gradient(
+    ellipse at 5% 85%,
+    color-mix(in srgb, var(--brand-accent) 9%, transparent),
+    transparent 50%
+  );
+}
+.textured::before,
+.textured::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+  width: clamp(14rem, 35vw, 32rem);
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in srgb, var(--brand-accent) 28%, transparent);
+}
+.textured::before {
+  left: -8%;
+  bottom: -15%;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2rem color-mix(in srgb, var(--brand-accent) 3%, transparent);
+}
+.textured::after {
+  right: -12%;
+  top: 5%;
+  border-radius: 22%;
+  transform: rotate(30deg);
+}

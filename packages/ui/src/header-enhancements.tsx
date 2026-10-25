@@ -16,6 +16,7 @@ export function HeaderEnhancements() {
       links.some((link) => {
         const url = new URL(link.href);
         return (
+          url.origin === window.location.origin &&
           url.pathname === window.location.pathname &&
           url.hash === `#${section.id}`
         );
@@ -31,6 +32,7 @@ export function HeaderEnhancements() {
       for (const link of links) {
         const url = new URL(link.href);
         const selected =
+          url.origin === window.location.origin &&
           (url.pathname === window.location.pathname ||
             (url.pathname !== "/" &&
               window.location.pathname.startsWith(`${url.pathname}/`))) &&

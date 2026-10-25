@@ -12,30 +12,33 @@ export default function Home() {
       <Businesses />
       <Products />
       <Approach />
-      <Section id="about" className="border-t border-border">
-        <div className="grid gap-8 lg:grid-cols-2">
-          <div>
+      <Section
+        id="about"
+        className="about-summary-section border-t border-border"
+      >
+        <div className="about-summary grid gap-8 lg:grid-cols-2">
+          <div className="about-summary-heading">
             <Eyebrow>About Motchi</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
-              Toronto Roots.
+              Practical Technology.
               <br />
               <span className="font-display italic text-primary">
-                A Wider Perspective.
+                Support Within Reach.
               </span>
             </h2>
           </div>
-          <div>
+          <div className="about-summary-content">
             <p className="max-w-lg text-body-lg leading-relaxed text-muted">
-              We make useful technology affordable and accessible. Based in
-              Toronto and working globally, we bring advice, implementation, and
-              continued support into one practical relationship.
+              We make useful technology accessible to businesses of different
+              sizes. Clear advice, help building the solution, and ongoing
+              support make it easier to choose what fits your needs and budget.
             </p>
             <AnimatedLink
               href="/about"
               arrow
               className="mt-6 min-h-12 text-primary"
             >
-              Meet Motchi
+              Learn More About Motchi
             </AnimatedLink>
           </div>
         </div>

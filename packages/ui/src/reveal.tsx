@@ -1,4 +1,5 @@
-import type { ReactNode } from "react";
+"use client";
+import { type ReactNode, useEffect, useRef } from "react";
 export function Reveal({
   children,
   className = "",
@@ -6,8 +7,20 @@ export function Reveal({
   children: ReactNode;
   className?: string;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    node.dataset.revealMounted = "true";
+    node.dispatchEvent(
+      new CustomEvent("motchi:reveal-ready", { bubbles: true }),
+    );
+    return () => {
+      delete node.dataset.revealMounted;
+    };
+  }, []);
   return (
-    <div data-reveal="ready" className={className}>
+    <div ref={ref} data-reveal="ready" className={className}>
       {children}
     </div>
   );

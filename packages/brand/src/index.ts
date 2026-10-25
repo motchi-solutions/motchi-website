@@ -20,21 +20,17 @@ export type GifAsset = {
 };
 export type MediaAsset = ImageAsset | VideoAsset | GifAsset;
 export type LogoAsset = { src: string; width: number; height: number };
-// Approved assets only. Configure these slots after placing files in public/brand/.
+// Approved SVGs resolve locally in every app.
 export const logos: Record<Branch, LogoAsset | null> = {
-  solutions: null,
-  websites: null,
-  consulting: null,
+  solutions: { src: "/brand/ms-logo.svg", width: 1095, height: 1095 },
+  websites: { src: "/brand/mw-logo.svg", width: 1095, height: 1095 },
+  consulting: { src: "/brand/mc-logo.svg", width: 1095, height: 1095 },
 };
-// All three approved marks must be copied into each app's public/brand folder.
-export const introLogos: Record<Branch, LogoAsset | null> = {
-  solutions: null,
-  websites: null,
-  consulting: null,
-};
+// The same family assets are available for the existing intro.
+export const introLogos = logos;
 export const palette = {
   gold: "#D4AF7C",
   burgundy: "#5B0202",
-  cream: "#F4F0E6",
+  cream: "#F6F2E9",
   charcoal: "#171313",
 } as const;

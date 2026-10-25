@@ -1,6 +1,6 @@
 # Media assets
 
-Use authentic, approved assets. No client screenshots, logos, project photography, or monograms have been invented. Current portfolio imagery and favicon remain placeholders. Assets belong to each deployed app's public folder; paths in configuration begin at `/`.
+Use authentic, approved assets. No client screenshots, logos, project photography, or monograms have been invented. All four portfolio projects use supplied desktop/mobile screenshots and logos; approved favicon/app-icon assets are integrated separately. Assets belong to each deployed app's public folder; paths in configuration begin at `/`.
 
 ## Exact locations
 
@@ -29,14 +29,14 @@ apps/websites/public/media/projects/
     preview.gif
 ```
 
-The final filenames under `kamanda/` illustrate the same optional files supported in every project folder. PNG/JPEG/SVG are also supported where appropriate; change the configured path to match. Keep all currently absent fields absent instead of pointing at missing files. Approved favicons replace each app's `src/app/icon.svg`; do not use the temporary circle as finalized brand artwork.
+The final filenames under `kamanda/` illustrate the same optional files supported in every project folder. PNG/JPEG/SVG are also supported where appropriate; change the configured path to match. Keep all currently absent fields absent instead of pointing at missing files. Approved favicons are present in each app's `src/app/`; see [ICONS.md](ICONS.md).
 
 ## Logos
 
-Use clean SVG with a correct viewBox, no scripts, embedded credentials, or external references. A transparent PNG at 256×256 or larger is a fallback for a square monogram. Preserve intrinsic aspect ratio. In `packages/brand/src/index.ts`, replace the matching null slot:
+SVG is the canonical web format. Preserve the supplied artwork and intrinsic aspect ratio. All three approved marks are present in every app's `public/brand/` directory and configured in `packages/brand/src/index.ts`:
 
 ```ts
-solutions: { src: "/brand/ms-logo.svg", width: 64, height: 64 }
+solutions: { src: "/brand/ms-logo.svg", width: 1095, height: 1095 }
 // websites uses /brand/mw-logo.svg; consulting uses /brand/mc-logo.svg.
 ```
 
@@ -44,9 +44,7 @@ solutions: { src: "/brand/ms-logo.svg", width: 64, height: 64 }
 
 ## Introduction
 
-The intro uses CSS transforms, opacity, and a clipping reveal. No GIF or video is needed. It shows the three family identities, lets the current branch grow toward the centre, then reveals the existing page underneath. It never owns or delays the actual page content. Pointer, keyboard, and scroll input dismiss it immediately; reduced motion, unavailable session storage, late hydration, and repeat visits skip it. Its maximum duration is 1.6 seconds.
-
-Set `introLogos` in `packages/brand/src/index.ts` to the three approved SVG/PNG assets. Each app must contain all three files at the same public paths because each deploys independently. `logos` controls header/footer identity separately. Until assets arrive, the introduction uses plain Motchi wordmarks with branch names, not invented MS/MW/MC artwork. The same-origin, per-tab session policy remains intentional; there is no cross-domain tracking cookie.
+One full-screen, decorative family overlay is mounted in each app root layout. It plays on each new document or reload, and persists without replay during in-app navigation. Approved SVG marks and a consistent MOTCHI/branch lockup are animated with CSS transforms, opacity, and an expanding radial mask over the page. Total duration is 3.8 seconds. CSS ends the overlay even without hydration; input dismisses it immediately and reduced motion skips it. No GIF/video, session-storage playback record, or loading-page route is used.
 
 ## Portfolio configuration
 
@@ -62,12 +60,22 @@ media: {
 
 Dimensions above are recommendations, not claims about existing files. Always use the actual exported dimensions. Prefer desktop screenshots around 1600×1000 and mobile around 430×932. Crop deliberately to show useful parts of the site rather than loading a huge full-page capture. Aim for approximately 150–400KB per still where quality allows. Use WebP/AVIF for photos/screenshots; SVG for approved vector logos.
 
-The primary preview selects `hero`, then `desktop`, then `motion`. A supplied mobile screenshot overlaps the primary preview. A client logo appears only if supplied. Static or photographic hero images use the image asset shape. The `motion` slot supports typed WebM/MP4+poster or GIF+poster assets; use a meaningful visual label. Portfolio video defaults to native controls with preload=none. A GIF shows its poster until the visitor deliberately plays it and can be paused. No giant animated media should load automatically below the fold.
+The primary preview selects `desktop`, then `hero`, then `motion`, then a supplied mobile-only image. A supplied mobile screenshot overlaps the primary preview. A client logo appears only if supplied. Static or photographic hero images use the image asset shape. The `motion` slot supports typed WebM/MP4+poster or GIF+poster assets; use a meaningful visual label. Portfolio video defaults to native controls with preload=none. A GIF shows its poster until the visitor deliberately plays it and can be paused. No giant animated media should load automatically below the fold.
 
 A video asset uses `{ kind: "video", sources: [{ src: "/media/projects/vietbites/preview.webm", type: "video/webm" }], poster: { kind: "image", src: "/media/projects/vietbites/preview-poster.webp", alt: "", width: 1600, height: 1000 }, label: "Website preview" }`. Add an MP4 source for fallback. A GIF uses `{ kind: "gif", src: "/media/projects/vietbites/preview.gif", poster: { ... }, label: "Website preview" }`. Approved animated SVG can be implemented as decorative inline paths with CSS; essential information must stay in normal text and reduced motion must stop animation.
 
-Confirm `url`, optional `caseStudyUrl`, services, description, optional technologies, and `featured`. Current family treatments are `paper`, `burgundy`, or `ink`. Optional `colors: { background, foreground }` must be the client's approved colours with verified contrast; never infer them from an unapproved placeholder.
+Confirm `url`, optional `caseStudyUrl`, services, description, optional technologies, and `featured`. Screenshots retain their original visual identity. Do not apply Motchi colour treatments or invent client palettes.
 
 ## Alt text and approval
 
 Describe what the image helps a visitor understand. Do not repeat the heading or invent project results. Redundant decorative logos may use empty alt text. Meaningful video with audio/narration needs captions and a transcript before publication; the current preview components are intended for silent visual demonstrations. Supply approved project links and permission to use every client asset. Review real files at 320px, with reduced motion, images disabled/failed, and keyboard controls before launch.
+
+## Approved project inventory
+
+All four projects now have desktop and mobile PNG screenshots with measured intrinsic dimensions. VietBites, Vee's Nails, and Lai use `logo.png`; Kamanda uses `logo.svg` (1024-square viewBox). Configuration references these exact filenames. Screenshots retain the client's own colours, with desktop primary and a small mobile overlap. Client logos sit alongside project context and use empty alt text. No project video/GIF/poster is supplied. Public project URLs remain unset until confirmed.
+
+## Product concept artwork
+
+The Products gate reads approved future sketches from `apps/solutions/src/content/product-concepts.ts`. Each entry needs a local public image path, intrinsic dimensions, a caption, and descriptive alternative text. Pop Tips currently shows a first-designs-coming-soon placeholder. Age Verification uses clearly labeled, code-drawn wireframe ideas, not confirmed features or an available verification service. Images sit inside the open gate as a clickable album. A gentle opening nudge and a browse hint introduce the interaction; the hint disappears after use. Back to gate or Escape closes the album and restores focus to the gate. Product selection closes the prior album. Horizontal swipes and mouse drags switch products only within the selector and gate area, excluding the album and controls; vertical touch scrolling remains available. Hover peeks at the gate only on devices with hover and without reduced motion. Click, Enter, or Space opens it, and reduced motion disables the nudge and page-turn effects.
+
+Pop Tips gate previews use three small, selected details from the supplied artwork: pink sparkles, a chat bubble, and the POP wordmark fragment. Only these stripped-down PNG excerpts live in `apps/solutions/public/products/pop-tips-teasers`; full source sheets, the brand kit, and complete title artwork remain outside public assets. Blush and lavender card treatments reference a small portion of the palette. These are visual teasers, not product screens or feature claims. The private community project uses a static illustrated message and reveals no feature details.

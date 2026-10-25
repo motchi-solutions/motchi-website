@@ -1,5 +1,7 @@
+import { resolveCapability } from "./capability-content";
 import { ConfigurationError } from "@motchi/config/env";
 import { contactMessage } from "@motchi/email/feedback";
+import { WebsiteBudget } from "./website-budget";
 import { ContactForm } from "./contact-form";
 import { Toast } from "./toast";
 import { sites as family, contactEmail } from "@motchi/config/sites";
@@ -18,11 +20,21 @@ export function ContactPageContent({
   branch,
   status,
   fields = "",
+  topic,
 }: {
   branch: Branch;
   status?: string;
   fields?: string;
+  topic?: string;
 }) {
+  const capability =
+    branch === "solutions" ? resolveCapability(topic) : undefined;
+  const initialInterest =
+    capability?.interest ??
+    (branch === "solutions" &&
+    (topic === "Something else" || topic === "Products")
+      ? topic
+      : "");
   const message = contactMessage(status);
   const sent = status === "sent" || status === "partial";
   let token: string | null = null;
@@ -58,13 +70,13 @@ export function ContactPageContent({
   return (
     <Container className="py-section">
       <div className="grid gap-12 lg:grid-cols-2 lg:gap-24">
-        <div>
+        <div className="page-introduction">
           <Eyebrow>{family[branch].name} / Contact</Eyebrow>
           <h1 className="text-h2 font-medium tracking-tight">
-            Tell Us What You’re Working On.
+            Contact {family[branch].name}
           </h1>
           <p className="mt-6 max-w-md text-lg leading-relaxed text-muted">
-            You don’t need a finished brief. A few words about your business and
+            You don't need a finished brief. A few words about your business and
             what you need are a good place to start.
           </p>
           <p className="mt-8 max-w-md leading-relaxed">
@@ -87,9 +99,11 @@ export function ContactPageContent({
           id="contact-form"
           className="border border-border bg-surface p-5 sm:p-8 lg:p-10"
         >
-          <h2 className="mb-2 text-h3 font-medium">Start a Conversation</h2>
+          <h2 className="mb-2 text-h3 font-medium">
+            {capability ? capability.action : "Tell Us About Your Project"}
+          </h2>
           <p className="mb-8 text-sm leading-relaxed text-muted">
-            A short introduction is enough. We’ll work through the details
+            A short introduction is enough. We'll work through the details
             together.
           </p>
           {message && (
@@ -156,28 +170,36 @@ export function ContactPageContent({
                 />
                 {error("company")}
               </div>
-              <div>
-                <label htmlFor="interest" className="text-sm font-semibold">
-                  {branch === "consulting"
-                    ? "Area of Interest"
-                    : "What can we help with?"}{" "}
-                  <span className="font-normal">(required)</span>
-                </label>
-                <select
-                  {...props("interest")}
-                  required
-                  defaultValue=""
-                  className={inputClass}
-                >
-                  <option value="" disabled>
-                    Select an option
-                  </option>
-                  {interests[branch].map((interest) => (
-                    <option key={interest}>{interest}</option>
-                  ))}
-                </select>
-                {error("interest")}
-              </div>
+              <WebsiteBudget
+                branch={branch}
+                initialInterest={initialInterest}
+                error={
+                  invalidFields.has("budget") ? fieldErrors.budget : undefined
+                }
+              >
+                <div>
+                  <label htmlFor="interest" className="text-sm font-semibold">
+                    {branch === "consulting"
+                      ? "Area of Interest"
+                      : "What can we help with?"}{" "}
+                    <span className="font-normal">(required)</span>
+                  </label>
+                  <select
+                    {...props("interest")}
+                    required
+                    defaultValue={initialInterest}
+                    className={inputClass}
+                  >
+                    <option value="" disabled>
+                      Select an option
+                    </option>
+                    {interests[branch].map((interest) => (
+                      <option key={interest}>{interest}</option>
+                    ))}
+                  </select>
+                  {error("interest")}
+                </div>
+              </WebsiteBudget>
               {branch === "websites" && (
                 <div>
                   <label htmlFor="website" className="text-sm font-semibold">

@@ -1,82 +1,208 @@
+@property --intro-aperture {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
 .intro-experience {
   position: fixed;
-  inset: 6rem 0 auto;
-  height: min(70svh, 36rem);
-  z-index: 40;
-  pointer-events: none;
+  inset: 0;
+  z-index: 70;
+  isolation: isolate;
   overflow: hidden;
   color: var(--foreground);
   background: var(--background);
-  animation: family-open var(--motion-intro) var(--ease-emphasized) both;
+  mask-image: radial-gradient(
+    circle at 50% 50%,
+    transparent var(--intro-aperture),
+    #000 calc(var(--intro-aperture) + 2px)
+  );
+  animation: intro-open 3800ms linear both;
 }
+.intro-experience[data-intro-dark="true"] {
+  color: var(--inverse);
+  background: var(--brand-primary);
+}
+
 .intro-family {
   position: absolute;
   inset: 0;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: center;
-  max-width: 60rem;
+  max-width: 54rem;
   margin-inline: auto;
+  padding-inline: 0.5rem;
 }
 .intro-identity {
   min-width: 0;
-  padding: 1rem 0.25rem;
   text-align: center;
-  animation: identity-recede var(--motion-intro) var(--ease-standard) both;
+  animation: intro-identity-recede 3800ms var(--ease-reveal) both;
 }
 .intro-identity[data-selected="true"] {
-  animation: identity-select var(--motion-intro) var(--ease-emphasized) both;
+  position: relative;
+  z-index: 2;
+  background: var(--background);
+  border-radius: 2rem;
+  animation: intro-identity-select 3800ms var(--ease-reveal) both;
+}
+.intro-experience[data-intro-dark="true"]
+  .intro-identity[data-selected="true"] {
+  background: var(--brand-primary);
+}
+.intro-monogram {
+  display: block;
+  width: clamp(3.5rem, 8vw, 6rem);
+  height: auto;
+  margin: 0 auto 1rem;
+  padding: 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--brand-accent);
+  border-radius: 30%;
+}
+.intro-parent-name {
+  display: block;
+  font-size: clamp(0.875rem, 2.2vw, 1.625rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+.intro-branch-name {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: clamp(0.75rem, 1.6vw, 1rem);
+  font-weight: 600;
 }
 .intro-selection-line {
   display: block;
   width: 2rem;
-  height: 1px;
-  margin: 1.5rem auto 0;
+  height: 2px;
+  margin: 1rem auto 0;
   background: var(--brand-accent);
+  transform: scaleX(0);
+  animation: intro-selection 3800ms var(--ease-reveal) both;
+}
+.intro-identity:not([data-selected="true"]) .intro-selection-line {
+  visibility: hidden;
 }
 .intro-family-caption {
   position: absolute;
-  inset: auto 0 12%;
+  left: 1rem;
+  right: 1rem;
+  bottom: 15%;
   text-align: center;
-  font-size: var(--type-caption);
-  letter-spacing: 0.08em;
+  font-size: clamp(0.875rem, 1.5vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  animation: intro-caption 3800ms var(--ease-reveal) both;
 }
-@keyframes identity-recede {
+.intro-experience[data-intro-dark="true"] .intro-family-caption {
+  color: var(--inverse);
+}
+@keyframes intro-open {
   0%,
-  24% {
+  77% {
+    --intro-aperture: 0px;
     opacity: 1;
-    transform: none;
+    visibility: visible;
   }
-  55%,
+  99% {
+    --intro-aperture: 150vmax;
+    opacity: 1;
+    visibility: visible;
+  }
   100% {
+    --intro-aperture: 150vmax;
     opacity: 0;
-    transform: scale(0.94);
+    visibility: hidden;
+    pointer-events: none;
   }
 }
-@keyframes identity-select {
-  0%,
-  24% {
-    transform: none;
-  }
-  65%,
-  100% {
-    transform: translateX(calc(var(--identity-offset) * 100%)) scale(1.18);
-  }
-}
-@keyframes family-open {
+@keyframes intro-identity-select {
   0% {
     opacity: 0;
-    clip-path: inset(0);
+    transform: translateY(6px) scale(0.96);
   }
-  12%,
-  65% {
+  17%,
+  32% {
     opacity: 1;
-    clip-path: inset(0);
+    transform: none;
+  }
+  42%,
+  48% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  68%,
+  74% {
+    opacity: 1;
+    transform: translateX(calc(var(--identity-offset) * 100%)) scale(1.12);
+  }
+  88% {
+    opacity: 0.85;
+    transform: translateX(calc(var(--identity-offset) * 100%)) scale(3);
   }
   100% {
     opacity: 0;
-    clip-path: inset(0 0 100% 0);
+    transform: translateX(calc(var(--identity-offset) * 100%)) scale(6);
   }
+}
+@keyframes intro-identity-recede {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+  17%,
+  32% {
+    opacity: 1;
+    transform: none;
+  }
+  45%,
+  100% {
+    opacity: 0;
+    transform: translateX(calc(var(--identity-outward) * 12px)) scale(0.96);
+  }
+}
+@keyframes intro-selection {
+  0%,
+  23% {
+    transform: scaleX(0);
+  }
+  38%,
+  100% {
+    transform: scaleX(1);
+  }
+}
+@keyframes intro-caption {
+  0% {
+    opacity: 0;
+  }
+  17%,
+  32% {
+    opacity: 1;
+  }
+  45%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes intro-name-dissolve {
+  0%,
+  74% {
+    opacity: 1;
+  }
+  88%,
+  100% {
+    opacity: 0;
+  }
+}
+.intro-identity[data-selected="true"] .intro-parent-name,
+.intro-identity[data-selected="true"] .intro-branch-name,
+.intro-identity[data-selected="true"] .intro-selection-line {
+  animation: intro-name-dissolve 3800ms var(--ease-reveal) both;
+}
+.intro-identity[data-selected="true"] .intro-selection-line {
+  animation:
+    intro-selection 3800ms var(--ease-reveal) both,
+    intro-name-dissolve 3800ms var(--ease-reveal) both;
 }
 @media (prefers-reduced-motion: reduce) {
   .intro-experience {
@@ -84,10 +210,41 @@
   }
 }
 
-.intro-experience[data-intro-branch="consulting"] {
-  background: var(--brand-primary);
-  color: var(--inverse);
+.intro-skip-hint {
+  position: absolute;
+  inset-inline: 1rem;
+  bottom: max(2rem, env(safe-area-inset-bottom));
+  margin: 0;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--muted);
 }
-.intro-experience[data-intro-branch="consulting"] .text-primary {
+.intro-experience[data-intro-dark="true"] .intro-skip-hint {
   color: var(--brand-accent);
+}
+
+.intro-skip-hint p {
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+.intro-skip-hint svg {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+}
+.intro-skip-touch {
+  display: flex;
+}
+.intro-skip-keyboard {
+  display: none;
+}
+@media (min-width: 768px) and (pointer: fine) {
+  .intro-skip-touch {
+    display: none;
+  }
+  .intro-skip-keyboard {
+    display: flex;
+  }
 }

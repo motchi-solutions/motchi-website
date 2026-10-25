@@ -1,6 +1,6 @@
 # Development
 
-Use Node 24 and npm 11+. Work from the repository root. Install with `npm ci` for a fresh clone, or `npm install` after changing manifests. The root lockfile is authoritative. Do not create per-app lockfiles. Dependency versions for Next/React are pinned; review framework/tool upgrades together.
+Use Node 26.12 or newer within Node 26 and npm 11+. Work from the repository root. Install with `npm ci` for a fresh clone, or `npm install` after changing manifests. The root lockfile is authoritative. Do not create per-app lockfiles. Dependency versions for Next/React are pinned; review framework/tool upgrades together.
 
 ## Commands
 
@@ -41,7 +41,7 @@ Use `AnimatedLink`, `ButtonLink`, `Reveal`, and the existing semantic tokens for
 
 Prefer the primary `react-icons/lu` family through shared icon wrappers. `react-icons` 5.7.0 supplies the icon family. Prettier 3.9.10 is a root development dependency. Fonts use the existing Next font tooling and need no package installation. Build machines must reach Google Fonts at build time; browsers fetch self-hosted assets. For offline builds, vendor licensed font files and deliberately migrate the central module to `next/font/local`.
 
-Use `http://localhost:3000`, `:3001`, and `:3002` for local browser review. Next development tooling may reject an alternate origin such as 127.0.0.1. Do not broaden production contact origin checks to solve a development preview issue.
+Use `http://localhost:3000`, `:3001`, and `:3002` for local browser review. For phone testing, use the Mac's LAN IPv4 address on the same Wi-Fi. All three Next configs allow the machine's current non-loopback IPv4 addresses in development so the HMR connection and hydration work over the LAN. Restart dev servers after changing networks. For sister-site links and contact forms, set `SOLUTIONS_URL`, `WEBSITES_URL`, and `CONSULTING_URL` to the matching LAN origins in each app's `.env.local`, then restart. This development allowlist does not broaden production contact origin checks.
 
 ## Media assets
 

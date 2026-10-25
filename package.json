@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "engines": {
-    "node": ">=24 <25",
+    "node": ">=24.22.1 <27",
     "npm": ">=11"
   },
   "scripts": {
@@ -23,13 +23,13 @@
     "format:check": "prettier . --check"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.2",
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^24",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@biomejs/biome": "2.6.3",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^24.19.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "prettier": "3.9.10",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "tailwindcss": "^4.3.3",
+    "typescript": "7.0.2"
   }
 }

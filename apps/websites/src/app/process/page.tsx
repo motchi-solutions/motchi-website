@@ -1,5 +1,11 @@
 import { pageMetadata } from "@motchi/config/metadata";
-import { ContactCTA, PageHero, Section, SectionHeading } from "@motchi/ui";
+import {
+  ButtonLink,
+  ContactCTA,
+  PageHero,
+  Section,
+  SectionHeading,
+} from "@motchi/ui";
 import { Process } from "@/components/process";
 export const metadata = pageMetadata(
   "Our Process",
@@ -11,20 +17,20 @@ export default function Page() {
     <>
       <PageHero
         eyebrow="Our Process"
-        title="Clear Decisions, from Brief to Launch"
+        title="How We Build Your Website"
+        actions={<ButtonLink href="/contact">Discuss Your Website</ButtonLink>}
       >
-        You know what happens next, where your input matters, and what is
-        included. We agree on milestones around the work your website actually
-        needs.
+        A clear, collaborative process for planning, building, and launching
+        your website, with agreed support after it goes live.
       </PageHero>
       <Process />
       <Section className="border-t border-border">
         <SectionHeading
           eyebrow="Before We Begin"
-          title="A Shared Definition of Ready"
+          title="Your Scope, Responsibilities, and Support"
         >
-          A clear brief keeps the work proportionate. These are the decisions we
-          make together.
+          We agree on what your website needs, who does what, and what support
+          comes after launch.
         </SectionHeading>
         <dl className="grid gap-8 md:grid-cols-3">
           {[
@@ -48,7 +54,7 @@ export default function Page() {
           ))}
         </dl>
       </Section>
-      <ContactCTA title="Let’s Discuss Your Website" />
+      <ContactCTA title="Let's Plan Your Website" />
     </>
   );
 }

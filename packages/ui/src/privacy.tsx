@@ -8,7 +8,7 @@ export function PrivacyNotice() {
           <Eyebrow>Your Information</Eyebrow>
           <h1 className="text-h2 font-medium">Privacy Notice</h1>
         </header>
-        <div className="mt-10 space-y-8 leading-relaxed text-muted">
+        <div className="privacy-content leading-relaxed text-muted">
           <section>
             <h2 className="mb-3 text-xl font-semibold text-foreground">
               Information You Share

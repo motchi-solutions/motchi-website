@@ -69,28 +69,28 @@ export function ContactPageContent({
     ) : null;
   return (
     <Container className="py-section">
-      <div className="grid gap-12 lg:grid-cols-2 lg:gap-24">
-        <div className="page-introduction">
+      <div className="section-layout grid lg:grid-cols-2">
+        <div className="page-introduction section-introduction contact-introduction">
           <Eyebrow>{family[branch].name} / Contact</Eyebrow>
           <h1 className="text-h2 font-medium tracking-tight">
             Contact {family[branch].name}
           </h1>
-          <p className="mt-6 max-w-md text-lg leading-relaxed text-muted">
+          <p className="max-w-md text-lg leading-relaxed text-muted">
             You don't need a finished brief. A few words about your business and
             what you need are a good place to start.
           </p>
-          <p className="mt-8 max-w-md leading-relaxed">
+          <p className="max-w-md leading-relaxed">
             We typically respond with next steps or an initial quote within{" "}
-            <strong>2–3 business days</strong>.
+            <strong>2-3 business days</strong>.
           </p>
           <a
-            className="animated-link mt-8 inline-flex min-h-12 items-center gap-3"
+            className="animated-link content-action inline-flex min-h-12 items-center gap-3"
             href={`mailto:${contactEmail}`}
           >
             <MailIcon />
             <span>{contactEmail}</span>
           </a>
-          <p className="mt-8 max-w-md text-sm leading-relaxed text-muted">
+          <p className="max-w-md text-sm leading-relaxed text-muted">
             Share only what we need to understand your enquiry. Please leave out
             passwords, sensitive personal information, and confidential records.
           </p>

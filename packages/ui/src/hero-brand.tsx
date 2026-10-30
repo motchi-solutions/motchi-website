@@ -7,9 +7,7 @@ export function HeroBrand({
   light?: boolean;
 }) {
   return (
-    <p
-      className={`hero-brand mb-5 ${light ? "text-inverse" : "text-foreground"}`}
-    >
+    <p className={`hero-brand ${light ? "text-inverse" : "text-foreground"}`}>
       <span className="hero-brand-parent">MOTCHI</span>{" "}
       <span
         className={`hero-brand-branch ${light ? "text-accent" : "text-primary"}`}

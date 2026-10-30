@@ -18,7 +18,7 @@ export default function Page() {
       <PageHero
         eyebrow="Our Process"
         title="How We Build Your Website"
-        actions={<ButtonLink href="/contact">Discuss Your Website</ButtonLink>}
+        actions={<ButtonLink href="/contact">Start a Project</ButtonLink>}
       >
         A clear, collaborative process for planning, building, and launching
         your website, with agreed support after it goes live.
@@ -32,7 +32,7 @@ export default function Page() {
           We agree on what your website needs, who does what, and what support
           comes after launch.
         </SectionHeading>
-        <dl className="grid gap-8 md:grid-cols-3">
+        <dl className="section-cards grid md:grid-cols-3">
           {[
             [
               "Content & Ownership",
@@ -54,7 +54,7 @@ export default function Page() {
           ))}
         </dl>
       </Section>
-      <ContactCTA title="Let's Plan Your Website" />
+      <ContactCTA action="Start a Project" title="Let's Plan Your Website" />
     </>
   );
 }

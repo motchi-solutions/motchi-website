@@ -11,8 +11,8 @@ export default function Home() {
       <Hero />
       <Work featuredOnly />
       <Section className="border-y border-border">
-        <div className="grid gap-10 lg:grid-cols-2">
-          <div>
+        <div className="section-layout grid lg:grid-cols-2">
+          <div className="section-introduction">
             <Eyebrow>Built Around Your Business</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
               Design, Integrations, and Ongoing Care
@@ -39,7 +39,7 @@ export default function Home() {
             <AnimatedLink
               href="/services"
               arrow
-              className="mt-5 min-h-12 text-primary"
+              className="content-action min-h-12 text-primary"
             >
               Explore Our Services
             </AnimatedLink>
@@ -65,8 +65,8 @@ export default function Home() {
         id="about"
         className="about-summary-section border-t border-border"
       >
-        <div className="about-summary grid gap-8 lg:grid-cols-2">
-          <div className="about-summary-heading">
+        <div className="about-summary section-layout grid lg:grid-cols-2">
+          <div className="about-summary-heading section-introduction">
             <Eyebrow>About Motchi Websites</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
               Design That Reflects Your Business
@@ -80,14 +80,14 @@ export default function Home() {
             <AnimatedLink
               href="/about"
               arrow
-              className="mt-6 min-h-12 text-primary"
+              className="content-action min-h-12 text-primary"
             >
               Learn More About Motchi Websites
             </AnimatedLink>
           </div>
         </div>
       </Section>
-      <ContactCTA title="Let's Plan Your Website" />
+      <ContactCTA action="Start a Project" title="Let's Plan Your Website" />
     </>
   );
 }

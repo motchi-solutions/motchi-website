@@ -18,7 +18,7 @@ export function Businesses({
         Reach your customers with a better website. Help your team with better
         systems. Our two branches bring focused expertise and practical support.
       </SectionHeading>
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="section-cards grid md:grid-cols-2">
         <Reveal className="service-card-reveal flex">
           <article className="branch-link w-full flex flex-col border border-border bg-surface p-7 sm:p-10">
             <p className="text-xs tracking-widest uppercase text-primary">
@@ -46,7 +46,7 @@ export function Businesses({
               Business websites · Booking · Integrations
             </p>
             <div className="mt-auto">
-              <ButtonLink href={family.websites.url}>
+              <ButtonLink href={family.websites.url} target="_blank">
                 Explore Motchi Websites
               </ButtonLink>
             </div>
@@ -79,7 +79,7 @@ export function Businesses({
               AI · Data · Digital systems · Adoption
             </p>
             <div className="mt-auto">
-              <ButtonLink href={family.consulting.url} light>
+              <ButtonLink href={family.consulting.url} target="_blank" light>
                 Explore Motchi Consulting
               </ButtonLink>
             </div>

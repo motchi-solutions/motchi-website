@@ -20,7 +20,11 @@ export function SystemGraphic() {
             { name: "Products", href: "/products" },
           ].map(({ name, href }) => (
             <li key={name}>
-              <SiteLink href={href} className="system-branch">
+              <SiteLink
+                href={href}
+                target={href === "/products" ? undefined : "_blank"}
+                className="system-branch"
+              >
                 <span>{name}</span>
                 <Arrow external={href !== "/products"} />
               </SiteLink>

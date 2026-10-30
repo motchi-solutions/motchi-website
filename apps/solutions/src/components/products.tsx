@@ -5,13 +5,13 @@ import { products } from "@/content/products";
 export function Products() {
   return (
     <Section id="products" className="bg-surface">
-      <div className="grid gap-10 lg:grid-cols-5">
-        <div className="lg:col-span-2">
+      <div className="section-layout grid lg:grid-cols-5">
+        <div className="section-introduction lg:col-span-2">
           <Eyebrow>Motchi Products</Eyebrow>
           <h2 className="text-h2 font-medium tracking-tight">
             Ideas Taking Shape
           </h2>
-          <p className="mt-6 max-w-sm leading-relaxed text-muted">
+          <p className="max-w-sm leading-relaxed text-muted">
             These products are still in development. We will share more about
             what they do and how to use them when they are ready.
           </p>

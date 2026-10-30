@@ -13,8 +13,8 @@ export default function AboutPage() {
     <>
       <AboutHero />
       <Section>
-        <div className="grid gap-8 lg:grid-cols-2 lg:gap-16">
-          <div>
+        <div className="section-layout grid lg:grid-cols-2">
+          <div className="section-introduction">
             <Eyebrow>Our Mission</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
               Useful Technology, Within Reach
@@ -68,9 +68,9 @@ export default function AboutPage() {
           ))}
         </div>
       </Section>
-      <Section className="bg-secondary text-inverse">
-        <div className="grid items-start gap-8 lg:grid-cols-2 lg:gap-16">
-          <div>
+      <Section id="partnership" className="bg-secondary text-inverse">
+        <div className="section-layout grid items-start lg:grid-cols-2">
+          <div className="section-introduction">
             <Eyebrow light>Better Together</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
               Your Progress Matters to Us

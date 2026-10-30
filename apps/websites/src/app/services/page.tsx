@@ -21,7 +21,7 @@ export default function Page() {
         eyebrow="Website Services"
         title="Website Design and Ongoing Care"
 
-        actions={<ButtonLink href="/contact">Discuss Your Website</ButtonLink>}
+        actions={<ButtonLink href="/contact">Start a Project</ButtonLink>}
       >
         From design and development to booking, integrations, and ongoing care.
         We shape the scope around your business and budget, with clear costs
@@ -34,7 +34,7 @@ export default function Page() {
         >
           {websiteStarter.description}
         </SectionHeading>
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="section-cards grid md:grid-cols-2">
           <p className="leading-relaxed text-muted">{websiteStarter.terms}</p>
           <div>
             <h3 className="text-h3 font-semibold">Maintenance After Launch</h3>
@@ -44,8 +44,8 @@ export default function Page() {
               they cover, and what they cost. You can discuss a budget without
               committing to a package.
             </p>
-            <ButtonLink href="/contact" className="mt-6">
-              Find Your Starting Point
+            <ButtonLink href="/contact" className="content-action">
+              Start a Project
             </ButtonLink>
           </div>
         </div>
@@ -60,7 +60,7 @@ export default function Page() {
           maintenance, integrations, and ongoing changes are discussed
           explicitly.
         </SectionHeading>
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="section-cards grid md:grid-cols-3">
           {[
             [
               "A New Website",
@@ -84,7 +84,7 @@ export default function Page() {
           ))}
         </div>
       </Section>
-      <ContactCTA title="Let's Plan Your Website" />
+      <ContactCTA action="Start a Project" title="Let's Plan Your Website" />
     </>
   );
 }

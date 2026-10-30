@@ -13,9 +13,7 @@ export default function AboutPage() {
         title="Practical Advice and Hands-On Support"
 
         actions={
-          <ButtonLink href="/capabilities">
-            Explore Consulting Services
-          </ButtonLink>
+          <ButtonLink href="/capabilities">Explore Our Capabilities</ButtonLink>
         }
       >
         Good technical work starts with understanding your business. We bring
@@ -23,7 +21,7 @@ export default function AboutPage() {
         together.
       </PageHero>
       <Section>
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="section-cards grid md:grid-cols-3">
           <Reveal className="service-card-reveal flex">
             <article className="w-full border-t border-border pt-6">
               <h2 className="text-h3 font-medium">
@@ -60,13 +58,13 @@ export default function AboutPage() {
             </article>
           </Reveal>
         </div>
-        <p className="mt-10 border-t border-border pt-6 text-muted">
+        <p className="section-action border-t border-border pt-6 text-muted">
           Part of the Motchi family. Based in Toronto. Working with businesses
           globally.
         </p>
       </Section>
 
-      <ContactCTA />
+      <ContactCTA action="Start a Conversation" />
     </>
   );
 }

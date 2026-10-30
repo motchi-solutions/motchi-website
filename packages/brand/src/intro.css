@@ -1,6 +1,6 @@
 @property --intro-aperture {
   syntax: "<length>";
-  inherits: false;
+  inherits: true;
   initial-value: 0px;
 }
 .intro-experience {
@@ -10,17 +10,23 @@
   isolation: isolate;
   overflow: hidden;
   color: var(--foreground);
-  background: var(--background);
+  animation: intro-open var(--motion-intro) linear both;
+}
+/* Only the curtain is masked: the selected identity must stay visible as it zooms. */
+.intro-experience::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--intro-background, var(--background));
   mask-image: radial-gradient(
     circle at 50% 50%,
     transparent var(--intro-aperture),
     #000 calc(var(--intro-aperture) + 2px)
   );
-  animation: intro-open 3800ms linear both;
 }
 .intro-experience[data-intro-dark="true"] {
   color: var(--inverse);
-  background: var(--brand-primary);
+  --intro-background: var(--brand-primary);
 }
 
 .intro-family {
@@ -36,18 +42,12 @@
 .intro-identity {
   min-width: 0;
   text-align: center;
-  animation: intro-identity-recede 3800ms var(--ease-reveal) both;
+  animation: intro-identity-recede var(--motion-intro) var(--ease-reveal) both;
 }
 .intro-identity[data-selected="true"] {
   position: relative;
   z-index: 2;
-  background: var(--background);
-  border-radius: 2rem;
-  animation: intro-identity-select 3800ms var(--ease-reveal) both;
-}
-.intro-experience[data-intro-dark="true"]
-  .intro-identity[data-selected="true"] {
-  background: var(--brand-primary);
+  animation: intro-identity-select var(--motion-intro) var(--ease-reveal) both;
 }
 .intro-monogram {
   display: block;
@@ -70,6 +70,8 @@
   margin-top: 0.25rem;
   font-size: clamp(0.75rem, 1.6vw, 1rem);
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 .intro-selection-line {
   display: block;
@@ -78,7 +80,7 @@
   margin: 1rem auto 0;
   background: var(--brand-accent);
   transform: scaleX(0);
-  animation: intro-selection 3800ms var(--ease-reveal) both;
+  animation: intro-selection var(--motion-intro) var(--ease-reveal) both;
 }
 .intro-identity:not([data-selected="true"]) .intro-selection-line {
   visibility: hidden;
@@ -92,7 +94,7 @@
   font-size: clamp(0.875rem, 1.5vw, 1rem);
   font-weight: 600;
   letter-spacing: 0.02em;
-  animation: intro-caption 3800ms var(--ease-reveal) both;
+  animation: intro-caption var(--motion-intro) var(--ease-reveal) both;
 }
 .intro-experience[data-intro-dark="true"] .intro-family-caption {
   color: var(--inverse);
@@ -135,9 +137,10 @@
   74% {
     opacity: 1;
     transform: translateX(calc(var(--identity-offset) * 100%)) scale(1.12);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
   88% {
-    opacity: 0.85;
+    opacity: 0;
     transform: translateX(calc(var(--identity-offset) * 100%)) scale(3);
   }
   100% {
@@ -186,10 +189,10 @@
 }
 @keyframes intro-name-dissolve {
   0%,
-  74% {
+  60% {
     opacity: 1;
   }
-  88%,
+  74%,
   100% {
     opacity: 0;
   }
@@ -197,12 +200,12 @@
 .intro-identity[data-selected="true"] .intro-parent-name,
 .intro-identity[data-selected="true"] .intro-branch-name,
 .intro-identity[data-selected="true"] .intro-selection-line {
-  animation: intro-name-dissolve 3800ms var(--ease-reveal) both;
+  animation: intro-name-dissolve var(--motion-intro) var(--ease-reveal) both;
 }
 .intro-identity[data-selected="true"] .intro-selection-line {
   animation:
-    intro-selection 3800ms var(--ease-reveal) both,
-    intro-name-dissolve 3800ms var(--ease-reveal) both;
+    intro-selection var(--motion-intro) var(--ease-reveal) both,
+    intro-name-dissolve var(--motion-intro) var(--ease-reveal) both;
 }
 @media (prefers-reduced-motion: reduce) {
   .intro-experience {
@@ -218,6 +221,19 @@
   text-align: center;
   font-size: 0.75rem;
   color: var(--muted);
+  animation: intro-hint-dismiss var(--motion-intro) var(--ease-reveal) both;
+}
+@keyframes intro-hint-dismiss {
+  0%,
+  60% {
+    opacity: 1;
+    visibility: visible;
+  }
+  72%,
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 .intro-experience[data-intro-dark="true"] .intro-skip-hint {
   color: var(--brand-accent);
@@ -247,4 +263,17 @@
   .intro-skip-keyboard {
     display: flex;
   }
+}
+
+/* Skipping starts the page entrance immediately; its labels must clear first. */
+.intro-experience[data-intro-releasing="true"]
+  :is(
+    .intro-parent-name,
+    .intro-branch-name,
+    .intro-selection-line,
+    .intro-family-caption,
+    .intro-skip-hint
+  ) {
+  animation: none;
+  opacity: 0;
 }

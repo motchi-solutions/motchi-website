@@ -25,7 +25,7 @@ Biome's accessibility rules catch some semantic mistakes. Add axe/Playwright whe
 
 Reveal wrappers start visible in server HTML. Only installed observers mark offscreen content pending, and focusing a nested link reveals every pending ancestor. Reduced motion reveals content immediately and suppresses the intro. Test changes to the preference while the page is open, not only on reload.
 
-Page entrances share a one-second fade and four-pixel lift, with related copy revealed as one group and stagger delays capped at 120ms. Scroll reveals use the same duration and easing. Initial artwork is assembled before it enters; decorative lines draw during the entrance. Tab selections and gate interactions retain their separate motion. Focusing or pressing a control immediately reveals its entrance group. Reduced motion bypasses the sequence.
+Page entrances share a 560ms fade (420ms for Consulting) and four-pixel lift, with related copy revealed as one group and stagger delays capped at 120ms. Scroll reveals use the same duration and easing. Initial artwork is assembled before it enters; decorative lines draw during the entrance. Tab selections and gate interactions retain their separate motion. Focusing or pressing a control immediately reveals its entrance group. Reduced motion bypasses the sequence.
 
 The mobile menu is a nonmodal disclosure rather than a focus-trapped dialog. Opening it leaves focus on its native control; Tab enters the navigation. Escape restores control focus. Moving focus outside or resizing to desktop closes it. Without JavaScript, native summary still works and no stale aria-expanded value is emitted. The scoped Biome suppression documents its incomplete handling of native summary semantics.
 
@@ -35,7 +35,7 @@ Project GIFs show static posters by default and require deliberate playback. Vid
 
 Read [MEDIA_ASSETS.md](MEDIA_ASSETS.md) for meaningful alt text, poster requirements, and avoiding baked-in text or essential hover-only information. Verify client-supplied palettes and logos against final backgrounds.
 
-## Earlier verification — 2026-10-11 (before route/feedback update)
+## Earlier verification - 2026-10-11 (before route/feedback update)
 
 Local Chrome checks covered all three applications at 320, 375, 430, 768, 1024, 1280, 1440, and 1920 CSS pixels without horizontal overflow. Desktop and mobile screenshots were reviewed. Checks passed for the keyboard skip link, menu Tab entry, Escape/focus return, expanded state and scroll restoration, reduced-motion visibility, and native no-JavaScript navigation and contact forms. Invalid native contact submissions returned accessible email errors. Those earlier checks covered the prior intro; the new document-entry choreography is checked separately below.
 
@@ -51,20 +51,32 @@ The navigation uses disclosure semantics, not an application menu role: [WAI-ARI
 
 ## Process exploration
 
-Every stage title and concise summary stays visible. Server HTML includes native details/summary for deeper information. After enhancement, desktop buttons use expanded state and control a common labelled panel; Every stage uses one full-area button covering its number, title, summary, and surrounding space. Click or keyboard activation toggles details; activating the selected stage leaves none selected. Hover/focus only highlights. Solutions fades the decorative marker in at the selected step when none was active, moves it between measured positions only when switching active steps, and fades it out when collapsed. Reduced motion removes the travel transition. Mobile buttons expose expanded state and control a matching labelled inline region; Enter/Space and touch toggle details. Selection never traps focus. The full journey remains visible at every breakpoint, and reduced motion affects only presentation. Deep details contain text, so changing the selected stage cannot hide focused form fields or links.
+Every stage title and concise summary stays visible. Server HTML includes native details/summary for deeper information. After enhancement, desktop buttons use expanded state and control a common labelled panel; Every stage uses one full-area button covering its number, title, summary, and surrounding space. Click or keyboard activation toggles details; activating the selected stage leaves none selected. Hover/focus only highlights. Solutions keeps a measured connector behind opaque stage rows, visible between the controls. There is no travelling marker. Mobile buttons expose expanded state and control a matching labelled inline region; Enter/Space and touch toggle details. Selection never traps focus. The full journey remains visible at every breakpoint, and reduced motion affects only presentation. Deep details contain text, so changing the selected stage cannot hide focused form fields or links.
 
 Route navigation now uses Next Link where appropriate. Persistent layout effects re-evaluate current navigation and reveal targets on pathname changes. Native forms and server errors remain independent of client navigation.
 
-## Second-pass verification — 2026-10-11
+## Second-pass verification - 2026-10-11
 
 Local Chrome checks passed for all three process journeys: desktop keyboard selection, mobile keyboard expansion/collapse, matching control/panel relationships, reduced motion, native no-JavaScript details and contact validation, and internal route navigation. All eight widths listed above were checked without horizontal overflow. Desktop and mobile screenshots were reviewed. All 21 automated tests, lint, formatting, and workspace type checks passed. Production compilation, live Brevo delivery, screen-reader testing, zoom checks, and final approved media remain release checks.
 
 ## Family entry overlay
 
-The decorative full-screen entry is rendered by each server root layout through one shared client controller. It is aria-hidden, has no focusable controls, and never moves focus. Pointer, keyboard, wheel, and scroll dismiss it immediately. Reduced motion hides it in CSS before hydration and skips it in the controller. The server-rendered page remains present underneath. CSS finishes in 3.8 seconds independently of hydration; the controller also bounds its lifetime. No session-storage suppression or loading-page route is used. Ordinary client navigation retains the root controller and does not replay it.
+The decorative full-screen entry is rendered by each server root layout through one shared client controller. It is aria-hidden, has no focusable controls, and never moves focus. Pointer, keyboard, wheel, and scroll dismiss it immediately. Reduced motion hides it in CSS before hydration and skips it in the controller. The server-rendered page remains present underneath. CSS finishes in 2.6 seconds independently of hydration; the controller also bounds its lifetime. No session-storage suppression or loading-page route is used. Ordinary client navigation retains the root controller and does not replay it.
 
 ## Readability and product cards
 
 Shared secondary text uses `#514b45`, giving 7.70:1 contrast on the cream background. Small reading text uses 15px; body text remains 16px or larger. Gold text on light surfaces uses the darker `--accent-ink` (5.69:1 on cream), while decorative gold and gold on dark surfaces keep their original colour. Product preview instructions sit below the gate in burgundy, with a separate surface badge for the card count.
 
 Preview cards support horizontal mouse/touch dragging, with native vertical scrolling and pointer-cancel recovery. A short drag returns the card; releasing beyond the threshold moves it through the stack. Click, tap, Enter, and Space remain alternatives. Reduced motion removes the automatic card-turn animation. Product selectors remain sticky beneath the site header within their section.
+
+## MS disclosure affordance refinement
+
+Hero area buttons use `aria-expanded`/`aria-controls`; activation opens the matching region, and activating the open choice or Back to areas restores the overview. Escape remains available. Solutions process rows expose the same native expanded-state interaction with a plain plus/minus cue; duplicate action links and toggle circles are omitted. Native Enter/Space operation was checked on both. Hero disclosure cues and process toggle cues are decorative; labels and expanded state provide the accessible meaning. Visual hitboxes stay stationary on small-control hover, and only button-like labels suppress text selection. Native OS cursor rendering across monitors was not directly tested.
+
+## Products layout and gate input - 2026-10-26
+
+Product summaries precede the gate in reading order; responsive grid areas place the preview beside the text on desktop. Only the selected summary is rendered. Product enquiry follows the preview in DOM order. Product tabs retain their labelled panel, arrow-key navigation, and selected state. Native gate buttons retain expanded/control relationships and restore focus on closing. Repeated hover can interrupt closing, and carousel arrival refreshes pointer hit testing without inventing pointer events or moving focus. Touch and Enter/Space opening/closing were checked on localhost:3000; reduced motion suppresses animated doors. Mobile descriptions no longer require scrolling past the gate to find context.
+
+## Active-first hero choices - 2026-10-26
+
+Open choices show a decorative minus; closed choices show a chevron. Expanded state and the controlled region provide the accessible meaning. Stacked controls reorder the actual keyed DOM so the active full-width control precedes the four remaining controls in visual and Tab order. Focus is preserved on the same button after selection. Wide rails retain their canonical order. Container resizing or text-size changes cancel stale movement and preserve focus. Reduced-motion changes settle in-flight movement immediately; keyboard focus entering a new detail action finishes its reveal so it cannot remain visually hidden. Rapid selection never locks out input or retains duplicate outgoing copy.

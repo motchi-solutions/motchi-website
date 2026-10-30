@@ -1,9 +1,12 @@
 "use client";
+import { motionMilliseconds } from "./motion-timing";
+import { usePathname } from "next/navigation";
 import { SiteLink } from "./site-link";
 import { useEffect, useRef, useState } from "react";
 import { Arrow } from "./icons";
 export type NavItem = { label: string; href: string };
 export function MobileMenu({ items }: { items: NavItem[] }) {
+  const pathname = usePathname();
   const details = useRef<HTMLDetailsElement>(null);
   const dismissMenu = useRef<() => void>(() => {});
   const [enhanced, setEnhanced] = useState(false);
@@ -14,32 +17,48 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
     if (!node) return;
     setOpen(node.open);
     node.dataset.animated = "true";
+    node.dataset.expanded = String(node.open);
     let closing: Animation | undefined;
+    let isClosing = false;
     const summary = node.querySelector("summary");
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const close = (restore = false, animate = true) => {
+    const transition = (opening: boolean, restore = false, animate = true) => {
+      if (!opening && animate && (isClosing || !node.open)) {
+        if (restore) summary?.focus();
+        return;
+      }
+      setOpen(opening);
+      node.dataset.expanded = String(opening);
       const panel = node.querySelector<HTMLElement>(".mobile-panel");
-      const current = panel ? getComputedStyle(panel) : undefined;
-      const opacity = current?.opacity ?? "1";
-      const transform = current?.transform ?? "none";
+      const current = node.open && panel ? getComputedStyle(panel) : undefined;
+      // Capture presentation values before cancelling so a reversal never jumps.
+      const from = {
+        opacity: current?.opacity ?? "0",
+        transform: current?.transform ?? "translateY(-6px)",
+      };
       closing?.cancel();
       closing = undefined;
+      isClosing = !opening;
+      if (opening) node.open = true;
       const finish = () => {
         closing = undefined;
-        node.open = false;
+        isClosing = false;
+        if (!opening) node.open = false;
         if (restore) summary?.focus();
       };
       if (animate && panel && !preference.matches) {
-        const duration = Number.parseFloat(
-          getComputedStyle(node).getPropertyValue("--motion-base"),
-        );
         closing = panel.animate(
           [
-            { opacity, transform },
-            { opacity: 0, transform: "translateY(-8px) scale(0.98)" },
+            from,
+            opening
+              ? { opacity: 1, transform: "translateY(0)" }
+              : { opacity: 0, transform: "translateY(-6px)" },
           ],
           {
-            duration,
+            duration: motionMilliseconds(
+              getComputedStyle(node).getPropertyValue("--motion-menu"),
+              280,
+            ),
             easing: getComputedStyle(node)
               .getPropertyValue("--ease-reveal")
               .trim(),
@@ -48,25 +67,12 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
         closing.onfinish = finish;
       } else finish();
     };
+    const close = (restore = false, animate = true) =>
+      transition(false, restore, animate);
     dismissMenu.current = () => close();
     const toggle = (event: MouseEvent) => {
       event.preventDefault();
-      if (node.open) {
-        close(false, true);
-        return;
-      }
-      node.open = true;
-      const panel = node.querySelector<HTMLElement>(".mobile-panel");
-      if (panel && !preference.matches) {
-        closing?.cancel();
-        closing = panel.animate(
-          [
-            { opacity: 0, transform: "translateY(-12px) scale(0.98)" },
-            { opacity: 1, transform: "translateY(0) scale(1)" },
-          ],
-          { duration: 520, easing: "cubic-bezier(0.22, 0.61, 0.36, 1)" },
-        );
-      }
+      transition(!node.open || isClosing);
     };
     const reduce = () => {
       if (preference.matches && closing) close(false, false);
@@ -98,6 +104,7 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
     return () => {
       closing?.cancel();
       delete node.dataset.animated;
+      delete node.dataset.expanded;
       summary?.removeEventListener("click", toggle);
       preference.removeEventListener("change", reduce);
       document.removeEventListener("keydown", keyboard);
@@ -118,15 +125,22 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
     <details
       ref={details}
       className="mobile-menu relative lg:hidden"
-      onToggle={(event) => setOpen(event.currentTarget.open)}
+      onToggle={(event) => {
+        if (event.currentTarget.dataset.animated !== "true")
+          setOpen(event.currentTarget.open);
+      }}
     >
       {/* biome-ignore lint/a11y/useAriaPropsSupportedByRole: Native summary is a disclosure control; its open state is mirrored only after enhancement. */}
       <summary
+        aria-label={open ? "Close menu" : "Open menu"}
         aria-controls="mobile-navigation"
         aria-expanded={enhanced ? open : undefined}
         className="flex min-h-12 cursor-pointer list-none items-center gap-3 px-3 text-sm font-medium"
       >
-        <span>Menu</span>
+        <span className="menu-trigger-label" aria-hidden="true">
+          <span data-visible={!open}>Menu</span>
+          <span data-visible={open}>Close</span>
+        </span>
         <span className="hamburger" aria-hidden="true">
           <span />
           <span />
@@ -136,16 +150,17 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
       <nav
         id="mobile-navigation"
         aria-label="Mobile navigation"
-        className="mobile-panel w-72 max-w-[calc(100vw-2.5rem)] border border-border bg-surface p-4 shadow-lg"
+        aria-hidden={enhanced ? !open : undefined}
+        inert={enhanced && !open}
+        className="mobile-panel"
       >
-        <p className="px-3 pt-2 pb-3 text-xs tracking-widest uppercase text-muted">
-          How can we help?
-        </p>
+        <p className="mobile-nav-heading">How can we help?</p>
         <ul>
           {items.map((item) => (
             <li key={item.href}>
               <SiteLink
                 href={item.href}
+                aria-current={pathname === item.href ? "page" : undefined}
                 className={`nav-link flex min-h-12 items-center justify-between px-3 text-base ${item.href === "/contact" ? "mobile-contact-cta" : ""}`}
                 onClick={() => {
                   dismissMenu.current();
@@ -154,7 +169,7 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
                 {item.label}
                 <Arrow
                   external={/^(https?:)?\/\//.test(item.href)}
-                  className="text-muted"
+                  className="mobile-nav-arrow"
                 />
               </SiteLink>
             </li>

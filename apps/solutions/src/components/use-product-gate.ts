@@ -2,10 +2,15 @@
 import { useEffect, useRef } from "react";
 import styles from "./products-hero.module.css";
 
-export function useProductGate() {
+export const productGateTiming = { peek: 240, close: 420, open: 850 } as const;
+
+export function useProductGate(product: number) {
   const gate = useRef<HTMLDivElement>(null);
   const reset = useRef<() => void>(() => {});
-  const moveGate = useRef<(angle: number, pulse?: boolean) => void>(() => {});
+  const moveGate = useRef<(angle: number) => void>(() => {});
+  const refreshHover = useRef<() => void>(() => {});
+  const pointer = useRef<{ x: number; y: number } | null>(null);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: A new product reuses the doors; reset their motion and restore stationary hover for that product.
   useEffect(() => {
     const node = gate.current;
     if (!node) return;
@@ -16,24 +21,19 @@ export function useProductGate() {
     ];
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     const motion = new Map<Element, Animation>();
-    let generation = 0;
-    let closing = false;
     let committed = false;
     const stop = () => {
-      generation += 1;
-      closing = false;
       committed = false;
       for (const animation of motion.values()) animation.cancel();
       motion.clear();
     };
     reset.current = stop;
     node.dataset.motion = "true";
-    const move = (angle: number, pulse = false) => {
-      if (angle === 78) committed = true;
-      closing = angle === 0;
-      const version = ++generation;
+    const move = (angle: number) => {
+      committed = angle === 78;
       doors.forEach((door, index) => {
         if (!door) return;
+        // Retarget from the displayed value, including during a closing motion.
         const computed = getComputedStyle(door);
         const current = computed.transform;
         const opacity = computed.opacity;
@@ -50,53 +50,56 @@ export function useProductGate() {
             },
           ],
           {
-            duration: angle === 0 ? 1400 : angle === 6 ? 600 : 850,
-            easing:
+            duration:
               angle === 0
-                ? "cubic-bezier(0.4, 0, 0.2, 1)"
-                : "cubic-bezier(0.22, 1, 0.36, 1)",
+                ? productGateTiming.close
+                : angle === 6
+                  ? productGateTiming.peek
+                  : productGateTiming.open,
+            easing: "cubic-bezier(0.22, 0.61, 0.36, 1)",
             fill: "both",
           },
         );
         motion.set(door, animation);
-        animation.onfinish = () => {
-          if (version === generation && angle === 0) {
-            closing = false;
-            committed = false;
-          }
-          if (!pulse || version !== generation || preference.matches) return;
-          const breathing = door.animate(
-            [
-              { transform: `rotateY(${sign * 6}deg)` },
-              { transform: `rotateY(${sign * 10}deg)` },
-              { transform: `rotateY(${sign * 6}deg)` },
-            ],
-            {
-              duration: 2400,
-              easing: "ease-in-out",
-              iterations: Infinity,
-              fill: "both",
-            },
-          );
-          motion.set(door, breathing);
-          animation.cancel();
-        };
       });
     };
     moveGate.current = move;
     const isOpen = () => node.dataset.open === "true";
-    const active = () => Boolean(trigger?.matches(":hover, :focus-visible"));
+    const active = () => {
+      if (trigger?.matches(":focus-visible")) return true;
+      if (!pointer.current) return Boolean(trigger?.matches(":hover"));
+      const target = document.elementFromPoint(
+        pointer.current.x,
+        pointer.current.y,
+      );
+      return Boolean(target && trigger?.contains(target));
+    };
+    const trackPointer = (event: PointerEvent) => {
+      if (event.pointerType === "mouse")
+        pointer.current = { x: event.clientX, y: event.clientY };
+    };
     const enter = () => {
       if (
         !committed &&
-        !closing &&
         !isOpen() &&
         window.matchMedia("(hover: hover)").matches
       )
-        move(6, true);
+        move(6);
+    };
+    refreshHover.current = () => {
+      if (active()) enter();
     };
     const leave = () => {
-      if (!committed && !closing && !isOpen() && !active()) move(0);
+      if (!committed && !isOpen() && !active()) move(0);
+    };
+    const pointerEnter = (event: PointerEvent) => {
+      trackPointer(event);
+      enter();
+    };
+    const pointerLeave = (event: PointerEvent) => {
+      // pointerleave runs before the window pointermove for the same move.
+      trackPointer(event);
+      leave();
     };
     const focus = (event: FocusEvent) => {
       if (
@@ -106,20 +109,28 @@ export function useProductGate() {
         enter();
     };
     const blur = () => queueMicrotask(leave);
-    trigger?.addEventListener("pointerenter", enter);
-    trigger?.addEventListener("pointerleave", leave);
+    const updatePreference = () => {
+      stop();
+      if (!preference.matches && active()) enter();
+    };
+    window.addEventListener("pointermove", trackPointer, { passive: true });
+    trigger?.addEventListener("pointerenter", pointerEnter);
+    trigger?.addEventListener("pointerleave", pointerLeave);
     node.addEventListener("focusin", focus);
     node.addEventListener("focusout", blur);
-    preference.addEventListener("change", stop);
+    preference.addEventListener("change", updatePreference);
+    // A switched product can inherit the same stationary pointer/focus.
+    if (active()) enter();
     return () => {
       stop();
       delete node.dataset.motion;
-      trigger?.removeEventListener("pointerenter", enter);
-      trigger?.removeEventListener("pointerleave", leave);
+      window.removeEventListener("pointermove", trackPointer);
+      trigger?.removeEventListener("pointerenter", pointerEnter);
+      trigger?.removeEventListener("pointerleave", pointerLeave);
       node.removeEventListener("focusin", focus);
       node.removeEventListener("focusout", blur);
-      preference.removeEventListener("change", stop);
+      preference.removeEventListener("change", updatePreference);
     };
-  }, []);
-  return { gate, reset, moveGate };
+  }, [product]);
+  return { gate, reset, moveGate, refreshHover };
 }

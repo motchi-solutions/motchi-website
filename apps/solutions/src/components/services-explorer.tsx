@@ -412,29 +412,26 @@ export function ServicesExplorer() {
               // biome-ignore lint/a11y/noNoninteractiveTabindex: A tab panel with introductory text needs keyboard focus.
               tabIndex={0}
             >
-              {goals.map((goal, index) => (
-                <div
-                  key={goal.topic}
-                  className={styles.copyReveal}
-                  data-active={selected === index}
-                  aria-hidden={selected !== index}
-                  inert={selected !== index}
-                >
-                  <h2 className="text-h3 font-semibold tracking-tight">
-                    {goal.title}
-                  </h2>
-                  <p className="mt-4 leading-relaxed text-muted">
-                    {goal.description}
-                    <span className="hidden lg:inline"> {goal.detail}</span>
-                  </p>
-                  <ButtonLink
-                    className="mt-5"
-                    href={`/contact?topic=${encodeURIComponent(goal.topic)}`}
-                  >
-                    {goal.action}
-                  </ButtonLink>
-                </div>
-              ))}
+              <div
+                key={goal.topic}
+                className={styles.copyReveal}
+                data-active="true"
+              >
+                <h2 className="text-h3 font-semibold tracking-tight">
+                  {goal.title}
+                </h2>
+                <p className="mt-4 leading-relaxed text-muted">
+                  {goal.description}
+                  <span className="hidden lg:inline"> {goal.detail}</span>
+                </p>
+              </div>
+            </div>
+            <div className={styles.serviceActions} data-entry-reveal="">
+              <ButtonLink
+                href={`/contact?topic=${encodeURIComponent(goal.topic)}`}
+              >
+                {goal.action}
+              </ButtonLink>
             </div>
           </div>
         </div>

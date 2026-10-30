@@ -43,7 +43,7 @@ export function Eyebrow({
 }) {
   return (
     <p
-      className={`eyebrow mb-5 flex items-center gap-3 text-eyebrow font-semibold tracking-widest uppercase ${light ? "text-accent" : "text-primary"}`}
+      className={`eyebrow flex items-center gap-3 text-eyebrow font-semibold tracking-widest uppercase ${light ? "text-accent" : "text-primary"}`}
     >
       {children}
     </p>
@@ -103,11 +103,11 @@ export function SectionHeading({
   children?: ReactNode;
 }) {
   return (
-    <div className="section-heading mb-8 max-w-reading">
+    <div className="section-heading section-introduction max-w-reading">
       <Eyebrow>{eyebrow}</Eyebrow>
       <h2 className="text-h2 font-medium tracking-tight">{title}</h2>
       {children && (
-        <p className="mt-6 max-w-xl text-body-lg leading-relaxed text-muted">
+        <p className="max-w-xl text-body-lg leading-relaxed text-muted">
           {children}
         </p>
       )}
@@ -116,23 +116,25 @@ export function SectionHeading({
 }
 export function ContactCTA({
   title = "Let's Plan Your Next Step",
+  action = "Contact Us",
 }: {
   title?: string;
+  action?: string;
 }) {
   return (
     <Section className="cta-section relative overflow-hidden bg-primary text-inverse">
-      <div className="relative flex flex-col justify-between gap-8 md:flex-row md:items-end">
-        <div className="max-w-2xl">
+      <div className="section-layout relative flex flex-col justify-between md:flex-row md:items-end">
+        <div className="section-introduction max-w-2xl">
           <Eyebrow light>Let's Talk</Eyebrow>
           <h2 className="text-h2 font-medium tracking-tight">{title}</h2>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-inverse/80">
+          <p className="max-w-xl text-base leading-relaxed text-inverse/80">
             Tell us what you're working on. We typically respond with next steps
-            or an initial quote within 2–3 business days.
+            or an initial quote within 2-3 business days.
           </p>
         </div>
         <div className="shrink-0">
           <ButtonLink href="/contact" light>
-            Contact Us
+            {action}
           </ButtonLink>
         </div>
       </div>

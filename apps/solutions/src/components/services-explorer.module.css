@@ -1,11 +1,6 @@
 .hero {
   position: relative;
   isolation: isolate;
-  background: radial-gradient(
-    ellipse at 90% 15%,
-    color-mix(in srgb, var(--brand-accent) 12%, transparent),
-    transparent 55%
-  );
 }
 .explorer {
   display: flex;
@@ -619,5 +614,46 @@
   }
   .options {
     padding-block: 0.5rem;
+  }
+}
+
+.possibility {
+  grid-template-areas: "summary" "preview" "contact";
+  row-gap: var(--space-preview);
+}
+.copy {
+  grid-area: summary;
+}
+.visual {
+  grid-area: preview;
+}
+.serviceActions {
+  grid-area: contact;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+@media (min-width: 1024px) {
+  .possibility {
+    grid-template-areas: "preview summary" "preview contact";
+    grid-template-rows: 1fr 1fr;
+    row-gap: var(--space-preview);
+  }
+  .copy {
+    align-self: end;
+  }
+  .serviceActions {
+    align-self: start;
+    justify-items: start;
+    text-align: left;
+  }
+}
+
+@media (max-width: 1023px) {
+  .copy {
+    padding: 0;
+  }
+  .visual {
+    padding-bottom: 0;
   }
 }

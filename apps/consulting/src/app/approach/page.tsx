@@ -19,7 +19,7 @@ export default function Page() {
       <PageHero
         eyebrow="Our Approach"
         title="How We Plan and Deliver Your Project"
-        actions={<ButtonLink href="/contact">Discuss Your Project</ButtonLink>}
+        actions={<ButtonLink href="/contact">Start a Conversation</ButtonLink>}
       >
         Understand the problem. Build the solution. Help your team use it. We
         work with you through implementation, adoption, and agreed ongoing
@@ -35,7 +35,7 @@ export default function Page() {
           responsibilities together. Scope and support are agreed for each
           engagement.
         </SectionHeading>
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="section-cards grid md:grid-cols-3">
           {[
             [
               "Your Goals and Constraints",
@@ -59,7 +59,10 @@ export default function Page() {
           ))}
         </div>
       </Section>
-      <ContactCTA title="Let's Plan Your Next Step" />
+      <ContactCTA
+        action="Start a Conversation"
+        title="Let's Plan Your Next Step"
+      />
     </>
   );
 }

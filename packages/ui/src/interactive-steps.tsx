@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { LuMousePointerClick } from "react-icons/lu";
 export type ProcessStep = {
   id: string;
   title: string;
@@ -33,13 +32,11 @@ export function InteractiveSteps({
   steps: readonly ProcessStep[];
   singleSelection?: boolean;
 }) {
-  const [interacted, setInteracted] = useState(false);
   const [enhanced, setEnhanced] = useState(false);
   const [desktop, setDesktop] = useState(false);
   const [selected, setSelected] = useState<number | null>(
     singleSelection ? 0 : null,
   );
-  const [markerTravels, setMarkerTravels] = useState(false);
   const [outgoing, setOutgoing] = useState<number | null>(null);
   useEffect(() => {
     if (outgoing === null) return;
@@ -58,15 +55,7 @@ export function InteractiveSteps({
     return () => media.removeEventListener("change", update);
   }, [singleSelection]);
   const track = useRef<HTMLDivElement>(null);
-  const lastMarkerIndex = useRef(0);
-  const [geometry, setGeometry] = useState<{
-    x: number;
-    y: number;
-    startX: number;
-    startY: number;
-    endX: number;
-    endY: number;
-  }>();
+  const connectors = useRef<SVGSVGElement>(null);
   useLayoutEffect(() => {
     if (!singleSelection || !enhanced) return;
     const node = track.current;
@@ -81,23 +70,25 @@ export function InteractiveSteps({
           y: rect.top - bounds.top + rect.height / 2,
         };
       };
-      if (selected !== null) lastMarkerIndex.current = selected;
-      const active = center(lastMarkerIndex.current);
-      const start = center(0);
-      const end = center(numbers.length - 1);
-      setGeometry({
-        ...active,
-        startX: start.x,
-        startY: start.y,
-        endX: end.x,
-        endY: end.y,
+      connectors.current?.querySelectorAll("line").forEach((line, index) => {
+        const start = center(index);
+        const end = center(index + 1);
+        line.setAttribute("x1", String(start.x));
+        line.setAttribute("y1", String(start.y));
+        line.setAttribute("x2", String(end.x));
+        line.setAttribute("y2", String(end.y));
       });
     };
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(node);
+    // Equal-height disclosures can trade space without resizing the track.
+    // Measure each row before paint and update both strokes' shared geometry.
+    node.querySelectorAll(".step-stage").forEach((stage) => {
+      observer.observe(stage);
+    });
     return () => observer.disconnect();
-  }, [singleSelection, enhanced, selected]);
+  }, [singleSelection, enhanced]);
   const current = selected === null ? undefined : steps[selected];
   return (
     <div
@@ -107,16 +98,6 @@ export function InteractiveSteps({
       data-desktop={desktop}
       data-single-selection={singleSelection}
     >
-      {singleSelection && enhanced && (
-        <p
-          className="step-interaction-hint"
-          data-dismissed={interacted}
-          aria-hidden={interacted}
-        >
-          <LuMousePointerClick aria-hidden="true" />
-          <span>Select a step to explore our process.</span>
-        </p>
-      )}
       <div ref={track} className="step-track">
         <ol
           className="step-journey"
@@ -173,7 +154,6 @@ export function InteractiveSteps({
                       aria-controls={desktop ? `${id}-panel` : detailId}
                       aria-expanded={selected === index}
                       onClick={() => {
-                        setInteracted(true);
                         const next = selected === index ? null : index;
                         const animate =
                           desktop &&
@@ -182,7 +162,6 @@ export function InteractiveSteps({
                           !window.matchMedia("(prefers-reduced-motion: reduce)")
                             .matches;
                         setOutgoing(animate ? selected : null);
-                        setMarkerTravels(selected !== null && next !== null);
                         setSelected(next);
                       }}
                     />
@@ -202,11 +181,17 @@ export function InteractiveSteps({
                   {enhanced && !desktop && (
                     <section
                       id={detailId}
-                      hidden={selected !== index}
+                      data-open={selected === index}
+                      aria-hidden={selected !== index}
+                      inert={selected !== index}
                       aria-labelledby={titleId}
-                      className="step-detail mt-5 ml-14"
+                      className="step-detail step-inline-detail"
                     >
-                      <StepDetails step={step} />
+                      <div className="step-inline-clip">
+                        <div className="pt-5 ml-14">
+                          <StepDetails step={step} />
+                        </div>
+                      </div>
                     </section>
                   )}
                 </div>
@@ -214,26 +199,15 @@ export function InteractiveSteps({
             );
           })}
         </ol>
-        {singleSelection && enhanced && geometry && (
-          <>
-            <svg className="step-travel-line" aria-hidden="true">
+        {singleSelection && enhanced && (
+          <svg ref={connectors} className="step-travel-line" aria-hidden="true">
+            {steps.slice(1).map((step, index) => (
               <line
-                x1={geometry.startX}
-                y1={geometry.startY}
-                x2={geometry.endX}
-                y2={geometry.endY}
+                key={step.id}
+                data-progressed={selected !== null && selected > index}
               />
-            </svg>
-            <span
-              aria-hidden="true"
-              data-visible={selected !== null}
-              data-travelling={markerTravels}
-              className="step-travel-marker"
-              style={{
-                transform: `translate(${geometry.x - 24}px, ${geometry.y - 24}px)`,
-              }}
-            />
-          </>
+            ))}
+          </svg>
         )}
       </div>
       {enhanced && desktop && (

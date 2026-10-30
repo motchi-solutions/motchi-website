@@ -77,6 +77,7 @@ export function Footer({ branch }: { branch: Branch }) {
                 <li key={key}>
                   <AnimatedLink
                     href={key === branch ? "/" : site.url}
+                    target={key === branch ? undefined : "_blank"}
                     external={key !== branch}
                     className="min-h-11 text-sm"
                   >

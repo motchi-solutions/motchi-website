@@ -8,14 +8,21 @@ export function ProjectPreview({ project }: { project: Project }) {
     project.media.hero ??
     project.media.motion ??
     project.media.mobile;
-  if (!primary) return null;
+  if (!primary)
+    return (
+      <figure className="border-l-2 border-accent py-6 pl-5">
+        <figcaption className="text-small text-muted">
+          {project.title} project images are being prepared.
+        </figcaption>
+      </figure>
+    );
   return (
     <figure className="project-preview">
       <div className="project-composition">
         <MediaFrame className="project-desktop bg-surface">
           <ProjectMedia
             asset={primary}
-            sizes="(min-width: 1280px) 640px, (min-width: 1024px) 55vw, 100vw"
+            sizes="(min-width: 1280px) 720px, (min-width: 1024px) 60vw, 100vw"
           />
         </MediaFrame>
         {project.media.desktop && project.media.mobile && (

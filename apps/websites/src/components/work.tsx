@@ -20,10 +20,10 @@ export function Work({ featuredOnly = false }: { featuredOnly?: boolean }) {
             : "See Each Website in Detail"
         }
       >
-        Food, beauty, project work, and professional services. Each needs its
+        Food, beauty, event catering, and professional services. Each needs its
         own voice and its own customer journey.
       </SectionHeading>
-      <div className="space-y-16 lg:space-y-24">
+      <div className="project-list">
         {(featuredOnly
           ? projects.filter((project) => project.featured)
           : projects
@@ -31,19 +31,17 @@ export function Work({ featuredOnly = false }: { featuredOnly?: boolean }) {
           <Reveal key={project.id}>
             <article
               id={`project-${project.id}`}
-              className="grid items-center gap-8 lg:grid-cols-12 lg:gap-12"
+              className="section-layout grid items-center lg:grid-cols-12"
             >
               <div
-                className={`min-w-0 lg:col-span-7 ${index % 2 === 1 ? "lg:order-2" : ""}`}
+                className={`min-w-0 lg:col-span-8 ${index % 2 === 1 ? "lg:order-2" : ""}`}
               >
                 <ProjectPreview project={project} />
               </div>
               <div
-                className={`lg:col-span-5 ${index % 2 === 1 ? "lg:order-1" : ""}`}
+                className={`project-description lg:col-span-4 ${index % 2 === 1 ? "lg:order-1" : ""}`}
               >
-                <Eyebrow>
-                  {String(index + 1).padStart(2, "0")} / {project.industry}
-                </Eyebrow>
+                <Eyebrow>{project.industry}</Eyebrow>
                 {project.media.logo && (
                   <Image
                     src={project.media.logo.src}
@@ -87,7 +85,7 @@ export function Work({ featuredOnly = false }: { featuredOnly?: boolean }) {
                     </dl>
                   </details>
                 )}
-                <div className="mt-7 flex flex-wrap items-center gap-4 empty:hidden">
+                <div className="content-action flex flex-wrap items-center gap-4 empty:hidden">
                   {project.url && (
                     <ButtonLink href={project.url} secondary>
                       Visit {project.title}
@@ -111,7 +109,7 @@ export function Work({ featuredOnly = false }: { featuredOnly?: boolean }) {
         <AnimatedLink
           href="/work"
           arrow
-          className="mt-10 min-h-12 text-primary"
+          className="section-action min-h-12 text-primary"
         >
           View All Projects
         </AnimatedLink>

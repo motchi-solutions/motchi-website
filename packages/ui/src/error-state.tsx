@@ -8,8 +8,8 @@ export function ErrorState({
   reference?: string;
 }) {
   return (
-    <section className="mx-auto max-w-shell px-5 py-section sm:px-8 lg:px-12">
-      <p className="mb-5 text-eyebrow font-semibold uppercase tracking-widest text-primary">
+    <section className="section-introduction mx-auto max-w-shell px-5 py-section sm:px-8 lg:px-12">
+      <p className="error-eyebrow text-eyebrow font-semibold uppercase tracking-widest text-primary">
         Something Went Wrong
       </p>
       <h1 className="max-w-reading text-h1 font-medium tracking-tight">
@@ -19,7 +19,7 @@ export function ErrorState({
         Please try again, or email us directly if you need a hand. If you were
         sending an enquiry, check for confirmation before submitting again.
       </p>
-      <div className="mt-8 flex flex-wrap gap-4">
+      <div className="content-action flex flex-wrap gap-4">
         <button
           type="button"
           onClick={reset}

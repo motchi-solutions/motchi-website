@@ -9,8 +9,8 @@ export default function Home() {
     <>
       <Hero />
       <Section id="capabilities">
-        <div className="grid gap-10 lg:grid-cols-2">
-          <div>
+        <div className="section-layout grid lg:grid-cols-2">
+          <div className="section-introduction">
             <Eyebrow>Where We Can Help</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
               AI, Data, and Business Systems Support
@@ -23,12 +23,12 @@ export default function Home() {
             <AnimatedLink
               href="/capabilities"
               arrow
-              className="mt-7 min-h-12 text-primary"
+              className="content-action min-h-12 text-primary"
             >
-              Explore Our Services
+              Explore Our Capabilities
             </AnimatedLink>
           </div>
-          <ol className="divide-y divide-border border-t border-border">
+          <ul className="divide-y divide-border border-t border-border">
             {[
               [
                 "Choose the Right Technology",
@@ -42,10 +42,9 @@ export default function Home() {
                 "Put Your Plan Into Practice",
                 "Turn an agreed approach into working software, adoption, and continued support.",
               ],
-            ].map(([title, text], i) => (
+            ].map(([title, text]) => (
               <li key={title} className="py-7">
                 <Reveal className="flex gap-5">
-                  <span className="pt-1 text-small text-primary">0{i + 1}</span>
                   <div>
                     <h3 className="text-h3 font-medium">{title}</h3>
                     <p className="mt-3 max-w-lg leading-relaxed text-muted">
@@ -55,15 +54,15 @@ export default function Home() {
                 </Reveal>
               </li>
             ))}
-          </ol>
+          </ul>
         </div>
       </Section>
       <Section
         id="approach"
         className="brand-grid border-y border-border bg-surface"
       >
-        <div className="grid gap-8 lg:grid-cols-2">
-          <div>
+        <div className="section-layout grid lg:grid-cols-2">
+          <div className="section-introduction">
             <Eyebrow>Advice Through Adoption</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
               How We Work With Your Team
@@ -77,7 +76,7 @@ export default function Home() {
             <AnimatedLink
               href="/approach"
               arrow
-              className="mt-7 min-h-12 text-primary"
+              className="content-action min-h-12 text-primary"
             >
               See How We Work
             </AnimatedLink>
@@ -88,8 +87,8 @@ export default function Home() {
         id="about"
         className="about-summary-section border-t border-border"
       >
-        <div className="about-summary grid gap-8 lg:grid-cols-2">
-          <div className="about-summary-heading">
+        <div className="about-summary section-layout grid lg:grid-cols-2">
+          <div className="about-summary-heading section-introduction">
             <Eyebrow>About Motchi Consulting</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
               Advice That Leads to Action
@@ -103,14 +102,17 @@ export default function Home() {
             <AnimatedLink
               href="/about"
               arrow
-              className="mt-6 min-h-12 text-primary"
+              className="content-action min-h-12 text-primary"
             >
               Learn More About Motchi Consulting
             </AnimatedLink>
           </div>
         </div>
       </Section>
-      <ContactCTA title="Let's Plan Your Next Step" />
+      <ContactCTA
+        action="Start a Conversation"
+        title="Let's Plan Your Next Step"
+      />
     </>
   );
 }

@@ -9,12 +9,12 @@
 .introduction {
   width: 100%;
   max-width: 56rem;
-  margin: 0 auto 1.25rem;
+  margin: 0 auto var(--space-section-heading);
   text-align: center;
 }
 .introduction > p:first-child {
   justify-content: center;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-eyebrow);
 }
 .introduction > p:first-child::after {
   display: block;
@@ -32,14 +32,9 @@
 }
 .introduction > p:last-child {
   max-width: 70ch;
-  margin: 0.75rem auto 0;
+  margin: var(--space-copy) auto 0;
   color: var(--muted);
   font-size: 1rem;
   line-height: 1.6;
   text-wrap: pretty;
-}
-@media (max-width: 767px) {
-  .introduction {
-    margin-bottom: 1.5rem;
-  }
 }

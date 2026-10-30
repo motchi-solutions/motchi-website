@@ -18,7 +18,7 @@ export default function Page() {
         the designs on desktop and mobile.
       </PageHero>
       <Work />
-      <ContactCTA title="Let's Plan Your Website" />
+      <ContactCTA action="Start a Project" title="Let's Plan Your Website" />
     </>
   );
 }

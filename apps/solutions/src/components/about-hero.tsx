@@ -175,7 +175,7 @@ export function AboutHero() {
                 >
                   <h2>{belief.title}</h2>
                   <p>{belief.description}</p>
-                  <ButtonLink href="/contact" className="mt-5">
+                  <ButtonLink href="/contact" className="content-action">
                     Tell Us About Your Business
                   </ButtonLink>
                 </div>

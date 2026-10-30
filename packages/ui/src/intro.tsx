@@ -1,4 +1,5 @@
 "use client";
+import { motionMilliseconds } from "./motion-timing";
 import { type Branch, introLogos } from "@motchi/brand";
 import Image from "next/image";
 import { LuKeyboard, LuMousePointerClick } from "react-icons/lu";
@@ -6,7 +7,6 @@ import { usePathname } from "next/navigation";
 import { type CSSProperties, useEffect, useRef, useState } from "react";
 
 const branches: Branch[] = ["solutions", "websites", "consulting"];
-const duration = 3800;
 
 // Root layouts persist during client navigation; each new document gets a new stage.
 export function Introduction({ branch }: { branch: Branch }) {
@@ -19,6 +19,7 @@ export function Introduction({ branch }: { branch: Branch }) {
     let timeout: number | undefined;
     const finish = () => {
       removeInputs();
+      document.dispatchEvent(new Event("motchi:page-reveal"));
       setVisible(false);
     };
     const animations: Animation[] = [];
@@ -34,12 +35,12 @@ export function Introduction({ branch }: { branch: Branch }) {
       }
       // Preserve the current aperture when cancelling the branded sequence.
       const current = getComputedStyle(node);
-      const mask = current.maskImage;
+      const aperture = current.getPropertyValue("--intro-aperture");
       const opacity = current.opacity;
-      node.style.maskImage = mask;
+      node.style.setProperty("--intro-aperture", aperture);
       node.style.animation = "none";
       const fade = node.animate([{ opacity }, { opacity: 0 }], {
-        duration: 600,
+        duration: 180,
         easing: "ease-in-out",
         fill: "forwards",
       });
@@ -67,6 +68,12 @@ export function Introduction({ branch }: { branch: Branch }) {
       return;
     }
     // CSS starts with server HTML and ends independently if hydration fails.
+    const duration = motionMilliseconds(
+      stage.current
+        ? getComputedStyle(stage.current).getPropertyValue("--motion-intro")
+        : "",
+      2600,
+    );
     const elapsed = Number(stage.current?.getAnimations()[0]?.currentTime ?? 0);
     timeout = window.setTimeout(finish, Math.max(0, duration - elapsed) + 50);
     preference.addEventListener("change", finish);

@@ -1,8 +1,8 @@
 .principles {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.25rem;
-  margin-top: 3rem;
+  gap: var(--space-card);
+  margin-top: var(--space-section-heading);
 }
 .principle {
   position: relative;
@@ -44,16 +44,12 @@
   width: 1.25rem;
   height: 1.25rem;
 }
-.principle:nth-child(2) {
-  border-top-color: var(--brand-primary);
-}
 .principle:nth-child(2) .number {
   color: #93652d;
 }
 @media (max-width: 767px) {
   .principles {
     grid-template-columns: 1fr;
-    gap: 1rem;
   }
   .marker {
     margin-bottom: 1.25rem;

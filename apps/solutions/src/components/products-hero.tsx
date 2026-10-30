@@ -16,7 +16,7 @@ import {
 import { ButtonLink, Container, Eyebrow } from "@motchi/ui/primitives";
 import { products } from "@/content/products";
 import { ProductAlbum } from "./product-album";
-import { useProductGate } from "./use-product-gate";
+import { productGateTiming, useProductGate } from "./use-product-gate";
 import styles from "./products-hero.module.css";
 import hero from "./exploration-hero.module.css";
 
@@ -27,6 +27,8 @@ export function ProductsHero() {
   const [albumUsed, setAlbumUsed] = useState(false);
   const display = useRef<HTMLDivElement>(null);
   const carouselSlide = useRef<HTMLDivElement>(null);
+  const albumReset = useRef<(() => void) | null>(null);
+  const productExit = useRef<Animation | null>(null);
   const productTransition = useRef<Animation | null>(null);
   const outgoingGate = useRef<HTMLElement | null>(null);
   const trigger = useRef<HTMLButtonElement>(null);
@@ -34,7 +36,7 @@ export function ProductsHero() {
   const albumButton = useRef<HTMLButtonElement>(null);
   const selector = useRef<HTMLDivElement>(null);
   const previousOpen = useRef(false);
-  const { gate, reset, moveGate } = useProductGate();
+  const { gate, reset, moveGate, refreshHover } = useProductGate(selected);
   const gesture = useRef<{ id: number; x: number; y: number } | null>(null);
   const suppressClick = useRef(false);
   const product = products[selected];
@@ -45,13 +47,16 @@ export function ProductsHero() {
     }
     const timer = window.setTimeout(
       () => setAlbumVisible(false),
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 1400,
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? 0
+        : productGateTiming.close,
     );
     return () => window.clearTimeout(timer);
   }, [opened]);
   useEffect(
     () => () => {
       productTransition.current?.cancel();
+      productExit.current?.cancel();
       outgoingGate.current?.remove();
     },
     [],
@@ -74,7 +79,9 @@ export function ProductsHero() {
   const choose = (index: number, direction = index > selected ? 1 : -1) => {
     if (index === selected) return;
     setAlbumUsed(false);
+    albumReset.current?.();
     productTransition.current?.cancel();
+    productExit.current?.cancel();
     outgoingGate.current?.remove();
     if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       const node = carouselSlide.current;
@@ -112,15 +119,19 @@ export function ProductsHero() {
         ],
         { ...timing, fill: "forwards" },
       );
+      productExit.current = exit;
       exit.onfinish = () => outgoing.remove();
-      productTransition.current =
-        node.animate(
-          [
-            { transform: `translateX(${direction * distance}px)` },
-            { transform: "translateX(0)" },
-          ],
-          timing,
-        ) ?? null;
+      const arrival = node.animate(
+        [
+          { transform: `translateX(${direction * distance}px)` },
+          { transform: "translateX(0)" },
+        ],
+        timing,
+      );
+      productTransition.current = arrival;
+      arrival.onfinish = () => {
+        if (productTransition.current === arrival) refreshHover.current();
+      };
     }
     resetTilt();
     reset.current();
@@ -294,6 +305,26 @@ export function ProductsHero() {
               aria-labelledby={`product-tab-${selected}`}
               className={styles.spotlight}
             >
+              <div className={styles.copy} data-entry-reveal="">
+                <div
+                  key={product.name}
+                  className={styles.copyReveal}
+                  data-active="true"
+                >
+                  <div className={styles.productHeading}>
+                    <h2 className="text-h2 font-medium tracking-tight">
+                      {product.name}
+                    </h2>
+                    <p className={styles.status}>
+                      <span aria-hidden="true" />
+                      {product.status}
+                    </p>
+                  </div>
+                  <p className="mt-4 max-w-lg leading-relaxed text-muted">
+                    {product.description}
+                  </p>
+                </div>
+              </div>
               <div
                 className={styles.stage}
                 data-entry-reveal=""
@@ -341,9 +372,6 @@ export function ProductsHero() {
                 </button>
                 <div ref={carouselSlide} className={styles.carouselSlide}>
                   <div className={styles.arch} aria-hidden="true" />
-                  <div className={styles.stageLabel} aria-hidden="true">
-                    Behind the scenes
-                  </div>
                   <div
                     ref={display}
                     id="product-album"
@@ -354,6 +382,7 @@ export function ProductsHero() {
                     aria-hidden={!opened}
                   >
                     <ProductAlbum
+                      resetRef={albumReset}
                       key={product.name}
                       name={product.name}
                       active={opened}
@@ -459,33 +488,14 @@ export function ProductsHero() {
                   </span>
                 </p>
               </div>
-              <div className={styles.copy} data-entry-reveal="">
-                {products.map((product, index) => (
-                  <div
-                    key={product.name}
-                    className={styles.copyReveal}
-                    data-active={selected === index}
-                    aria-hidden={selected !== index}
-                    inert={selected !== index}
-                  >
-                    <p className={styles.status}>
-                      <span aria-hidden="true" />
-                      {product.status}
-                    </p>
-                    <h2 className="mt-4 text-h2 font-medium tracking-tight">
-                      {product.name}
-                    </h2>
-                    <p className="mt-4 max-w-lg leading-relaxed text-muted">
-                      {product.description}
-                    </p>
-
-                    <ButtonLink href="/contact?topic=Products" className="mt-6">
-                      {product.logo
-                        ? `Ask About ${product.name}`
-                        : "Ask About Our Products"}
-                    </ButtonLink>
-                  </div>
-                ))}
+              <div className={styles.productActions} data-entry-reveal="">
+                <div key={product.name} className={styles.copyReveal}>
+                  <ButtonLink href="/contact?topic=Products">
+                    {product.logo
+                      ? `Ask About ${product.name}`
+                      : "Ask About Our Products"}
+                  </ButtonLink>
+                </div>
               </div>
             </div>
           </div>
@@ -495,7 +505,10 @@ export function ProductsHero() {
             <h2 className="text-h3 font-semibold">{products[1].name}</h2>
             <p className="mt-3 text-muted">{products[1].description}</p>
             <p className="mt-2 text-sm text-muted">{products[1].status}</p>
-            <ButtonLink href="/contact?topic=Products" className="mt-5">
+            <ButtonLink
+              href="/contact?topic=Products"
+              className="content-action"
+            >
               Ask About Our Products
             </ButtonLink>
           </div>

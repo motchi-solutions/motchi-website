@@ -16,8 +16,8 @@ export default function Home() {
         id="about"
         className="about-summary-section border-t border-border"
       >
-        <div className="about-summary grid gap-8 lg:grid-cols-2">
-          <div className="about-summary-heading">
+        <div className="about-summary section-layout grid lg:grid-cols-2">
+          <div className="about-summary-heading section-introduction">
             <Eyebrow>About Motchi</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
               Practical Technology.

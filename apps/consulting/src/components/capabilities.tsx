@@ -11,14 +11,13 @@ export function Capabilities() {
         what you already have. The business problem leads the conversation.
       </SectionHeading>
       <div>
-        {capabilities.map((capability, i) => (
+        {capabilities.map((capability) => (
           <Reveal key={capability.id} className="service-row-reveal">
             <article
               id={capability.id}
               className="capability-row grid gap-5 border-t border-border px-5 py-8 sm:px-7 lg:grid-cols-12 lg:gap-10"
             >
               <div className="flex items-baseline gap-4 lg:col-span-4">
-                <span className="text-xs text-primary">0{i + 1}</span>
                 <h3 className="text-xl font-medium">{capability.title}</h3>
               </div>
               <div className="lg:col-span-8">
@@ -28,11 +27,12 @@ export function Capabilities() {
                 <p className="mt-4 max-w-2xl leading-relaxed text-muted">
                   {capability.description}
                 </p>
-                <details className="mt-5">
+                <details className="capability-disclosure mt-5">
                   <summary className="animated-link inline-flex min-h-11 cursor-pointer list-none items-center text-sm text-primary">
-                    <span>What This Includes</span>
-                    <span aria-hidden="true" className="ml-3">
-                      +
+                    <span>What this includes</span>
+                    <span aria-hidden="true" className="step-disclosure-icon">
+                      <span className="step-disclosure-horizontal" />
+                      <span className="step-disclosure-vertical" />
                     </span>
                   </summary>
                   <ul className="mt-4 grid gap-3 text-sm sm:grid-cols-2">

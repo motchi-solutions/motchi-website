@@ -3,7 +3,7 @@ export function Hero() {
   return (
     <section className="family-hero relative overflow-hidden bg-primary py-hero text-inverse">
       <Container>
-        <div className="grid gap-12 lg:grid-cols-12 lg:items-end">
+        <div className="section-layout grid lg:grid-cols-12 lg:items-end">
           <div className="family-hero-intro relative lg:col-span-8">
             <HeroBrand branch="consulting" light />
             <h1 className="text-display font-medium tracking-tight">
@@ -19,10 +19,10 @@ export function Hero() {
             </p>
             <div className="family-hero-actions mt-9 flex flex-wrap gap-3">
               <ButtonLink href="/contact" light>
-                Discuss Your Project
+                Start a Conversation
               </ButtonLink>
               <ButtonLink href="/capabilities" light secondary>
-                Explore Our Services
+                Explore Our Capabilities
               </ButtonLink>
             </div>
           </div>

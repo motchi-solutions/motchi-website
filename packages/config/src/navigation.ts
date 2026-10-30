@@ -17,7 +17,7 @@ export const navigation = {
   ],
   consulting: [
     { label: "Home", href: "/" },
-    { label: "Services", href: "/capabilities" },
+    { label: "Capabilities", href: "/capabilities" },
     { label: "How We Work", href: "/approach" },
     { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },

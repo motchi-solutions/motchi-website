@@ -3,13 +3,13 @@ import { Eyebrow, Reveal, Section } from "@motchi/ui";
 export function Services() {
   return (
     <Section id="services" className="bg-surface">
-      <div className="grid gap-10 lg:grid-cols-5">
-        <div className="lg:col-span-2">
+      <div className="section-layout grid lg:grid-cols-5">
+        <div className="section-introduction lg:col-span-2">
           <Eyebrow>Website Services</Eyebrow>
           <h2 className="text-h2 font-medium tracking-tight">
             Choose the Services You Need
           </h2>
-          <p className="mt-6 max-w-sm leading-relaxed text-muted">
+          <p className="max-w-sm leading-relaxed text-muted">
             A useful website connects what customers need with what your team
             can manage.
           </p>

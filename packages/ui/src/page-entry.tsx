@@ -1,18 +1,9 @@
 "use client";
-import { usePathname } from "next/navigation";
+import { motionMilliseconds } from "./motion-timing";
 import { useLayoutEffect, useRef, type ReactNode } from "react";
 
 const details =
-  /(?:^|_)(trace|path-trace|connect|connect-story|globe-turn|chart-draw|workflow-release|workflow-complete|workflow-transfer|compass-navigate)(?:$|__)/;
-const milliseconds = (value: string, fallback: number) => {
-  const amount = Number.parseFloat(value);
-  if (!Number.isFinite(amount)) return fallback;
-  return value.trim().endsWith("ms")
-    ? amount
-    : value.trim().endsWith("s")
-      ? amount * 1000
-      : amount;
-};
+  /(?:^|_)(trace|path-trace|connect|connect-story|icon-arrive|globe-turn|chart-draw|workflow-release|workflow-complete|workflow-transfer|compass-navigate)(?:$|__)/;
 
 function prepareEntry(root: HTMLDivElement) {
   const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -66,11 +57,11 @@ function prepareEntry(root: HTMLDivElement) {
       : first.top - second.top;
   });
   const style = getComputedStyle(root);
-  const duration = milliseconds(
+  const duration = motionMilliseconds(
     style.getPropertyValue("--motion-page-reveal"),
     1000,
   );
-  const stagger = milliseconds(
+  const stagger = motionMilliseconds(
     style.getPropertyValue("--motion-page-stagger"),
     60,
   );
@@ -150,8 +141,15 @@ function prepareEntry(root: HTMLDivElement) {
   if (!intro || intro.dataset.introReleasing === "true") start();
   else {
     const elapsed = Number(intro.getAnimations()[0]?.currentTime ?? 0);
-    // Start with the aperture reveal, rather than running unseen behind it.
-    timer = window.setTimeout(start, Math.max(0, 3800 * 0.77 - elapsed));
+    const introDuration = motionMilliseconds(
+      getComputedStyle(intro).getPropertyValue("--motion-intro"),
+      2600,
+    );
+    // Begin the page entrance as the selected identity opens onto it.
+    timer = window.setTimeout(
+      start,
+      Math.max(0, introDuration * 0.77 - elapsed),
+    );
   }
   return () => {
     cancelled = true;
@@ -160,17 +158,22 @@ function prepareEntry(root: HTMLDivElement) {
     root.removeEventListener("focusin", revealControl);
     root.removeEventListener("pointerdown", revealControl);
     preference.removeEventListener("change", finish);
-    for (const animation of [...entrances, ...decorations]) animation.cancel();
+    for (const animation of entrances) animation.cancel();
+    // Preserve CSS animation ownership across effect restarts (including
+    // development Strict Mode), so the next setup can rewind and play it.
+    for (const animation of decorations) animation.pause();
   };
 }
 
 export function PageEntry({ children }: { children: ReactNode }) {
-  const pathname = usePathname();
   const ref = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
-    if (!pathname) return;
     const root = ref.current;
     if (!root) return;
+    // Next's template already remounts this component on route changes.
+    // Read the committed URL after mount, without re-keying streamed children
+    // or suspending this lifecycle wrapper on a navigation-hook promise.
+    root.dataset.innerPage = String(window.location.pathname !== "/");
     let cleanup: (() => void) | undefined;
     const observer = new MutationObserver(() => {
       if (!root.querySelector("h1")) return;
@@ -183,14 +186,9 @@ export function PageEntry({ children }: { children: ReactNode }) {
       observer.disconnect();
       cleanup?.();
     };
-  }, [pathname]);
+  }, []);
   return (
-    <div
-      ref={ref}
-      key={pathname}
-      className="page-arrival"
-      data-inner-page={pathname !== "/"}
-    >
+    <div ref={ref} className="page-arrival">
       {children}
     </div>
   );

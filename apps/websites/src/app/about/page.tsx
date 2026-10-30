@@ -2,7 +2,7 @@ import { pageMetadata } from "@motchi/config/metadata";
 import { ButtonLink, ContactCTA, PageHero, Reveal, Section } from "@motchi/ui";
 export const metadata = pageMetadata(
   "About",
-  "Your website should reflect it. We bring design, development, and support together around the people who use your site.",
+  "Website design, development, and support shaped around your business and the people who use your site.",
   "/about",
 );
 export default function AboutPage() {
@@ -20,7 +20,7 @@ export default function AboutPage() {
         after launch.
       </PageHero>
       <Section>
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="section-cards grid md:grid-cols-3">
           <Reveal className="service-card-reveal flex">
             <article className="w-full border-t border-border pt-6">
               <h2 className="text-h3 font-medium">
@@ -56,13 +56,13 @@ export default function AboutPage() {
             </article>
           </Reveal>
         </div>
-        <p className="mt-10 border-t border-border pt-6 text-muted">
+        <p className="section-action border-t border-border pt-6 text-muted">
           Part of the Motchi family. Based in Toronto. Working with businesses
           globally.
         </p>
       </Section>
 
-      <ContactCTA title="Let's Plan Your Website" />
+      <ContactCTA action="Start a Project" title="Let's Plan Your Website" />
     </>
   );
 }

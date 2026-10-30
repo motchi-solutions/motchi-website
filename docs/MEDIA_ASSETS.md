@@ -44,7 +44,7 @@ solutions: { src: "/brand/ms-logo.svg", width: 1095, height: 1095 }
 
 ## Introduction
 
-One full-screen, decorative family overlay is mounted in each app root layout. It plays on each new document or reload, and persists without replay during in-app navigation. Approved SVG marks and a consistent MOTCHI/branch lockup are animated with CSS transforms, opacity, and an expanding radial mask over the page. Total duration is 3.8 seconds. CSS ends the overlay even without hydration; input dismisses it immediately and reduced motion skips it. No GIF/video, session-storage playback record, or loading-page route is used.
+One full-screen, decorative family overlay is mounted in each app root layout. It plays on each new document or reload, and persists without replay during in-app navigation. Approved SVG marks and a consistent MOTCHI/branch lockup are animated with CSS transforms, opacity, and an expanding radial mask over the page. Total duration is 2.6 seconds. CSS ends the overlay even without hydration; input dismisses it immediately and reduced motion skips it. No GIF/video, session-storage playback record, or loading-page route is used.
 
 ## Portfolio configuration
 
@@ -58,7 +58,7 @@ media: {
 }
 ```
 
-Dimensions above are recommendations, not claims about existing files. Always use the actual exported dimensions. Prefer desktop screenshots around 1600×1000 and mobile around 430×932. Crop deliberately to show useful parts of the site rather than loading a huge full-page capture. Aim for approximately 150–400KB per still where quality allows. Use WebP/AVIF for photos/screenshots; SVG for approved vector logos.
+Dimensions above are recommendations, not claims about existing files. Always use the actual exported dimensions. Prefer desktop screenshots around 1600×1000 and mobile around 430×932. Crop deliberately to show useful parts of the site rather than loading a huge full-page capture. Aim for approximately 150-400KB per still where quality allows. Use WebP/AVIF for photos/screenshots; SVG for approved vector logos.
 
 The primary preview selects `desktop`, then `hero`, then `motion`, then a supplied mobile-only image. A supplied mobile screenshot overlaps the primary preview. A client logo appears only if supplied. Static or photographic hero images use the image asset shape. The `motion` slot supports typed WebM/MP4+poster or GIF+poster assets; use a meaningful visual label. Portfolio video defaults to native controls with preload=none. A GIF shows its poster until the visitor deliberately plays it and can be paused. No giant animated media should load automatically below the fold.
 
@@ -76,6 +76,10 @@ All four projects now have desktop and mobile PNG screenshots with measured intr
 
 ## Product concept artwork
 
-The Products gate reads approved future sketches from `apps/solutions/src/content/product-concepts.ts`. Each entry needs a local public image path, intrinsic dimensions, a caption, and descriptive alternative text. Pop Tips currently shows a first-designs-coming-soon placeholder. Age Verification uses clearly labeled, code-drawn wireframe ideas, not confirmed features or an available verification service. Images sit inside the open gate as a clickable album. A gentle opening nudge and a browse hint introduce the interaction; the hint disappears after use. Back to gate or Escape closes the album and restores focus to the gate. Product selection closes the prior album. Horizontal swipes and mouse drags switch products only within the selector and gate area, excluding the album and controls; vertical touch scrolling remains available. Hover peeks at the gate only on devices with hover and without reduced motion. Click, Enter, or Space opens it, and reduced motion disables the nudge and page-turn effects.
+The Products gate reads preview cards from `apps/solutions/src/content/product-concepts.ts`. Each entry supplies a public image path, intrinsic dimensions, a caption, descriptive alternative text, and an optional restrained motion treatment. Images use square, uncropped artwork areas and adapt to the open gate. The album supports pointer/touch dragging, loaded next/previous previews, keyboard browsing, interruptible return motion, and reduced motion.
 
-Pop Tips gate previews use three small, selected details from the supplied artwork: pink sparkles, a chat bubble, and the POP wordmark fragment. Only these stripped-down PNG excerpts live in `apps/solutions/public/products/pop-tips-teasers`; full source sheets, the brand kit, and complete title artwork remain outside public assets. Blush and lavender card treatments reference a small portion of the palette. These are visual teasers, not product screens or feature claims. The private community project uses a static illustrated message and reveals no feature details.
+Pop Tips presents three cards: the user-supplied Hirono mystery image, the user-supplied Labubu silhouette with its yellow background edited to pink, and the existing full pink mystery-box logo. `/products/pop-tips/hirono-mystery.jpeg` is an unchanged copy of the supplied 383×399 JPEG. `/products/pop-tips/labubu-silhouette-pink.webp` is a 398×502 optimized background edit that preserves the black silhouette and original bottom-edge crop. The generated collectible character was removed from the album and public assets in favor of these supplied images.
+
+The supplied logo remains `/products/pop-tips/logo.png`, unchanged, with a one-time gentle CSS wiggle after reveal. Reduced motion disables the wiggle. All active Pop Tips images live in `/products/pop-tips/` with lowercase, descriptive filenames. Unused teaser excerpts have been removed; private source sheets and brand kits are not published.
+
+Our Next Chapter retains its static message and reveals no unconfirmed product features. Switching products or closing the gate cancels transient artwork immediately.

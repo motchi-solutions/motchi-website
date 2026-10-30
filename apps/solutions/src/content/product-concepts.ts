@@ -4,34 +4,36 @@ export type ProductSketch = {
   width: number;
   height: number;
   alt: string;
+  motion?: "wiggle";
   tone?: "blush" | "lavender" | "cream";
 };
-// Public teasers contain only selected details, never the original brand sheets.
+// User-supplied mystery artwork and the complete product mark; no availability claims.
 export const productSketches: Record<string, readonly ProductSketch[]> = {
   "Pop Tips": [
     {
-      title: "A little sparkle",
-      src: "/products/pop-tips-teasers/sparkle.png",
-      width: 198,
-      height: 171,
-      alt: "Two glossy pink sparkles from the Pop Tips artwork",
-      tone: "blush",
-    },
-    {
-      title: "A playful hello",
-      src: "/products/pop-tips-teasers/hello.png",
-      width: 264,
-      height: 194,
-      alt: "A soft pink chat bubble with three dots",
-      tone: "lavender",
-    },
-    {
-      title: "Just a hint",
-      src: "/products/pop-tips-teasers/wordmark.png",
-      width: 440,
-      height: 164,
-      alt: "The word POP, a small detail from the Pop Tips wordmark",
+      title: "Meet Pop Tips",
+      src: "/products/pop-tips/logo.png",
+      width: 1254,
+      height: 1254,
+      alt: "The complete Pop Tips pink mystery-box logo with its white question mark",
+      motion: "wiggle",
       tone: "cream",
+    },
+    {
+      title: "A friend for sad times",
+      src: "/products/pop-tips/hirono-mystery.jpeg",
+      width: 383,
+      height: 399,
+      alt: "Mystery artwork with a red question mark, a black frame, and the word FRIEND",
+      tone: "cream",
+    },
+    {
+      title: "A familiar shadow",
+      src: "/products/pop-tips/labubu-silhouette-pink.webp",
+      width: 398,
+      height: 502,
+      alt: "A black bunny-eared Labubu silhouette on a soft pink background",
+      tone: "blush",
     },
   ],
   "Our Next Chapter": [],

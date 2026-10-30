@@ -12,7 +12,7 @@ export type Product = ProductBase &
 export const products: Product[] = [
   {
     name: "Pop Tips",
-    logo: { src: "/products/pop-tips-logo.png", width: 1254, height: 1254 },
+    logo: { src: "/products/pop-tips/logo.png", width: 1254, height: 1254 },
     description:
       "A little curiosity, a splash of colour, and something fun on the way. Explore a few hints while we bring Pop Tips to life.",
     status: "Coming soon",

@@ -119,14 +119,16 @@ export function Introduction({ branch }: { branch: Branch }) {
               }
             >
               {logo && (
-                <Image
-                  src={logo.src}
-                  alt=""
-                  width={logo.width}
-                  height={logo.height}
-                  loading="eager"
-                  className="intro-monogram"
-                />
+                <span className="intro-monogram-frame" data-intro-mark={key}>
+                  <Image
+                    src={logo.src}
+                    alt=""
+                    width={logo.width}
+                    height={logo.height}
+                    loading="eager"
+                    className="intro-monogram"
+                  />
+                </span>
               )}
               <span className="intro-parent-name">MOTCHI</span>
               <span className="intro-branch-name">

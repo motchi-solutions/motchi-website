@@ -1,71 +1,114 @@
 import { pageMetadata } from "@motchi/config/metadata";
 import { AnimatedLink, ContactCTA, Eyebrow, Section } from "@motchi/ui";
 import { AboutHero } from "@/components/about-hero";
-import { LuWallet, LuClock3, LuShieldCheck } from "react-icons/lu";
 import styles from "./about.module.css";
 export const metadata = pageMetadata(
   "About",
-  "Affordable technology, less repetitive work, and a supportive partnership. Learn why Motchi Solutions helps businesses make room for better things.",
+  "Client-first technology, clear pricing, and products built for the community. Discover the mission and vision behind Motchi Solutions.",
   "/about",
 );
 export default function AboutPage() {
   return (
     <>
       <AboutHero />
-      <Section>
-        <div className="section-layout grid lg:grid-cols-2">
-          <div className="section-introduction">
-            <Eyebrow>Our Mission</Eyebrow>
-            <h2 className="text-h2 font-medium tracking-tight">
-              Useful Technology, Within Reach
-            </h2>
-          </div>
-          <div className="space-y-5 text-lg leading-relaxed text-muted">
-            <p>
-              We want technology to be affordable and easy to use, even if you
-              don't have a large budget or your own technical team. A small,
-              thoughtful improvement can make a real difference to a working
-              day.
-            </p>
-            <p>
-              That might mean a responsive website that helps customers find
-              you, tools that work together, or a simpler way to handle a task
-              you repeat every week. We start with the problem, then agree on a
-              solution and costs that fit.
-            </p>
-          </div>
-        </div>
-        <div className={styles.principles}>
-          {(
-            [
-              [
-                "Spend Where It Helps",
-                "Build what you need now. We look at your existing tools first and explain the costs of building, running, and maintaining the solution.",
-                LuWallet,
-              ],
-              [
-                "Give Time Back to People",
-                "Reduce repetitive admin so your team can focus on customers, solve better problems, and spend more time on the work that matters to them.",
-                LuClock3,
-              ],
-              [
-                "Keep People in Control",
-                "Technology should support your team. We explain the tools, help people get comfortable, and consider data security when choosing how things work.",
-                LuShieldCheck,
-              ],
-            ] as const
-          ).map(([title, description, Icon], index) => (
-            <article key={title} className={styles.principle}>
-              <div className={styles.marker} aria-hidden="true">
-                <span className={styles.number}>0{index + 1}</span>
-                <span className={styles.icon}>
-                  <Icon />
-                </span>
-              </div>
-              <h3 className="text-xl font-semibold">{title}</h3>
-              <p className="mt-3 leading-relaxed text-muted">{description}</p>
-            </article>
-          ))}
+      <Section id="purpose">
+        <div className={styles.purposeGrid}>
+          <article
+            id="mission"
+            className={`${styles.purposeCard} ms-surface-feature border border-border bg-surface`}
+          >
+            <div className="section-introduction">
+              <Eyebrow>Our Mission</Eyebrow>
+              <h2 className="text-h2 font-medium tracking-tight">
+                Make Good Technology Easier to Access
+              </h2>
+            </div>
+            <div
+              className={`${styles.prose} text-lg leading-relaxed text-muted`}
+            >
+              <p>
+                We help people turn good ideas into useful technology, without
+                making the process feel overwhelming.
+              </p>
+              <dl className={styles.points}>
+                <div className={styles.point}>
+                  <dt className="text-lg font-medium text-foreground">
+                    Client-first partnership
+                  </dt>
+                  <dd>
+                    We learn how your business works, give honest advice, and
+                    support you after launch.
+                  </dd>
+                </div>
+                <div className={styles.point}>
+                  <dt className="text-lg font-medium text-foreground">
+                    Transparent pricing
+                  </dt>
+                  <dd>
+                    You know what is included, what it costs to run, and what
+                    support involves before you commit.
+                  </dd>
+                </div>
+                <div className={styles.point}>
+                  <dt className="text-lg font-medium text-foreground">
+                    Sustainable technology
+                  </dt>
+                  <dd>
+                    We focus on what helps now and discuss changes before taking
+                    on more work.
+                  </dd>
+                </div>
+              </dl>
+            </div>
+          </article>
+          <article
+            id="vision"
+            className={`${styles.purposeCard} ms-surface-feature ms-surface-dark border border-border`}
+          >
+            <div className="section-introduction">
+              <Eyebrow light>Our Vision</Eyebrow>
+              <h2 className="text-h2 font-medium tracking-tight">
+                Technology That Puts People First
+              </h2>
+            </div>
+            <div
+              className={`${styles.prose} text-lg leading-relaxed text-muted`}
+            >
+              <p>
+                We want technology to make everyday life better for the people
+                and communities who use it.
+              </p>
+              <dl className={styles.points}>
+                <div className={styles.point}>
+                  <dt className="text-lg font-medium text-inverse">
+                    Useful products
+                  </dt>
+                  <dd>
+                    We build tools that help people connect, solve problems, or
+                    enjoy themselves.
+                  </dd>
+                </div>
+                <div className={styles.point}>
+                  <dt className="text-lg font-medium text-inverse">
+                    Privacy and safety
+                  </dt>
+                  <dd>
+                    We protect personal information and build safety into every
+                    product from the start.
+                  </dd>
+                </div>
+                <div className={styles.point}>
+                  <dt className="text-lg font-medium text-inverse">
+                    Welcoming experiences
+                  </dt>
+                  <dd>
+                    Our products should feel clear, inclusive, and respectful of
+                    people's choices.
+                  </dd>
+                </div>
+              </dl>
+            </div>
+          </article>
         </div>
       </Section>
       <Section id="partnership" className="bg-secondary text-inverse">
@@ -79,7 +122,9 @@ export default function AboutPage() {
               Based in Toronto. Working with businesses globally.
             </p>
           </div>
-          <div className="space-y-5 text-lg leading-relaxed text-inverse/85">
+          <div
+            className={`${styles.prose} text-lg leading-relaxed text-inverse/85`}
+          >
             <p>
               We want to support businesses we believe in and people who care
               about what they do. We take time to understand what you're

@@ -64,8 +64,8 @@
   grid-template-columns: minmax(0, 1fr);
   grid-template-areas: "summary" "preview" "contact";
   align-items: center;
-  gap: clamp(1.5rem, 5vw, 5rem);
-  padding-top: 1.5rem;
+  gap: var(--space-preview);
+  padding-top: var(--space-preview);
 }
 .stage {
   grid-area: preview;
@@ -312,7 +312,7 @@
   }
   .spotlight {
     grid-template-columns: 1fr;
-    gap: 1.25rem;
+    gap: var(--space-preview);
   }
   .stage {
     height: 21rem;
@@ -338,8 +338,8 @@
 }
 
 .fallback {
-  margin-top: 2rem;
-  padding-top: 1.5rem;
+  margin-top: var(--space-section-heading);
+  padding-top: var(--space-action);
   border-top: 1px solid var(--border);
 }
 
@@ -417,8 +417,8 @@
   transition: none;
 }
 .concepts {
-  margin-top: 1.5rem;
-  padding-top: 1.25rem;
+  margin-top: var(--space-action);
+  padding-top: var(--space-preview);
   border-top: 1px solid var(--border);
   animation: concepts-arrive 650ms ease 180ms both;
 }
@@ -808,7 +808,7 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-areas: "preview summary" "preview contact";
     grid-template-rows: 1fr 1fr;
-    gap: 1.5rem clamp(2rem, 5vw, 5rem);
+    gap: var(--space-action) var(--space-layout);
   }
   .copy {
     padding: 0;

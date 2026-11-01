@@ -1,3 +1,4 @@
+import "@/components/home.css";
 import { AnimatedLink, ContactCTA, Eyebrow, Section } from "@motchi/ui";
 import type { Metadata } from "next";
 import { Approach } from "@/components/approach";
@@ -7,11 +8,11 @@ import { Products } from "@/components/products";
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 export default function Home() {
   return (
-    <>
+    <div className="solutions-home">
       <Hero />
       <Businesses />
-      <Products />
       <Approach />
+      <Products />
       <Section
         id="about"
         className="about-summary-section border-t border-border"
@@ -20,30 +21,22 @@ export default function Home() {
           <div className="about-summary-heading section-introduction">
             <Eyebrow>About Motchi</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
-              Practical Technology.
-              <br />
-              <span className="font-display italic text-primary">
-                Support Within Reach.
-              </span>
+              A Little About Us
             </h2>
           </div>
           <div className="about-summary-content">
-            <p className="max-w-lg text-body-lg leading-relaxed text-muted">
-              We make useful technology accessible to businesses of different
-              sizes. Clear advice, help building the solution, and ongoing
-              support make it easier to choose what fits your needs and budget.
+            <p className="text-body-lg leading-relaxed text-muted">
+              We build technology around people. That means working alongside
+              your business with clear, accessible pricing, and creating
+              community products with care for the people using them.
             </p>
-            <AnimatedLink
-              href="/about"
-              arrow
-              className="mt-6 min-h-12 text-primary"
-            >
+            <AnimatedLink href="/about" arrow className="min-h-12 text-primary">
               Learn More About Motchi
             </AnimatedLink>
           </div>
         </div>
       </Section>
       <ContactCTA />
-    </>
+    </div>
   );
 }

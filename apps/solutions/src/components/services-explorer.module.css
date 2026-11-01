@@ -88,8 +88,8 @@
 .possibility {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: clamp(1.5rem, 4vw, 4rem);
-  margin-top: 1.25rem;
+  gap: var(--space-layout);
+  margin-top: var(--space-preview);
   align-items: center;
 }
 .visual {
@@ -254,7 +254,7 @@
 }
 .copy {
   display: grid;
-  padding: 1rem 0;
+  padding: 0;
   min-width: 0;
 }
 .copyReveal {
@@ -280,7 +280,7 @@
   }
   .possibility {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(2rem, 5vw, 5rem);
+    gap: var(--space-layout);
   }
   .copy {
     padding: 0;
@@ -637,7 +637,7 @@
   .possibility {
     grid-template-areas: "preview summary" "preview contact";
     grid-template-rows: 1fr 1fr;
-    row-gap: var(--space-preview);
+    row-gap: var(--space-action);
   }
   .copy {
     align-self: end;

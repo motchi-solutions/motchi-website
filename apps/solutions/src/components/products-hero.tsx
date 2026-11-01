@@ -244,7 +244,7 @@ export function ProductsHero() {
             <h1 className="text-h2 font-medium tracking-tight">
               A Look at What's Next
             </h1>
-            <p className="mt-3 max-w-reading leading-relaxed text-muted">
+            <p className="max-w-reading leading-relaxed text-muted">
               We're making room for ideas that could bring a little fun to
               everyday life or do something useful for our community. These are
               projects we're excited to share with you as they take shape.
@@ -320,7 +320,7 @@ export function ProductsHero() {
                       {product.status}
                     </p>
                   </div>
-                  <p className="mt-4 max-w-lg leading-relaxed text-muted">
+                  <p className="mt-[var(--space-copy)] max-w-lg leading-relaxed text-muted">
                     {product.description}
                   </p>
                 </div>

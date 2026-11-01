@@ -1,31 +1,31 @@
-import { ButtonLink, Container, HeroBrand, SystemGraphic } from "@motchi/ui";
+import { getSites } from "@motchi/config/env";
+import { Container, HeroBrand } from "@motchi/ui";
+import { CapabilityThread } from "./capability-thread";
+import styles from "./hero.module.css";
+
 export function Hero() {
+  const sites = getSites();
   return (
-    <section className="solutions-hero relative overflow-hidden border-b border-border py-hero">
-      <Container className="relative">
-        <div className="solutions-hero-layout grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
-          <div className="solutions-hero-intro">
-            <HeroBrand branch="solutions" />
-            <h1 className="text-display font-medium tracking-tight">
-              Technology <br className="hidden lg:block" />
-              Without the <br className="hidden lg:block" />
-              <span className="font-display italic text-primary">
-                Complexity.
-              </span>
-            </h1>
-            <p className="mt-7 max-w-lg text-lg leading-relaxed text-muted">
-              Websites, data, AI, and everyday tools that fit your business. We
-              help you choose, build, and keep them working.
-            </p>
-            <div className="solutions-hero-actions mt-9 flex flex-wrap gap-3">
-              <ButtonLink href="/services">Explore Our Services</ButtonLink>
-              <ButtonLink href="/contact" secondary>
-                Contact Us
-              </ButtonLink>
-            </div>
-          </div>
-          <SystemGraphic />
+    <section className={styles.hero} aria-labelledby="solutions-title">
+      <Container className={styles.composition}>
+        <div className={styles.identity}>
+          <HeroBrand branch="solutions" />
         </div>
+        <h1 id="solutions-title" className={styles.headline}>
+          <span>Technology Built</span> <span>Around Real</span>{" "}
+          <span>Business Needs.</span>
+        </h1>
+        <div className={styles.explanation}>
+          <p>
+            Websites, AI, data, automation, and technology consulting. <br />
+            Designed, implemented, and supported around how your business
+            actually works.
+          </p>
+        </div>
+        <CapabilityThread
+          websitesUrl={sites.websites.url}
+          consultingUrl={sites.consulting.url}
+        />
       </Container>
     </section>
   );

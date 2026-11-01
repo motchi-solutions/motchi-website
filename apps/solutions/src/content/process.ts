@@ -2,7 +2,7 @@ import type { ProcessStep } from "@motchi/ui";
 export const processSteps = [
   {
     id: "understand",
-    title: "Understand",
+    title: "Define Your Goals",
     summary: "Tell us what is getting in the way and what you want to achieve.",
     detailHeading: "First, We Listen",
     details: [
@@ -13,19 +13,19 @@ export const processSteps = [
   },
   {
     id: "plan",
-    title: "Plan",
+    title: "Set Project Scope",
     summary:
-      "Understand the options, costs, and next steps before work begins.",
+      "Agree on the work, transparent pricing, and next steps before we begin.",
     detailHeading: "Know What You're Agreeing To",
     details: [
-      "We explain the practical options and trade-offs in plain language, including how they fit your budget and existing tools.",
-      "Together, we agree on the scope, responsibilities, and review points, so you know what is included.",
+      "We explain the options and trade-offs in plain language, with transparent pricing for the work and any ongoing costs.",
+      "Together, we agree on the scope, timeline, responsibilities, and review points, so you know what is included and how it fits your budget.",
       "If priorities change, we discuss the impact with you before changing the plan.",
     ],
   },
   {
     id: "build",
-    title: "Build",
+    title: "Build & Test",
     summary: "Stay involved as the plan becomes a working solution.",
     detailHeading: "See the Progress, Shape the Result",
     details: [
@@ -36,7 +36,7 @@ export const processSteps = [
   },
   {
     id: "support",
-    title: "Support",
+    title: "Ongoing Support",
     summary: "Know who to turn to after launch and as your needs change.",
     detailHeading: "Support Beyond the Launch",
     details: [

@@ -224,7 +224,7 @@ export function ServicesExplorer() {
             <h1 className="text-h2 font-medium tracking-tight">
               Explore Our Services
             </h1>
-            <p className="mt-3 max-w-reading leading-relaxed text-muted">
+            <p className="max-w-reading leading-relaxed text-muted">
               Websites, connected tools, and clearer data, with costs agreed up
               front and support as you grow.
             </p>
@@ -420,7 +420,7 @@ export function ServicesExplorer() {
                 <h2 className="text-h3 font-semibold tracking-tight">
                   {goal.title}
                 </h2>
-                <p className="mt-4 leading-relaxed text-muted">
+                <p className="mt-[var(--space-copy)] leading-relaxed text-muted">
                   {goal.description}
                   <span className="hidden lg:inline"> {goal.detail}</span>
                 </p>

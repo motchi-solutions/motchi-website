@@ -8,7 +8,8 @@
     "./fonts": "./src/fonts.ts",
     "./media": "./src/media.tsx",
     "./error-state": "./src/error-state.tsx",
-    "./primitives": "./src/primitives.tsx"
+    "./primitives": "./src/primitives.tsx",
+    "./capability-content": "./src/capability-content.ts"
   },
   "dependencies": {
     "@motchi/brand": "*",

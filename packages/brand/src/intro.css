@@ -49,15 +49,19 @@
   z-index: 2;
   animation: intro-identity-select var(--motion-intro) var(--ease-reveal) both;
 }
-.intro-monogram {
+.intro-monogram-frame {
   display: block;
   width: clamp(3.5rem, 8vw, 6rem);
-  height: auto;
   margin: 0 auto 1rem;
   padding: 0.5rem;
   background: var(--surface);
   border: 1px solid var(--brand-accent);
   border-radius: 30%;
+}
+.intro-monogram {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 .intro-parent-name {
   display: block;

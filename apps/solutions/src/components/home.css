@@ -1,0 +1,132 @@
+/* Shared grid, feature corner, and light/dark surfaces provide continuity.
+   Composition can vary by role without inventing a treatment for each section. */
+.solutions-home .section-heading,
+.solutions-home .section-introduction,
+.solutions-home .about-summary-heading {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  text-align: left;
+}
+.solutions-home .section-heading h2,
+.solutions-home .about-summary-heading h2 {
+  text-align: left;
+  text-wrap: pretty;
+}
+.solutions-home .eyebrow {
+  justify-content: flex-start;
+}
+.solutions-home .eyebrow::after {
+  display: none;
+}
+.solutions-home .about-summary-content > p,
+.solutions-home .section-heading > h2 + p,
+.solutions-home .section-introduction > h2 + p {
+  max-width: 42rem;
+  margin-inline: 0;
+  font-size: clamp(1.125rem, 1.6vw, 1.5rem);
+  line-height: 1.6;
+}
+.solutions-home #businesses {
+  border-top: 1px solid var(--border);
+}
+.solutions-home #businesses .section-cards {
+  gap: var(--space-card);
+  align-items: stretch;
+}
+.solutions-home #products .section-layout {
+  display: block;
+}
+.solutions-home #products .section-introduction {
+  margin-bottom: var(--space-section-heading);
+}
+.solutions-home #products .section-introduction + div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-card);
+}
+.solutions-home #products article {
+  flex-direction: column;
+  padding-top: var(--space-inset);
+}
+.solutions-home #products article h3 {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+}
+.solutions-home .about-summary {
+  display: grid;
+  align-items: start;
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+}
+.solutions-home .about-summary-content {
+  margin-top: 0;
+  margin-inline: 0;
+  max-width: 42rem;
+  align-items: flex-start;
+}
+.solutions-home .about-summary-content > p + p {
+  margin-top: var(--space-copy);
+}
+.solutions-home #about .about-summary-content > p {
+  max-width: none;
+}
+.solutions-home #about .about-summary-content > a {
+  margin-top: var(--space-action);
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+@media (min-width: 1024px) {
+  .solutions-home .about-summary-content {
+    padding-top: calc(var(--space-eyebrow) + var(--space-section-heading));
+  }
+}
+@media (max-width: 767px) {
+  .solutions-home #products .section-introduction + div {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* On mobile and tablet the whole process disclosure is one growing surface. */
+@media (max-width: 1023px) {
+  .solutions-home
+    [data-single-selection="true"][data-enhanced="true"]
+    .step-stage {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-control);
+    background: var(--surface);
+    padding-top: 0;
+  }
+  .solutions-home
+    [data-single-selection="true"][data-enhanced="true"]
+    .step-hit-area {
+    border: 0;
+    background: transparent;
+  }
+  .solutions-home
+    [data-single-selection="true"]
+    .step-stage:is(
+      [data-selected="true"],
+      :has(.step-card-control:focus-visible),
+      :has(.step-card-control:hover)
+    ) {
+    border-color: var(--brand-primary);
+  }
+  .solutions-home .step-stage:has(.step-card-control:focus-visible) {
+    outline: 3px solid var(--brand-primary);
+    outline-offset: 3px;
+  }
+  .solutions-home .step-hit-area:has(.step-card-control:focus-visible),
+  .solutions-home .step-card-control:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+  .solutions-home .step-inline-clip > div {
+    margin-left: 0;
+    padding: var(--space-related) 1rem 1rem 2rem;
+  }
+  .solutions-home .step-inline-detail ul {
+    grid-template-columns: 1fr;
+  }
+}

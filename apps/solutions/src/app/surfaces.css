@@ -1,0 +1,46 @@
+/* Reused by the hero explorer and service cards: one expressive corner. */
+:root[data-branch="solutions"] {
+  --ms-radius-feature: 0 clamp(1.25rem, 2.5vw, 2.5rem) 0 0;
+}
+
+.ms-surface-feature {
+  border-radius: var(--ms-radius-feature);
+}
+
+/* The original brand charcoal, shared by Consulting and Products.
+   See ../../COLORS.md.
+   Brand primary stays burgundy so light buttons retain their correct ink. */
+.ms-surface-dark {
+  --muted: #d4c9ba;
+  --border: #5c5047;
+  --background: var(--charcoal);
+  --surface: var(--charcoal);
+  background: var(--charcoal);
+  color: var(--cream);
+}
+
+/* Reusable across Solutions contact sections; shared MW/MC styling is unchanged. */
+[data-branch="solutions"] .cta-section::before {
+  content: "";
+  width: clamp(18rem, 40vw, 36rem);
+  height: auto;
+  aspect-ratio: 1;
+  border: clamp(1.5rem, 4vw, 4rem) solid var(--gold);
+  border-radius: 50%;
+  transform: none;
+  opacity: 0.18;
+}
+
+/* Optical balance for the approved MS mark, inside an unchanged intro tile. */
+[data-intro-branch="solutions"]
+  .intro-monogram-frame[data-intro-mark="solutions"]
+  .intro-monogram {
+  transform: translate(1.5%, -1%) scale(1.04);
+}
+
+/* Optical weight correction for the shorter Solutions wordmark label. */
+[data-intro-branch="solutions"]
+  .intro-identity:has([data-intro-mark="solutions"])
+  .intro-branch-name {
+  font-weight: 700;
+}

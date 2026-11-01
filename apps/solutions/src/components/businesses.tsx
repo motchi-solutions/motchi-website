@@ -20,11 +20,11 @@ export function Businesses({
       </SectionHeading>
       <div className="section-cards grid md:grid-cols-2">
         <Reveal className="service-card-reveal flex">
-          <article className="branch-link w-full flex flex-col border border-border bg-surface p-7 sm:p-10">
+          <article className="branch-link w-full flex flex-col ms-surface-feature border border-border bg-surface p-[var(--space-inset)]">
             <p className="text-xs tracking-widest uppercase text-primary">
-              01 / Be understood online
+              Be understood online
             </p>
-            <div className="mt-8 flex items-center gap-5">
+            <div className="mt-[var(--space-eyebrow)] flex items-center gap-4">
               {logos.websites && (
                 <Image
                   src={logos.websites.src}
@@ -37,12 +37,12 @@ export function Businesses({
               )}
               <h3 className="text-3xl font-medium">Motchi Websites</h3>
             </div>
-            <p className="mt-5 mb-8 max-w-md leading-relaxed text-muted">
+            <p className="mt-[var(--space-copy)] mb-[var(--space-related)] max-w-md leading-relaxed text-muted">
               An affordable website shaped around your business, customers, and
               budget. We agree on what matters now, with maintenance options to
               keep supporting you after launch.
             </p>
-            <p className="mb-8 text-sm text-primary">
+            <p className="mb-[var(--space-action)] text-sm text-primary">
               Business websites · Booking · Integrations
             </p>
             <div className="mt-auto">
@@ -53,11 +53,11 @@ export function Businesses({
           </article>
         </Reveal>
         <Reveal className="service-card-reveal flex">
-          <article className="branch-link w-full flex flex-col border border-secondary bg-secondary p-7 text-inverse sm:p-10">
+          <article className="ms-surface-dark branch-link w-full flex flex-col ms-surface-feature border border-border p-[var(--space-inset)]">
             <p className="text-xs tracking-widest uppercase text-accent">
-              02 / Put technology to work
+              Put technology to work
             </p>
-            <div className="mt-8 flex items-center gap-5">
+            <div className="mt-[var(--space-eyebrow)] flex items-center gap-4">
               {logos.consulting && (
                 <Image
                   src={logos.consulting.src}
@@ -70,12 +70,12 @@ export function Businesses({
               )}
               <h3 className="text-3xl font-medium">Motchi Consulting</h3>
             </div>
-            <p className="mt-5 mb-8 max-w-md leading-relaxed text-inverse/80">
+            <p className="mt-[var(--space-copy)] mb-[var(--space-related)] max-w-md leading-relaxed text-muted">
               When a process, platform, or technology decision is holding you
               back, we help you understand the options and put a practical plan
               to work.
             </p>
-            <p className="mb-8 text-sm text-accent">
+            <p className="mb-[var(--space-action)] text-sm text-accent">
               AI · Data · Digital systems · Adoption
             </p>
             <div className="mt-auto">

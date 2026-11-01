@@ -1,5 +1,5 @@
 .hero {
-  padding-block: clamp(1rem, 2.25vh, 1.5rem);
+  padding-block: var(--ms-space-exploration);
 }
 .frame {
   width: 100%;

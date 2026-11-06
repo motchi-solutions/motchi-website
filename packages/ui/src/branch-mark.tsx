@@ -17,6 +17,7 @@ export function BranchMark({ branch }: { branch: Branch }) {
           width={logo.width}
           height={logo.height}
           alt=""
+          unoptimized
           priority
           className="h-11 w-11 object-contain"
         />

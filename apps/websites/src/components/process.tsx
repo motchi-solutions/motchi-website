@@ -3,7 +3,7 @@ import { processSteps } from "@/content/process";
 export function Process() {
   return (
     <Section id="process">
-      <SectionHeading eyebrow="Our Process" title="Your Website, Step by Step">
+      <SectionHeading title="How We Build Your Website">
         From planning your pages to launch and ongoing support. Select a step to
         see what we do and where your input helps.
       </SectionHeading>

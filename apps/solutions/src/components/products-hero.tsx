@@ -13,7 +13,7 @@ import {
   LuArrowRight,
   LuMousePointerClick,
 } from "react-icons/lu";
-import { ButtonLink, Container, Eyebrow } from "@motchi/ui/primitives";
+import { ButtonLink, Container } from "@motchi/ui/primitives";
 import { products } from "@/content/products";
 import { ProductAlbum } from "./product-album";
 import { productGateTiming, useProductGate } from "./use-product-gate";
@@ -240,9 +240,8 @@ export function ProductsHero() {
       <Container>
         <div className={`${styles.layout} ${hero.frame}`}>
           <header className={`page-introduction ${hero.introduction}`}>
-            <Eyebrow>Motchi Products</Eyebrow>
             <h1 className="text-h2 font-medium tracking-tight">
-              A Look at What's Next
+              Products We're Building
             </h1>
             <p className="max-w-reading leading-relaxed text-muted">
               We're making room for ideas that could bring a little fun to

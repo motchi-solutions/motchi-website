@@ -1,13 +1,11 @@
 import Image from "next/image";
-import { LuCircleHelp } from "react-icons/lu";
-import { AnimatedLink, ButtonLink, Eyebrow, Section } from "@motchi/ui";
+import { AnimatedLink, ButtonLink, Section } from "@motchi/ui";
 import { products } from "@/content/products";
 export function Products() {
   return (
     <Section id="products" className="ms-surface-dark">
-      <div className="section-layout grid lg:grid-cols-5">
+      <div className="section-layout product-overview grid lg:grid-cols-5">
         <div className="section-introduction lg:col-span-2">
-          <Eyebrow light>Motchi Products</Eyebrow>
           <h2 className="text-h2 font-medium tracking-tight">
             Products We're Building
           </h2>
@@ -20,7 +18,7 @@ export function Products() {
           {products.map((product) => (
             <article
               key={product.name}
-              className="flex items-start gap-4 border-t border-border py-[var(--space-inset)]"
+              className="flex items-start gap-4 border-t border-border py-[var(--space-related)]"
             >
               {product.logo ? (
                 <Image
@@ -31,14 +29,7 @@ export function Products() {
                   alt=""
                   className="h-16 w-16 shrink-0 object-contain"
                 />
-              ) : (
-                <div
-                  aria-hidden="true"
-                  className="flex h-16 w-16 shrink-0 items-center justify-center rounded-md border border-border bg-background text-muted"
-                >
-                  <LuCircleHelp className="h-8 w-8" />
-                </div>
-              )}
+              ) : null}
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <h3 className="text-2xl font-medium">{product.name}</h3>
@@ -66,11 +57,11 @@ export function Products() {
             </article>
           ))}
         </div>
-      </div>
-      <div className="section-action">
-        <ButtonLink href="/products" light>
-          Explore Our Products
-        </ButtonLink>
+        <div className="section-action product-overview-action">
+          <ButtonLink href="/products" light>
+            Explore Our Products
+          </ButtonLink>
+        </div>
       </div>
     </Section>
   );

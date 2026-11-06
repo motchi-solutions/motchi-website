@@ -1,3 +1,35 @@
+export const contactContextLimit = 2000;
+export const contactNamePattern =
+  "[\\p{L}\\p{M}]+(?:[ '\\u2019\\-][\\p{L}\\p{M}]+)*";
+// Filter characters, not incomplete values: structure is checked on blur/submit.
+export function filterContactCharacters(field: string, value: string): string {
+  if (field === "name") return value.replace(/[^\p{L}\p{M} '\u2019-]/gu, "");
+  if (field === "email")
+    return value.replace(/[^a-zA-Z0-9!#$%&'*+/=?^_`{|}~@.-]/g, "");
+  if (field === "website") return value.replace(/\s/g, "");
+  if (field === "phone" || field === "phoneCountryCode")
+    return value.replace(/\D/g, "");
+  const multiline = field === "context" || field === "message";
+  return Array.from(value)
+    .filter((character) => {
+      const code = character.charCodeAt(0);
+      return (
+        (code >= 32 && code !== 127) ||
+        (multiline && [9, 10, 13].includes(code))
+      );
+    })
+    .join("");
+}
+export function isContactName(value: string): boolean {
+  const name = value.trim().normalize("NFC");
+  const length = Array.from(name).length;
+  return (
+    length >= 2 &&
+    length <= 100 &&
+    new RegExp(`^(?:${contactNamePattern})$`, "u").test(name)
+  );
+}
+
 export function hasHeaderControls(value: string): boolean {
   return Array.from(value).some(
     (character) =>

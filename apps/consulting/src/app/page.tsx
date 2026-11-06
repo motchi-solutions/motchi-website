@@ -1,6 +1,6 @@
 import { capabilities } from "@/content/capabilities";
 import { engagement } from "@/content/process";
-import { AnimatedLink, ContactCTA, Eyebrow, Reveal, Section } from "@motchi/ui";
+import { AnimatedLink, ContactCTA, Reveal, Section } from "@motchi/ui";
 import type { Metadata } from "next";
 import { Hero } from "@/components/hero";
 export const metadata: Metadata = { alternates: { canonical: "/" } };
@@ -11,7 +11,6 @@ export default function Home() {
       <Section id="capabilities">
         <div className="section-layout grid lg:grid-cols-2">
           <div className="section-introduction">
-            <Eyebrow>Where We Can Help</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
               AI, Data, and Business Systems Support
             </h2>
@@ -63,7 +62,6 @@ export default function Home() {
       >
         <div className="section-layout grid lg:grid-cols-2">
           <div className="section-introduction">
-            <Eyebrow>Advice Through Adoption</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
               How We Work With Your Team
             </h2>
@@ -89,15 +87,15 @@ export default function Home() {
       >
         <div className="about-summary section-layout grid lg:grid-cols-2">
           <div className="about-summary-heading section-introduction">
-            <Eyebrow>About Motchi Consulting</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
-              Advice That Leads to Action
+              About Motchi Consulting
             </h2>
           </div>
           <div className="about-summary-content">
             <p className="max-w-lg text-body-lg leading-relaxed text-muted">
-              We start with business context and stay involved through
-              implementation and adoption. Technology should fit the work.
+              Recommendations should be practical for the people who use them.
+              Clear responsibilities, documentation, and handoff help teams make
+              the most of what is delivered.
             </p>
             <AnimatedLink
               href="/about"

@@ -3,10 +3,7 @@ import { capabilities } from "@/content/capabilities";
 export function Capabilities() {
   return (
     <Section id="capabilities">
-      <SectionHeading
-        eyebrow="Where We Can Help"
-        title="AI, Data, and Technology Services"
-      >
+      <SectionHeading title="AI, Data, and Technology Services">
         Sometimes the answer is a new system. Sometimes it's a better use of
         what you already have. The business problem leads the conversation.
       </SectionHeading>

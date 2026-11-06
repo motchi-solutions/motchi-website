@@ -114,9 +114,8 @@ export default function AboutPage() {
       <Section id="partnership" className="bg-secondary text-inverse">
         <div className="section-layout grid items-start lg:grid-cols-2">
           <div className="section-introduction">
-            <Eyebrow light>Better Together</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
-              Your Progress Matters to Us
+              Working Together on Your Goals
             </h2>
             <p className="mt-6 text-sm text-accent">
               Based in Toronto. Working with businesses globally.

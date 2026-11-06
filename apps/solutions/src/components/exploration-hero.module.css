@@ -38,3 +38,9 @@
   line-height: 1.6;
   text-wrap: pretty;
 }
+
+@media (min-width: 1440px) {
+  .introduction > p:last-child {
+    font-size: var(--type-reading-body);
+  }
+}

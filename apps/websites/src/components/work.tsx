@@ -9,15 +9,18 @@ import {
 } from "@motchi/ui";
 import { projects } from "@/content/projects";
 import { ProjectPreview } from "./project-preview";
-export function Work({ featuredOnly = false }: { featuredOnly?: boolean }) {
+export function Work({
+  featuredOnly = false,
+  skipFirst = false,
+}: {
+  featuredOnly?: boolean;
+  skipFirst?: boolean;
+}) {
   return (
     <Section id="work">
       <SectionHeading
-        eyebrow="Selected Website Work"
         title={
-          featuredOnly
-            ? "Recent Website Projects"
-            : "See Each Website in Detail"
+          featuredOnly ? "Recent Website Projects" : "More Website Projects"
         }
       >
         Food, beauty, event catering, and professional services. Each needs its
@@ -26,7 +29,9 @@ export function Work({ featuredOnly = false }: { featuredOnly?: boolean }) {
       <div className="project-list">
         {(featuredOnly
           ? projects.filter((project) => project.featured)
-          : projects
+          : skipFirst
+            ? projects.slice(1)
+            : projects
         ).map((project, index) => (
           <Reveal key={project.id}>
             <article

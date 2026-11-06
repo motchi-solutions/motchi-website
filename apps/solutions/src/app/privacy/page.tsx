@@ -5,5 +5,5 @@ export const metadata: Metadata = {
   alternates: { canonical: "/privacy" },
 };
 export default function Privacy() {
-  return <PrivacyNotice />;
+  return <PrivacyNotice frontendOnly />;
 }

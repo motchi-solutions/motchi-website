@@ -29,3 +29,9 @@ export { PageEntry } from "./page-entry";
 export { HeroBrand } from "./hero-brand";
 
 export { Introduction } from "./intro";
+
+export { NotFoundPage } from "./not-found";
+
+export { InfoTip } from "./info-tip";
+
+export { RequiredMark, RequiredNotice } from "./required-mark";

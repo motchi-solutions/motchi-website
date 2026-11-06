@@ -46,7 +46,6 @@
   gap: var(--space-card);
 }
 .solutions-home #products article {
-  flex-direction: column;
   padding-top: var(--space-inset);
 }
 .solutions-home #products article h3 {
@@ -128,5 +127,49 @@
   }
   .solutions-home .step-inline-detail ul {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 768px) {
+  .solutions-home #products .product-overview {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-section-heading) var(--space-card);
+  }
+  .solutions-home #products .section-introduction {
+    grid-column: 1;
+    grid-row: 1;
+    margin-bottom: 0;
+  }
+  .solutions-home #products .section-introduction + div {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .solutions-home #products .product-overview-action {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    align-self: start;
+    margin-top: calc(var(--space-eyebrow) + 1.125rem);
+  }
+}
+@media (max-width: 1023px) {
+  .solutions-home #solutions-process .step-stage[data-selected="true"] {
+    background: var(--surface-selected);
+    border-color: var(--border-selected);
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1919px) {
+  .solutions-home .about-summary-content > p,
+  .solutions-home .section-heading > h2 + p,
+  .solutions-home .section-introduction > h2 + p {
+    font-size: var(--type-reading-large);
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1919px) {
+  .solutions-home #products article h3 {
+    font-size: var(--type-feature-title);
   }
 }

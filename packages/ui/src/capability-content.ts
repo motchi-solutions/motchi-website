@@ -3,7 +3,7 @@ export const capabilityContent = [
     name: "Websites",
     heading: "A Website That Works for You",
     detail:
-      "Help customers understand your business and take the next step, from an enquiry to a booking.",
+      "We help you create a digital presence that reflects your brand and helps you connect with your audience, whether through a contact form, a booking system, or a product showcase.",
     scope: [
       "Clear structure, responsive design, and a straightforward path to enquire or book.",
       "Support from planning and launch through ongoing improvements.",
@@ -15,7 +15,7 @@ export const capabilityContent = [
     name: "AI",
     heading: "Put AI to Practical Use",
     detail:
-      "Find where AI can help your team, choose a suitable approach, and put it to work with clear safeguards.",
+      "We help you identify where AI can help your team, choose a suitable approach, and put it to work with clear safeguards; saving time and resources.",
     scope: [
       "Identify useful tasks and assess whether AI is a suitable fit.",
       "Plan implementation, safeguards, and adoption with your team.",
@@ -27,7 +27,7 @@ export const capabilityContent = [
     name: "Data",
     heading: "Make Your Data Useful",
     detail:
-      "Bring information together so your team can see what matters and make better-informed decisions.",
+      "We help you bring information together securely, so your team can see what matters and make better-informed decisions.",
     scope: [
       "Connect and organise information from the tools you use.",
       "Build useful reporting and help your team understand the results.",
@@ -39,7 +39,7 @@ export const capabilityContent = [
     name: "Cloud",
     heading: "Keep Your Systems Manageable",
     detail:
-      "Choose, connect, and improve the platforms your business relies on, with support as your needs change.",
+      "We help you choose, maintain, and improve the platforms your business is built on, ensuring the reliability, scalability, and security of your systems and operations.",
     scope: [
       "Review your platforms, integrations, and everyday setup.",
       "Plan practical improvements and support your team as systems change.",
@@ -51,7 +51,7 @@ export const capabilityContent = [
     name: "Automation",
     heading: "Spend Less Time on Repetitive Work",
     detail:
-      "Connect the tools you already use and simplify routine tasks so your team can focus on the work that needs them.",
+      "We help you simplify routine tasks and streamline your workflow so your team can focus on the work that needs them, improving efficiency and productivity.",
     scope: [
       "Find repetitive steps, handoffs, and avoidable manual work.",
       "Connect suitable tools, test the workflow, and help your team use it.",

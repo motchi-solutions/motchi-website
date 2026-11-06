@@ -2,6 +2,7 @@
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { Arrow } from "./icons";
+import { cleanContactInput, preventInvalidContactInput } from "./contact-input";
 
 export function ContactForm({ children }: { children: ReactNode }) {
   const [pending, setPending] = useState(false);
@@ -29,6 +30,12 @@ export function ContactForm({ children }: { children: ReactNode }) {
         method="post"
         className="space-y-6"
         aria-busy={pending || undefined}
+        onBeforeInput={preventInvalidContactInput}
+        onInput={(event) => {
+          if (!(event.nativeEvent as InputEvent).isComposing)
+            cleanContactInput(event.target);
+        }}
+        onCompositionEnd={(event) => cleanContactInput(event.target)}
         onSubmit={(event) => {
           if (submitted.current) {
             event.preventDefault();

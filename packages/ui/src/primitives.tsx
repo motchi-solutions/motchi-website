@@ -1,6 +1,7 @@
 import { SiteLink } from "./site-link";
 import type { ComponentProps, ReactNode } from "react";
 import { Arrow } from "./icons";
+export { Arrow } from "./icons";
 import { Reveal } from "./reveal";
 export function Container({
   children,
@@ -98,13 +99,13 @@ export function SectionHeading({
   title,
   children,
 }: {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   children?: ReactNode;
 }) {
   return (
     <div className="section-heading section-introduction max-w-reading">
-      <Eyebrow>{eyebrow}</Eyebrow>
+      {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
       <h2 className="text-h2 font-medium tracking-tight">{title}</h2>
       {children && (
         <p className="max-w-xl text-body-lg leading-relaxed text-muted">
@@ -115,7 +116,7 @@ export function SectionHeading({
   );
 }
 export function ContactCTA({
-  title = "Let's Plan Your Next Step",
+  title = "Talk to Us About Your Project",
   action = "Contact Us",
 }: {
   title?: string;
@@ -125,7 +126,6 @@ export function ContactCTA({
     <Section className="cta-section relative overflow-hidden bg-primary text-inverse">
       <div className="section-layout relative flex flex-col justify-between md:flex-row md:items-end">
         <div className="section-introduction max-w-2xl">
-          <Eyebrow light>Let's Talk</Eyebrow>
           <h2 className="text-h2 font-medium tracking-tight">{title}</h2>
           <p className="max-w-xl text-base leading-relaxed text-inverse/80">
             Tell us what you're working on. We typically respond with next steps

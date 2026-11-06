@@ -45,10 +45,7 @@
     background-color 320ms ease,
     border-color 320ms ease;
 }
-.selector button:hover {
-  color: var(--brand-primary);
-  background: var(--surface);
-}
+
 .selector button[aria-selected="true"] {
   color: var(--brand-primary);
   background: var(--surface);
@@ -993,5 +990,36 @@
 @media (prefers-reduced-motion: no-preference) {
   .albumButton .albumPage[data-art-motion="wiggle"] .albumArt img {
     animation: album-logo-wiggle 900ms ease-in-out 600ms both;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .selector
+    button:not(:disabled):not([aria-disabled="true"]):not(
+      [aria-selected="true"]
+    ):hover {
+    background: color-mix(in srgb, var(--gold) 12%, var(--surface));
+    border-color: color-mix(in srgb, var(--brand-primary) 35%, var(--border));
+    color: var(--brand-primary);
+  }
+  .selector
+    button[aria-selected="true"]:not(:disabled):not(
+      [aria-disabled="true"]
+    ):hover {
+    background: color-mix(in srgb, var(--gold) 18%, var(--surface));
+    border-color: var(--gold);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .selector button {
+    transition: none;
+  }
+}
+
+@media (min-width: 1440px) {
+  .status,
+  .previewHint,
+  .placeholder span {
+    font-size: var(--type-reading-small);
   }
 }

@@ -16,11 +16,18 @@
     "dev:websites": "npm run dev --workspace=@motchi/websites",
     "dev:consulting": "npm run dev --workspace=@motchi/consulting",
     "build": "npm run build --workspaces --if-present",
+    "build:solutions": "npm run build --workspace=@motchi/solutions --",
+    "build:websites": "npm run build --workspace=@motchi/websites --",
+    "build:consulting": "npm run build --workspace=@motchi/consulting --",
+    "start:solutions": "npm run start --workspace=@motchi/solutions --",
+    "start:websites": "npm run start --workspace=@motchi/websites --",
+    "start:consulting": "npm run start --workspace=@motchi/consulting --",
     "lint": "biome lint .",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "node --conditions=react-server --test tests/*.test.mjs",
     "format": "prettier . --write",
-    "format:check": "prettier . --check"
+    "format:check": "prettier . --check",
+    "dependencies:inventory": "node scripts/generate-dependency-inventory.mjs"
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.3",

@@ -1,12 +1,5 @@
 import { pageMetadata } from "@motchi/config/metadata";
-import {
-  ButtonLink,
-  ContactCTA,
-  PageHero,
-  Reveal,
-  Section,
-  SectionHeading,
-} from "@motchi/ui";
+import { ButtonLink, ContactCTA, PageHero, Section } from "@motchi/ui";
 import { Approach } from "@/components/approach";
 export const metadata = pageMetadata(
   "Our Approach",
@@ -17,7 +10,6 @@ export default function Page() {
   return (
     <>
       <PageHero
-        eyebrow="Our Approach"
         title="How We Plan and Deliver Your Project"
         actions={<ButtonLink href="/contact">Start a Conversation</ButtonLink>}
       >
@@ -27,36 +19,43 @@ export default function Page() {
       </PageHero>
       <Approach />
       <Section className="border-t border-border">
-        <SectionHeading
-          eyebrow="Before We Begin"
-          title="Your Scope, Responsibilities, and Support"
-        >
-          We clarify the problem, decision-makers, constraints, and
-          responsibilities together. Scope and support are agreed for each
-          engagement.
-        </SectionHeading>
-        <div className="section-cards grid md:grid-cols-3">
-          {[
-            [
-              "Your Goals and Constraints",
-              "The current process, what is getting in the way, and what a useful improvement would look like.",
-            ],
-            [
-              "Access, Approvals, and Ownership",
-              "The people, access, and approvals needed to move from a recommendation to implementation.",
-            ],
-            [
-              "Handover and Ongoing Support",
-              "An agreed handover and support arrangement, with room to review what needs improving.",
-            ],
-          ].map(([title, text]) => (
-            <Reveal key={title} className="service-card-reveal flex">
-              <article className="w-full border-t border-border pt-6">
-                <h3 className="text-h3 font-medium">{title}</h3>
-                <p className="mt-4 leading-relaxed text-muted">{text}</p>
-              </article>
-            </Reveal>
-          ))}
+        <div className="section-layout grid gap-10 lg:grid-cols-2">
+          <div>
+            <h2 className="text-h2 font-medium tracking-tight">
+              Decisions and responsibilities
+            </h2>
+            <p className="mt-5 max-w-lg text-body-lg leading-relaxed text-muted">
+              We clarify decision-makers, constraints, and responsibilities
+              together. Scope and support are agreed for each engagement.
+            </p>
+          </div>
+          <dl className="divide-y divide-border border-t border-border">
+            <div className="py-6">
+              <dt className="text-h3 font-medium">Goals and constraints</dt>
+              <dd className="mt-3 leading-relaxed text-muted">
+                The current process, what is getting in the way, and what a
+                useful improvement would look like.
+              </dd>
+            </div>
+            <div className="py-6">
+              <dt className="text-h3 font-medium">
+                Access, approvals, and ownership
+              </dt>
+              <dd className="mt-3 leading-relaxed text-muted">
+                The people, access, and approvals needed to move from a
+                recommendation to implementation.
+              </dd>
+            </div>
+            <div className="py-6">
+              <dt className="text-h3 font-medium">
+                Handover and ongoing support
+              </dt>
+              <dd className="mt-3 leading-relaxed text-muted">
+                An agreed handover and support arrangement, with room to review
+                what needs improving.
+              </dd>
+            </div>
+          </dl>
         </div>
       </Section>
       <ContactCTA

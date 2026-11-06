@@ -16,7 +16,6 @@ export default function Page() {
   return (
     <>
       <PageHero
-        eyebrow="Our Process"
         title="How We Build Your Website"
         actions={<ButtonLink href="/contact">Start a Project</ButtonLink>}
       >
@@ -25,10 +24,7 @@ export default function Page() {
       </PageHero>
       <Process />
       <Section className="border-t border-border">
-        <SectionHeading
-          eyebrow="Before We Begin"
-          title="Your Scope, Responsibilities, and Support"
-        >
+        <SectionHeading title="Your Scope, Responsibilities, and Support">
           We agree on what your website needs, who does what, and what support
           comes after launch.
         </SectionHeading>

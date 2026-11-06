@@ -1,6 +1,6 @@
 import { services } from "@/content/services";
 import { processSteps } from "@/content/process";
-import { AnimatedLink, ContactCTA, Eyebrow, Reveal, Section } from "@motchi/ui";
+import { AnimatedLink, ContactCTA, Reveal, Section } from "@motchi/ui";
 import type { Metadata } from "next";
 import { Hero } from "@/components/hero";
 import { Work } from "@/components/work";
@@ -13,7 +13,6 @@ export default function Home() {
       <Section className="border-y border-border">
         <div className="section-layout grid lg:grid-cols-2">
           <div className="section-introduction">
-            <Eyebrow>Built Around Your Business</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
               Design, Integrations, and Ongoing Care
             </h2>
@@ -67,9 +66,8 @@ export default function Home() {
       >
         <div className="about-summary section-layout grid lg:grid-cols-2">
           <div className="about-summary-heading section-introduction">
-            <Eyebrow>About Motchi Websites</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
-              Design That Reflects Your Business
+              About Motchi Websites
             </h2>
           </div>
           <div className="about-summary-content">

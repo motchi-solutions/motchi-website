@@ -7,7 +7,7 @@ export function PageHero({
   children,
   actions,
 }: {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   children: ReactNode;
   actions?: ReactNode;
@@ -15,7 +15,7 @@ export function PageHero({
   return (
     <section className="brand-grid relative overflow-hidden border-b border-border py-hero">
       <Container className="page-introduction section-introduction relative">
-        <Eyebrow>{eyebrow}</Eyebrow>
+        {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
         <h1 className="max-w-4xl text-h1 font-medium tracking-tight">
           {title}
         </h1>

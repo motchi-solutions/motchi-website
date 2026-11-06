@@ -1,4 +1,4 @@
-import { isEmail } from "@motchi/config/validation";
+import { isEmail, isContactName } from "@motchi/config/validation";
 export { isEmail } from "@motchi/config/validation";
 export const contactLimits = {
   name: 100,
@@ -10,8 +10,8 @@ export const contactLimits = {
   messageMax: 5000,
 } as const;
 export const contactFieldErrors = {
-  name: `Enter a name of up to ${contactLimits.name} characters, without line breaks.`,
-  email: "Enter a valid email address.",
+  name: "Please enter a valid name.",
+  email: "Please enter a valid email address.",
   company: `Use up to ${contactLimits.company} characters without line breaks.`,
   interest: "Choose an area of interest.",
   budget: "Use up to 100 characters without line breaks.",
@@ -84,12 +84,7 @@ export function validateContact(
     budget: value("budget"),
   };
   const errors: ContactErrors = {};
-  if (
-    !input.name ||
-    input.name.length > contactLimits.name ||
-    hasControls(input.name)
-  )
-    errors.name = contactFieldErrors.name;
+  if (!isContactName(input.name)) errors.name = contactFieldErrors.name;
   if (!isEmail(input.email)) errors.email = contactFieldErrors.email;
   if (
     input.company.length > contactLimits.company ||

@@ -51,9 +51,23 @@ npm run build
 npm run format
 ```
 
-A full build builds all three apps sequentially. `npm run build --workspace=@motchi/websites` builds just that app. `npm run start --workspace=@motchi/websites` serves its completed production build on port 3001. Type checking uses lightweight Next route type generation, without compiling production assets.
+A full `npm run build` builds all three apps sequentially. To build and serve an individual app, use:
+
+| App        | Build                      | Serve production build     | Default port |
+| ---------- | -------------------------- | -------------------------- | ------------ |
+| Solutions  | `npm run build:solutions`  | `npm run start:solutions`  | 3000         |
+| Websites   | `npm run build:websites`   | `npm run start:websites`   | 3001         |
+| Consulting | `npm run build:consulting` | `npm run start:consulting` | 3002         |
+
+Run the build command before the corresponding start command. Start serves the completed build; it does not rebuild or watch for changes. Extra arguments pass through to Next.js, for example `npm run start:solutions -- --port 3005` or `npm run build:solutions -- --webpack`.
+
+Type checking uses lightweight Next route type generation, without compiling production assets.
+
+The [dependency inventory and audit](docs/DEPENDENCIES.md) lists direct and transitive libraries, locked versions, publication dates, and the latest npm audit. Run `npm run dependencies:inventory` to refresh it.
 
 ## Contact configuration
+
+The three Contact pages share one four-step wizard, with site-specific questions. See [Contact forms](docs/CONTACT_FORMS.md) for its UI, 2,000-character message limit, draft storage, validation, and submission contracts.
 
 Copy `.env.example` to each app's `.env.local` and fill:
 

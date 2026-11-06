@@ -1,27 +1,44 @@
-import { ContactPageContent } from "@motchi/ui";
 import type { Metadata } from "next";
-export const dynamic = "force-dynamic";
-type Props = {
-  searchParams: Promise<{ status?: string; fields?: string; topic?: string }>;
+import { Eyebrow } from "@motchi/ui/primitives";
+import { ContactNavigation } from "@motchi/ui/contact-navigation";
+import { ContactExperience } from "@motchi/ui/contact-experience";
+import styles from "@motchi/ui/contact.module.css";
+export const metadata: Metadata = {
+  title: "Contact",
+  description:
+    "Explore how Motchi can support your goals, from websites and software to everyday technology support.",
+  alternates: { canonical: "/contact" },
 };
-export async function generateMetadata({
+export default async function Contact({
   searchParams,
-}: Props): Promise<Metadata> {
-  const { status } = await searchParams;
-  return {
-    title: "Contact",
-    alternates: { canonical: "/contact" },
-    robots: status ? { index: false, follow: true } : undefined,
-  };
-}
-export default async function Contact({ searchParams }: Props) {
-  const { status, fields, topic } = await searchParams;
+}: {
+  searchParams: Promise<{ topic?: string }>;
+}) {
+  const { topic } = await searchParams;
   return (
-    <ContactPageContent
-      branch="solutions"
-      status={status}
-      fields={fields}
-      topic={topic}
-    />
+    <>
+      <ContactNavigation />
+      <ContactExperience topic={topic}>
+        <header className={styles.hero}>
+          <div className={styles.contactEyebrow}>
+            <Eyebrow>Contact Motchi</Eyebrow>
+          </div>
+          <h1 id="contact-title" tabIndex={-1}>
+            Let's Explore How We Can Help
+          </h1>
+          <div className={styles.heroCopy}>
+            <p>
+              Please share what you have in mind. New ideas and organizations
+              are welcome. We can help from planning to delivery.
+            </p>
+            <div className={styles.contactMeta}>
+              <p className={styles.responseTime}>
+                We usually reply within 2-3 business days
+              </p>
+            </div>
+          </div>
+        </header>
+      </ContactExperience>
+    </>
   );
 }

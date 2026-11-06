@@ -1,5 +1,5 @@
 import { pageMetadata } from "@motchi/config/metadata";
-import { ButtonLink, ContactCTA, PageHero, Reveal, Section } from "@motchi/ui";
+import { ButtonLink, ContactCTA, PageHero, Section } from "@motchi/ui";
 export const metadata = pageMetadata(
   "About",
   "Website design, development, and support shaped around your business and the people who use your site.",
@@ -20,41 +20,34 @@ export default function AboutPage() {
         after launch.
       </PageHero>
       <Section>
-        <div className="section-cards grid md:grid-cols-3">
-          <Reveal className="service-card-reveal flex">
-            <article className="w-full border-t border-border pt-6">
-              <h2 className="text-h3 font-medium">
-                Design That Reflects Your Business
-              </h2>
-              <p className="mt-4 leading-relaxed text-muted">
-                Your brand, customers, and goals guide the design. We plan a
-                responsive website that feels like your business on every
-                screen.
-              </p>
-            </article>
-          </Reveal>
-          <Reveal className="service-card-reveal flex">
-            <article className="w-full border-t border-border pt-6">
-              <h2 className="text-h3 font-medium">
-                Help Customers Find What They Need
-              </h2>
-              <p className="mt-4 leading-relaxed text-muted">
+        <div className="section-layout grid gap-10 lg:grid-cols-2">
+          <div>
+            <h2 className="text-h2 font-medium tracking-tight">
+              Your identity, shaped for the people you serve
+            </h2>
+            <p className="mt-5 max-w-lg text-body-lg leading-relaxed text-muted">
+              Your brand, customers, and goals guide the design. We plan a
+              responsive website that feels like your business on every screen.
+            </p>
+          </div>
+          <dl className="divide-y divide-border border-t border-border">
+            <div className="py-6">
+              <dt className="text-h3 font-medium">Make it easy to use</dt>
+              <dd className="mt-3 max-w-lg leading-relaxed text-muted">
                 Appearance matters, and so does finding information, booking,
                 enquiring, or buying. We consider both from the beginning.
-              </p>
-            </article>
-          </Reveal>
-          <Reveal className="service-card-reveal flex">
-            <article className="w-full border-t border-border pt-6">
-              <h2 className="text-h3 font-medium">
-                Agree on Care After Launch
-              </h2>
-              <p className="mt-4 leading-relaxed text-muted">
+              </dd>
+            </div>
+            <div className="py-6">
+              <dt className="text-h3 font-medium">
+                Plan for care after launch
+              </dt>
+              <dd className="mt-3 max-w-lg leading-relaxed text-muted">
                 We explain who looks after your website, how maintenance works,
                 and how to request changes after launch.
-              </p>
-            </article>
-          </Reveal>
+              </dd>
+            </div>
+          </dl>
         </div>
         <p className="section-action border-t border-border pt-6 text-muted">
           Part of the Motchi family. Based in Toronto. Working with businesses

@@ -3,6 +3,7 @@ import { useState, type ReactNode } from "react";
 import { websiteStarter } from "@motchi/config/sites";
 import { contactLimits } from "@motchi/email/validation";
 import type { Branch } from "@motchi/brand";
+import { ContactFieldError } from "./contact-field-error";
 
 export function WebsiteBudget({
   branch,
@@ -34,20 +35,8 @@ export function WebsiteBudget({
       {relevant && (
         <div>
           <label htmlFor="budget" className="text-sm font-semibold">
-            Website Budget (CAD) <span className="font-normal">(optional)</span>
+            Website Budget (CAD)
           </label>
-          <input
-            id="budget"
-            name="budget"
-            type="text"
-            maxLength={contactLimits.budget}
-            placeholder="An amount, range, or 'not sure yet'"
-            aria-invalid={Boolean(error) || undefined}
-            aria-describedby={
-              error ? "budget-help budget-error" : "budget-help"
-            }
-            className="form-control mt-2 min-h-12 w-full border border-border bg-background px-4 py-3 text-base"
-          />
           <p
             id="budget-help"
             className="mt-2 text-sm leading-relaxed text-muted"
@@ -57,14 +46,23 @@ export function WebsiteBudget({
             and maintenance are quoted separately. Not sure about a budget?
             Leave this blank and we'll work through the options together.
           </p>
-          {error && (
-            <p
-              id="budget-error"
-              className="mt-2 text-sm font-semibold text-primary"
-            >
-              {error}
-            </p>
-          )}
+          <ContactFieldError
+            field="budget"
+            branch={branch}
+            initialMessage={error}
+          />
+          <input
+            id="budget"
+            name="budget"
+            type="text"
+            maxLength={contactLimits.budget}
+            placeholder="e.g. $1,000-$2,000"
+            aria-invalid={Boolean(error) || undefined}
+            aria-describedby={
+              error ? "budget-help budget-error" : "budget-help"
+            }
+            className="form-control mt-2 min-h-12 w-full border border-border bg-background px-4 py-3 text-base"
+          />
         </div>
       )}
     </div>

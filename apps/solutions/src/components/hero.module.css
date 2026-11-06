@@ -138,10 +138,20 @@
     color 180ms,
     transform 350ms var(--ease-emphasized);
 }
-@media (hover: hover) {
-  .choices button:hover {
-    background: var(--gold);
+@media (hover: hover) and (pointer: fine) {
+  .choices
+    button:not(:disabled):not([aria-disabled="true"]):not(
+      [aria-pressed="true"]
+    ):hover {
+    background: color-mix(in srgb, var(--gold) 18%, var(--cream));
     color: var(--burgundy);
+  }
+  .choices
+    button[aria-pressed="true"]:not(:disabled):not(
+      [aria-disabled="true"]
+    ):hover {
+    background: color-mix(in srgb, var(--burgundy) 85%, var(--charcoal));
+    color: var(--cream);
   }
 }
 .choices button[aria-pressed="true"] {
@@ -256,5 +266,39 @@
   .choices button,
   .choiceVertical {
     transition: none;
+  }
+}
+
+/* Keep the headline scale; make supporting copy comfortable on larger screens. */
+@media (min-width: 1280px) {
+  .explanation > p {
+    font-size: var(--type-hero-copy);
+    max-width: 36rem;
+  }
+  .prompt {
+    font-size: var(--type-hero-prompt);
+  }
+  .selectionIntro {
+    font-size: var(--type-hero-selection-intro);
+  }
+  .choices button,
+  .response {
+    font-size: var(--type-ui-copy);
+  }
+  .response h2 {
+    font-size: var(--type-hero-result-title);
+  }
+}
+
+@media (min-width: 1440px) {
+  .response {
+    font-size: var(--type-reading-body);
+    line-height: 1.65;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1919px) {
+  .headline {
+    font-size: clamp(3.5rem, 1.2rem + 4vw, 6rem);
   }
 }

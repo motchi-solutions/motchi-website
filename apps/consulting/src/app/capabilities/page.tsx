@@ -10,7 +10,6 @@ export default function Page() {
   return (
     <>
       <PageHero
-        eyebrow="Consulting Capabilities"
         title="Technology Consulting for Your Business"
 
         actions={<ButtonLink href="/contact">Start a Conversation</ButtonLink>}

@@ -56,10 +56,7 @@
   flex-shrink: 0;
   color: var(--brand-primary);
 }
-.options button:hover {
-  border-color: var(--brand-accent);
-  color: var(--brand-primary);
-}
+
 .options button[aria-selected="true"] {
   background: var(--brand-primary);
   border-color: var(--brand-primary);
@@ -252,5 +249,34 @@
   }
   .exampleDetail {
     font-size: 0.875rem;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .options
+    button:not(:disabled):not([aria-disabled="true"]):not(
+      [aria-selected="true"]
+    ):hover {
+    background: color-mix(in srgb, var(--gold) 12%, var(--surface));
+    border-color: color-mix(in srgb, var(--brand-primary) 35%, var(--border));
+    color: var(--brand-primary);
+  }
+  .options
+    button[aria-selected="true"]:not(:disabled):not(
+      [aria-disabled="true"]
+    ):hover {
+    background: color-mix(in srgb, var(--brand-primary) 85%, var(--charcoal));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .options button {
+    transition: none;
+  }
+}
+
+@media (min-width: 1440px) {
+  .exampleTitle,
+  .exampleDetail {
+    font-size: var(--type-reading-small);
   }
 }

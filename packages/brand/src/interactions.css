@@ -1,0 +1,146 @@
+/* One interaction contract for all three sites; native editing cursors stay intact. */
+:root {
+  --motion-hover: 300ms;
+  --ease-hover: ease-in-out;
+}
+:root
+  :is(
+    a[href],
+    button,
+    select,
+    summary,
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"],
+    input[type="checkbox"],
+    input[type="radio"],
+    input[type="range"],
+    input[type="file"],
+    input[type="color"],
+    label[for],
+    label:has(input[type="checkbox"], input[type="radio"])
+  ):not(:disabled):not([aria-disabled="true"]):not(:has(input:disabled)) {
+  cursor: pointer;
+  transition-property:
+    background-color, border-color, color, text-decoration-color, box-shadow,
+    filter, transform;
+  transition-duration: var(--motion-hover);
+  transition-timing-function: var(--ease-hover);
+}
+/* The card/label owns the hit target, including its native checkbox or radio. */
+:root
+  :is(
+    button,
+    a[href],
+    summary,
+    label[for],
+    label:has(input[type="checkbox"], input[type="radio"])
+  )
+  :is(svg, span) {
+  cursor: inherit;
+}
+:root :is(button, select, input, a, summary)[aria-disabled="true"],
+:root :is(button, select, input):disabled,
+:root label:has(input:disabled) {
+  cursor: not-allowed;
+}
+@media (hover: hover) and (pointer: fine) {
+  /* Small tonal feedback also covers native controls without custom surfaces. */
+  :root
+    :is(
+      a[href],
+      button,
+      select,
+      summary,
+      input[type="button"],
+      input[type="submit"],
+      input[type="reset"],
+      input[type="checkbox"],
+      input[type="radio"],
+      input[type="range"],
+      input[type="file"],
+      input[type="color"],
+      label[for],
+      label:has(input[type="checkbox"], input[type="radio"])
+    ):not(:disabled):not([aria-disabled="true"]):not(:has(input:disabled)):not(
+      .brand-mark
+    ):hover {
+    filter: brightness(0.97);
+  }
+}
+/* Press and focus feedback should never wait for the hover transition. */
+:root
+  :is(
+    a[href],
+    button,
+    select,
+    summary,
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"],
+    input[type="checkbox"],
+    input[type="radio"],
+    label[for],
+    label:has(input[type="checkbox"], input[type="radio"])
+  ):not(:disabled):not([aria-disabled="true"]):active {
+  transition-duration: 80ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root
+    :is(a[href], button, select, summary, input, label[for], label:has(input)) {
+    transition: none;
+  }
+}
+
+/* Keep vector brand marks on the normal paint path instead of filtering their pixels. */
+:root a.brand-mark:hover {
+  filter: none;
+}
+
+/* Shared selection surface: color supports the native check/disclosure indicator. */
+:root [data-steps][data-enhanced] .step-hit-area {
+  transition:
+    background-color var(--motion-hover) var(--ease-hover),
+    border-color var(--motion-hover) var(--ease-hover);
+}
+:root [data-steps] .step-stage[data-selected="true"] .step-hit-area {
+  background: var(--surface-selected);
+  border-color: var(--border-selected);
+  color: var(--foreground-selected);
+}
+@media (hover: hover) and (pointer: fine) {
+  [data-steps]
+    .step-stage[data-selected="true"]
+    .step-hit-area:has(.step-card-control:hover) {
+    background: var(--surface-selected-hover);
+    border-color: var(--border-selected);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root [data-steps][data-enhanced] .step-hit-area {
+    transition: none;
+  }
+}
+
+/* Privacy links need actual color feedback as well as the shared tonal hover. */
+@media (hover: hover) and (pointer: fine) {
+  :root a[href="/privacy"]:not([aria-disabled="true"]):hover {
+    color: var(--brand-primary);
+    text-decoration-color: currentColor;
+  }
+}
+
+/* Link adornments follow the same timing as the link surface and text. */
+:root a[href]:not(.brand-mark)::after,
+:root a[href]:not(.brand-mark) > span::after,
+:root a[href] .interaction-arrow {
+  transition-duration: var(--motion-hover);
+  transition-timing-function: var(--ease-hover);
+}
+@media (prefers-reduced-motion: reduce) {
+  :root a[href]:not(.brand-mark)::after,
+  :root a[href]:not(.brand-mark) > span::after,
+  :root a[href] .interaction-arrow {
+    transition: none;
+  }
+}

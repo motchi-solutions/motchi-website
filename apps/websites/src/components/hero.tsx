@@ -1,5 +1,6 @@
 import { AnimatedLink, ButtonLink, Container, HeroBrand } from "@motchi/ui";
 import { projects } from "@/content/projects";
+import { ProjectPreview } from "./project-preview";
 export function Hero() {
   return (
     <section className="family-hero py-hero">
@@ -27,7 +28,8 @@ export function Hero() {
             </div>
           </div>
           <div className="family-hero-secondary lg:col-span-4">
-            <p className="mb-5 text-xs tracking-widest uppercase text-muted">
+            <ProjectPreview project={projects[0]} />
+            <p className="mb-5 mt-6 text-xs tracking-widest uppercase text-muted">
               A few businesses we've built for
             </p>
             <ul className="grid grid-cols-2 gap-x-5 lg:block">

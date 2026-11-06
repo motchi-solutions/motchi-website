@@ -14,7 +14,7 @@ export function Businesses({
   const family = getSites();
   return (
     <Section id="businesses" className={textured ? styles.textured : ""}>
-      <SectionHeading eyebrow="Our Services" title={title}>
+      <SectionHeading title={title}>
         Reach your customers with a better website. Help your team with better
         systems. Our two branches bring focused expertise and practical support.
       </SectionHeading>

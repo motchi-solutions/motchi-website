@@ -6,7 +6,7 @@ import {
   type PointerEvent,
   type KeyboardEvent,
 } from "react";
-import { ButtonLink, Container, Eyebrow } from "@motchi/ui/primitives";
+import { ButtonLink, Container } from "@motchi/ui/primitives";
 import {
   LuGlobe,
   LuWorkflow,
@@ -220,7 +220,6 @@ export function ServicesExplorer() {
           }}
         >
           <header className={`page-introduction ${hero.introduction}`}>
-            <Eyebrow>Motchi Services</Eyebrow>
             <h1 className="text-h2 font-medium tracking-tight">
               Explore Our Services
             </h1>

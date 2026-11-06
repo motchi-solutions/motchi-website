@@ -1,0 +1,1404 @@
+.composition {
+  --contact-page-space: clamp(2rem, 4vw, 3rem);
+  --contact-form-max: 768px;
+  --contact-body-size: var(--type-reading-body);
+  --contact-description-size: var(--type-reading-small);
+  --contact-help-size: 0.875rem;
+  --contact-meta-size: 0.8125rem;
+  --contact-control-size: 0.9375rem;
+  --contact-option-size: var(--form-option-size);
+  --space-control-gap: 0.5rem;
+  font-size: var(--contact-body-size);
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+}
+.layout {
+  --contact-inset: var(--space-card);
+  --contact-group-gap: 1.5rem;
+  --contact-related: 0.75rem;
+  --contact-label-gap: 0.5rem;
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2rem);
+  align-items: start;
+}
+.contactContainer {
+  padding-block: var(--contact-page-space);
+}
+.hero,
+.leftColumn {
+  min-width: 0;
+}
+.formStage,
+.leftColumn {
+  position: relative;
+  min-width: 0;
+}
+.experience {
+  position: relative;
+  z-index: 1;
+}
+.hero h1 {
+  font-size: clamp(2.25rem, 3.75vw, 4.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.05em;
+  color: var(--burgundy);
+  margin-top: var(--space-eyebrow);
+  max-width: 20ch;
+  text-wrap: balance;
+}
+.heroCopy {
+  margin-top: var(--space-copy);
+  max-width: 42ch;
+  line-height: 1.6;
+  color: var(--charcoal);
+}
+.responseTime {
+  margin-top: var(--contact-related);
+}
+.email {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  color: var(--burgundy);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  overflow-wrap: anywhere;
+}
+.experience {
+  border-radius: 0 clamp(1.25rem, 2.5vw, 2.5rem) 0 0;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--gold);
+  background: var(--surface);
+  overflow: clip;
+  scroll-margin-top: 7rem;
+}
+.experience :focus-visible {
+  outline: 2px solid var(--burgundy);
+  outline-offset: 3px;
+}
+.progressNav {
+  min-width: 0;
+}
+.progress {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-bottom: 1px solid var(--border);
+  padding: var(--contact-related) var(--contact-inset);
+  gap: var(--space-control-gap);
+}
+.progress button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-control-gap);
+  flex-wrap: wrap;
+  width: 100%;
+  min-height: 48px;
+  padding: 0.375rem;
+  border-radius: var(--radius-control);
+  color: var(--charcoal);
+  font-size: var(--contact-help-size);
+  cursor: pointer;
+  transition: background-color 0.24s var(--ease-standard);
+}
+.progress button > :first-child {
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+}
+.progress button[aria-current] {
+  color: var(--burgundy);
+  font-weight: 600;
+}
+.progress button[aria-current] > :first-child {
+  background: var(--burgundy);
+  color: var(--cream);
+  border-color: var(--burgundy);
+}
+.progress [data-complete="true"] button > :first-child {
+  border-color: var(--burgundy);
+}
+.progressHint {
+  margin-block: var(--contact-related) var(--contact-group-gap);
+  color: var(--burgundy);
+  font-size: var(--contact-help-size);
+  line-height: 1.5;
+}
+.step {
+  padding: var(--contact-inset);
+  animation: step-arrive 0.28s var(--ease-reveal) both;
+}
+.step h2 {
+  margin: 0 0 var(--contact-group-gap);
+  scroll-margin-top: 8rem;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.group {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  margin: 0 0 var(--contact-group-gap);
+}
+.group:last-child {
+  margin-bottom: 0;
+}
+.field > label,
+.group legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: 0.375rem;
+  font-weight: 600;
+  font-size: var(--contact-body-size);
+  line-height: 1.5;
+}
+.field > label > span,
+.group legend > span {
+  font-size: var(--contact-meta-size);
+  font-weight: 400;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.hint {
+  font-size: var(--contact-help-size);
+  color: var(--muted);
+  line-height: 1.5;
+  margin-top: var(--contact-label-gap);
+}
+.options,
+.serviceOptions {
+  display: grid;
+  gap: var(--contact-related);
+  margin-top: var(--contact-related);
+}
+.serviceOptions {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+}
+.options {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+}
+.option {
+  font-size: var(--contact-option-size);
+  display: flex;
+  align-items: center;
+  gap: var(--contact-related);
+  min-height: 52px;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: var(--contact-related);
+  cursor: pointer;
+  line-height: 1.5;
+  transition:
+    border-color 0.18s var(--ease-standard),
+    background-color 0.18s var(--ease-standard);
+}
+.option input {
+  scroll-margin-top: 8rem;
+  accent-color: var(--burgundy);
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.option:has(:checked) {
+  border-color: var(--border-selected);
+  background: var(--surface-selected);
+  color: var(--foreground-selected);
+  box-shadow: none;
+}
+.option:has(:focus-visible) {
+  outline: 2px solid var(--burgundy);
+  outline-offset: 3px;
+}
+.option input:focus-visible {
+  outline: none;
+}
+.option:not(:has(:disabled)):active {
+  transition-duration: 80ms;
+  background: color-mix(in srgb, var(--gold) 30%, var(--surface));
+}
+.optionCopy {
+  display: block;
+  min-width: 0;
+}
+.optionTitle {
+  display: block;
+  font-weight: 600;
+  color: var(--charcoal);
+}
+.optionDescription {
+  display: block;
+  margin-top: var(--contact-label-gap);
+  font-size: var(--contact-description-size);
+  color: var(--charcoal);
+  line-height: 1.5;
+  max-width: 46ch;
+}
+.reveal {
+  border-left: 2px solid var(--gold);
+  padding-left: var(--contact-related);
+  margin-top: var(--contact-group-gap);
+}
+.conditional {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    grid-template-rows 0.28s var(--ease-reveal),
+    opacity 0.2s var(--ease-standard),
+    visibility 0s linear 0.28s;
+}
+.conditional[data-open="true"] {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s;
+}
+.conditionalClip {
+  min-height: 0;
+  overflow: hidden;
+}
+.fields {
+  display: grid;
+  gap: var(--contact-group-gap);
+  margin-bottom: var(--contact-group-gap);
+}
+.field {
+  min-width: 0;
+}
+.input {
+  scroll-margin-top: 8rem;
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  background: var(--cream);
+  padding: var(--contact-related);
+  font-size: var(--contact-body-size);
+  line-height: 1.5;
+  margin-top: var(--contact-label-gap);
+  color: var(--charcoal);
+}
+textarea.input {
+  max-width: 70ch;
+  resize: vertical;
+}
+.input[aria-invalid="true"] {
+  border: 2px solid var(--burgundy);
+}
+.error {
+  color: var(--burgundy);
+  font-weight: 600;
+  font-size: var(--contact-help-size);
+  line-height: 1.5;
+  margin-top: var(--contact-label-gap);
+  animation: text-arrive 0.18s var(--ease-reveal) both;
+}
+.errorSummary {
+  scroll-margin-top: 8rem;
+  border-left: 3px solid var(--burgundy);
+  padding: var(--contact-related);
+  margin-bottom: var(--contact-group-gap);
+  background: var(--cream);
+  line-height: 1.5;
+}
+.errorSummary h3 {
+  font-weight: 600;
+}
+.errorSummary a,
+.hint a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.errorSummary li {
+  margin-top: var(--contact-related);
+}
+.formFooter {
+  padding: var(--contact-inset);
+  border-top: 1px solid var(--border);
+}
+.actions {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--contact-related);
+}
+.actions button {
+  min-height: 48px;
+  padding: var(--contact-related) 0.875rem;
+  cursor: pointer;
+  border: 1px solid var(--burgundy);
+  border-radius: var(--radius-control);
+  color: var(--burgundy);
+}
+.actions .primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-control-gap);
+  margin-left: auto;
+  background: var(--burgundy);
+  color: var(--cream);
+}
+.actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+.nextAction {
+  position: relative;
+  margin-left: auto;
+  min-width: 0;
+}
+.savePreference {
+  display: flex;
+  align-items: center;
+  gap: var(--contact-related);
+  min-height: 44px;
+  cursor: pointer;
+  color: var(--charcoal);
+  font-size: var(--contact-control-size);
+  line-height: 1.5;
+}
+.savePreference input {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  accent-color: var(--burgundy);
+}
+.savePreference > span > span {
+  font-size: var(--contact-meta-size);
+  color: var(--muted);
+}
+.actionDetails {
+  margin-bottom: var(--contact-group-gap);
+  min-width: 0;
+  color: var(--muted);
+  font-size: var(--contact-help-size);
+  line-height: 1.5;
+}
+.actionDetails > p > span {
+  display: block;
+}
+.actionDetails a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.actionDetails button {
+  min-height: 44px;
+  border: 0;
+  padding: 0;
+  margin-left: var(--contact-related);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-size: inherit;
+}
+.reviewSection {
+  padding-block: 1rem;
+}
+.reviewSection + .reviewSection {
+  border-top: 1px solid var(--border);
+  margin-top: 0.5rem;
+  padding-top: 1.25rem;
+}
+.reviewHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--contact-related);
+  margin-bottom: 0.25rem;
+}
+.reviewHeading h3 {
+  font-weight: 600;
+  font-size: clamp(1.125rem, 1rem + 0.15vw, 1.25rem);
+  line-height: 1.35;
+  color: var(--charcoal);
+}
+.reviewHeading button {
+  min-width: 44px;
+  min-height: 44px;
+  color: var(--burgundy);
+  text-decoration: underline;
+  cursor: pointer;
+  border-radius: var(--radius-control);
+  padding-inline: 0.5rem;
+  text-underline-offset: 3px;
+}
+.reviewRow {
+  display: grid;
+  gap: 0.25rem;
+  padding-block: 0.875rem;
+}
+.reviewRow + .reviewRow {
+  border-top: 1px solid color-mix(in srgb, var(--border) 55%, var(--surface));
+}
+.reviewSection dt {
+  font-size: var(--contact-help-size);
+  color: var(--muted);
+  line-height: 1.5;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.reviewSection dd {
+  max-width: 65ch;
+  margin: 0;
+  font-size: var(--contact-body-size);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.reviewValues {
+  display: grid;
+  gap: 0.25rem;
+  list-style: disc;
+  padding-left: 1.125rem;
+}
+.reviewValues li::marker {
+  color: var(--burgundy);
+}
+.reviewMissing {
+  color: var(--muted);
+  font-size: var(--contact-help-size);
+}
+@media (min-width: 640px) {
+  .reviewRow {
+    grid-template-columns: minmax(9rem, 0.85fr) minmax(0, 2fr);
+    gap: 1.5rem;
+    align-items: baseline;
+  }
+}
+.draftPrompt {
+  padding: var(--contact-inset);
+  background: var(--surface);
+  line-height: 1.5;
+}
+.draftPrompt :is(h1, h2) {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.2;
+  color: var(--burgundy);
+  margin-bottom: var(--contact-related);
+}
+.draftPrompt h3 {
+  font-weight: 600;
+}
+.draftPrompt p + p {
+  margin-top: var(--contact-related);
+}
+.draftActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--contact-related);
+  margin-top: var(--contact-group-gap);
+}
+.draftActions button {
+  min-height: 48px;
+  padding: var(--contact-related) 1rem;
+  border: 1px solid var(--burgundy);
+  border-radius: var(--radius-control);
+  color: var(--burgundy);
+  cursor: pointer;
+}
+.draftActions .primary {
+  background: var(--burgundy);
+  color: var(--cream);
+}
+.notice {
+  border-left: 2px solid var(--gold);
+  background: var(--cream);
+  line-height: 1.5;
+}
+.notice {
+  padding: var(--contact-inset);
+}
+.textChange {
+  display: block;
+  animation: text-arrive 0.22s var(--ease-reveal) both;
+}
+@keyframes text-arrive {
+  0% {
+    opacity: 0.35;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes step-arrive {
+  0% {
+    opacity: 0.35;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (min-width: 600px) {
+  .fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1024px) {
+  .serviceOptions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .progress {
+    padding-inline: var(--contact-related);
+    gap: 0.25rem;
+  }
+  .progress button {
+    flex-direction: column;
+    justify-content: center;
+    padding: 0.25rem 0.125rem;
+    font-size: var(--contact-meta-size);
+    white-space: nowrap;
+  }
+}
+@media (forced-colors: active) {
+  .option:has(:focus-visible) {
+    outline-color: Highlight;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .error,
+  .reveal,
+  .step,
+  .textChange {
+    animation: none;
+  }
+  .conditional,
+  .option,
+  .progress button {
+    transition: none;
+  }
+}
+.saveStatus {
+  display: grid;
+}
+.saveMessage {
+  grid-area: 1/1;
+  min-width: 0;
+  visibility: hidden;
+}
+.saveSentence {
+  display: block;
+}
+.saveMessage[data-active="true"] {
+  visibility: visible;
+  animation: text-arrive 0.22s var(--ease-reveal) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .saveMessage[data-active="true"] {
+    animation: none;
+  }
+}
+.optionDescription {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  margin-top: 0;
+  transition:
+    grid-template-rows 0.22s var(--ease-reveal),
+    opacity 0.18s var(--ease-standard),
+    margin-top 0.22s var(--ease-reveal);
+}
+.optionDescription > :where(span) {
+  min-height: 0;
+  overflow: hidden;
+}
+.option:has(:checked) .optionDescription,
+.option:has(:focus-visible) .optionDescription {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  margin-top: var(--contact-label-gap);
+}
+@media (prefers-reduced-motion: reduce) {
+  .optionDescription {
+    transition: none;
+  }
+}
+.formFooter .draftPrompt {
+  padding: var(--contact-related);
+  margin-bottom: var(--contact-group-gap);
+  background: var(--cream);
+}
+@media (max-width: 600px) {
+  .projectInfoSuffix {
+    display: none;
+  }
+}
+@media (min-width: 1440px) {
+  .composition {
+    --contact-help-size: var(--type-reading-small);
+    --contact-meta-size: 0.875rem;
+    --contact-control-size: var(--type-reading-body);
+  }
+  .layout {
+    --contact-inset: 2.5rem;
+    --contact-group-gap: 1.75rem;
+    --contact-related: 0.875rem;
+    gap: 3rem;
+  }
+  .hero h1 {
+    font-size: 4rem;
+  }
+  .step h2 {
+    font-size: 2.25rem;
+  }
+  .hero > :first-child {
+    font-size: var(--contact-meta-size);
+  }
+  .option input,
+  .savePreference input {
+    width: 20px;
+    height: 20px;
+  }
+  .progress button > :first-child {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+@media (min-width: 1920px) {
+  .hero h1 {
+    font-size: 4.5rem;
+  }
+}
+.actions button,
+.draftActions button {
+  transition:
+    background-color 0.22s var(--ease-standard),
+    border-color 0.22s var(--ease-standard),
+    color 0.22s var(--ease-standard);
+}
+.actionDetails a,
+.actionDetails button,
+.reviewHeading button,
+.savePreference {
+  transition: color 0.22s var(--ease-standard);
+}
+.input {
+  transition: border-color 0.22s var(--ease-standard);
+}
+@media (hover: hover) and (pointer: fine) {
+  .option:not(:has(:disabled)):hover {
+    border-color: color-mix(in srgb, var(--burgundy) 35%, var(--border));
+    background: color-mix(in srgb, var(--gold) 12%, var(--surface));
+  }
+  .option:has(:checked):not(:has(:disabled)):hover {
+    border-color: var(--border-selected);
+    background: var(--surface-selected-hover);
+  }
+  .option:has(:checked):not(:has(:disabled)):active,
+  .option:not(:has(:disabled)):active {
+    background: color-mix(in srgb, var(--gold) 30%, var(--surface));
+    transition-duration: 80ms;
+  }
+  .progress button:not(:disabled):not([aria-disabled="true"]):hover {
+    background: color-mix(in srgb, var(--gold) 12%, transparent);
+  }
+  .actions button:not(:disabled):not([aria-disabled="true"]):hover,
+  .draftActions button:not(:disabled):hover {
+    background: color-mix(in srgb, var(--gold) 14%, var(--surface));
+  }
+  .actions .primary:not(:disabled):not([aria-disabled="true"]):hover,
+  .draftActions .primary:not(:disabled):hover {
+    background: var(--charcoal);
+    border-color: var(--charcoal);
+    color: var(--cream);
+  }
+  .actionDetails a:hover,
+  .actionDetails button:hover,
+  .reviewHeading button:hover,
+  .savePreference:not(:has(:disabled)):hover {
+    color: var(--burgundy);
+  }
+  .input:not(:disabled):not([aria-invalid="true"]):hover {
+    border-color: color-mix(in srgb, var(--burgundy) 60%, var(--border));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .actionDetails a,
+  .actionDetails button,
+  .actions button,
+  .draftActions button,
+  .input,
+  .reviewHeading button,
+  .savePreference {
+    transition: none;
+  }
+}
+.serviceDetails {
+  margin-top: var(--contact-related);
+  border-top: 1px solid var(--border);
+  padding-top: var(--contact-related);
+}
+@media (min-width: 1440px) {
+  .composition {
+    --contact-body-size: var(--type-reading-body);
+    --contact-description-size: var(--type-reading-small);
+    --contact-help-size: var(--type-reading-small);
+  }
+}
+.disclosureToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.5rem 0;
+  border: 0;
+  background: transparent;
+  color: var(--burgundy);
+  text-align: left;
+  font-weight: 600;
+}
+.optional {
+  color: var(--muted);
+  font-weight: 400;
+}
+.disclosureIcon {
+  flex-shrink: 0;
+  transition: transform var(--motion-hover) var(--ease-hover);
+}
+.disclosureIcon[data-open="true"] {
+  transform: rotate(180deg);
+}
+.disclosurePanel {
+  transition-duration: var(--motion-hover), var(--motion-hover), 0s;
+  transition-timing-function: var(--ease-hover);
+}
+.disclosurePanel:not([data-open="true"]) {
+  transition-delay: 0s, 0s, var(--motion-hover);
+}
+.detailDescription {
+  max-width: 65ch;
+  margin-bottom: var(--contact-related);
+  color: var(--muted);
+  line-height: 1.65;
+}
+.saveMessage {
+  display: grid;
+  gap: 0.375rem;
+}
+.saveStatus {
+  margin-top: 0.375rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .disclosureIcon,
+  .disclosurePanel {
+    transition: none;
+  }
+}
+.detailsHeading {
+  margin-top: var(--contact-group-gap);
+  font-size: clamp(1.25rem, 1.6vw, 1.5rem);
+  font-weight: 600;
+  color: var(--charcoal);
+}
+.detailDescription {
+  margin-top: var(--contact-related);
+  margin-bottom: 0;
+}
+.disclosurePanel .reveal {
+  margin-top: var(--contact-related);
+}
+.actionDetails {
+  display: block;
+}
+.draftHeading {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+}
+.draftHeading button {
+  margin-left: 0;
+  font-size: var(--contact-meta-size);
+}
+.privacyNote {
+  margin-bottom: var(--contact-related);
+  max-width: 65ch;
+  color: var(--muted);
+  font-size: var(--contact-help-size);
+  line-height: 1.65;
+}
+.privacyNote a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.disclosurePanel .option {
+  line-height: 1.5;
+}
+.selectionSummaryLabel {
+  color: var(--charcoal);
+  font-weight: 500;
+}
+.serviceDetails .detailsHeading {
+  margin-top: 0;
+}
+.disclosureToggle {
+  font-size: inherit;
+}
+.serviceDetailGroup {
+  margin-top: var(--contact-group-gap);
+}
+.serviceDetailTitle {
+  font-size: var(--contact-body-size);
+  color: var(--charcoal);
+}
+.stepNumberGlyph {
+  display: block;
+  line-height: 1;
+  font-variant-numeric: lining-nums tabular-nums;
+  transform: translateY(0.06em);
+}
+.disclosureIcon {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+.error {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.errorIcon {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: var(--burgundy);
+  color: var(--cream);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.input::placeholder {
+  color: var(--placeholder);
+  opacity: 1;
+}
+.phoneField {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.phoneField legend {
+  font-weight: 600;
+  font-size: var(--contact-body-size);
+  margin-bottom: 0;
+}
+.phoneField > .hint {
+  margin-top: 0.25rem;
+}
+.phoneField legend > span {
+  color: var(--muted);
+  font-weight: 400;
+  font-size: var(--contact-meta-size);
+}
+.phoneInputs {
+  display: grid;
+  grid-template-columns: minmax(7rem, 0.35fr) minmax(0, 1fr);
+  align-items: end;
+  gap: var(--contact-related);
+  margin-top: 0.875rem;
+}
+.phoneInputs .input {
+  margin-top: 0;
+}
+.phoneInputs > :where(div) {
+  min-width: 0;
+}
+.phoneSubLabel {
+  display: block;
+  font-size: var(--contact-help-size);
+  color: var(--muted);
+  margin-bottom: 0.25rem;
+}
+.countryCodeInput {
+  position: relative;
+}
+.countryCodeInput > :where(span) {
+  position: absolute;
+  left: 0.875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.countryCodeInput input {
+  padding-left: 2rem;
+}
+.fieldLabelRow,
+.phoneLegendRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  min-height: 2rem;
+}
+.fieldLabelRow > label {
+  font-size: var(--contact-body-size);
+  font-weight: 600;
+  line-height: 1.5;
+}
+.fieldLabelRow > label > span {
+  color: var(--muted);
+  font-size: var(--contact-meta-size);
+  font-weight: 400;
+  white-space: nowrap;
+}
+.phoneField legend > .phoneLegendRow {
+  color: var(--charcoal);
+  font-size: var(--contact-body-size);
+  font-weight: 600;
+}
+.phoneLegendRow > .optional {
+  font-size: var(--contact-meta-size);
+}
+@media (pointer: coarse) {
+  .fieldLabelRow {
+    min-height: 44px;
+  }
+}
+@media (min-width: 1280px) and (max-width: 1919px) {
+  .layout {
+    --contact-inset: clamp(1.5rem, 2.5vw - 0.5rem, 2.5rem);
+    gap: clamp(2rem, 3.333333vw - 1rem, 3rem);
+  }
+  .hero h1 {
+    font-size: clamp(3rem, 3.75vw, 4.5rem);
+  }
+  .step h2 {
+    font-size: clamp(1.75rem, 0.25rem + 1.666667vw, 2.25rem);
+  }
+}
+.draftRestartNote {
+  margin-top: var(--contact-related);
+  max-width: 55ch;
+  color: var(--muted);
+  font-size: var(--contact-help-size);
+  line-height: 1.5;
+}
+.savePreferenceGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+.step[data-step]:not([data-step="3"]) > h2 {
+  margin-bottom: var(--contact-related);
+}
+.composition .layout {
+  grid-template-columns: minmax(0, 1fr);
+}
+.leftColumn {
+  width: 100%;
+  max-width: 60rem;
+  margin-inline: auto;
+  text-align: center;
+}
+.leftColumn[hidden] {
+  display: none;
+}
+.hero .heroCopy {
+  max-width: 60ch;
+  margin-inline: auto;
+}
+.hero h1 {
+  max-width: none;
+  margin-inline: auto;
+}
+.experience {
+  width: 100%;
+  max-width: var(--contact-form-max);
+  margin-inline: auto;
+}
+.layout[data-resume="true"] {
+  min-height: calc(100svh - 6rem - 2 * var(--contact-page-space));
+  grid-template-rows: auto minmax(0, 1fr);
+  align-content: start;
+}
+.layout[data-resume="true"] .formStage {
+  align-self: center;
+}
+.saveIndicator {
+  color: var(--muted);
+  font-size: var(--contact-meta-size);
+}
+.contactEyebrow,
+.contactMeta {
+  display: flex;
+  justify-content: center;
+}
+.contactMeta {
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0 1.5rem;
+  margin-top: var(--contact-related);
+}
+.contactMeta .responseTime {
+  margin-top: 0;
+}
+.step h2[tabindex="-1"]:focus-visible {
+  outline: none;
+}
+.contactEyebrow > p:after {
+  display: block;
+}
+.formFooter {
+  padding-block: var(--contact-related);
+}
+.actionDetails {
+  margin-bottom: 0.25rem;
+}
+.privacyNote {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+@media (min-width: 1920px) {
+  .composition {
+    --contact-form-max: 1024px;
+  }
+}
+.draftPrompt > :where(p) {
+  max-width: 60ch;
+}
+.decorations {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  color: var(--gold);
+}
+.decorations > :is(img, svg) {
+  position: absolute;
+  height: auto;
+  opacity: 0.7;
+}
+.flowAccent {
+  width: clamp(13rem, 20vw, 22rem);
+  left: max(-4rem, calc(50% - var(--contact-form-max) / 2 - 19rem));
+  top: 8%;
+}
+.clarityAccent {
+  width: clamp(12rem, 18vw, 20rem);
+  right: max(-4rem, calc(50% - var(--contact-form-max) / 2 - 17rem));
+  top: 65%;
+}
+.serviceDetailTitle {
+  font-size: clamp(1.25rem, 0.875rem + 0.5vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.3;
+}
+.disclosurePanel .group legend {
+  font-size: var(--contact-description-size);
+  font-weight: 500;
+}
+@media (max-width: 767px) {
+  .decorations .flowAccent {
+    width: 7rem;
+    top: -2.25rem;
+    left: auto;
+    right: -1.75rem;
+    opacity: 0.55;
+  }
+  .clarityAccent {
+    display: none;
+  }
+}
+
+.reminderRail {
+  display: none;
+}
+/* A separate margin rail keeps the sticky reminder clear of form controls. */
+@media (min-width: 1200px) and (min-height: 480px) {
+  .formStage {
+    --reminder-shift: 7rem;
+  }
+  .experience {
+    translate: 0;
+    transition: translate 400ms ease-in-out;
+  }
+  .formStage[data-reminder="true"] .experience {
+    translate: calc(-1 * var(--reminder-shift)) 0;
+  }
+  .formStage[data-reminder="true"] :is(.errorSummary, .progressHint) {
+    display: none;
+  }
+  .reminderRail {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(50% + var(--contact-form-max) / 2 + 1.5rem);
+    width: 16rem;
+    z-index: 2;
+    opacity: 0;
+    visibility: hidden;
+    translate: 0.5rem 0;
+    transition:
+      left 400ms ease-in-out,
+      opacity 300ms ease-in-out,
+      translate 400ms ease-in-out,
+      visibility 0s 400ms;
+  }
+  .formStage[data-reminder="true"] .reminderRail {
+    left: calc(
+      50% + var(--contact-form-max) / 2 + 1.5rem - var(--reminder-shift)
+    );
+    opacity: 1;
+    visibility: visible;
+    translate: 0;
+    transition-delay: 0s;
+  }
+  .reminderCard {
+    position: sticky;
+    top: 8rem;
+    padding: 1rem;
+    border: 1px solid var(--burgundy);
+    border-radius: 0.5rem;
+    background: var(--surface);
+    color: var(--burgundy);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  .reminderCard:focus-visible {
+    outline: 2px solid var(--burgundy);
+    outline-offset: 3px;
+  }
+  .reminderTitle {
+    font-weight: 600;
+  }
+  .reminderItem {
+    display: grid;
+    grid-template-rows: 1fr;
+    opacity: 1;
+    translate: 0;
+    transition:
+      grid-template-rows 300ms ease-in-out,
+      opacity 300ms ease-in-out,
+      translate 300ms ease-in-out;
+  }
+  .reminderItem > div {
+    min-height: 0;
+    overflow: hidden;
+  }
+  .reminderItem[data-resolved="true"] {
+    grid-template-rows: 0fr;
+    opacity: 0;
+    translate: 1rem 0;
+  }
+  .reminderCard a {
+    display: block;
+    padding-top: 0.5rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition:
+      padding-top 300ms ease-in-out,
+      color 300ms ease-in-out,
+      text-decoration-color 300ms ease-in-out;
+  }
+  .reminderCard a:focus-visible {
+    outline-offset: -2px;
+  }
+  .reminderItem[data-resolved="true"] a {
+    padding-top: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .experience,
+  .reminderRail,
+  .reminderItem,
+  .reminderItem a {
+    transition: none;
+  }
+}
+
+.review .reviewHeading button {
+  transition:
+    background-color var(--motion-hover) var(--ease-hover),
+    color var(--motion-hover) var(--ease-hover);
+}
+@media (hover: hover) and (pointer: fine) {
+  .review .reviewHeading button:not(:disabled):hover {
+    background: color-mix(in srgb, var(--gold) 18%, var(--surface));
+  }
+}
+.review .reviewHeading button:not(:disabled):active {
+  background: var(--surface-selected);
+  transition-duration: 100ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .review .reviewHeading button {
+    transition: none;
+  }
+}
+
+.textareaShell {
+  min-width: 0;
+}
+.textareaShell textarea.input {
+  max-width: none;
+}
+.characterCounter {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.375rem;
+  color: var(--muted);
+  font-size: var(--contact-meta-size);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+.characterCounter [data-limit="true"] {
+  color: color-mix(in srgb, var(--burgundy) 88%, var(--charcoal));
+  font-weight: 700;
+}
+.characterCounter [data-limit] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: color var(--motion-hover) var(--ease-hover);
+}
+
+.submissionFeedback {
+  margin-block: var(--contact-related);
+  flex-wrap: wrap;
+}
+.submissionFeedback a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.resultPanel {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  padding: clamp(1.5rem, 4vw, 3rem);
+}
+.resultIcon {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  background: var(--surface-selected);
+  color: var(--burgundy);
+}
+.resultContent {
+  min-width: 0;
+}
+.resultTitle {
+  color: var(--charcoal);
+  font-size: clamp(1.75rem, 1.4rem + 0.5vw, 2.125rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+.experience .resultTitle:focus-visible {
+  outline: none;
+}
+.resultDescription {
+  max-width: 50ch;
+  margin-top: 0.875rem;
+  color: var(--muted);
+  font-size: var(--contact-body-size);
+  line-height: 1.6;
+}
+.resultActions {
+  margin-top: 1.75rem;
+}
+.resultActions .primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 48px;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid var(--burgundy);
+  border-radius: var(--radius-control);
+  background: var(--burgundy);
+  color: var(--cream);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    color var(--motion-hover) var(--ease-hover),
+    background-color var(--motion-hover) var(--ease-hover),
+    border-color var(--motion-hover) var(--ease-hover);
+}
+@media (hover: hover) and (pointer: fine) {
+  .resultActions .primary:not(:disabled):hover {
+    background: var(--charcoal);
+    border-color: var(--charcoal);
+  }
+}
+.resultActions .primary:not(:disabled):active {
+  background: color-mix(in srgb, var(--burgundy) 70%, var(--charcoal));
+  transition-duration: 100ms;
+}
+@media (max-width: 480px) {
+  .resultPanel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .resultActions .primary {
+    width: 100%;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .resultPanel {
+    animation: text-arrive 300ms var(--ease-hover) both;
+  }
+  .resultIcon {
+    animation: result-icon-arrive 400ms var(--ease-hover) both;
+  }
+  .resultCheck path,
+  .resultCheck polyline {
+    stroke-dasharray: 30;
+    animation: result-check-draw 420ms var(--ease-hover) 100ms both;
+  }
+}
+@keyframes result-icon-arrive {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes result-check-draw {
+  from {
+    stroke-dashoffset: 30;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .resultActions .primary {
+    transition: none;
+  }
+}

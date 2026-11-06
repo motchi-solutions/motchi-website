@@ -42,6 +42,11 @@
   margin-top: var(--space-section-heading);
   padding-top: var(--space-action);
 }
-[data-branch="solutions"] #contact-form {
-  padding: var(--space-inset);
+
+@media (min-width: 1024px) and (max-width: 1919px) {
+  :root[data-branch="solutions"] {
+    --ms-space-section: clamp(2rem, 1.266667rem + 1.444444vw, 3rem);
+    --space-section-heading: clamp(1.5rem, 0.766667rem + 1.444444vw, 2.5rem);
+    --space-copy: clamp(1rem, 0.633333rem + 0.722222vw, 1.5rem);
+  }
 }

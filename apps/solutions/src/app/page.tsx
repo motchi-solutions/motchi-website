@@ -1,5 +1,5 @@
 import "@/components/home.css";
-import { AnimatedLink, ContactCTA, Eyebrow, Section } from "@motchi/ui";
+import { AnimatedLink, ContactCTA, Section } from "@motchi/ui";
 import type { Metadata } from "next";
 import { Approach } from "@/components/approach";
 import { Businesses } from "@/components/businesses";
@@ -19,9 +19,8 @@ export default function Home() {
       >
         <div className="about-summary section-layout grid lg:grid-cols-2">
           <div className="about-summary-heading section-introduction">
-            <Eyebrow>About Motchi</Eyebrow>
             <h2 className="text-h2 font-medium tracking-tight">
-              A Little About Us
+              About Motchi Solutions
             </h2>
           </div>
           <div className="about-summary-content">

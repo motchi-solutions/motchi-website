@@ -11,6 +11,41 @@ import {
   notification,
 } from "../packages/email/src/templates.ts";
 import { isEmail, validateContact } from "../packages/email/src/validation.ts";
+import { filterContactCharacters } from "../packages/config/src/validation.ts";
+
+test("character filtering preserves meaningful content and incomplete typing", () => {
+  assert.equal(
+    filterContactCharacters("name", "Anne-Marie O'Neill 123"),
+    "Anne-Marie O'Neill ",
+  );
+  assert.equal(
+    filterContactCharacters("name", "Jose\u0301 \u674e\u660e"),
+    "Jose\u0301 \u674e\u660e",
+  );
+  assert.equal(
+    filterContactCharacters("email", " alex+team_2 @example.com "),
+    "alex+team_2@example.com",
+  );
+  assert.equal(filterContactCharacters("email", "alex@"), "alex@");
+  assert.equal(
+    filterContactCharacters("phone", "+1 (416) 555-0123"),
+    "14165550123",
+  );
+  assert.equal(
+    filterContactCharacters("website", "https://example.com /page"),
+    "https://example.com/page",
+  );
+  const message = "Please connect 3 tools: CRM + billing.\nBudget: $2,000.";
+  assert.equal(filterContactCharacters("context", message), message);
+  assert.equal(
+    filterContactCharacters("company", "Studio 123 & Co."),
+    "Studio 123 & Co.",
+  );
+  assert.equal(
+    filterContactCharacters("message", "Hello\u0000 world"),
+    "Hello world",
+  );
+});
 
 function form(overrides = {}) {
   const data = new FormData();
@@ -26,6 +61,32 @@ function form(overrides = {}) {
     data.set(key, value);
   return data;
 }
+test("contact names enforce length and letters while preserving international names", () => {
+  for (const name of [
+    "Jo",
+    "Anne-Marie",
+    "O'Neill",
+    "Jose\u0301",
+    "\u674e\u660e",
+    "A".repeat(100),
+  ]) {
+    assert.equal(
+      validateContact(form({ name }), "websites").errors.name,
+      undefined,
+      name,
+    );
+  }
+  for (const name of [
+    "A",
+    "12",
+    "Alex2",
+    "A".repeat(101),
+    "--",
+    "Alex\nSmith",
+  ]) {
+    assert.ok(validateContact(form({ name }), "websites").errors.name, name);
+  }
+});
 test("valid enquiry is accepted; unsafe website protocols and email headers are rejected", () => {
   assert.deepEqual(validateContact(form(), "websites").errors, {});
   assert.ok(

@@ -9,12 +9,11 @@ export function HeaderEnhancements() {
     if (!header) return;
     const links = Array.from(
       header.querySelectorAll<HTMLAnchorElement>("nav a"),
-    );
+    ).map((link) => ({ link, url: new URL(link.href) }));
     const sections = Array.from(
       document.querySelectorAll<HTMLElement>("main section[id]"),
     ).filter((section) =>
-      links.some((link) => {
-        const url = new URL(link.href);
+      links.some(({ url }) => {
         return (
           url.origin === window.location.origin &&
           url.pathname === window.location.pathname &&
@@ -25,20 +24,27 @@ export function HeaderEnhancements() {
     let frame = 0;
     const update = () => {
       frame = 0;
-      header.dataset.scrolled = String(window.scrollY > 24);
-      const active = sections
-        .filter((section) => section.getBoundingClientRect().top <= 160)
-        .at(-1)?.id;
-      for (const link of links) {
-        const url = new URL(link.href);
+      const scrolled = String(window.scrollY > 24);
+      // Read section positions before changing styles or navigation attributes.
+      let active: string | undefined;
+      for (let index = sections.length - 1; index >= 0; index--) {
+        if (sections[index].getBoundingClientRect().top <= 160) {
+          active = sections[index].id;
+          break;
+        }
+      }
+      if (header.dataset.scrolled !== scrolled)
+        header.dataset.scrolled = scrolled;
+      for (const { link, url } of links) {
         const selected =
           url.origin === window.location.origin &&
           (url.pathname === window.location.pathname ||
             (url.pathname !== "/" &&
               window.location.pathname.startsWith(`${url.pathname}/`))) &&
           (url.hash ? url.hash === `#${active}` : !active);
-        if (selected)
-          link.setAttribute("aria-current", url.hash ? "location" : "page");
+        const current = selected ? (url.hash ? "location" : "page") : null;
+        if (link.getAttribute("aria-current") === current) continue;
+        if (current) link.setAttribute("aria-current", current);
         else link.removeAttribute("aria-current");
       }
     };

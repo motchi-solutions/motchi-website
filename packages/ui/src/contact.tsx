@@ -1,25 +1,15 @@
-import { resolveCapability } from "./capability-content";
-import { ConfigurationError } from "@motchi/config/env";
-import { contactMessage } from "@motchi/email/feedback";
-import { WebsiteBudget } from "./website-budget";
-import { ContactForm } from "./contact-form";
-import { Toast } from "./toast";
-import { sites as family, contactEmail } from "@motchi/config/sites";
-import type { Branch } from "@motchi/brand";
 import { createContactToken } from "@motchi/email";
-import {
-  type ContactInput,
-  interests,
-  contactLimits,
-  contactFieldErrors as fieldErrors,
-} from "@motchi/email/validation";
-import { MailIcon } from "./icons";
-import { AnimatedLink, Container, Eyebrow } from "./primitives";
+import { contactMessage } from "@motchi/email/feedback";
+import type { Branch } from "@motchi/brand";
+import { ContactExperience } from "./contact/contact-experience";
+import { ContactNavigation } from "./contact/contact-navigation";
+import { getContactConfiguration } from "./contact/contact-config";
+import { Eyebrow } from "./primitives";
+import styles from "./contact/contact.module.css";
 
 export function ContactPageContent({
   branch,
   status,
-  fields = "",
   topic,
 }: {
   branch: Branch;
@@ -27,232 +17,42 @@ export function ContactPageContent({
   fields?: string;
   topic?: string;
 }) {
-  const capability =
-    branch === "solutions" ? resolveCapability(topic) : undefined;
-  const initialInterest =
-    capability?.interest ??
-    (branch === "solutions" &&
-    (topic === "Something else" || topic === "Products")
-      ? topic
-      : "");
-  const message = contactMessage(status);
-  const sent = status === "sent" || status === "partial";
+  const config = getContactConfiguration(branch);
   let token: string | null = null;
   try {
     token = createContactToken();
-  } catch (error) {
+  } catch {
     console.error("Contact form unavailable", {
       branch,
-      category:
-        error instanceof ConfigurationError ? error.category : "INTERNAL_ERROR",
+      category: "CONFIGURATION_ERROR",
     });
   }
-  const invalidFields = new Set(
-    fields.split(",").filter((key) => Object.hasOwn(fieldErrors, key)),
-  );
-  const inputClass =
-    "form-control mt-2 min-h-12 w-full rounded-none border border-border bg-background px-4 py-3 text-base";
-  const props = (field: keyof ContactInput) => ({
-    id: field,
-    name: field,
-    "aria-invalid": invalidFields.has(field) || undefined,
-    "aria-describedby": invalidFields.has(field) ? `${field}-error` : undefined,
-  });
-  const error = (field: keyof ContactInput) =>
-    invalidFields.has(field) ? (
-      <p
-        id={`${field}-error`}
-        className="mt-2 text-sm font-semibold text-primary"
-      >
-        {fieldErrors[field]}
-      </p>
-    ) : null;
   return (
-    <Container className="py-section">
-      <div className="section-layout grid lg:grid-cols-2">
-        <div className="page-introduction section-introduction contact-introduction">
-          <Eyebrow>{family[branch].name} / Contact</Eyebrow>
-          <h1 className="text-h2 font-medium tracking-tight">
-            Contact {family[branch].name}
+    <>
+      <ContactNavigation />
+      <ContactExperience
+        branch={branch}
+        topic={topic}
+        submission={{ token }}
+        initialFeedback={contactMessage(status)}
+      >
+        <header className={styles.hero}>
+          <div className={styles.contactEyebrow}>
+            <Eyebrow>Contact Motchi</Eyebrow>
+          </div>
+          <h1 id="contact-title" tabIndex={-1}>
+            {config.title}
           </h1>
-          <p className="max-w-md text-lg leading-relaxed text-muted">
-            You don't need a finished brief. A few words about your business and
-            what you need are a good place to start.
-          </p>
-          <p className="max-w-md leading-relaxed">
-            We typically respond with next steps or an initial quote within{" "}
-            <strong>2-3 business days</strong>.
-          </p>
-          <a
-            className="animated-link content-action inline-flex min-h-12 items-center gap-3"
-            href={`mailto:${contactEmail}`}
-          >
-            <MailIcon />
-            <span>{contactEmail}</span>
-          </a>
-          <p className="max-w-md text-sm leading-relaxed text-muted">
-            Share only what we need to understand your enquiry. Please leave out
-            passwords, sensitive personal information, and confidential records.
-          </p>
-        </div>
-        <div
-          id="contact-form"
-          className="border border-border bg-surface p-5 sm:p-8 lg:p-10"
-        >
-          <h2 className="mb-2 text-h3 font-medium">
-            {capability ? capability.action : "Tell Us About Your Project"}
-          </h2>
-          <p className="mb-8 text-sm leading-relaxed text-muted">
-            A short introduction is enough. We'll work through the details
-            together.
-          </p>
-          {message && (
-            <div
-              id="contact-result"
-              tabIndex={-1}
-              role={sent ? undefined : "alert"}
-              className="mb-8 border-l-4 border-primary bg-surface p-5 leading-relaxed"
-            >
-              <p>{message}</p>
-            </div>
-          )}
-          {!token && !sent && (
-            <p className="mb-8 border border-border p-5">
-              Online enquiries are temporarily unavailable. Please contact us by
-              email.
-            </p>
-          )}
-          {token && !sent && (
-            <ContactForm>
-              <input type="hidden" name="token" value={token} />
-              <div hidden aria-hidden="true">
-                <label htmlFor="fax">Leave this field empty</label>
-                <input id="fax" name="fax" autoComplete="off" tabIndex={-1} />
-              </div>
-              <div className="grid gap-6 sm:grid-cols-2">
-                <div>
-                  <label htmlFor="name" className="text-sm font-semibold">
-                    Name <span className="font-normal">(required)</span>
-                  </label>
-                  <input
-                    {...props("name")}
-                    autoComplete="name"
-                    required
-                    maxLength={contactLimits.name}
-                    className={inputClass}
-                  />
-                  {error("name")}
-                </div>
-                <div>
-                  <label htmlFor="email" className="text-sm font-semibold">
-                    Email <span className="font-normal">(required)</span>
-                  </label>
-                  <input
-                    {...props("email")}
-                    type="email"
-                    autoComplete="email"
-                    required
-                    maxLength={contactLimits.email}
-                    className={inputClass}
-                  />
-                  {error("email")}
-                </div>
-              </div>
-              <div>
-                <label htmlFor="company" className="text-sm font-semibold">
-                  Company <span className="font-normal">(optional)</span>
-                </label>
-                <input
-                  {...props("company")}
-                  autoComplete="organization"
-                  maxLength={contactLimits.company}
-                  className={inputClass}
-                />
-                {error("company")}
-              </div>
-              <WebsiteBudget
-                branch={branch}
-                initialInterest={initialInterest}
-                error={
-                  invalidFields.has("budget") ? fieldErrors.budget : undefined
-                }
-              >
-                <div>
-                  <label htmlFor="interest" className="text-sm font-semibold">
-                    {branch === "consulting"
-                      ? "Area of Interest"
-                      : "What can we help with?"}{" "}
-                    <span className="font-normal">(required)</span>
-                  </label>
-                  <select
-                    {...props("interest")}
-                    required
-                    defaultValue={initialInterest}
-                    className={inputClass}
-                  >
-                    <option value="" disabled>
-                      Select an option
-                    </option>
-                    {interests[branch].map((interest) => (
-                      <option key={interest}>{interest}</option>
-                    ))}
-                  </select>
-                  {error("interest")}
-                </div>
-              </WebsiteBudget>
-              {branch === "websites" && (
-                <div>
-                  <label htmlFor="website" className="text-sm font-semibold">
-                    Existing Website URL{" "}
-                    <span className="font-normal">(optional)</span>
-                  </label>
-                  <input
-                    {...props("website")}
-                    type="url"
-                    autoComplete="url"
-                    placeholder="https://"
-                    maxLength={contactLimits.website}
-                    className={inputClass}
-                  />
-                  {error("website")}
-                </div>
-              )}
-              <div>
-                <label htmlFor="message" className="text-sm font-semibold">
-                  Message <span className="font-normal">(required)</span>
-                </label>
-                <textarea
-                  {...props("message")}
-                  rows={6}
-                  required
-                  minLength={contactLimits.messageMin}
-                  maxLength={contactLimits.messageMax}
-                  className={inputClass}
-                />
-                {error("message")}
-              </div>
-              <p className="text-sm leading-relaxed text-muted">
-                We use these details to respond to your enquiry. Read our{" "}
-                <a href="/privacy" className="underline underline-offset-4">
-                  privacy notice
-                </a>
-                .
+          <div className={styles.heroCopy}>
+            <p>{config.introduction}</p>
+            <div className={styles.contactMeta}>
+              <p className={styles.responseTime}>
+                We usually reply within 2-3 business days
               </p>
-            </ContactForm>
-          )}
-          {sent && (
-            <Toast
-              message="Message Sent. The delivery details are shown in the form."
-              returnFocusId="contact-result"
-            />
-          )}
-          {sent && (
-            <AnimatedLink href="/" className="min-h-12">
-              Return to {family[branch].name}
-            </AnimatedLink>
-          )}
-        </div>
-      </div>
-    </Container>
+            </div>
+          </div>
+        </header>
+      </ContactExperience>
+    </>
   );
 }

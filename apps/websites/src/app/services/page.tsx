@@ -18,7 +18,6 @@ export default function Page() {
   return (
     <>
       <PageHero
-        eyebrow="Website Services"
         title="Website Design and Ongoing Care"
 
         actions={<ButtonLink href="/contact">Start a Project</ButtonLink>}
@@ -29,7 +28,6 @@ export default function Page() {
       </PageHero>
       <Section className="border-b border-border">
         <SectionHeading
-          eyebrow="A Practical Starting Point"
           title={`One-Page Websites From ${websiteStarter.price}`}
         >
           {websiteStarter.description}
@@ -52,10 +50,7 @@ export default function Page() {
       </Section>
       <Services />
       <Section>
-        <SectionHeading
-          eyebrow="Agreeing the Scope"
-          title="Decide What to Build First"
-        >
+        <SectionHeading title="Decide What to Build First">
           We work out what needs to launch now and what can wait. Hosting,
           maintenance, integrations, and ongoing changes are discussed
           explicitly.

@@ -9,13 +9,24 @@
     "./media": "./src/media.tsx",
     "./error-state": "./src/error-state.tsx",
     "./primitives": "./src/primitives.tsx",
-    "./capability-content": "./src/capability-content.ts"
+    "./capability-content": "./src/capability-content.ts",
+    "./info-tip": "./src/info-tip.tsx",
+    "./contact-input": "./src/contact-input.ts",
+    "./contact-name-help": "./src/contact-name-help.tsx",
+    "./required-mark": "./src/required-mark.tsx",
+    "./contact-experience": "./src/contact/contact-experience.tsx",
+    "./contact-model": "./src/contact/contact-model.ts",
+    "./contact-phone": "./src/contact/contact-phone.ts",
+    "./contact-navigation": "./src/contact/contact-navigation.tsx",
+    "./contact.module.css": "./src/contact/contact.module.css"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.27.20",
     "@motchi/brand": "*",
+    "@motchi/config": "*",
     "@motchi/email": "*",
     "react-icons": "5.7.0",
-    "@motchi/config": "*"
+    "libphonenumber-js": "^1.13.15"
   },
   "peerDependencies": {
     "next": ">=16 <17",

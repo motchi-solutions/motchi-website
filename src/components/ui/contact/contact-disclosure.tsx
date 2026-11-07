@@ -5,11 +5,13 @@ import styles from "./contact.module.css";
 export function ContactDisclosure({
   title,
   children,
+  defaultOpen = false,
 }: {
   title: string;
   children: ReactNode;
+  defaultOpen?: boolean;
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(defaultOpen);
   const id = useId();
   return (
     <div className={styles.serviceDetails}>

@@ -1,6 +1,6 @@
 # Dependency inventory and audit
 
-Inventory refreshed and npm advisory audit run: **2026-11-06 (America/Toronto)**.
+Inventory refreshed and npm advisory audit run: **2026-11-07 (America/Toronto)**.
 
 Direct dependency versions and runtime/tooling classification come from [package-lock.json](../package-lock.json). The lockfile records the complete transitive tree; this document lists only direct dependencies. Use the Node 26 runtime in `.nvmrc` (26.12.1) and npm 11 or newer. The manifest permits Node >=24.22.1 <27; tests use Node native TypeScript support.
 
@@ -33,6 +33,18 @@ Runtime dependencies support the single Next.js application; owners marked `dev`
 No unused direct dependency or deprecated direct API requiring replacement was identified in the source-import review. Existing Motchi controls cover the current micro-interactions; no Interior.dev source or dependencies are installed. Recheck usage and advisories when changing dependencies.
 
 The application pins Next 16 and React 19; review major upgrades together. Multiple PostCSS versions are transitive constraints, not separate applications. Keep server-only guards around trusted configuration and email code.
+
+## Local diagram tooling
+
+[Stack Diagram](https://github.com/caru-ini/stack-diagram), MIT, is installed in the local Codex skills directory, outside the application dependency tree. Reviewed source: `1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838`, path `skills/stack-diagram`. Future installations should use the standard skill installer with this pinned ref and repeat the review before execution. The repository does not require the skill to run or build.
+
+The [application diagram](diagrams/application.html) uses the skill's geometry/template conventions, a bundled generic visitor SVG pictogram, and official Next.js, React, and Brevo logos embedded as data images, with the MIT notice embedded in the HTML. It uses system fonts; no bundled fonts or font packages are included. Initial generation executed only `scripts/build.py`: standard-library Python, explicit local input/icon/output paths, no network, subprocesses, credentials, or upload behavior. Subsequent geometry and logo updates are manually authored. Logo sources are [Next.js](https://nextjs.org/favicon.ico), [React](https://react.dev/images/brand/logo_dark.svg), and [Brevo](https://corp-backend.brevo.com/wp-content/uploads/2025/07/Brevo_logo.svg); brand marks remain their owners' trademarks. The finished HTML has no scripts or external asset requests.
+
+Reviewed but unused: `fetch_icons.py` (public logo GETs; arbitrary explicit URLs and redirects need per-use review), `render_png.py` (Playwright/Chromium and a font-detection subprocess; passes `--no-sandbox`, so do not execute unchanged), and `share.py` (gallery requests and a local gallery key store). No Playwright/Python packages were installed. Local browser verification uses an isolated temporary profile and blocks external page requests. The gallery helper remains disabled under [AGENT_SECURITY.md](AGENT_SECURITY.md#stack-diagram).
+
+## Repository agent skills
+
+See [SKILLS.md](SKILLS.md) for installed skill purposes, modes, provenance, licenses, executable helpers, and network capabilities. Agent skills are outside the application dependency tree; their presence does not authorize execution or external access.
 
 ## Refreshing this document
 

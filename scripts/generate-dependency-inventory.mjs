@@ -167,6 +167,13 @@ lines.push(
 );
 lines.push(
   "",
+  ..."## Local diagram tooling\n\n[Stack Diagram](https://github.com/caru-ini/stack-diagram), MIT, is installed in the local Codex skills directory, outside the application dependency tree. Reviewed source: `1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838`, path `skills/stack-diagram`. Future installations should use the standard skill installer with this pinned ref and repeat the review before execution. The repository does not require the skill to run or build.\n\nThe [application diagram](diagrams/application.html) uses the skill's geometry/template conventions and three bundled generic SVG pictograms, with the MIT notice embedded in the HTML. It uses system fonts; no bundled fonts or font packages are included. Only `scripts/build.py` was executed: standard-library Python, explicit local input/icon/output paths, no network, subprocesses, credentials, or upload behavior. The finished HTML has no scripts or external asset requests.\n\nReviewed but unused: `fetch_icons.py` (public logo GETs; arbitrary explicit URLs and redirects need per-use review), `render_png.py` (Playwright/Chromium and a font-detection subprocess; passes `--no-sandbox`, so do not execute unchanged), and `share.py` (gallery requests and a local gallery key store). No Playwright/Python packages were installed. Local browser verification uses an isolated temporary profile and blocks external page requests. The gallery helper remains disabled under [AGENT_SECURITY.md](AGENT_SECURITY.md#stack-diagram).".split(
+    "\n",
+  ),
+  "",
+);
+lines.push(
+  "",
   "## Refreshing this document",
   "",
   "After dependency changes, update the root lockfile, then run:",

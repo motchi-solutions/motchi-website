@@ -35,7 +35,7 @@ export function BranchMark({
                     height={asset.height}
                     alt=""
                     unoptimized
-                    priority
+                    loading="eager"
                     data-active={branch === identity}
                   />
                 )
@@ -51,7 +51,7 @@ export function BranchMark({
             height={logo.height}
             alt=""
             unoptimized
-            priority
+            loading="lazy"
             className="h-11 w-11 object-contain"
           />
         )

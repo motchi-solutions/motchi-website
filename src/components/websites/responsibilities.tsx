@@ -1,12 +1,9 @@
-import { Section, SectionHeading } from "../ui/index.ts";
+import styles from "./landing.module.css";
 export function WebsiteResponsibilities() {
   return (
-    <Section className="border-t border-border">
-      <SectionHeading title="Your Scope, Responsibilities, and Support">
-        We agree on what your website needs, who does what, and what support
-        comes after launch.
-      </SectionHeading>
-      <dl className="section-cards grid md:grid-cols-3">
+    <div className={styles.agreement}>
+      <h4>Agreed Before Work Starts</h4>
+      <dl>
         {[
           [
             "Content & Ownership",
@@ -14,19 +11,19 @@ export function WebsiteResponsibilities() {
           ],
           [
             "Scope & Review",
-            "Which pages and customer flows are included, how feedback is collected, and how changes are agreed.",
+            "Pages, customer flows, pricing, revisions, and how feedback and changes are agreed.",
           ],
           [
             "Launch & Support",
-            "Who manages the domain, hosting, and connected tools, and what support is included after launch.",
+            "Who manages the domain, hosting, and connected tools, plus maintenance coverage, costs, and response times.",
           ],
         ].map(([title, text]) => (
-          <div key={title} className="border-t border-border pt-6">
-            <dt className="text-h3 font-medium">{title}</dt>
-            <dd className="mt-4 leading-relaxed text-muted">{text}</dd>
+          <div key={title}>
+            <dt>{title}</dt>
+            <dd>{text}</dd>
           </div>
         ))}
       </dl>
-    </Section>
+    </div>
   );
 }

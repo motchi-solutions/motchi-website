@@ -42,7 +42,11 @@ npm run format:check
 
 The single header links to Websites, Consulting, Products, About and Contact. The Websites and Consulting pages use an animated right-edge section navigator instead of dropdowns. The full portfolio is linked from Websites. The header identity follows the current branch; its logo always returns to the company homepage. `/services` remains the company-wide overview, linked as All Services in the footer.
 
+The initial family intro selects MS, MW or MC once from the initial pathname. Client navigation updates the header identity without replaying the intro.
+
 Marketing pages render on the server; interactive navigation, motion and forms use client components. Keep branch compositions distinct while reusing controls and tokens. Navigation and sitemap route lists live in `src/lib/config/navigation.ts`; site identity and the default origin live in `sites.ts`. The site currently blocks indexing until publication is intended; robots rules are not access control.
+
+The [local application diagram](docs/diagrams/application.html) shows server/client boundaries and the contact/email path. Open the self-contained HTML in a browser; it makes no network requests. Keep it aligned with the contact components and server handlers when those boundaries change.
 
 ## Environment and contact
 
@@ -52,6 +56,10 @@ Copy `.env.example` to `.env.local` at the root. Never commit filled environment
 
 The four-step wizard lives in `src/components/ui/contact`; `contact-config.ts` owns choices, questions and topic aliases. `ContactPageContent` supplies signed tokens and results. The wizard requires JavaScript and offers direct email without it. Draft saving is opt-in and expires after three days. Preserve the full optional message for editing; validate its 2,000-character limit on blur/navigation. Failed requests retain answers; confirmed or partial delivery clears saved drafts. Mock email in UI/CI tests and use controlled inboxes for real delivery checks.
 
+Project records live in `src/content/websites/projects.json`. Server-rendered pages and `GET /api/projects` share the async `getProjects()` data boundary; replace its file read when adopting a database.
+
+Websites and Consulting reuse the wizard's service questions in their enquiry sections. Continue carries only allowlisted service choices in the URL and opens Contact at step two; personal contact details never belong in these links. The main form's first step explicitly asks Websites or Consulting; branch links preselect that choice. The selected type controls services and project questions, stays in the saved draft and review, and determines submission routing.
+
 Edit approved project, service and process records in `src/content/websites` and `src/content/consulting`; company products live directly in `src/content`. Use actual image dimensions, useful alt text, approved URLs and original SVG marks. Next discovers icons, manifests and social images through app file conventions.
 
-See [DEPENDENCIES.md](docs/DEPENDENCIES.md) for the direct inventory, [AUDIT.md](docs/AUDIT.md) for maintenance concerns, [AGENTS.md](AGENTS.md) for persistent design constraints, [CONTRIBUTING.md](CONTRIBUTING.md) for contribution access and [SECURITY.md](SECURITY.md) for vulnerability reporting. The existing [license](LICENSE) applies.
+See [DEPENDENCIES.md](docs/DEPENDENCIES.md) for the direct inventory, [AUDIT.md](docs/AUDIT.md) for maintenance concerns, [AGENTS.md](AGENTS.md) for persistent agent constraints, [AGENT_SECURITY.md](docs/AGENT_SECURITY.md) for mandatory third-party executable review, [CONTRIBUTING.md](CONTRIBUTING.md) for contribution access and [SECURITY.md](SECURITY.md) for vulnerability reporting. The existing [license](LICENSE) applies.

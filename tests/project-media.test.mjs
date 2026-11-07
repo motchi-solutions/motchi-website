@@ -1,11 +1,11 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { test } from "node:test";
-import { projects } from "../src/content/websites/projects.ts";
+import { getProjects } from "../src/content/websites/projects.ts";
 
 const publicRoot = new URL("../public/", import.meta.url);
 test("approved project assets exist and configured PNG dimensions match the files", async () => {
-  for (const project of projects) {
+  for (const project of await getProjects()) {
     for (const slot of ["desktop", "mobile", "logo"]) {
       const asset = project.media[slot];
       assert.ok(asset, `${project.id}: missing ${slot}`);

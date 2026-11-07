@@ -6,6 +6,7 @@ export function branchHref(branch: ServiceBranch, href: string): string {
   if (!href.startsWith("/") || href.startsWith("//")) return href;
   const url = new URL(href, "https://motchi.invalid");
   if (url.pathname === "/contact") {
+    url.searchParams.set("branch", branch);
     if (!url.searchParams.has("topic"))
       url.searchParams.set(
         "topic",
@@ -25,6 +26,7 @@ export function branchHref(branch: ServiceBranch, href: string): string {
 }
 
 export const mainNavigation: NavigationItem[] = [
+  { label: "Home", href: "/" },
   { label: "Websites", href: "/websites" },
   { label: "Consulting", href: "/consulting" },
   { label: "Products", href: "/products" },
@@ -36,9 +38,8 @@ export const websiteSections = [
   { id: "overview", label: "Overview" },
   { id: "work", label: "Selected Work" },
   { id: "services", label: "Services" },
-  { id: "pricing", label: "Pricing & Care" },
+  { id: "pricing", label: "Pricing & Maintenance" },
   { id: "process", label: "How We Work" },
-  { id: "about", label: "About" },
   { id: "enquiry", label: "Start a Project" },
 ];
 export const consultingSections = [

@@ -7,32 +7,42 @@ export type WebsiteService = {
 export const services = [
   {
     id: "design-development",
-    title: "Design & Development",
+    title: "Design & Content",
     summary:
-      "A new website or a redesign that reflects your business and helps customers find what they need.",
+      "Design, words, and visuals shaped around your brand. Clear, responsive layouts that work on phones, tablets, and desktops.",
     details: [
-      "Plan the pages, content, and a responsive design that fits your business.",
-      "Build and review the pages and steps your customers will use.",
+      "Plan the pages and customer journey, with clear navigation and content that sounds like your business.",
+      "Create responsive layouts around your brand, photographs, and content. We agree on who writes, supplies, and approves each part.",
+    ],
+  },
+  {
+    id: "full-stack-websites",
+    title: "Full-Stack Websites",
+    summary:
+      "We build the pages customers see and the systems behind them, from bookings and reservations to menu management and custom features.",
+    details: [
+      "Build the customer-facing website alongside the server-side features, data, and management tools your project needs.",
+      "Plan and test the whole experience, from a customer's first visit to how your team receives and manages their request.",
     ],
   },
   {
     id: "booking-integrations",
-    title: "Booking & Integrations",
+    title: "Connected Tools & Workflows",
     summary:
-      "Connect booking, enquiries, and purchases with the tools behind your business.",
+      "Connect your website to the tools you already use, so enquiries, bookings, and payments reach the right place.",
     details: [
-      "Plan the steps customers take and how booking or enquiry details reach your team.",
-      "Connect the tools we agree on and explain which accounts and access are needed.",
+      "Connect the agreed booking, reservation, payment, or business tools, and explain which accounts and access are needed.",
+      "Make the handoff between your website and your team easier, with custom integrations where existing tools don't quite fit.",
     ],
   },
   {
     id: "continued-support",
-    title: "Maintenance & Ongoing Care",
+    title: "Maintenance & Support",
     summary:
-      "Keep running your business while we take care of the agreed website maintenance, updates, and technical support.",
+      "Keep your website up to date after launch, with content changes, technical upkeep, and support as your business grows.",
     details: [
-      "Check accessibility, loading speed, and basic search setup before launch.",
-      "Choose a care plan for hosting, routine maintenance, and content updates. We explain the costs and when to expect a response.",
+      "Check accessibility, loading speed, and basic search setup before launch, with a handover that helps you use your website.",
+      "Agree on hosting, maintenance, and ongoing support. We explain what's covered, what it costs, and when to expect a response.",
     ],
   },
 ] satisfies WebsiteService[];

@@ -8,15 +8,16 @@ import {
   Section,
   SectionHeading,
 } from "../ui/index.ts";
-import { projects } from "../../content/websites/projects.ts";
+import { getProjects } from "../../content/websites/projects.ts";
 import { ProjectPreview } from "./project-preview.tsx";
-export function Work({
+export async function Work({
   featuredOnly = false,
   skipFirst = false,
 }: {
   featuredOnly?: boolean;
   skipFirst?: boolean;
 }) {
+  const projects = await getProjects();
   return (
     <Section id="work">
       <SectionHeading
@@ -50,6 +51,7 @@ export function Work({
                 <Eyebrow>{project.industry}</Eyebrow>
                 {project.media.logo && (
                   <Image
+                    loading="lazy"
                     src={project.media.logo.src}
                     alt=""
                     width={project.media.logo.width}
@@ -93,7 +95,12 @@ export function Work({
                 )}
                 <div className="content-action flex flex-wrap items-center gap-4 empty:hidden">
                   {project.url && (
-                    <ButtonLink href={project.url} secondary>
+                    <ButtonLink
+                      href={project.url}
+                      secondary
+                      target="_blank"
+                      aria-label={`Visit ${project.title} (opens in a new tab)`}
+                    >
                       Visit {project.title}
                     </ButtonLink>
                   )}

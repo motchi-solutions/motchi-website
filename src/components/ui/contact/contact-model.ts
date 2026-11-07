@@ -5,7 +5,11 @@ import {
 } from "./contact-phone.ts";
 import type { Branch } from "../../../lib/brand.ts";
 import { contactContextLimit } from "../../../lib/config/validation.ts";
-import { getContactConfiguration } from "./contact-config.ts";
+import {
+  websiteTiers,
+  productNames,
+  getContactConfiguration,
+} from "./contact-config.ts";
 export {
   services,
   serviceDescriptions,
@@ -13,6 +17,9 @@ export {
   questions,
 } from "./contact-config.ts";
 export type ContactDraft = {
+  enquiryType: "" | "websites" | "consulting" | "products";
+  websiteTier: string;
+  productName: string;
   services: string[];
   details: Record<string, string[]>;
   business: string;
@@ -36,6 +43,9 @@ export function initialDraft(
   const { services, topicAliases: aliases } = getContactConfiguration(branch);
   const service = topic ? (aliases[topic] ?? topic) : "";
   return {
+    enquiryType: branch === "solutions" ? "" : branch,
+    websiteTier: "",
+    productName: "",
     services: services.includes(service) ? [service] : [],
     details: {},
     business: "",
@@ -57,9 +67,16 @@ export function validateContact(
   step: number,
 ): ContactErrors {
   const errors: ContactErrors = {};
-  if (step === 0 && !draft.services.length)
-    errors.services = "Please select a service, or choose Not Sure Yet.";
-  if (step === 1) {
+  if (step === 0) {
+    if (!draft.enquiryType)
+      errors.enquiryType = "Please choose Websites, Consulting, or Products.";
+    else if (!draft.services.length)
+      errors.services =
+        draft.enquiryType === "products"
+          ? "Please select a topic, or choose Something else."
+          : "Please select a service, or choose I'm not sure.";
+  }
+  if (step === 1 && draft.enquiryType !== "products") {
     if (!draft.business)
       errors.business =
         "Please choose what best describes your project or organization.";
@@ -70,6 +87,8 @@ export function validateContact(
         "Please choose a starting time, or choose Flexible / just exploring.";
   }
   if (step === 2) {
+    if (draft.enquiryType === "products" && !draft.context.trim())
+      errors.context = "Please tell us about your question or idea.";
     if (draft.context.length > contactContextLimit)
       errors.context = "Please use 2,000 characters or fewer.";
     if (!isContactName(draft.name)) errors.name = "Please enter a valid name.";
@@ -77,13 +96,16 @@ export function validateContact(
       errors.email = draft.email.trim()
         ? "Please enter a valid email address."
         : "Please enter your email address.";
-    if (draft.phone || draft.phoneCountryCode) {
+    if (
+      draft.enquiryType !== "products" &&
+      (draft.phone || draft.phoneCountryCode)
+    ) {
       if (!isPhoneCallingCode(draft.phoneCountryCode))
         errors.phoneCountryCode = "Please enter a valid country code.";
       if (!/^[0-9]{1,12}$/.test(draft.phone))
         errors.phone = "Please enter a valid phone number.";
     }
-    if (draft.website.trim()) {
+    if (draft.enquiryType !== "products" && draft.website.trim()) {
       try {
         const url = new URL(draft.website);
         if (
@@ -116,14 +138,20 @@ export type SavedContactDraft = {
 export function hasContactProgress(draft: ContactDraft) {
   return (
     draft.services.length > 0 ||
+    (draft.enquiryType === "websites" && draft.websiteTier.length > 0) ||
     Object.entries(draft).some(
       ([key, value]) =>
         key !== "services" &&
         key !== "details" &&
+        key !== "enquiryType" &&
+        key !== "websiteTier" &&
         typeof value === "string" &&
         value.length > 0,
     )
   );
+}
+export function contactStepIndices(draft: ContactDraft): number[] {
+  return draft.enquiryType === "products" ? [0, 2, 3] : [0, 1, 2, 3];
 }
 export function canVisitContactStep(
   draft: ContactDraft,
@@ -131,10 +159,11 @@ export function canVisitContactStep(
   target: number,
 ) {
   return (
-    target <= current ||
-    Array.from({ length: target }, (_, index) =>
-      validateContact(draft, index),
-    ).every((errors) => Object.keys(errors).length === 0)
+    contactStepIndices(draft).includes(target) &&
+    (target <= current ||
+      Array.from({ length: target }, (_, index) =>
+        validateContact(draft, index),
+      ).every((errors) => Object.keys(errors).length === 0))
   );
 }
 // Storage is untrusted: restore only this schema and known choices.
@@ -143,7 +172,6 @@ export function parseContactDraft(
   now = Date.now(),
   branch: Branch = "solutions",
 ): SavedContactDraft | null {
-  const { services, followUps, questions } = getContactConfiguration(branch);
   if (!raw) return null;
   try {
     const saved = JSON.parse(raw);
@@ -161,6 +189,16 @@ export function parseContactDraft(
       return null;
     const source = saved.draft;
     if (
+      source?.enquiryType !== undefined &&
+      !["", "websites", "consulting", "products"].includes(source.enquiryType)
+    )
+      return null;
+    const enquiryType =
+      source?.enquiryType ?? (branch === "solutions" ? "" : branch);
+    const { services, followUps, questions } = getContactConfiguration(
+      enquiryType || branch,
+    );
+    if (
       !source ||
       typeof source !== "object" ||
       !Array.isArray(source.services) ||
@@ -173,6 +211,23 @@ export function parseContactDraft(
     )
       return null;
     const draft = initialDraft(undefined, branch);
+    draft.enquiryType = enquiryType;
+    if (source.websiteTier !== undefined) {
+      if (
+        source.websiteTier !== "" &&
+        !websiteTiers.includes(source.websiteTier)
+      )
+        return null;
+      draft.websiteTier = source.websiteTier;
+    }
+    if (source.productName !== undefined) {
+      if (
+        !productNames.includes(source.productName) &&
+        source.productName !== ""
+      )
+        return null;
+      draft.productName = source.productName;
+    }
     draft.services = [
       ...new Set<string>(
         source.services.map((service: string) =>
@@ -199,8 +254,21 @@ export function parseContactDraft(
         (key !== "context" && source[key].length > limit)
       )
         return null;
+      if (
+        key === "business" &&
+        [
+          "Small business",
+          "Growing business",
+          "Established organization",
+        ].includes(source[key])
+      ) {
+        draft.business = "Business";
+        continue;
+      }
       if (key === "stage") {
         const previousStages: Record<string, string> = {
+          "Just exploring": "Exploring an idea",
+          "I have an idea": "Exploring an idea",
           "I know what I need": "I know where to start",
           "I know what needs to be done": "I know where to start",
           "I already have something that needs improvement":
@@ -281,7 +349,10 @@ export function parseContactDraft(
       version: 1,
       branch,
       updatedAt: saved.updatedAt,
-      step: Math.min(saved.step, firstIncomplete),
+      step: Math.min(
+        contactStepIndices(draft).includes(saved.step) ? saved.step : 0,
+        firstIncomplete,
+      ),
       draft,
     };
   } catch {

@@ -36,7 +36,9 @@
   min-height: 3rem;
 }
 .primary-navigation-link.nav-contact {
-  padding: 0.75rem 1.5rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 1.25rem;
+  line-height: 1.25;
   border: 1px solid var(--brand-primary);
   border-radius: var(--radius-control);
 }
@@ -46,17 +48,20 @@
   right: 0;
   z-index: 35;
   width: min(17rem, calc(100dvw - 2rem));
-  transform: translate(100%, -50%);
+  transform: translate(12px, -50%);
+  opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transition:
     transform var(--motion-hover) var(--ease-hover),
-    visibility var(--motion-hover);
+    opacity var(--motion-hover) var(--ease-hover),
+    visibility 0s var(--motion-hover);
 }
 .section-navigation[data-visible="true"] {
   transform: translate(0, -50%);
   visibility: visible;
-  pointer-events: auto;
+  opacity: 1;
+  transition-delay: 0s;
 }
 .section-navigation-drawer {
   display: flex;
@@ -69,25 +74,39 @@
   transform: translateX(0);
 }
 .section-navigation-handle {
+  position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.35rem;
+  isolation: isolate;
   width: 2.75rem;
-  height: 4.5rem;
+  min-height: 6rem;
+  padding: 0;
   flex-shrink: 0;
+  color: var(--brand-primary);
+  transition: color var(--motion-hover) var(--ease-hover);
+}
+/* A slim visible tab inside a full 44px pointer and keyboard target. */
+.section-navigation-handle::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 0 0.75rem;
+  z-index: -1;
   border: 1px solid var(--border);
   border-right: 0;
   border-radius: 0.5rem 0 0 0.5rem;
   background: var(--surface);
-  color: var(--brand-primary);
-  font-size: 0.7rem;
+  transition:
+    background-color var(--motion-hover) var(--ease-hover),
+    border-color var(--motion-hover) var(--ease-hover);
 }
-.section-navigation-handle svg {
+.section-navigation-handle .section-navigation-chevron {
+  margin-left: 0.75rem;
   transition: transform var(--motion-hover) var(--ease-hover);
 }
-.section-navigation[data-open="true"] .section-navigation-handle svg {
+.section-navigation[data-open="true"]
+  .section-navigation-handle
+  .section-navigation-chevron {
   transform: rotate(180deg);
 }
 .section-navigation nav {
@@ -99,15 +118,20 @@
   padding: 0.75rem;
   border: 1px solid var(--border);
   border-right: 0;
-  border-radius: 0.5rem 0 0 0.5rem;
+  border-radius: 0;
   background: var(--surface);
-  box-shadow: 0 0.5rem 1.5rem -1rem var(--charcoal);
 }
-.section-navigation nav > p {
+.section-navigation[data-visible="true"] .section-navigation-handle,
+.section-navigation[data-visible="true"][data-open="true"] nav {
+  pointer-events: auto;
+}
+.section-navigation-title {
   margin: 0 0 0.5rem;
-  padding: 0.35rem 0.5rem;
+  padding: 0.4rem 0.5rem 0.8rem;
+  border-bottom: 1px solid var(--border);
   font-size: var(--type-reading-small);
-  color: var(--muted);
+  font-weight: 600;
+  color: var(--foreground);
 }
 .section-navigation li + li {
   margin-top: 0.2rem;
@@ -120,6 +144,9 @@
   border: 1px solid transparent;
   border-radius: 0.25rem;
   font-size: var(--type-reading-small);
+  transition:
+    background-color var(--motion-hover) var(--ease-hover),
+    color var(--motion-hover) var(--ease-hover);
 }
 .section-navigation a[aria-current="location"] {
   border-color: var(--border-selected);
@@ -134,7 +161,7 @@
   outline-offset: 3px;
 }
 .section-navigation a:active,
-.section-navigation-handle:active {
+.section-navigation-handle:active::before {
   background: var(--background);
   transition-duration: 100ms;
 }
@@ -143,7 +170,7 @@
 }
 @media (hover: hover) and (pointer: fine) {
   .section-navigation a:hover,
-  .section-navigation-handle:hover {
+  .section-navigation-handle:hover::before {
     background: var(--background);
     color: var(--brand-primary);
   }
@@ -157,7 +184,10 @@
   .header-brand-label > span,
   .section-navigation,
   .section-navigation-drawer,
-  .section-navigation-handle svg {
+  .section-navigation a,
+  .section-navigation-handle,
+  .section-navigation-handle::before,
+  .section-navigation-handle .section-navigation-chevron {
     transition: none;
   }
 }
@@ -165,5 +195,29 @@
   .section-navigation a:focus-visible,
   .section-navigation-handle:focus-visible {
     outline-color: Highlight;
+  }
+}
+
+@media (max-width: 639px) {
+  .section-navigation {
+    top: auto;
+    bottom: 1rem;
+    transform: translateX(12px);
+  }
+  .section-navigation[data-visible="true"] {
+    transform: translateX(0);
+  }
+  .section-navigation-drawer {
+    align-items: flex-end;
+  }
+  .section-navigation-handle {
+    min-height: 3.5rem;
+  }
+
+  body:has([data-analytics-context="MW"], [data-analytics-context="MC"])
+    .site-header
+    > div
+    > div {
+    flex-wrap: wrap;
   }
 }

@@ -1,0 +1,339 @@
+/* Hallmark: Motchi Consulting; structured editorial groups and original MC identity. */
+/* Critique: lead with business problems and tangible implementation, not a wall of disclosures. */
+.hero {
+  padding-block: clamp(3rem, 6vw, 6rem);
+  background: var(--brand-primary);
+  color: var(--inverse);
+}
+.heroLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.7fr);
+  gap: clamp(3rem, 7vw, 8rem);
+  align-items: center;
+  max-width: 86rem;
+  margin-inline: auto;
+}
+.introduction {
+  min-width: 0;
+}
+.identity {
+  margin-bottom: 2rem;
+  text-align: left;
+  align-items: flex-start;
+}
+.introduction h1 {
+  font-size: clamp(2.75rem, 4.7vw, 5rem);
+  line-height: 1.06;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  overflow-wrap: break-word;
+}
+.heroCopy {
+  max-width: 65ch;
+  margin-top: 1.75rem;
+  font-size: var(--type-reading-body);
+  line-height: var(--type-reading-leading);
+  color: color-mix(in srgb, var(--inverse) 85%, transparent);
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+.heroAside {
+  padding-left: clamp(1.5rem, 3vw, 3rem);
+  border-left: 1px solid color-mix(in srgb, var(--gold) 50%, transparent);
+}
+.mark {
+  width: 8rem;
+  height: 8rem;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-radius: 0.25rem 0.25rem 2rem 0.25rem;
+  background: var(--cream);
+}
+.mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.heroAside h2 {
+  max-width: 100%;
+  font-size: clamp(1.5rem, 2.3vw, 2rem);
+  line-height: 1.25;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+.heroAside > p {
+  max-width: 100%;
+  margin-top: 1.25rem;
+  font-size: var(--type-reading-small);
+  line-height: var(--type-reading-leading);
+  color: color-mix(in srgb, var(--inverse) 80%, transparent);
+}
+.capabilities {
+  padding-block: var(--space-section);
+}
+.sectionHeading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.5rem 4rem;
+  align-items: end;
+  margin-bottom: 3rem;
+}
+.sectionHeading h2 {
+  max-width: 100%;
+  font-size: var(--text-h2);
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  font-weight: 500;
+  text-wrap: balance;
+}
+.sectionHeading > p {
+  max-width: 100%;
+  font-size: var(--type-reading-body);
+  line-height: var(--type-reading-leading);
+  color: var(--muted);
+}
+.groups {
+  max-width: 90rem;
+  margin-inline: auto;
+}
+.capabilityGroup {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem 3rem;
+  padding-block: 2.75rem;
+  border-top: 1px solid var(--border);
+}
+.capabilityGroup:last-child {
+  padding-bottom: 0;
+}
+.capabilityGroup > h3 {
+  max-width: 100%;
+  font-size: clamp(1.4rem, 2vw, 1.875rem);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  font-weight: 500;
+  color: var(--brand-primary);
+}
+.capabilityPair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem 3rem;
+}
+.capability {
+  min-width: 0;
+}
+.capability h4 {
+  font-size: var(--type-reading-small);
+  font-weight: 600;
+}
+.problem {
+  max-width: 100%;
+  margin-top: 1rem;
+  font-size: var(--type-reading-xl);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+}
+.description {
+  max-width: 100%;
+  margin-top: 1rem;
+  font-size: var(--type-reading-body);
+  line-height: var(--type-reading-leading);
+  color: var(--muted);
+}
+.areas {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding-left: 1rem;
+  list-style: disc;
+  font-size: var(--type-reading-small);
+  line-height: 1.5;
+}
+.areas li::marker {
+  color: var(--brand-primary);
+}
+@media (max-width: 1023px) {
+  .heroLayout {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.8fr);
+    gap: 2rem;
+  }
+  .capabilityGroup {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.75rem;
+  }
+  .capabilityGroup > h3 {
+    max-width: 100%;
+  }
+  .sectionHeading {
+    gap: 2rem;
+  }
+}
+@media (max-width: 767px) {
+  .heroLayout,
+  .sectionHeading,
+  .capabilityPair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .heroLayout {
+    gap: 3rem;
+  }
+  .introduction h1 {
+    font-size: clamp(2.5rem, 8.5vw, 3.5rem);
+  }
+  .heroAside {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr);
+    gap: 1rem;
+    padding-left: 0;
+    padding-top: 1.5rem;
+    border-left: 0;
+    border-top: 1px solid color-mix(in srgb, var(--gold) 50%, transparent);
+  }
+  .mark {
+    grid-row: span 2;
+    width: 4rem;
+    height: 4rem;
+    margin: 0;
+    padding: 0.5rem;
+    border-bottom-right-radius: 1rem;
+  }
+  .heroAside h2 {
+    max-width: 24ch;
+    font-size: 1.375rem;
+  }
+  .heroAside > p {
+    grid-column: 2;
+    margin-top: 0;
+    max-width: 40ch;
+  }
+  .actions > a {
+    padding-inline: 1rem;
+  }
+  .sectionHeading {
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  .capabilityGroup {
+    padding-block: 2rem;
+  }
+  .capabilityPair {
+    gap: 2rem;
+  }
+  .capability + .capability {
+    border-top: 1px solid var(--border);
+    padding-top: 2rem;
+  }
+}
+
+.approach {
+  padding-block: var(--space-section);
+  background: var(--surface);
+}
+.journey {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin-block: 3.5rem 2.5rem;
+}
+.journey > li {
+  position: relative;
+  min-width: 0;
+  padding: 1.75rem 1.5rem 1rem 0;
+  border-top: 1px solid var(--gold);
+}
+.journey > li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  right: 1rem;
+  width: 7px;
+  height: 7px;
+  border-top: 1px solid var(--gold);
+  border-right: 1px solid var(--gold);
+  transform: rotate(45deg);
+}
+.stageNumber {
+  display: block;
+  margin-bottom: 1rem;
+  font-size: var(--type-reading-small);
+  font-variant-numeric: tabular-nums;
+  color: var(--brand-primary);
+}
+.journey h3 {
+  font-size: var(--type-reading-xl);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  overflow-wrap: break-word;
+}
+.journey p {
+  max-width: 30ch;
+  margin-top: 1rem;
+  font-size: var(--type-reading-small);
+  line-height: var(--type-reading-leading);
+  color: var(--muted);
+}
+.stageDetails {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem 4rem;
+  padding-block: 1.5rem;
+}
+.stageDetails dt {
+  font-weight: 500;
+}
+.stageDetails dd {
+  max-width: 58ch;
+  margin-top: 0.5rem;
+  font-size: var(--type-reading-small);
+  line-height: var(--type-reading-leading);
+  color: var(--muted);
+}
+@media (max-width: 1279px) {
+  .journey {
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: 2.5rem;
+  }
+  .journey > li {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 0.7fr) minmax(0, 1.3fr);
+    gap: 1rem;
+    padding: 0 0 2rem 1.5rem;
+    border-top: 0;
+    border-left: 1px solid var(--gold);
+  }
+  .journey > li:not(:last-child)::after {
+    top: auto;
+    bottom: 1rem;
+    left: -4px;
+    right: auto;
+    transform: rotate(135deg);
+  }
+  .journey > li:last-child {
+    padding-bottom: 0;
+  }
+  .journey p {
+    max-width: 50ch;
+    margin-top: 0;
+  }
+}
+@media (max-width: 767px) {
+  .journey > li {
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+    gap: 0.5rem 1rem;
+  }
+  .journey p {
+    grid-column: 2;
+  }
+  .stageNumber {
+    margin-bottom: 0;
+  }
+  .stageDetails {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+}

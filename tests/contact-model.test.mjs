@@ -20,6 +20,8 @@ test("capability links resolve to known services and ignore unknown query values
 });
 test("each step validates only its required answers", () => {
   const draft = initialDraft();
+  assert.deepEqual(Object.keys(validateContact(draft, 0)), ["enquiryType"]);
+  draft.enquiryType = "consulting";
   assert.deepEqual(Object.keys(validateContact(draft, 0)), ["services"]);
   assert.deepEqual(Object.keys(validateContact(draft, 1)), [
     "business",
@@ -59,6 +61,7 @@ test("forward navigation validates all preceding steps while back remains availa
   const draft = initialDraft();
   assert.equal(canVisitContactStep(draft, 0, 1), false);
   assert.equal(canVisitContactStep(draft, 2, 0), true);
+  draft.enquiryType = "consulting";
   draft.services = ["AI"];
   assert.equal(canVisitContactStep(draft, 0, 1), true);
   assert.equal(canVisitContactStep(draft, 0, 2), false);
@@ -83,7 +86,7 @@ test("saved drafts reject corrupt, expired, unknown, or excessive data and clamp
     draft: { ...initialDraft(), services: ["AI"] },
   };
   const parse = (value) => parseContactDraft(JSON.stringify(value), now);
-  assert.equal(parse(saved).step, 1);
+  assert.equal(parse(saved).step, 0);
   assert.equal(parse({ ...saved, version: 2 }), null);
   assert.equal(
     parse({ ...saved, updatedAt: now - contactDraftLifetime }),
@@ -232,4 +235,96 @@ test("legacy combined phones migrate without losing the saved draft", async () =
   );
   assert.equal(restored.draft.phoneCountryCode, "1");
   assert.equal(restored.draft.phone, "4165550123");
+});
+
+test("service enquiry links round-trip branch services and optional details into step two", async () => {
+  const { contactEntryHref, contactEntryFromParams } =
+    await import("../src/components/ui/contact/contact-entry.ts");
+  for (const [branch, services, details] of [
+    [
+      "websites",
+      ["New Website", "Booking & Integrations"],
+      {
+        "New Website": ["Showcase my work"],
+        "Booking & Integrations": ["Add online booking"],
+      },
+    ],
+    [
+      "consulting",
+      ["AI Adoption", "Databricks"],
+      { Databricks: ["Set up governance"] },
+    ],
+  ]) {
+    const draft = { ...initialDraft(undefined, branch), services, details };
+    const url = new URL(
+      contactEntryHref(branch, draft),
+      "https://motchi.invalid",
+    );
+    const entry = contactEntryFromParams(url.searchParams, branch);
+    assert.equal(entry.step, 1);
+    assert.deepEqual(entry.draft.services, services);
+    assert.deepEqual(entry.draft.details, details);
+    assert.deepEqual(validateContact(entry.draft, 0), {});
+    assert.equal(entry.draft.name, "");
+    assert.equal(entry.draft.email, "");
+  }
+});
+
+test("enquiry handoff ignores unknown services and details and cannot skip required selections", async () => {
+  const { contactEntryFromParams } =
+    await import("../src/components/ui/contact/contact-entry.ts");
+  const invalid = contactEntryFromParams(
+    new URLSearchParams("continue=project&service=unknown"),
+    "websites",
+  );
+  assert.equal(invalid.step, 0);
+  assert.deepEqual(invalid.draft.services, []);
+  const params = new URLSearchParams({
+    continue: "project",
+    service: "AI Adoption",
+    "detail.AI Adoption": "invalid",
+    "detail.Databricks": "Set up governance",
+  });
+  params.append("service", "AI Adoption");
+  const entry = contactEntryFromParams(params, "consulting");
+  assert.deepEqual(entry.draft.services, ["AI Adoption"]);
+  assert.deepEqual(entry.draft.details, {});
+  assert.equal(
+    contactEntryFromParams(new URLSearchParams(), "solutions", "Website").step,
+    0,
+  );
+});
+
+test("branch enquiries remain valid for the consolidated contact endpoint", async () => {
+  const { consolidatedContactSubmissionFields } =
+    await import("../src/components/ui/contact/contact-submission.ts");
+  const { getContactConfiguration } =
+    await import("../src/components/ui/contact/contact-config.ts");
+  const { validateContact: validateSubmission } =
+    await import("../src/lib/email/validation.ts");
+  for (const branch of ["websites", "consulting"]) {
+    for (const service of getContactConfiguration(branch).services) {
+      const draft = {
+        ...initialDraft(service, branch),
+        name: "Alex Morgan",
+        email: "alex@example.com",
+        website: "https://example.com",
+        budget: "$500-$1,000",
+      };
+      const fields = consolidatedContactSubmissionFields(
+        draft,
+        branch,
+        "test-token",
+      );
+      const form = new FormData();
+      for (const [key, value] of fields) form.append(key, value);
+      assert.deepEqual(
+        validateSubmission(form, "solutions").errors,
+        {},
+        `${branch}: ${service}`,
+      );
+      assert.ok(fields.get("message").includes(service));
+      assert.ok(fields.get("message").includes("https://example.com"));
+    }
+  }
 });

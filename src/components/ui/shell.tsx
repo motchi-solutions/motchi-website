@@ -1,3 +1,4 @@
+import { ContactLink } from "./contact-link.tsx";
 import { LuArrowUp } from "react-icons/lu";
 import { SiteLink } from "./site-link.tsx";
 import { getSites } from "../../lib/config/env.ts";
@@ -8,7 +9,7 @@ import { BranchMark } from "./branch-mark.tsx";
 import { HeaderEnhancements } from "./header-enhancements.tsx";
 import { MailIcon } from "./icons.tsx";
 import { MobileMenu, type NavItem } from "./mobile-menu.tsx";
-import { AnimatedLink, ButtonLink, Container } from "./primitives.tsx";
+import { AnimatedLink, Container } from "./primitives.tsx";
 
 export type { NavItem } from "./mobile-menu.tsx";
 export function Header({ items }: { items: NavItem[] }) {
@@ -26,12 +27,12 @@ export function Header({ items }: { items: NavItem[] }) {
             <ul className="primary-navigation-links">
               {items.map((item) => (
                 <li key={item.href}>
-                  <SiteLink
+                  <ContactLink
                     className={`nav-link primary-navigation-link ${item.href === "/contact" ? "nav-contact" : ""}`}
                     href={item.href}
                   >
                     {item.label}
-                  </SiteLink>
+                  </ContactLink>
                 </li>
               ))}
             </ul>
@@ -88,9 +89,14 @@ export function Footer({ branch }: { branch: Branch }) {
             <p className="mb-4 text-xs font-semibold tracking-widest uppercase text-muted">
               Let&apos;s Talk!
             </p>
-            <ButtonLink href="/contact" secondary className="mb-3">
+            <ContactLink
+              appearance="button"
+              href="/contact"
+              secondary
+              className="mb-3"
+            >
               Contact Us
-            </ButtonLink>
+            </ContactLink>
             <SiteLink
               className="animated-link flex min-h-12 items-center gap-3 text-sm"
               href={`mailto:${contactEmail}`}
@@ -113,9 +119,13 @@ export function Footer({ branch }: { branch: Branch }) {
             <AnimatedLink href="/privacy" className="min-h-11">
               Privacy
             </AnimatedLink>
-            <AnimatedLink href="/contact" className="min-h-11">
+            <ContactLink
+              appearance="animated"
+              href="/contact"
+              className="min-h-11"
+            >
               Contact
-            </AnimatedLink>
+            </ContactLink>
             <a
               href="#page-top"
               className="inline-flex min-h-11 items-center gap-2 text-primary underline-offset-4 hover:underline focus-visible:underline"

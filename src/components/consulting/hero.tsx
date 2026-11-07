@@ -1,28 +1,27 @@
+import Image from "next/image";
 import { branchHref } from "../../lib/config/navigation.ts";
 import { ButtonLink, Container, HeroBrand } from "../ui/index.ts";
+import styles from "./landing.module.css";
+
 export function Hero() {
   return (
-    <section
-      id="overview"
-      className="family-hero relative overflow-hidden bg-primary py-hero text-inverse"
-    >
+    <section id="overview" className={styles.hero}>
       <Container>
-        <div className="section-layout grid lg:grid-cols-12 lg:items-end">
-          <div className="family-hero-intro relative lg:col-span-8">
-            <HeroBrand branch="consulting" light />
-            <h1 className="text-display font-medium tracking-tight">
-              Technology Advice. <br className="hidden lg:block" />
-              <span className="font-display italic text-accent">
-                Hands-On Support.
-              </span>
+        <div className={styles.heroLayout}>
+          <div className={styles.introduction}>
+            <HeroBrand branch="consulting" light className={styles.identity} />
+            <h1>
+              Technology Advice.
+              <br />
+              Hands-On Support.
             </h1>
-            <p className="mt-7 max-w-xl text-lg leading-relaxed text-inverse/80">
+            <p className={styles.heroCopy}>
               Practical technology consulting and hands-on implementation for
               AI, data, and business systems. We start with what your team
               needs, then help put the right solution to work.
             </p>
-            <div className="family-hero-actions mt-9 flex flex-wrap gap-3">
-              <ButtonLink href={branchHref("consulting", "/contact")} light>
+            <div className={styles.actions}>
+              <ButtonLink href="#enquiry" light>
                 Start a Conversation
               </ButtonLink>
               <ButtonLink
@@ -34,17 +33,18 @@ export function Hero() {
               </ButtonLink>
             </div>
           </div>
-          <aside className="family-hero-secondary border-l border-accent/40 pl-6 lg:col-span-4">
-            <p className="text-xs tracking-widest uppercase text-accent">
-              The question comes first
-            </p>
-            <p className="mt-5 text-2xl leading-snug sm:text-3xl">
-              What is getting
-              <br className="hidden lg:block" /> in the way of{" "}
-              <br className="hidden lg:block" />
-              <span className="font-display italic">doing the work?</span>
-            </p>
-            <p className="mt-6 max-w-xs text-sm leading-relaxed text-inverse/75">
+          <aside className={styles.heroAside}>
+            <div className={styles.mark} aria-hidden="true">
+              <Image
+                src="/brand/mc-logo.svg"
+                alt=""
+                width={1095}
+                height={1095}
+                preload
+              />
+            </div>
+            <h2>What is getting in the way of doing the work?</h2>
+            <p>
               A slow process. An unclear platform decision. Data you can't
               depend on. Let's start there.
             </p>

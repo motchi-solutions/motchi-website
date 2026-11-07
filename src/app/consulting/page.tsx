@@ -1,6 +1,6 @@
 import { pageMetadata } from "../../lib/config/metadata.ts";
 import { consultingSections } from "../../lib/config/navigation.ts";
-import { ContactCTA } from "../../components/ui/index.ts";
+import { ServiceEnquiry } from "../../components/ui/contact/service-enquiry.tsx";
 import { SectionNavigation } from "../../components/ui/section-navigation.tsx";
 import { Hero } from "../../components/consulting/hero.tsx";
 import { Capabilities } from "../../components/consulting/capabilities.tsx";
@@ -22,13 +22,7 @@ export default function Consulting() {
       <Approach />
       <ConsultingResponsibilities />
       <ConsultingAbout />
-      <div id="enquiry">
-        <ContactCTA
-          href="/contact?topic=Consulting"
-          action="Start a Conversation"
-          title="Let's Plan Your Next Step"
-        />
-      </div>
+      <ServiceEnquiry branch="consulting" />
     </>
   );
 }

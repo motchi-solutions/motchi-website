@@ -13,7 +13,7 @@ import {
   LuArrowRight,
   LuMousePointerClick,
 } from "react-icons/lu";
-import { ButtonLink, Container } from "./ui/primitives.tsx";
+import { ButtonLink, Container, Eyebrow } from "./ui/primitives.tsx";
 import { products } from "@/content/products";
 import { ProductAlbum } from "./product-album.tsx";
 import { productGateTiming, useProductGate } from "./use-product-gate.ts";
@@ -240,6 +240,7 @@ export function ProductsHero() {
       <Container>
         <div className={`${styles.layout} ${hero.frame}`}>
           <header className={`page-introduction ${hero.introduction}`}>
+            <Eyebrow>Motchi Products</Eyebrow>
             <h1 className="text-h2 font-medium tracking-tight">
               Products We're Building
             </h1>
@@ -404,7 +405,7 @@ export function ProductsHero() {
                             width={product.logo.width}
                             height={product.logo.height}
                             sizes="(max-width: 767px) 120px, 160px"
-                            priority
+                            loading="eager"
                             draggable={false}
                             className={styles.doorLogo}
                           />
@@ -489,7 +490,9 @@ export function ProductsHero() {
               </div>
               <div className={styles.productActions} data-entry-reveal="">
                 <div key={product.name} className={styles.copyReveal}>
-                  <ButtonLink href="/contact?topic=Products">
+                  <ButtonLink
+                    href={`/contact?topic=Products&product=${encodeURIComponent(product.name)}`}
+                  >
                     {product.logo
                       ? `Ask About ${product.name}`
                       : "Ask About Our Products"}

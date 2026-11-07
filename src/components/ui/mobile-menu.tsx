@@ -1,7 +1,7 @@
 "use client";
 import { motionMilliseconds } from "./motion-timing.ts";
 import { usePathname } from "next/navigation";
-import { SiteLink } from "./site-link.tsx";
+import { ContactLink } from "./contact-link.tsx";
 import { useEffect, useRef, useState } from "react";
 import { Arrow } from "./icons.tsx";
 export type NavItem = import("../../lib/config/navigation.ts").NavigationItem;
@@ -158,7 +158,7 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
         <ul>
           {items.map((item) => (
             <li key={item.href}>
-              <SiteLink
+              <ContactLink
                 href={item.href}
                 aria-current={
                   pathname === item.href
@@ -177,7 +177,7 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
                   external={/^(https?:)?\/\//.test(item.href)}
                   className="mobile-nav-arrow"
                 />
-              </SiteLink>
+              </ContactLink>
             </li>
           ))}
         </ul>

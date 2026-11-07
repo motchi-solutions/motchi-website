@@ -1,4 +1,5 @@
 "use client";
+import { branchForPath } from "../../lib/config/navigation.ts";
 import { motionMilliseconds } from "./motion-timing.ts";
 import { type Branch, introLogos } from "../../lib/brand.ts";
 import Image from "next/image";
@@ -9,8 +10,9 @@ import { type CSSProperties, useEffect, useRef, useState } from "react";
 const branches: Branch[] = ["solutions", "websites", "consulting"];
 
 // Root layouts persist during client navigation; each new document gets a new stage.
-export function Introduction({ branch }: { branch: Branch }) {
+export function Introduction() {
   const pathname = usePathname();
+  const [branch] = useState(() => branchForPath(pathname));
   const [visible, setVisible] = useState(true);
   const stage = useRef<HTMLDivElement>(null);
   const complete = useRef<() => void>(() => setVisible(false));
@@ -94,7 +96,6 @@ export function Introduction({ branch }: { branch: Branch }) {
       aria-hidden="true"
       className="intro-experience"
       data-intro-branch={branch}
-      data-intro-dark={branch === "consulting" && pathname === "/"}
       onAnimationEnd={(event) => {
         if (
           event.target === event.currentTarget &&

@@ -370,7 +370,7 @@ export function ProductAlbum({
                 height={upcoming.height}
                 alt=""
                 sizes="(max-width: 1023px) 208px, 280px"
-                loading="eager"
+                loading={active ? "eager" : "lazy"}
                 draggable={false}
               />
             </span>
@@ -385,7 +385,7 @@ export function ProductAlbum({
               height={previous.height}
               alt=""
               sizes="(max-width: 1023px) 208px, 280px"
-              loading="eager"
+              loading={active ? "eager" : "lazy"}
             />
           </span>
         )}
@@ -445,6 +445,7 @@ export function ProductAlbum({
             <span className={styles.albumArt}>
               {sketch ? (
                 <Image
+                  loading={active ? "eager" : "lazy"}
                   src={sketch.src}
                   width={sketch.width}
                   height={sketch.height}

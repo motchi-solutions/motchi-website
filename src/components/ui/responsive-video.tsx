@@ -68,7 +68,17 @@ export function ResponsiveVideo({
     </video>
   );
 }
-export function AnimatedImage({ asset }: { asset: GifAsset }) {
+export function AnimatedImage({
+  asset,
+  loading = "lazy",
+  fetchPriority,
+  sizes = "(min-width: 1024px) 55vw, 100vw",
+}: {
+  asset: GifAsset;
+  loading?: "eager" | "lazy";
+  fetchPriority?: "high" | "low" | "auto";
+  sizes?: string;
+}) {
   const [enhanced, setEnhanced] = useState(false);
   const [playing, setPlaying] = useState(false);
   useEffect(() => {
@@ -81,11 +91,13 @@ export function AnimatedImage({ asset }: { asset: GifAsset }) {
   return (
     <div className="relative">
       <Image
+        loading={loading}
+        fetchPriority={fetchPriority}
         src={playing ? asset.src : asset.poster.src}
         alt={asset.label}
         width={asset.poster.width}
         height={asset.poster.height}
-        sizes="(min-width: 1024px) 55vw, 100vw"
+        sizes={sizes}
         unoptimized={playing}
         className="h-auto w-full"
       />

@@ -1,3 +1,4 @@
+import { contactOptionLabel } from "./contact-config.ts";
 import { formatPhone } from "./contact-phone.ts";
 import type { ContactDraft } from "./contact-model.ts";
 import styles from "./contact.module.css";
@@ -13,10 +14,30 @@ export function ContactReview({
 }) {
   const sections: { title: string; step: number; rows: ReviewRow[] }[] = [
     {
-      title: "Selected services",
+      title:
+        draft.enquiryType === "products"
+          ? "Your product question"
+          : "Selected services",
       step: 0,
       rows: [
-        ["Areas", draft.services],
+        [
+          "Service",
+          draft.enquiryType === "websites"
+            ? "Motchi Websites"
+            : draft.enquiryType === "products"
+              ? "Motchi Products"
+              : "Motchi Consulting",
+        ],
+        ...(draft.enquiryType === "websites"
+          ? [["Website tier", draft.websiteTier] as ReviewRow]
+          : []),
+        ...(draft.enquiryType === "products" && draft.productName
+          ? [["Product", draft.productName] as ReviewRow]
+          : []),
+        [
+          draft.enquiryType === "products" ? "Questions" : "Areas",
+          draft.services,
+        ],
         ...draft.services
           .filter((service) => draft.details[service]?.length)
           .map((service): ReviewRow => [service, draft.details[service]]),
@@ -53,45 +74,62 @@ export function ContactReview({
   ];
   return (
     <div className={styles.review}>
-      {sections.map((section) => (
-        <section
-          className={styles.reviewSection}
-          key={section.title}
-          aria-labelledby={`review-section-${section.step}`}
-        >
-          <div className={styles.reviewHeading}>
-            <h3 id={`review-section-${section.step}`}>{section.title}</h3>
-            <button
-              type="button"
-              disabled={disabled}
-              onClick={() => edit(section.step)}
-              aria-label={`Edit ${section.title.toLowerCase()}`}
-            >
-              Edit
-            </button>
-          </div>
-          <dl>
-            {section.rows.map(([label, value]) => (
-              <div className={styles.reviewRow} key={label}>
-                <dt>{label}</dt>
-                <dd>
-                  {Array.isArray(value) && value.length > 0 ? (
-                    <ul className={styles.reviewValues}>
-                      {value.map((answer) => (
-                        <li key={answer}>{answer}</li>
-                      ))}
-                    </ul>
-                  ) : typeof value === "string" && value ? (
-                    value
-                  ) : (
-                    <span className={styles.reviewMissing}>Not provided</span>
-                  )}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-      ))}
+      {sections
+        .filter(
+          (section) => draft.enquiryType !== "products" || section.step !== 1,
+        )
+        .map((section) => (
+          <section
+            className={styles.reviewSection}
+            key={section.title}
+            aria-labelledby={`review-section-${section.step}`}
+          >
+            <div className={styles.reviewHeading}>
+              <h3 id={`review-section-${section.step}`}>{section.title}</h3>
+              <button
+                type="button"
+                disabled={disabled}
+                onClick={() => edit(section.step)}
+                aria-label={`Edit ${section.title.toLowerCase()}`}
+              >
+                Edit
+              </button>
+            </div>
+            <dl>
+              {section.rows
+                .filter(
+                  ([label]) =>
+                    draft.enquiryType !== "products" ||
+                    section.step !== 2 ||
+                    ["Name", "Email", "Anything else"].includes(label),
+                )
+                .map(([label, value]) => (
+                  <div className={styles.reviewRow} key={label}>
+                    <dt>{label}</dt>
+                    <dd>
+                      {Array.isArray(value) && value.length > 0 ? (
+                        <ul className={styles.reviewValues}>
+                          {value.map((answer) => (
+                            <li key={answer}>{contactOptionLabel(answer)}</li>
+                          ))}
+                        </ul>
+                      ) : typeof value === "string" && value ? (
+                        section.step === 2 ? (
+                          value
+                        ) : (
+                          contactOptionLabel(value)
+                        )
+                      ) : (
+                        <span className={styles.reviewMissing}>
+                          Not provided
+                        </span>
+                      )}
+                    </dd>
+                  </div>
+                ))}
+            </dl>
+          </section>
+        ))}
     </div>
   );
 }

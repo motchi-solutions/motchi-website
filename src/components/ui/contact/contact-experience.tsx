@@ -13,13 +13,17 @@ import { contactContextLimit } from "../../../lib/config/validation.ts";
 import { Arrow, Container } from "../primitives.tsx";
 import { ContactField, ContactOptionGroup } from "./contact-controls.tsx";
 import { ContactPhoneField } from "./contact-phone-field.tsx";
+import { ContactServices } from "./contact-services.tsx";
 import { ContactDisclosure } from "./contact-disclosure.tsx";
+import type { ContactEntry } from "./contact-entry.ts";
 import { ContactReview } from "./contact-review.tsx";
 import { ContactSuccess } from "./contact-result.tsx";
 import { ContactProgress } from "./contact-progress.tsx";
 import { ContactDecorations } from "./contact-decorations.tsx";
 import { useContactDraft } from "./use-contact-draft.ts";
 import {
+  contactStepIndices,
+  initialDraft,
   canVisitContactStep,
   hasContactProgress,
   validateContact,
@@ -28,6 +32,7 @@ import {
 } from "./contact-model.ts";
 import styles from "./contact.module.css";
 const errorLabels: Partial<Record<keyof ContactDraft, string>> = {
+  enquiryType: "Enquiry type",
   services: "Preferred services",
   business: "Project or organization",
   stage: "Project stage",
@@ -47,25 +52,24 @@ const titles = [
 ];
 export function ContactExperience({
   topic,
+  entry,
   branch = "solutions",
   children,
   submission,
   initialFeedback,
 }: {
   topic?: string;
+  entry?: ContactEntry;
   branch?: Branch;
   children: ReactNode;
   submission?: { token: string | null };
   initialFeedback?: string;
 }) {
-  const { services, serviceDescriptions, followUps, questions, projectTitle } =
-    getContactConfiguration(branch);
-  const pageTitles = [...titles];
-  pageTitles[1] = projectTitle;
   const {
     draft,
     step,
     updateDraft,
+    replaceDraft,
     changeStep,
     ready,
     pendingDraft,
@@ -74,7 +78,65 @@ export function ContactExperience({
     toggleSaving,
     resume,
     clear,
-  } = useContactDraft(topic, branch);
+  } = useContactDraft(topic, branch, entry);
+  const activeBranch = draft.enquiryType || branch;
+  const { questions, projectTitle } = getContactConfiguration(activeBranch);
+  const pageTitles = [...titles];
+  pageTitles[1] = projectTitle;
+  const branchAnswers = useRef<
+    Partial<Record<Branch | "products", ContactDraft>>
+  >({});
+  function chooseBranch(next: "websites" | "consulting" | "products") {
+    if (draft.enquiryType === next) return;
+    branchAnswers.current[activeBranch] = draft;
+    const config = getContactConfiguration(next);
+    const compatibleServices =
+      activeBranch === "solutions"
+        ? [
+            ...new Set(
+              draft.services.flatMap(
+                (service) =>
+                  initialDraft(
+                    service,
+                    next === "products" ? "solutions" : next,
+                  ).services,
+              ),
+            ),
+          ]
+        : [];
+    const previous = branchAnswers.current[next] ?? {
+      ...initialDraft(undefined, next === "products" ? "solutions" : next),
+      services: compatibleServices.filter((service) =>
+        config.services.includes(service),
+      ),
+      details: Object.fromEntries(
+        compatibleServices.map((service) => [
+          service,
+          (draft.details[service] ?? []).filter((detail) =>
+            config.followUps[service]?.includes(detail),
+          ),
+        ]),
+      ),
+      stage: config.questions.stage.options.includes(draft.stage)
+        ? draft.stage
+        : "",
+      budget: config.questions.budget.options.includes(draft.budget)
+        ? draft.budget
+        : "",
+    };
+    replaceDraft({
+      ...draft,
+      enquiryType: next,
+      services: previous.services,
+      details: previous.details,
+      stage: previous.stage,
+      budget: previous.budget,
+    });
+    setErrors({});
+    setAnnouncement(
+      `Showing ${next === "products" ? "product questions" : next === "websites" ? "website services" : "consulting services"}.`,
+    );
+  }
   const [confirmClear, setConfirmClear] = useState(false);
   const [blockedTarget, setBlockedTarget] = useState<number | null>(null);
   const [attemptedStep, setAttemptedStep] = useState<number | null>(null);
@@ -203,7 +265,10 @@ export function ContactExperience({
             : "smooth",
         });
       });
-    else go(step + 1);
+    else {
+      const steps = contactStepIndices(draft);
+      go(steps[steps.indexOf(step) + 1]);
+    }
   }
   const blocked =
     blockedTarget !== null && !canVisitContactStep(draft, step, blockedTarget);
@@ -240,11 +305,11 @@ export function ContactExperience({
       : Object.fromEntries(unresolvedErrors);
   const hasReminder = !pendingDraft && Object.keys(reminderErrors).length > 0;
   function errorTarget(key: string) {
-    return `#${["services", "business", "stage", "timeline"].includes(key) ? `${key}-0` : key === "phoneCountryCode" ? "phone-country-code" : key}`;
+    return `#${["enquiryType", "services", "business", "stage", "timeline"].includes(key) ? `${key}-0` : key === "phoneCountryCode" ? "phone-country-code" : key}`;
   }
   function startFresh() {
     if (submissionInFlight.current) return;
-    if (clear()) {
+    if (clear(!!pendingDraft)) {
       setBlockedTarget(null);
       setAttemptedStep(null);
       setErrors({});
@@ -268,7 +333,7 @@ export function ContactExperience({
     try {
       const result = await sendContactEnquiry(
         draft,
-        branch,
+        activeBranch,
         submissionToken,
         honeypot.current?.value ?? "",
       );
@@ -530,96 +595,58 @@ export function ContactExperience({
                     {step === 0 && (
                       <>
                         <ContactOptionGroup
-                          id="services"
-                          onBlur={() => validateField("services", 0)}
-                          label="Please select your preferred services"
-                          options={services}
-                          hint="You can choose more than one. If you're unsure, please choose Not Sure Yet."
-                          value={draft.services}
-                          multiple
-                          required
-                          error={errors.services}
-                          onChange={(value) => {
-                            const added = value.find(
-                              (service) => !draft.services.includes(service),
-                            );
-                            const removed = draft.services.find(
-                              (service) => !value.includes(service),
-                            );
-                            setAnnouncement(
-                              added && followUps[added]
-                                ? `Optional details for ${added} available below.`
-                                : removed && followUps[removed]
-                                  ? `Questions for ${removed} removed.`
-                                  : "",
-                            );
-                            update("services", value);
+                          id="enquiryType"
+                          label="Pick a service"
+                          options={["Websites", "Consulting", "Products"]}
+                          descriptions={{
+                            Websites: "Design, development, and maintenance.",
+                            Consulting: "AI, data, and hands-on support.",
+                            Products: "Questions, ideas, and feedback.",
                           }}
+                          value={
+                            draft.enquiryType
+                              ? [
+                                  draft.enquiryType === "websites"
+                                    ? "Websites"
+                                    : draft.enquiryType === "products"
+                                      ? "Products"
+                                      : "Consulting",
+                                ]
+                              : []
+                          }
+                          onChange={(value) =>
+                            chooseBranch(
+                              value[0] === "Websites"
+                                ? "websites"
+                                : value[0] === "Products"
+                                  ? "products"
+                                  : "consulting",
+                            )
+                          }
+                          onBlur={() => validateField("enquiryType", 0)}
+                          required
+                          error={errors.enquiryType}
                         />
                         <section
                           className={styles.conditional}
-                          data-open={draft.services.some(
-                            (service) => followUps[service],
-                          )}
-                          aria-hidden={
-                            !draft.services.some(
-                              (service) => followUps[service],
-                            )
-                          }
-                          inert={
-                            !draft.services.some(
-                              (service) => followUps[service],
-                            )
-                          }
-                          aria-label="Optional service details"
+                          data-open={!!draft.enquiryType}
+                          aria-hidden={!draft.enquiryType}
+                          inert={!draft.enquiryType}
+                          aria-label="Services for your enquiry"
                         >
                           <div className={styles.conditionalClip}>
-                            <ContactDisclosure title="Would you like to share more?">
-                              {services
-                                .filter((service) => followUps[service])
-                                .map((service) => (
-                                  <div
-                                    className={styles.conditional}
-                                    key={service}
-                                    data-open={draft.services.includes(service)}
-                                    aria-hidden={
-                                      !draft.services.includes(service)
-                                    }
-                                    inert={!draft.services.includes(service)}
-                                  >
-                                    <div className={styles.conditionalClip}>
-                                      <div
-                                        className={styles.serviceDetailGroup}
-                                      >
-                                        <h4
-                                          className={styles.serviceDetailTitle}
-                                        >
-                                          {service}
-                                        </h4>
-                                        <p className={styles.detailDescription}>
-                                          {serviceDescriptions[service]}
-                                        </p>
-                                        <div className={styles.reveal}>
-                                          <ContactOptionGroup
-                                            id={`details-${services.indexOf(service)}`}
-                                            label="What would you like help with?"
-                                            showRequirement={false}
-                                            options={followUps[service]}
-                                            value={draft.details[service] ?? []}
-                                            multiple
-                                            onChange={(value) =>
-                                              update("details", {
-                                                ...draft.details,
-                                                [service]: value,
-                                              })
-                                            }
-                                          />
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                ))}
-                            </ContactDisclosure>
+                            <ContactServices
+                              key={activeBranch}
+                              branch={activeBranch}
+                              draft={draft}
+                              update={update}
+                              error={errors.services}
+                              onBlur={() => validateField("services", 0)}
+                              announce={setAnnouncement}
+                              detailsOpen={
+                                !!topic || !!entry?.draft.services.length
+                              }
+                            />
                           </div>
                         </section>
                       </>
@@ -627,23 +654,39 @@ export function ContactExperience({
                     {step === 1 &&
                       (
                         ["business", "stage", "timeline", "budget"] as const
-                      ).map((key) => (
-                        <ContactOptionGroup
-                          key={key}
-                          id={key}
-                          onBlur={() => validateField(key, 1)}
-                          {...questions[key]}
-                          required={key !== "budget"}
-                          value={draft[key] ? [draft[key]] : []}
-                          error={errors[key]}
-                          onChange={(value) => update(key, value[0])}
-                          hint={
-                            key === "budget"
-                              ? "Amounts are in CAD. This helps us plan, not set a final price."
-                              : undefined
-                          }
-                        />
-                      ))}
+                      ).map((key) => {
+                        const question = (
+                          <ContactOptionGroup
+                            key={key}
+                            id={key}
+                            hideLabel={key === "budget"}
+                            onBlur={() => validateField(key, 1)}
+                            {...questions[key]}
+                            required={key !== "budget"}
+                            value={draft[key] ? [draft[key]] : []}
+                            error={errors[key]}
+                            onChange={(value) => update(key, value[0])}
+                            hint={
+                              key === "budget"
+                                ? "Amounts are in CAD. This helps us plan, not set a final price."
+                                : undefined
+                            }
+                          />
+                        );
+                        return key === "budget" ? (
+                          <ContactDisclosure
+                            key={key}
+                            title="Budget range"
+                            defaultOpen={!!draft.budget}
+                          >
+                            <div className={styles.serviceDetailGroup}>
+                              {question}
+                            </div>
+                          </ContactDisclosure>
+                        ) : (
+                          question
+                        );
+                      })}
                     {step === 2 && (
                       <>
                         <div className={styles.fields}>
@@ -671,64 +714,89 @@ export function ContactExperience({
                             required
                             error={errors.email}
                           />
-                          <ContactField
-                            field="organization"
-                            label="Business / organization"
-                            placeholder="Example Studio"
-                            value={draft.organization}
-                            onChange={(value) => update("organization", value)}
-                            autoComplete="organization"
-                          />
-                          <ContactField
-                            field="website"
-                            help="A full website address looks like https://example.com. You can leave this blank if you don't have a website."
-                            placeholder="https://example.com"
-                            onBlur={() => validateField("website")}
-                            label="Website"
-                            value={draft.website}
-                            onChange={(value) => update("website", value)}
-                            type="url"
-                            autoComplete="url"
-                            error={errors.website}
-                          />
-                          <ContactPhoneField
-                            countryCode={draft.phoneCountryCode}
-                            number={draft.phone}
-                            error={errors.phone}
-                            countryCodeError={errors.phoneCountryCode}
-                            onBlur={validatePhone}
-                            onChange={({ countryCode, number }) => {
-                              update("phoneCountryCode", countryCode);
-                              update("phone", number);
-                              const found = validateContact(
-                                {
-                                  ...draft,
-                                  phoneCountryCode: countryCode,
-                                  phone: number,
-                                },
-                                2,
-                              );
-                              setErrors((current) => ({
-                                ...current,
-                                phone: current.phone
-                                  ? found.phone
-                                  : current.phone,
-                                phoneCountryCode: current.phoneCountryCode
-                                  ? found.phoneCountryCode
-                                  : current.phoneCountryCode,
-                              }));
-                            }}
-                          />
+                          {activeBranch !== "products" && (
+                            <>
+                              <ContactField
+                                field="organization"
+                                label="Business / organization"
+                                placeholder="Example Studio"
+                                value={draft.organization}
+                                onChange={(value) =>
+                                  update("organization", value)
+                                }
+                                autoComplete="organization"
+                              />
+                              <ContactField
+                                field="website"
+                                help="A full website address looks like https://example.com. You can leave this blank if you don't have a website."
+                                placeholder="https://example.com"
+                                onBlur={() => validateField("website")}
+                                label="Website"
+                                value={draft.website}
+                                onChange={(value) => update("website", value)}
+                                type="url"
+                                autoComplete="url"
+                                error={errors.website}
+                              />
+                              <ContactPhoneField
+                                countryCode={draft.phoneCountryCode}
+                                number={draft.phone}
+                                error={errors.phone}
+                                countryCodeError={errors.phoneCountryCode}
+                                onBlur={validatePhone}
+                                onChange={({ countryCode, number }) => {
+                                  update("phoneCountryCode", countryCode);
+                                  update("phone", number);
+                                  const found = validateContact(
+                                    {
+                                      ...draft,
+                                      phoneCountryCode: countryCode,
+                                      phone: number,
+                                    },
+                                    2,
+                                  );
+                                  setErrors((current) => ({
+                                    ...current,
+                                    phone: current.phone
+                                      ? found.phone
+                                      : current.phone,
+                                    phoneCountryCode: current.phoneCountryCode
+                                      ? found.phoneCountryCode
+                                      : current.phoneCountryCode,
+                                  }));
+                                }}
+                              />
+                            </>
+                          )}
                         </div>
-                        <ContactOptionGroup
-                          id="source"
-                          {...questions.source}
-                          value={draft.source ? [draft.source] : []}
-                          onChange={(value) => update("source", value[0])}
-                        />
+                        {activeBranch !== "products" && (
+                          <div className={styles.group}>
+                            <ContactDisclosure
+                              title="How you found us"
+                              defaultOpen={!!draft.source}
+                            >
+                              <div className={styles.serviceDetailGroup}>
+                                <ContactOptionGroup
+                                  id="source"
+                                  {...questions.source}
+                                  hideLabel
+                                  value={draft.source ? [draft.source] : []}
+                                  onChange={(value) =>
+                                    update("source", value[0])
+                                  }
+                                />
+                              </div>
+                            </ContactDisclosure>
+                          </div>
+                        )}
                         <ContactField
                           field="context"
-                          label="Anything else you'd like to share?"
+                          required={activeBranch === "products"}
+                          label={
+                            activeBranch === "products"
+                              ? "What would you like us to know?"
+                              : "Anything else you'd like to share?"
+                          }
                           value={draft.context}
                           onChange={(value) => update("context", value)}
                           onBlur={() => validateField("context")}
@@ -852,7 +920,10 @@ export function ContactExperience({
                         <button
                           className={styles.backButton}
                           type="button"
-                          onClick={() => go(step - 1)}
+                          onClick={() => {
+                            const steps = contactStepIndices(draft);
+                            go(steps[steps.indexOf(step) - 1]);
+                          }}
                         >
                           Back
                         </button>

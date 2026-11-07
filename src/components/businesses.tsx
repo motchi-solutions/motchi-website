@@ -29,7 +29,7 @@ export function Businesses({
                   width={logos.websites.width}
                   height={logos.websites.height}
                   alt=""
-                  loading="eager"
+                  loading="lazy"
                   className="h-16 w-16 shrink-0 object-contain"
                 />
               )}
@@ -62,7 +62,7 @@ export function Businesses({
                   width={logos.consulting.width}
                   height={logos.consulting.height}
                   alt=""
-                  loading="eager"
+                  loading="lazy"
                   className="h-16 w-16 shrink-0 object-contain"
                 />
               )}

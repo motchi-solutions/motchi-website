@@ -1,0 +1,67 @@
+.root {
+  border-top: 1px solid var(--border);
+}
+.root button {
+  display: flex;
+  width: 100%;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.75rem;
+  color: var(--brand-primary);
+  text-align: left;
+  font-size: var(--type-reading-small);
+  font-weight: 500;
+  cursor: pointer;
+  transition: color var(--motion-hover) var(--ease-hover);
+}
+.root button svg {
+  flex-shrink: 0;
+  transition: transform var(--motion-hover) var(--ease-hover);
+}
+.root button svg[data-open="true"] {
+  transform: rotate(180deg);
+}
+.root button:focus-visible {
+  outline: 2px solid var(--brand-primary);
+  outline-offset: 4px;
+}
+.root button:active {
+  color: var(--charcoal);
+  transition-duration: 100ms;
+}
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows var(--motion-hover) var(--ease-hover),
+    visibility 0s var(--motion-hover);
+}
+.panel[data-open="true"] {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition-delay: 0s;
+}
+.clip {
+  min-height: 0;
+  overflow: clip;
+}
+@media (hover: hover) and (pointer: fine) {
+  .root button:hover {
+    color: var(--charcoal);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .root button,
+  .root button svg,
+  .panel {
+    transition: none;
+  }
+}
+@media (forced-colors: active) {
+  .root button:focus-visible {
+    outline-color: Highlight;
+  }
+}

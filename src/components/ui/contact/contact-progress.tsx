@@ -1,4 +1,5 @@
 import {
+  contactStepIndices,
   canVisitContactStep,
   validateContact,
   type ContactDraft,
@@ -18,8 +19,14 @@ export function ContactProgress({
 }) {
   return (
     <nav aria-label="Enquiry progress" className={styles.progressNav}>
-      <ol className={styles.progress}>
-        {contactSteps.map((label, index) => {
+      <ol
+        className={styles.progress}
+        style={{
+          gridTemplateColumns: `repeat(${contactStepIndices(draft).length}, minmax(0, 1fr))`,
+        }}
+      >
+        {contactStepIndices(draft).map((index, position) => {
+          const label = contactSteps[index];
           const available = canVisitContactStep(draft, step, index);
           const complete =
             index < 3 &&
@@ -37,7 +44,7 @@ export function ContactProgress({
               >
                 <span aria-hidden="true">
                   <span className={styles.stepNumberGlyph}>
-                    {complete && index !== step ? "✓" : index + 1}
+                    {complete && index !== step ? "✓" : position + 1}
                   </span>
                 </span>
                 <span>

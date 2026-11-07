@@ -17,7 +17,7 @@ export const processSteps = [
     summary: "Make the pages and customer journey clear.",
     details: [
       "Plan the pages, menus, and steps customers need to take.",
-      "Agree on who supplies and approves copy, photographs, and logos.",
+      "Map how your content, navigation, and connected tools fit together.",
     ],
   },
   {
@@ -47,7 +47,7 @@ export const processSteps = [
     summary: "Prepare the content, domain, and connected tools.",
     details: [
       "Check the content, forms, search details, links, and domain setup.",
-      "Agree on who handles launch and check the steps customers take on the live site.",
+      "Follow the agreed launch plan and check the steps customers take on the live site.",
     ],
   },
   {
@@ -56,7 +56,7 @@ export const processSteps = [
     detailHeading: "Keep Your Website Useful After Launch",
     summary: "Keep the site useful after it goes live.",
     details: [
-      "Agree on hosting, maintenance, handover, and post-launch support.",
+      "Hand over the site and follow the hosting, maintenance, and support plan agreed at the start.",
       "Make future changes around the needs of your customers and team.",
     ],
   },

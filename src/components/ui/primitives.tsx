@@ -81,13 +81,19 @@ export function AnimatedLink({
   children,
   external = false,
   arrow = false,
+  underline = "hover",
   className = "",
   ...props
-}: ComponentProps<"a"> & { external?: boolean; arrow?: boolean }) {
+}: ComponentProps<"a"> & {
+  external?: boolean;
+  arrow?: boolean;
+  underline?: "hover" | "always";
+}) {
   return (
     <SiteLink
       {...props}
       className={`animated-link inline-flex items-center gap-3 ${className}`}
+      data-underline={underline}
     >
       <span>{children}</span>
       {(external || arrow) && <Arrow external={external} />}
@@ -98,13 +104,17 @@ export function SectionHeading({
   eyebrow,
   title,
   children,
+  wide = false,
 }: {
+  wide?: boolean;
   eyebrow?: string;
   title: string;
   children?: ReactNode;
 }) {
   return (
-    <div className="section-heading section-introduction max-w-reading">
+    <div
+      className={`section-heading section-introduction ${wide ? "service-section-heading" : "max-w-reading"}`}
+    >
       {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
       <h2 className="text-h2 font-medium tracking-tight">{title}</h2>
       {children && (

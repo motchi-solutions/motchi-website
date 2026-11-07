@@ -29,7 +29,9 @@ export function SectionNavigation({
     let frame = 0;
     const update = () => {
       frame = 0;
-      setVisible(window.scrollY > 240);
+      // A small threshold band avoids flicker when scrolling near the reveal point.
+      setVisible((current) => window.scrollY > (current ? 180 : 260));
+      if (window.scrollY <= 180) setOpen(false);
       const threshold = Math.min(220, window.innerHeight * 0.3);
       let active = items[0]?.id ?? "";
       for (const section of sections)
@@ -55,8 +57,11 @@ export function SectionNavigation({
   useEffect(() => {
     if (!open) return;
     const dismiss = (event: Event) => {
-      if (event.target instanceof Node && !root.current?.contains(event.target))
-        setOpen(false);
+      const panel = root.current?.querySelector("nav");
+      const path = event.composedPath();
+      const insidePanel = panel && path.includes(panel);
+      const insideToggle = toggle.current && path.includes(toggle.current);
+      if (!insidePanel && !insideToggle) setOpen(false);
     };
     const keyboard = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -66,11 +71,9 @@ export function SectionNavigation({
       }
     };
     document.addEventListener("pointerdown", dismiss);
-    document.addEventListener("focusin", dismiss);
     document.addEventListener("keydown", keyboard);
     return () => {
       document.removeEventListener("pointerdown", dismiss);
-      document.removeEventListener("focusin", dismiss);
       document.removeEventListener("keydown", keyboard);
     };
   }, [open]);
@@ -79,6 +82,8 @@ export function SectionNavigation({
       ref={root}
       className="section-navigation"
       data-visible={visible}
+      aria-hidden={!visible}
+      inert={!visible}
       data-open={open}
     >
       <div className="section-navigation-drawer">
@@ -89,10 +94,13 @@ export function SectionNavigation({
           tabIndex={visible ? 0 : -1}
           aria-expanded={open && visible}
           aria-controls={panelId}
-          aria-label={open ? "Close page navigation" : "Open page navigation"}
+          aria-label={
+            open ? "Close section navigation" : "Open section navigation"
+          }
           onClick={() => setOpen((value) => !value)}
         >
           <svg
+            className="section-navigation-chevron"
             viewBox="0 0 20 20"
             width="20"
             height="20"
@@ -103,7 +111,6 @@ export function SectionNavigation({
           >
             <path d="m12 5-5 5 5 5" />
           </svg>
-          <span aria-hidden="true">Page</span>
         </button>
         <nav
           id={panelId}
@@ -111,7 +118,7 @@ export function SectionNavigation({
           aria-hidden={!visible || !open}
           inert={!visible || !open}
         >
-          <p>On this page</p>
+          <p className="section-navigation-title">Jump to a section</p>
           <ul>
             {items.map((item) => (
               <li key={item.id}>

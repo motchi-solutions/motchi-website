@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { RequiredMark } from "../required-mark.tsx";
 import {
   contactNamePattern,
@@ -10,6 +11,7 @@ import {
 import { InfoTip } from "../info-tip.tsx";
 import { LuCircleAlert } from "react-icons/lu";
 import type { ContactDraft } from "./contact-model.ts";
+import { contactOptionLabel } from "./contact-config.ts";
 import styles from "./contact.module.css";
 
 export function ContactOptionGroup({
@@ -22,8 +24,10 @@ export function ContactOptionGroup({
   multiple = false,
   required = false,
   showRequirement = true,
+  hideLabel = false,
   hint,
   descriptions,
+  action,
   error,
 }: {
   id: string;
@@ -35,31 +39,66 @@ export function ContactOptionGroup({
   multiple?: boolean;
   required?: boolean;
   showRequirement?: boolean;
+  hideLabel?: boolean;
   hint?: string;
   descriptions?: Record<string, string>;
+  action?: ReactNode;
   error?: string;
 }) {
-  const help = hint ?? (multiple ? "Please select all that apply." : undefined);
+  const help = hint ?? (multiple ? "Select all that apply." : "Choose one.");
+  const hiddenHelp = !hint && !multiple;
   return (
     <fieldset
       id={`${id}-group`}
+      data-descriptions={id === "enquiryType" ? "visible" : undefined}
+      data-layout={
+        id === "enquiryType"
+          ? "branches"
+          : id === "websiteTier"
+            ? "tiers"
+            : id.startsWith("details-")
+              ? "details"
+              : undefined
+      }
       className={styles.group}
+      aria-labelledby={`${id}-label`}
       onBlur={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget)) onBlur?.();
       }}
       aria-describedby={
-        [help ? `${id}-hint` : "", error ? `${id}-error` : ""]
+        [
+          help ? `${id}-hint` : "",
+          multiple && hint ? `${id}-instruction` : "",
+          error ? `${id}-error` : "",
+        ]
           .filter(Boolean)
           .join(" ") || undefined
       }
     >
-      <legend>
-        {label} {showRequirement && required && <RequiredMark />}
+      <legend className={hideLabel ? "sr-only" : undefined}>
+        <span className={styles.groupHeading}>
+          <span id={`${id}-label`} className={styles.groupLabel}>
+            {label} {showRequirement && required && <RequiredMark />}
+          </span>
+          {action && <span className={styles.groupAction}>{action}</span>}
+        </span>
       </legend>
-      {help && (
-        <p id={`${id}-hint`} className={styles.hint}>
+      {hiddenHelp && (
+        <p id={`${id}-hint`} className="sr-only">
           {help}
         </p>
+      )}
+      {multiple && hint && (
+        <p id={`${id}-instruction`} className="sr-only">
+          Select all that apply.
+        </p>
+      )}
+      {!hiddenHelp && (
+        <div className={styles.groupContext}>
+          <p id={`${id}-hint`} className={styles.hint}>
+            {help}
+          </p>
+        </div>
       )}
       {error && (
         <p id={`${id}-error`} className={styles.error}>
@@ -80,6 +119,7 @@ export function ContactOptionGroup({
               type={multiple ? "checkbox" : "radio"}
               value={option}
               checked={value.includes(option)}
+              required={required && !multiple}
               aria-invalid={!!error}
               aria-labelledby={`${id}-${index}-label`}
               aria-describedby={
@@ -101,11 +141,8 @@ export function ContactOptionGroup({
               }
             />
             <span className={styles.optionCopy}>
-              <span
-                id={`${id}-${index}-label`}
-                className={id === "services" ? styles.optionTitle : undefined}
-              >
-                {option}
+              <span id={`${id}-${index}-label`} className={styles.optionTitle}>
+                {contactOptionLabel(option)}
               </span>
               {descriptions?.[option] && (
                 <span

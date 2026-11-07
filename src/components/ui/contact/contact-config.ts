@@ -83,29 +83,26 @@ export const followUps: Record<string, string[]> = {
 };
 export const questions = {
   business: {
-    label: "What best describes your project or organization?",
+    label: "Your project or organization",
     options: [
       "Starting something new",
-      "Small business",
-      "Growing business",
-      "Established organization",
+      "Business",
       "Non-profit / community organization",
       "Personal project",
       "Other",
     ],
   },
   stage: {
-    label: "What stage is your project at?",
+    label: "Project stage",
     options: [
-      "Just exploring",
-      "I have an idea",
+      "Exploring an idea",
       "I know where to start",
       "I want to improve an existing process",
       "I need ongoing support",
     ],
   },
   budget: {
-    label: "Do you have a budget range in mind?",
+    label: "Budget range",
     options: [
       "$100-$500",
       "$500-$1,000",
@@ -118,7 +115,7 @@ export const questions = {
     ],
   },
   timeline: {
-    label: "When would you like to get started?",
+    label: "When would you like to start?",
     options: [
       "As soon as possible",
       "Within a month",
@@ -254,10 +251,9 @@ const configurations: Record<Branch, ContactConfiguration> = {
       ...questions,
       stage: {
         ...questions.stage,
-        label: "What stage is your website project at?",
+        label: "Website project stage",
         options: [
-          "Just exploring",
-          "I have an idea",
+          "Exploring an idea",
           "I know where to start",
           "I want to improve an existing website",
           "I need ongoing support",
@@ -277,6 +273,7 @@ const configurations: Record<Branch, ContactConfiguration> = {
       },
     },
     topicAliases: {
+      Website: "New Website",
       "New website": "New Website",
       "Website redesign": "Website Redesign",
       "Booking or integrations": "Booking & Integrations",
@@ -402,8 +399,75 @@ const configurations: Record<Branch, ContactConfiguration> = {
     projectTitle: "A little about your project",
   },
 };
+export type ContactEnquiryType = "websites" | "consulting" | "products";
+export const websiteTiers = [
+  "Starter",
+  "Business",
+  "Advanced / Enterprise",
+  "I'm not sure",
+];
+export const productNames = [
+  "Pop Tips",
+  "Our Next Chapter",
+  "A new product idea",
+  "Something else",
+];
+const productConfiguration: ContactConfiguration = {
+  ...configurations.solutions,
+  services: [
+    "A product idea",
+    "Report a bug",
+    "Suggest an improvement",
+    "How a product works",
+    "Setup or requirements",
+    "Something else",
+  ],
+  serviceDescriptions: {},
+  followUps: {},
+  topicAliases: { Products: "How a product works" },
+  submissionInterests: Object.fromEntries(
+    [
+      "A product idea",
+      "Report a bug",
+      "Suggest an improvement",
+      "How a product works",
+      "Setup or requirements",
+      "Something else",
+    ].map((value) => [value, "Products"]),
+  ),
+  projectTitle: "Your product question",
+};
 export function getContactConfiguration(
-  branch: Branch = "solutions",
+  branch: Branch | "products" = "solutions",
 ): ContactConfiguration {
-  return configurations[branch];
+  return branch === "products" ? productConfiguration : configurations[branch];
+}
+
+// Keep saved choices and submission values compatible while using consistent copy.
+export function contactOptionLabel(value: string): string {
+  const labels: Record<string, string> = {
+    "Not Sure Yet": "I'm not sure",
+    "Not sure yet": "I'm not sure",
+    "Not sure": "I'm not sure",
+    "Non-profit / community organization": "Non-profit or community",
+    "Exploring an idea": "Explore an idea",
+    "I have an idea": "Explore an idea",
+    "Just exploring": "Explore an idea",
+    "I know where to start": "Have a plan",
+    "I want to improve an existing website": "Improve an existing website",
+    "I want to improve an existing process": "Improve an existing process",
+    "I need ongoing support": "Ongoing support",
+    "Introduce my business or project": "Introduce a business or project",
+    "Showcase my work": "Showcase work",
+    "Connect my other tools": "Connect other tools",
+    "Connect my tools": "Connect tools",
+    "Estimate the cost of moving to the cloud": "Estimate migration costs",
+    "Find trends or answer specific questions": "Find trends or answers",
+    "Clean up inaccurate or duplicate data": "Clean up data",
+    "Connect data from different tools": "Connect data sources",
+    "Online Search": "Online search",
+    "Existing client/project": "Existing client or project",
+    "Event/community": "Event or community",
+  };
+  return labels[value] ?? value;
 }

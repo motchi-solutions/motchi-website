@@ -237,7 +237,10 @@ p {
   background: currentColor;
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform var(--motion-base) var(--ease-emphasized);
+  transition: transform var(--motion-hover) var(--ease-hover);
+}
+.animated-link[data-underline="always"] > span:first-child::after {
+  transform: scaleX(1);
 }
 .animated-link:is(:hover, :focus-visible) > span:first-child::after,
 .nav-link:is(:hover, :focus-visible)::after,
@@ -876,52 +879,9 @@ button.system-node-control {
     transform: none;
   }
 }
-@keyframes route-orbit {
-  to {
-    transform: rotate(360deg);
-  }
-}
-@keyframes route-appear {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-.route-loading {
-  min-height: 55vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem 1.25rem;
-}
-.route-emblem {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 8rem;
-  height: 8rem;
-}
-.route-orbit {
-  position: absolute;
-  inset: 0;
-  border: 1px solid var(--border);
-  border-top-color: var(--brand-primary);
-  border-right-color: var(--brand-accent);
-  border-radius: 44% 50% 46% 50%;
-}
 @media (prefers-reduced-motion: no-preference) {
   .page-arrival {
     animation: page-arrive var(--motion-slow) var(--ease-reveal) both;
-  }
-  .route-loading {
-    animation: route-appear var(--motion-fast) var(--ease-standard) both;
-    animation-delay: var(--motion-fast);
-  }
-  .route-orbit {
-    animation: route-orbit calc(var(--motion-slow) * 3) linear infinite;
   }
 }
 
@@ -2410,4 +2370,32 @@ button:is(:hover, :focus-visible) > .interaction-arrow {
   #contact-form select {
     font-size: 1rem;
   }
+}
+
+/* Branch composition shares the existing rhythm while keeping Solutions density local. */
+:is([data-analytics-context="MW"], [data-analytics-context="MC"]) {
+  --space-section: clamp(2.5rem, 4vw, 4rem);
+}
+@media (min-width: 1024px) {
+  :is([data-branch="websites"], [data-branch="consulting"])
+    .section-layout.lg\:grid-cols-2 {
+    grid-template-columns: minmax(0, 0.38fr) minmax(0, 0.62fr);
+  }
+}
+
+/* Short service introductions use the section width; body copy has its own reading limits. */
+.service-section-heading {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+}
+.service-section-heading h2 {
+  text-align: left;
+}
+.service-section-heading.section-introduction > p {
+  max-width: none;
+  margin-top: 1rem;
+  margin-inline: 0;
+  font-size: var(--type-reading-body);
+  line-height: var(--type-reading-leading);
 }

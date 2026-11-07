@@ -1,3 +1,4 @@
+import type { ContactEntry } from "./contact/contact-entry.ts";
 import { createContactToken } from "../../lib/email/index.ts";
 import { contactMessage } from "../../lib/email/feedback.ts";
 import type { Branch } from "../../lib/brand.ts";
@@ -11,13 +12,15 @@ export function ContactPageContent({
   branch,
   status,
   topic,
+  entry,
 }: {
   branch: Branch;
   status?: string;
   fields?: string;
   topic?: string;
+  entry?: ContactEntry;
 }) {
-  const config = getContactConfiguration(branch);
+  const config = getContactConfiguration("solutions");
   let token: string | null = null;
   try {
     token = createContactToken();
@@ -31,6 +34,8 @@ export function ContactPageContent({
     <>
       <ContactNavigation />
       <ContactExperience
+        key={JSON.stringify([branch, topic, entry])}
+        entry={entry}
         branch={branch}
         topic={topic}
         submission={{ token }}

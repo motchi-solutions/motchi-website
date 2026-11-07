@@ -42,6 +42,8 @@ npm run format:check
 
 The single header links to Websites, Consulting, Products, About and Contact. The Websites and Consulting pages use an animated right-edge section navigator instead of dropdowns. The full portfolio is linked from Websites. The header identity follows the current branch; its logo always returns to the company homepage. `/services` remains the company-wide overview, linked as All Services in the footer.
 
+The initial family intro selects MS, MW or MC once from the initial pathname. Client navigation updates the header identity without replaying the intro.
+
 Marketing pages render on the server; interactive navigation, motion and forms use client components. Keep branch compositions distinct while reusing controls and tokens. Navigation and sitemap route lists live in `src/lib/config/navigation.ts`; site identity and the default origin live in `sites.ts`. The site currently blocks indexing until publication is intended; robots rules are not access control.
 
 ## Environment and contact
@@ -51,6 +53,10 @@ Copy `.env.example` to `.env.local` at the root. Never commit filled environment
 `BREVO_API_KEY`, `CONTACT_FROM_EMAIL` (verified sender), and `CONTACT_TO_EMAIL` configure transactional email. Production also requires a stable `CONTACT_FORM_SECRET` of at least 32 characters. Development can use a temporary process-wide signing key. Missing configuration shows an email fallback rather than claiming delivery. Contact requires a Node server, not static export. Build/runtime origins must agree because POSTs accept only the configured origin.
 
 The four-step wizard lives in `src/components/ui/contact`; `contact-config.ts` owns choices, questions and topic aliases. `ContactPageContent` supplies signed tokens and results. The wizard requires JavaScript and offers direct email without it. Draft saving is opt-in and expires after three days. Preserve the full optional message for editing; validate its 2,000-character limit on blur/navigation. Failed requests retain answers; confirmed or partial delivery clears saved drafts. Mock email in UI/CI tests and use controlled inboxes for real delivery checks.
+
+Project records live in `src/content/websites/projects.json`. Server-rendered pages and `GET /api/projects` share the async `getProjects()` data boundary; replace its file read when adopting a database.
+
+Websites and Consulting reuse the wizard's service questions in their enquiry sections. Continue carries only allowlisted service choices in the URL and opens Contact at step two; personal contact details never belong in these links.
 
 Edit approved project, service and process records in `src/content/websites` and `src/content/consulting`; company products live directly in `src/content`. Use actual image dimensions, useful alt text, approved URLs and original SVG marks. Next discovers icons, manifests and social images through app file conventions.
 

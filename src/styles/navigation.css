@@ -36,7 +36,9 @@
   min-height: 3rem;
 }
 .primary-navigation-link.nav-contact {
-  padding: 0.75rem 1.5rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 1.25rem;
+  line-height: 1.25;
   border: 1px solid var(--brand-primary);
   border-radius: var(--radius-control);
 }
@@ -70,19 +72,16 @@
 }
 .section-navigation-handle {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.35rem;
   width: 2.75rem;
-  height: 4.5rem;
+  height: 2.75rem;
+  padding: 0;
   flex-shrink: 0;
   border: 1px solid var(--border);
-  border-right: 0;
-  border-radius: 0.5rem 0 0 0.5rem;
+  border-radius: 0.5rem;
   background: var(--surface);
   color: var(--brand-primary);
-  font-size: 0.7rem;
 }
 .section-navigation-handle svg {
   transition: transform var(--motion-hover) var(--ease-hover);

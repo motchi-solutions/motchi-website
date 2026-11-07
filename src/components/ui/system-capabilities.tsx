@@ -485,6 +485,7 @@ export function SystemCapabilities() {
         <div className="toolkit-anchor">
           {logos.solutions && (
             <Image
+              loading="lazy"
               src={logos.solutions.src}
               width={logos.solutions.width}
               height={logos.solutions.height}

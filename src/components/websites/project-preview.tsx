@@ -1,8 +1,13 @@
 import { MediaFrame, ProjectMedia } from "../ui/index.ts";
-import Image from "next/image";
 import type { Project } from "../../content/websites/projects.ts";
 
-export function ProjectPreview({ project }: { project: Project }) {
+export function ProjectPreview({
+  project,
+  aboveFold = false,
+}: {
+  project: Project;
+  aboveFold?: boolean;
+}) {
   const primary =
     project.media.desktop ??
     project.media.hero ??
@@ -22,18 +27,17 @@ export function ProjectPreview({ project }: { project: Project }) {
         <MediaFrame className="project-desktop bg-surface">
           <ProjectMedia
             asset={primary}
+            loading={aboveFold ? "eager" : "lazy"}
+            fetchPriority={aboveFold ? "high" : undefined}
             sizes="(min-width: 1280px) 720px, (min-width: 1024px) 60vw, 100vw"
           />
         </MediaFrame>
         {project.media.desktop && project.media.mobile && (
           <MediaFrame className="project-mobile bg-surface">
-            <Image
-              src={project.media.mobile.src}
-              alt={project.media.mobile.alt}
-              width={project.media.mobile.width}
-              height={project.media.mobile.height}
+            <ProjectMedia
+              asset={project.media.mobile}
+              loading={aboveFold ? "eager" : "lazy"}
               sizes="(min-width: 1024px) 160px, (min-width: 640px) 180px, 28vw"
-              className="h-auto w-full"
             />
           </MediaFrame>
         )}

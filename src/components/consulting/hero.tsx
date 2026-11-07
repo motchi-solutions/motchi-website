@@ -22,7 +22,7 @@ export function Hero() {
               needs, then help put the right solution to work.
             </p>
             <div className="family-hero-actions mt-9 flex flex-wrap gap-3">
-              <ButtonLink href={branchHref("consulting", "/contact")} light>
+              <ButtonLink href="#enquiry" light>
                 Start a Conversation
               </ButtonLink>
               <ButtonLink

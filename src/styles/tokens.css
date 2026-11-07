@@ -876,52 +876,9 @@ button.system-node-control {
     transform: none;
   }
 }
-@keyframes route-orbit {
-  to {
-    transform: rotate(360deg);
-  }
-}
-@keyframes route-appear {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-.route-loading {
-  min-height: 55vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem 1.25rem;
-}
-.route-emblem {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 8rem;
-  height: 8rem;
-}
-.route-orbit {
-  position: absolute;
-  inset: 0;
-  border: 1px solid var(--border);
-  border-top-color: var(--brand-primary);
-  border-right-color: var(--brand-accent);
-  border-radius: 44% 50% 46% 50%;
-}
 @media (prefers-reduced-motion: no-preference) {
   .page-arrival {
     animation: page-arrive var(--motion-slow) var(--ease-reveal) both;
-  }
-  .route-loading {
-    animation: route-appear var(--motion-fast) var(--ease-standard) both;
-    animation-delay: var(--motion-fast);
-  }
-  .route-orbit {
-    animation: route-orbit calc(var(--motion-slow) * 3) linear infinite;
   }
 }
 

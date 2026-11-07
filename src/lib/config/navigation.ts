@@ -25,6 +25,7 @@ export function branchHref(branch: ServiceBranch, href: string): string {
 }
 
 export const mainNavigation: NavigationItem[] = [
+  { label: "Home", href: "/" },
   { label: "Websites", href: "/websites" },
   { label: "Consulting", href: "/consulting" },
   { label: "Products", href: "/products" },

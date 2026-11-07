@@ -49,14 +49,19 @@ test("company navigation targets valid sitemap pages", () => {
     assert.ok(existsSync(resolve(`src/app/${route}/page.tsx`)), route);
 });
 
-test("header identity follows service route boundaries and resets on company pages", () => {
+test("route identity follows service boundaries and defaults to the company", () => {
   for (const [path, expected] of [
     ["/", "solutions"],
     ["/services", "solutions"],
+    ["/about", "solutions"],
+    ["/products", "solutions"],
+    ["/privacy", "solutions"],
     ["/websites", "websites"],
     ["/websites/work", "websites"],
     ["/consulting", "consulting"],
+    ["/consulting/capabilities", "consulting"],
     ["/consulting-other", "solutions"],
+    ["/websites-other", "solutions"],
     ["/contact", "solutions"],
   ])
     assert.equal(branchForPath(path), expected);

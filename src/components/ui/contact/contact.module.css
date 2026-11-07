@@ -1402,3 +1402,8 @@ textarea.input {
     transition: none;
   }
 }
+
+.enquiry {
+  max-width: 64rem;
+  margin-inline: auto;
+}

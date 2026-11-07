@@ -1,4 +1,4 @@
-import { RouteLoading } from "../components/ui/index.ts";
+import { RouteLoading } from "../components/ui/route-loading.tsx";
 export default function Loading() {
-  return <RouteLoading branch="solutions" />;
+  return <RouteLoading />;
 }

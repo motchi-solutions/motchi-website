@@ -89,7 +89,9 @@ export function SectionNavigation({
           tabIndex={visible ? 0 : -1}
           aria-expanded={open && visible}
           aria-controls={panelId}
-          aria-label={open ? "Close page navigation" : "Open page navigation"}
+          aria-label={
+            open ? "Close section navigation" : "Open section navigation"
+          }
           onClick={() => setOpen((value) => !value)}
         >
           <svg
@@ -103,7 +105,6 @@ export function SectionNavigation({
           >
             <path d="m12 5-5 5 5 5" />
           </svg>
-          <span aria-hidden="true">Page</span>
         </button>
         <nav
           id={panelId}

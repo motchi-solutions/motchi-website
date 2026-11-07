@@ -10,11 +10,18 @@ import {
 } from "./contact-model.ts";
 
 import type { Branch } from "../../../lib/brand.ts";
+import type { ContactEntry } from "./contact-entry.ts";
 type SaveState = "idle" | "saving" | "saved" | "error";
-export function useContactDraft(topic?: string, branch: Branch = "solutions") {
+export function useContactDraft(
+  topic?: string,
+  branch: Branch = "solutions",
+  entry?: ContactEntry,
+) {
   const contactDraftKey = getContactDraftKey(branch);
-  const [draft, setDraft] = useState(() => initialDraft(topic, branch));
-  const [step, setStep] = useState(0);
+  const [draft, setDraft] = useState(
+    () => entry?.draft ?? initialDraft(topic, branch),
+  );
+  const [step, setStep] = useState(entry?.step ?? 0);
   const [ready, setReady] = useState(false);
   const [pendingDraft, setPendingDraft] = useState<SavedContactDraft | null>(
     null,
@@ -167,24 +174,26 @@ export function useContactDraft(topic?: string, branch: Branch = "solutions") {
     setPendingDraft(null);
     setEdited(true);
   }
-  function clear() {
+  function clear(restartFromEntry = false) {
     try {
       localStorage.removeItem(contactDraftKey);
     } catch {
       setSaveState("error");
       return false;
     }
-    const empty = initialDraft(undefined, branch);
+    const empty =
+      restartFromEntry && entry ? entry.draft : initialDraft(undefined, branch);
+    const restartStep = restartFromEntry ? (entry?.step ?? 0) : 0;
     snapshot.current = {
       draft: empty,
-      step: 0,
+      step: restartStep,
       edited: false,
       savingEnabled: false,
     };
     savedSignature.current = "";
     setPendingDraft(null);
     setDraft(empty);
-    setStep(0);
+    setStep(restartStep);
     setEdited(false);
     setSavingEnabled(false);
     setSaveState("idle");

@@ -1,5 +1,4 @@
 import { ButtonLink, Reveal, Section, SectionHeading } from "../ui/index.ts";
-import { branchHref } from "../../lib/config/navigation.ts";
 import { websiteStarter } from "../../lib/config/sites.ts";
 export function WebsiteOffer() {
   return (
@@ -20,10 +19,7 @@ export function WebsiteOffer() {
               they cover, and what they cost. You can discuss a budget without
               committing to a package.
             </p>
-            <ButtonLink
-              href={branchHref("websites", "/contact")}
-              className="content-action"
-            >
+            <ButtonLink href="/websites#enquiry" className="content-action">
               Start a Project
             </ButtonLink>
           </div>

@@ -1,9 +1,10 @@
 import Image from "next/image";
 import { ButtonLink, Container, HeroBrand } from "../ui/index.ts";
-import { projects } from "../../content/websites/projects.ts";
+import { getProjects } from "../../content/websites/projects.ts";
 import styles from "./hero.module.css";
 
-export function Hero() {
+export async function Hero() {
+  const projects = await getProjects();
   return (
     <section id="overview" className={styles.hero}>
       <Container>
@@ -21,7 +22,7 @@ export function Hero() {
             </p>
             <div className={styles.actions}>
               <ButtonLink href="#work">Explore Our Work</ButtonLink>
-              <ButtonLink href="/contact?topic=Website" secondary>
+              <ButtonLink href="#enquiry" secondary>
                 Start a Project
               </ButtonLink>
             </div>
@@ -47,7 +48,7 @@ export function Hero() {
                       width={asset.width}
                       height={asset.height}
                       sizes="(max-width: 767px) 60vw, (max-width: 1023px) 45vw, 34vw"
-                      priority={index < 2}
+                      loading="eager"
                     />
                     <span>{project.title}</span>
                   </a>

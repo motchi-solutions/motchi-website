@@ -1,6 +1,6 @@
 import { pageMetadata } from "../../lib/config/metadata.ts";
 import { websiteSections } from "../../lib/config/navigation.ts";
-import { ContactCTA } from "../../components/ui/index.ts";
+import { ServiceEnquiry } from "../../components/ui/contact/service-enquiry.tsx";
 import { SectionNavigation } from "../../components/ui/section-navigation.tsx";
 import { Hero } from "../../components/websites/hero.tsx";
 import { Work } from "../../components/websites/work.tsx";
@@ -26,13 +26,7 @@ export default function Websites() {
       <Process />
       <WebsiteResponsibilities />
       <WebsiteAbout />
-      <div id="enquiry">
-        <ContactCTA
-          href="/contact?topic=Website"
-          action="Start a Project"
-          title="Let's Plan Your Website"
-        />
-      </div>
+      <ServiceEnquiry branch="websites" />
     </>
   );
 }

@@ -24,10 +24,6 @@
     #000 calc(var(--intro-aperture) + 2px)
   );
 }
-.intro-experience[data-intro-dark="true"] {
-  color: var(--inverse);
-  --intro-background: var(--brand-primary);
-}
 
 .intro-family {
   position: absolute;
@@ -99,9 +95,6 @@
   font-weight: 600;
   letter-spacing: 0.02em;
   animation: intro-caption var(--motion-intro) var(--ease-reveal) both;
-}
-.intro-experience[data-intro-dark="true"] .intro-family-caption {
-  color: var(--inverse);
 }
 @keyframes intro-open {
   0%,
@@ -238,9 +231,6 @@
     opacity: 0;
     visibility: hidden;
   }
-}
-.intro-experience[data-intro-dark="true"] .intro-skip-hint {
-  color: var(--brand-accent);
 }
 
 .intro-skip-hint p {

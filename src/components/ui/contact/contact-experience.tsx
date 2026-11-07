@@ -13,7 +13,8 @@ import { contactContextLimit } from "../../../lib/config/validation.ts";
 import { Arrow, Container } from "../primitives.tsx";
 import { ContactField, ContactOptionGroup } from "./contact-controls.tsx";
 import { ContactPhoneField } from "./contact-phone-field.tsx";
-import { ContactDisclosure } from "./contact-disclosure.tsx";
+import { ContactServices } from "./contact-services.tsx";
+import type { ContactEntry } from "./contact-entry.ts";
 import { ContactReview } from "./contact-review.tsx";
 import { ContactSuccess } from "./contact-result.tsx";
 import { ContactProgress } from "./contact-progress.tsx";
@@ -47,19 +48,20 @@ const titles = [
 ];
 export function ContactExperience({
   topic,
+  entry,
   branch = "solutions",
   children,
   submission,
   initialFeedback,
 }: {
   topic?: string;
+  entry?: ContactEntry;
   branch?: Branch;
   children: ReactNode;
   submission?: { token: string | null };
   initialFeedback?: string;
 }) {
-  const { services, serviceDescriptions, followUps, questions, projectTitle } =
-    getContactConfiguration(branch);
+  const { questions, projectTitle } = getContactConfiguration(branch);
   const pageTitles = [...titles];
   pageTitles[1] = projectTitle;
   const {
@@ -74,7 +76,7 @@ export function ContactExperience({
     toggleSaving,
     resume,
     clear,
-  } = useContactDraft(topic, branch);
+  } = useContactDraft(topic, branch, entry);
   const [confirmClear, setConfirmClear] = useState(false);
   const [blockedTarget, setBlockedTarget] = useState<number | null>(null);
   const [attemptedStep, setAttemptedStep] = useState<number | null>(null);
@@ -244,7 +246,7 @@ export function ContactExperience({
   }
   function startFresh() {
     if (submissionInFlight.current) return;
-    if (clear()) {
+    if (clear(!!pendingDraft)) {
       setBlockedTarget(null);
       setAttemptedStep(null);
       setErrors({});
@@ -528,101 +530,15 @@ export function ContactExperience({
                       </div>
                     )}
                     {step === 0 && (
-                      <>
-                        <ContactOptionGroup
-                          id="services"
-                          onBlur={() => validateField("services", 0)}
-                          label="Please select your preferred services"
-                          options={services}
-                          hint="You can choose more than one. If you're unsure, please choose Not Sure Yet."
-                          value={draft.services}
-                          multiple
-                          required
-                          error={errors.services}
-                          onChange={(value) => {
-                            const added = value.find(
-                              (service) => !draft.services.includes(service),
-                            );
-                            const removed = draft.services.find(
-                              (service) => !value.includes(service),
-                            );
-                            setAnnouncement(
-                              added && followUps[added]
-                                ? `Optional details for ${added} available below.`
-                                : removed && followUps[removed]
-                                  ? `Questions for ${removed} removed.`
-                                  : "",
-                            );
-                            update("services", value);
-                          }}
-                        />
-                        <section
-                          className={styles.conditional}
-                          data-open={draft.services.some(
-                            (service) => followUps[service],
-                          )}
-                          aria-hidden={
-                            !draft.services.some(
-                              (service) => followUps[service],
-                            )
-                          }
-                          inert={
-                            !draft.services.some(
-                              (service) => followUps[service],
-                            )
-                          }
-                          aria-label="Optional service details"
-                        >
-                          <div className={styles.conditionalClip}>
-                            <ContactDisclosure title="Would you like to share more?">
-                              {services
-                                .filter((service) => followUps[service])
-                                .map((service) => (
-                                  <div
-                                    className={styles.conditional}
-                                    key={service}
-                                    data-open={draft.services.includes(service)}
-                                    aria-hidden={
-                                      !draft.services.includes(service)
-                                    }
-                                    inert={!draft.services.includes(service)}
-                                  >
-                                    <div className={styles.conditionalClip}>
-                                      <div
-                                        className={styles.serviceDetailGroup}
-                                      >
-                                        <h4
-                                          className={styles.serviceDetailTitle}
-                                        >
-                                          {service}
-                                        </h4>
-                                        <p className={styles.detailDescription}>
-                                          {serviceDescriptions[service]}
-                                        </p>
-                                        <div className={styles.reveal}>
-                                          <ContactOptionGroup
-                                            id={`details-${services.indexOf(service)}`}
-                                            label="What would you like help with?"
-                                            showRequirement={false}
-                                            options={followUps[service]}
-                                            value={draft.details[service] ?? []}
-                                            multiple
-                                            onChange={(value) =>
-                                              update("details", {
-                                                ...draft.details,
-                                                [service]: value,
-                                              })
-                                            }
-                                          />
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                ))}
-                            </ContactDisclosure>
-                          </div>
-                        </section>
-                      </>
+                      <ContactServices
+                        branch={branch}
+                        draft={draft}
+                        update={update}
+                        error={errors.services}
+                        onBlur={() => validateField("services", 0)}
+                        announce={setAnnouncement}
+                        detailsOpen={!!topic || !!entry?.draft.services.length}
+                      />
                     )}
                     {step === 1 &&
                       (

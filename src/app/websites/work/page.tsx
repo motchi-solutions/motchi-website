@@ -6,7 +6,7 @@ import {
   ContactCTA,
   Container,
 } from "../../../components/ui/index.ts";
-import { projects } from "../../../content/websites/projects.ts";
+import { getProjects } from "../../../content/websites/projects.ts";
 import { ProjectPreview } from "../../../components/websites/project-preview.tsx";
 import { Work } from "../../../components/websites/work.tsx";
 export const metadata = pageMetadata(
@@ -14,7 +14,8 @@ export const metadata = pageMetadata(
   "Selected website work across food, beauty, projects, and professional services. Each business deserves its own voice.",
   branchHref("websites", "/work"),
 );
-export default function Page() {
+export default async function Page() {
+  const projects = await getProjects();
   return (
     <>
       <section className="border-b border-border py-hero">
@@ -29,13 +30,13 @@ export default function Page() {
                 Explore the designs on desktop and mobile.
               </p>
               <div className="mt-7">
-                <ButtonLink href={branchHref("websites", "/contact")}>
+                <ButtonLink href="/websites#enquiry">
                   Start a Project
                 </ButtonLink>
               </div>
             </div>
             <article id={`project-${projects[0].id}`} className="min-w-0">
-              <ProjectPreview project={projects[0]} />
+              <ProjectPreview project={projects[0]} aboveFold />
               <p className="mt-4 text-small text-muted">
                 {projects[0].industry}
               </p>
@@ -91,7 +92,7 @@ export default function Page() {
       </section>
       <Work skipFirst />
       <ContactCTA
-        href={branchHref("websites", "/contact")}
+        href="/websites#enquiry"
         action="Start a Project"
         title="Let's Plan Your Website"
       />

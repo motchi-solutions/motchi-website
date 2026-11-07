@@ -1,8 +1,9 @@
 import { ContactPageContent } from "../../components/ui/index.ts";
+import { contactEntryFromParams } from "../../components/ui/contact/contact-entry.ts";
 import type { Metadata } from "next";
 export const dynamic = "force-dynamic";
 type Props = {
-  searchParams: Promise<{ status?: string; fields?: string; topic?: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 export async function generateMetadata({
   searchParams,
@@ -17,10 +18,23 @@ export async function generateMetadata({
   };
 }
 export default async function Contact({ searchParams }: Props) {
-  const { status, fields, topic } = await searchParams;
+  const values = await searchParams;
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(values)) {
+    for (const item of Array.isArray(value) ? value : value ? [value] : [])
+      params.append(key, item);
+  }
+  const branch = ["websites", "consulting"].includes(params.get("branch") ?? "")
+    ? (params.get("branch") as "websites" | "consulting")
+    : "solutions";
+  const status = params.get("status") ?? undefined;
+  const fields = params.get("fields") ?? undefined;
+  const topic = params.get("topic") ?? undefined;
+  const entry = contactEntryFromParams(params, branch, topic);
   return (
     <ContactPageContent
-      branch="solutions"
+      branch={branch}
+      entry={entry}
       status={status}
       fields={fields}
       topic={topic}

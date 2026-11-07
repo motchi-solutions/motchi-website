@@ -404,7 +404,7 @@ export function ProductsHero() {
                             width={product.logo.width}
                             height={product.logo.height}
                             sizes="(max-width: 767px) 120px, 160px"
-                            priority
+                            loading="eager"
                             draggable={false}
                             className={styles.doorLogo}
                           />

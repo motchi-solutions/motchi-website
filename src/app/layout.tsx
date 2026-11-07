@@ -27,7 +27,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       className={fontVariables}
     >
       <body id="page-top">
-        <Introduction branch="solutions" />
+        <Introduction />
         <MotionEnhancements />
         <a
           href="#main-content"

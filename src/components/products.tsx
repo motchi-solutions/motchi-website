@@ -22,6 +22,7 @@ export function Products() {
             >
               {product.logo ? (
                 <Image
+                  loading="lazy"
                   src={product.logo.src}
                   width={product.logo.width}
                   height={product.logo.height}

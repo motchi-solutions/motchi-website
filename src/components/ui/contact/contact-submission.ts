@@ -1,6 +1,7 @@
 import type { Branch } from "../../../lib/brand.ts";
 import { contactMessage } from "../../../lib/email/feedback.ts";
 import { getContactConfiguration } from "./contact-config.ts";
+import { initialDraft } from "./contact-model.ts";
 import { formatPhone } from "./contact-phone.ts";
 import type { ContactDraft } from "./contact-model.ts";
 
@@ -44,6 +45,29 @@ export function contactSubmissionFields(
     message: lines.join("\n"),
   });
 }
+// All branches submit through the consolidated Solutions endpoint. Keep detailed
+// branch choices in the message while routing through its supported categories.
+export function consolidatedContactSubmissionFields(
+  draft: ContactDraft,
+  branch: Branch,
+  token: string,
+  fax = "",
+) {
+  const fields = contactSubmissionFields(draft, branch, token, fax);
+  if (branch !== "solutions") {
+    const service = initialDraft(draft.services[0], "solutions").services[0];
+    fields.set(
+      "interest",
+      getContactConfiguration("solutions").submissionInterests[service],
+    );
+    if (branch === "websites" && draft.website)
+      fields.set(
+        "message",
+        `${fields.get("message")}\nWebsite: ${draft.website}`,
+      );
+  }
+  return fields;
+}
 export async function sendContactEnquiry(
   draft: ContactDraft,
   branch: Branch,
@@ -52,7 +76,7 @@ export async function sendContactEnquiry(
 ) {
   const response = await fetch("/api/contact", {
     method: "POST",
-    body: contactSubmissionFields(draft, branch, token, fax),
+    body: consolidatedContactSubmissionFields(draft, branch, token, fax),
     credentials: "same-origin",
     cache: "no-store",
   });

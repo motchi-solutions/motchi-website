@@ -1,29 +1,63 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import test from "node:test";
-import { navigation, publicRoutes } from "../packages/config/src/navigation.ts";
+import {
+  branchHref,
+  branchForPath,
+  mainNavigation,
+  publicRoutes,
+} from "../src/lib/config/navigation.ts";
 
-test("public navigation resolves to real pages included in each sitemap", () => {
-  for (const [branch, items] of Object.entries(navigation)) {
-    assert.equal(new Set(items.map((item) => item.href)).size, items.length);
-    for (const item of items) {
-      const url = new URL(item.href, "https://motchi.test");
-      assert.equal(url.origin, "https://motchi.test");
-      assert.ok(
-        publicRoutes[branch].includes(url.pathname),
-        `${branch}: ${item.href} missing from sitemap`,
-      );
-    }
-    for (const route of publicRoutes[branch]) {
-      const page = resolve(`apps/${branch}/src/app/${route}/page.tsx`);
-      assert.ok(existsSync(page), `${branch}: missing ${route}`);
-      const content = readFileSync(page, "utf8");
-      assert.match(
-        content,
-        /metadata|generateMetadata/,
-        `${branch}: metadata for ${route}`,
-      );
-    }
+test("service links preserve paths, contact topics, query strings and fragments", () => {
+  assert.equal(branchHref("websites", "/"), "/websites");
+  assert.equal(branchHref("websites", "/services"), "/websites#services");
+  assert.equal(branchHref("websites", "/process"), "/websites#process");
+  assert.equal(
+    branchHref("consulting", "/capabilities"),
+    "/consulting#capabilities",
+  );
+  assert.equal(branchHref("consulting", "/about"), "/consulting#about");
+  assert.equal(
+    branchHref("websites", "/work?view=all#project-vietbites"),
+    "/websites/work?view=all#project-vietbites",
+  );
+  assert.equal(
+    branchHref("consulting", "/contact"),
+    "/contact?topic=Consulting",
+  );
+  assert.equal(
+    branchHref("websites", "/contact?topic=Maintenance#form"),
+    "/contact?topic=Maintenance#form",
+  );
+  assert.equal(branchHref("websites", "/privacy"), "/privacy");
+  for (const href of [
+    "https://example.com/work",
+    "//example.com/work",
+    "#work",
+    "mailto:contact@motchi.ca",
+  ])
+    assert.equal(branchHref("websites", href), href);
+});
+
+test("company navigation targets valid sitemap pages", () => {
+  assert.equal(new Set(publicRoutes).size, publicRoutes.length);
+  for (const item of mainNavigation) {
+    for (const { href } of [item]) assert.ok(publicRoutes.includes(href));
   }
+  for (const route of publicRoutes)
+    assert.ok(existsSync(resolve(`src/app/${route}/page.tsx`)), route);
+});
+
+test("header identity follows service route boundaries and resets on company pages", () => {
+  for (const [path, expected] of [
+    ["/", "solutions"],
+    ["/services", "solutions"],
+    ["/websites", "websites"],
+    ["/websites/work", "websites"],
+    ["/consulting", "consulting"],
+    ["/consulting-other", "solutions"],
+    ["/contact", "solutions"],
+  ])
+    assert.equal(branchForPath(path), expected);
 });

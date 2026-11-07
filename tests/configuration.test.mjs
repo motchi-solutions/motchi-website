@@ -4,22 +4,22 @@ import test from "node:test";
 import {
   ConfigurationError,
   resolveSites,
-} from "../packages/config/src/resolve-sites.ts";
-import { getFormSecret, getServerEnv } from "../packages/config/src/env.ts";
-import { acknowledgement } from "../packages/email/src/templates.ts";
-import { validateContact } from "../packages/email/src/validation.ts";
+} from "../src/lib/config/resolve-sites.ts";
+import { getFormSecret, getServerEnv } from "../src/lib/config/env.ts";
+import { acknowledgement } from "../src/lib/email/templates.ts";
+import { validateContact } from "../src/lib/email/validation.ts";
 
 test("site origins use local development defaults and canonical production defaults", () => {
   assert.equal(
     resolveSites("development").websites.url,
-    "http://localhost:3001",
+    "http://localhost:3000/websites",
   );
   assert.equal(resolveSites("production").solutions.url, "https://motchi.ca");
   const sites = resolveSites("production", {
-    WEBSITES_URL: "https://websites.staging.example/",
+    SOLUTIONS_URL: "https://staging.example/",
   });
-  assert.equal(sites.websites.url, "https://websites.staging.example");
-  assert.equal(sites.consulting.url, "https://consulting.motchi.ca");
+  assert.equal(sites.websites.url, "https://staging.example/websites");
+  assert.equal(sites.consulting.url, "https://staging.example/consulting");
 });
 
 test("unsafe origins fail with variable names, without exposing their values", () => {
@@ -90,7 +90,7 @@ test("server environment validation is lazy, rejects missing delivery config and
 test("secret configuration refuses imports outside the server condition", () => {
   const result = spawnSync(
     process.execPath,
-    ["--input-type=module", "-e", "import('@motchi/config/env')"],
+    ["--input-type=module", "-e", "import('./src/lib/config/env.ts')"],
     { encoding: "utf8" },
   );
   assert.notEqual(result.status, 0);

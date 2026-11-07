@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { randomBytes } from "node:crypto";
 import test from "node:test";
-import { signToken } from "../packages/email/src/abuse.ts";
-import { handleContact } from "../packages/email/src/index.ts";
+import { signToken } from "../src/lib/email/abuse.ts";
+import { handleContact } from "../src/lib/email/index.ts";
 
 function makeRequest(overrides = {}, headers = {}) {
   const token = signToken(

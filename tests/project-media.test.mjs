@@ -1,9 +1,9 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { test } from "node:test";
-import { projects } from "../apps/websites/src/content/projects.ts";
+import { projects } from "../src/content/websites/projects.ts";
 
-const publicRoot = new URL("../apps/websites/public/", import.meta.url);
+const publicRoot = new URL("../public/", import.meta.url);
 test("approved project assets exist and configured PNG dimensions match the files", async () => {
   for (const project of projects) {
     for (const slot of ["desktop", "mobile", "logo"]) {

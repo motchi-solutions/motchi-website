@@ -1,104 +1,57 @@
 # Motchi Solutions
 
-Motchi makes technology accessible to businesses through practical advice, implementation, and continued support. This npm monorepo contains three related, independently deployed Next.js App Router sites.
+One Next.js application for Motchi Solutions (MS), with Motchi Websites (MW) and Motchi Consulting (MC) as specialist service branches. Products presents approved products in development, with their actual availability.
 
-| App                  | Domain                       | Local URL             |
-| -------------------- | ---------------------------- | --------------------- |
-| `@motchi/solutions`  | https://motchi.ca            | http://localhost:3000 |
-| `@motchi/websites`   | https://websites.motchi.ca   | http://localhost:3001 |
-| `@motchi/consulting` | https://consulting.motchi.ca | http://localhost:3002 |
+## Development
 
-```text
-apps/{solutions,websites,consulting}/
-  src/app/               Pages, metadata routes, contact POST endpoint
-  src/components/        Branch-specific sections
-  src/content/           Typed branch content where applicable
-  public/brand/          Approved logo assets
-packages/
-  ui/src/                Shared shell, primitives, contact/privacy content
-  brand/src/             Semantic CSS tokens and family configuration
-  email/src/             Server-only delivery, pure validation and templates
-  config/                TypeScript base, security headers, metadata helpers
-tests/                   Node-native utility and submission tests
-docs/                    Maintenance and launch guidance
-.github/                 CI and repository templates
-```
-
-## Local setup
-
-Use Node 26.12 or newer within Node 26 (`.nvmrc`) and npm 11 or newer. Run commands from the repository root. For a fresh clone with the committed lockfile:
+Use Node 26.12.1 from `.nvmrc` and npm 11 or newer. Run everything from this directory:
 
 ```bash
 npm ci
-npm run dev:solutions
+npm run dev
 ```
 
-Open another terminal for each additional app:
+Open http://localhost:3000. No workspace commands or feature flags are required.
 
 ```bash
-npm run dev:websites
-npm run dev:consulting
-```
-
-When package manifests change, run `npm install` to update the single root lockfile. Do not install independently inside apps. The root `npm run dev` starts Solutions.
-
-```bash
-npm run format:check
+npm run build
+npm start
 npm run lint
 npm run typecheck
 npm test
-npm run build
-npm run format
+npm run format:check
 ```
 
-A full `npm run build` builds all three apps sequentially. To build and serve an individual app, use:
+`build` creates one production application. `start` serves that build. Prettier formats source (`npm run format`); Biome lints it. CI runs the same checks. After reviewed dependency changes, update the single lockfile with `npm install`, then run `npm run dependencies:inventory`.
 
-| App        | Build                      | Serve production build     | Default port |
-| ---------- | -------------------------- | -------------------------- | ------------ |
-| Solutions  | `npm run build:solutions`  | `npm run start:solutions`  | 3000         |
-| Websites   | `npm run build:websites`   | `npm run start:websites`   | 3001         |
-| Consulting | `npm run build:consulting` | `npm run start:consulting` | 3002         |
+## Routes and source
 
-Run the build command before the corresponding start command. Start serves the completed build; it does not rebuild or watch for changes. Extra arguments pass through to Next.js, for example `npm run start:solutions -- --port 3005` or `npm run build:solutions -- --webpack`.
+- Company: `/`, `/services`, `/products`, `/about`, `/contact`, `/privacy`
+- Websites: `/websites` combines selected work, services, pricing, process and About. `/websites/work` contains the full portfolio.
+- Consulting: `/consulting` combines capabilities, approach and About.
 
-Type checking uses lightweight Next route type generation, without compiling production assets.
+| Location           | Purpose                                                                  |
+| ------------------ | ------------------------------------------------------------------------ |
+| `src/app`          | App Router pages, layouts, metadata and contact API                      |
+| `src/components`   | Company and branch composition, with reusable controls in `ui`           |
+| `src/content`      | Approved services, processes, projects and product content               |
+| `src/lib`          | Brand identity, configuration, validation and server-only email handling |
+| `src/styles`       | Shared brand, responsive typography and interaction tokens               |
+| `public`           | Original logos, portfolio media, product artwork and icons               |
+| `tests`, `scripts` | Node-native behavior tests and dependency inventory generation           |
 
-The [dependency inventory and audit](docs/DEPENDENCIES.md) lists direct and transitive libraries, locked versions, publication dates, and the latest npm audit. Run `npm run dependencies:inventory` to refresh it.
+The single header links to Websites, Consulting, Products, About and Contact. The Websites and Consulting pages use an animated right-edge section navigator instead of dropdowns. The full portfolio is linked from Websites. The header identity follows the current branch; its logo always returns to the company homepage. `/services` remains the company-wide overview, linked as All Services in the footer.
 
-## Contact configuration
+Marketing pages render on the server; interactive navigation, motion and forms use client components. Keep branch compositions distinct while reusing controls and tokens. Navigation and sitemap route lists live in `src/lib/config/navigation.ts`; site identity and the default origin live in `sites.ts`. The site currently blocks indexing until publication is intended; robots rules are not access control.
 
-The three Contact pages share one four-step wizard, with site-specific questions. See [Contact forms](docs/CONTACT_FORMS.md) for its UI, 2,000-character message limit, draft storage, validation, and submission contracts.
+## Environment and contact
 
-Copy `.env.example` to each app's `.env.local` and fill:
+Copy `.env.example` to `.env.local` at the root. Never commit filled environment files. `SOLUTIONS_URL` optionally overrides the site origin for alternate local ports or staging. Use an origin without a path, credentials, query or fragment. Production requires HTTPS and rejects loopback addresses. Restart development after environment changes; statically rendered URLs require rebuilding too.
 
-- `BREVO_API_KEY`: transactional-email API key, server only.
-- `CONTACT_FROM_EMAIL`: Brevo-verified sender address.
-- `CONTACT_TO_EMAIL`: business inbox receiving enquiries.
-- `CONTACT_FORM_SECRET`: stable secret of at least 32 characters. Generate locally with `node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"`.
+`BREVO_API_KEY`, `CONTACT_FROM_EMAIL` (verified sender), and `CONTACT_TO_EMAIL` configure transactional email. Production also requires a stable `CONTACT_FORM_SECRET` of at least 32 characters. Development can use a temporary process-wide signing key. Missing configuration shows an email fallback rather than claiming delivery. Contact requires a Node server, not static export. Build/runtime origins must agree because POSTs accept only the configured origin.
 
-Do not put production secrets in Git. Without email configuration, forms report unavailability and direct email remains usable. In production, an absent/short form secret disables the online form. Development has a temporary process-shared fallback secret for local preview, including separate page/API bundles. Production always requires the configured secret. Actual submissions send real email when configured: test only with addresses you control.
+The four-step wizard lives in `src/components/ui/contact`; `contact-config.ts` owns choices, questions and topic aliases. `ContactPageContent` supplies signed tokens and results. The wizard requires JavaScript and offers direct email without it. Draft saving is opt-in and expires after three days. Preserve the full optional message for editing; validate its 2,000-character limit on blur/navigation. Failed requests retain answers; confirmed or partial delivery clears saved drafts. Mock email in UI/CI tests and use controlled inboxes for real delivery checks.
 
-## Deployment
+Edit approved project, service and process records in `src/content/websites` and `src/content/consulting`; company products live directly in `src/content`. Use actual image dimensions, useful alt text, approved URLs and original SVG marks. Next discovers icons, manifests and social images through app file conventions.
 
-Deploy each app as a separate Next.js project sharing this repository and lockfile; Vercel is a straightforward option. Set app roots and domains independently. Provide the four server environment variables to each environment. See [Deployment](docs/DEPLOYMENT.md). No hosting or email service has been configured by this implementation.
-
-## Content and assets awaiting approval
-
-- Approved MS/MW/MC SVG or PNG logos: current wordmarks are ordinary text; temporary geometric favicon is not a monogram.
-- Approved portfolio screenshots, image alternative text, project URLs, and confirmed service descriptions; current visuals explicitly say “Screenshot placeholder”.
-- Pop Tips and Motchi Verify / MTV names, status, descriptions, and launch URLs. Current records are planned, unavailable products.
-- Consulting case studies only after completion and publication permission.
-- Business contact address, privacy/retention practices, final copy, and legal review.
-- License choice: the existing **GPLv3** license has been preserved. Public visibility does not change its obligations. Confirm the intended license before publishing new work.
-
-## Developer documentation
-
-- [Architecture](docs/ARCHITECTURE.md) · [Brand system](docs/BRAND_SYSTEM.md) · [Media assets](docs/MEDIA_ASSETS.md)
-- [Development](docs/DEVELOPMENT.md) · [Deployment](docs/DEPLOYMENT.md)
-- [Email](docs/EMAIL.md) · [Security](docs/SECURITY.md)
-- [Accessibility](docs/ACCESSIBILITY.md) · [SEO](docs/SEO.md)
-- [Contributing](docs/CONTRIBUTING.md) · [GitHub setup checklist](docs/GITHUB_SETUP.md)
-
-Read [SECURITY.md](SECURITY.md) for reporting issues. Browser review has covered the current layout and progressive enhancements; screen-reader/zoom review, final-asset media checks, full production builds, provider delivery, and DNS/HTTPS verification remain launch requirements. See the review record in docs/ACCESSIBILITY.md; utility tests alone do not establish production readiness.
-
-Configuration and environment setup: [docs/CONFIGURATION.md](docs/CONFIGURATION.md). All app `.env.local` files use the tracked root `.env.example`; public marketing content stays in source.
+See [DEPENDENCIES.md](docs/DEPENDENCIES.md) for the direct inventory, [AUDIT.md](docs/AUDIT.md) for maintenance concerns, [AGENTS.md](AGENTS.md) for persistent design constraints, [CONTRIBUTING.md](CONTRIBUTING.md) for contribution access and [SECURITY.md](SECURITY.md) for vulnerability reporting. The existing [license](LICENSE) applies.

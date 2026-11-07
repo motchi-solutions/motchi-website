@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { motionMilliseconds } from "../packages/ui/src/motion-timing.ts";
+import { motionMilliseconds } from "../src/components/ui/motion-timing.ts";
 
 test("motion timing handles CSS optimizer seconds and authored milliseconds equally", () => {
   assert.equal(motionMilliseconds("2600ms", 0), 2600);

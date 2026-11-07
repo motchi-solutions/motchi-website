@@ -8,4 +8,4 @@ Do not publish exploitable details, secrets, or submitted personal information i
 
 The repository owner must confirm that this inbox is monitored and enable private vulnerability reporting before public launch. No guaranteed response SLA is published at this stage.
 
-See [security engineering](docs/SECURITY.md) for threat boundaries, hosting requirements, and contact-form limitations.
+See [the maintenance audit](docs/AUDIT.md#security-and-contact-reliability) for security boundaries and contact reliability limits, and [the dependency inventory](docs/DEPENDENCIES.md) for advisory findings.

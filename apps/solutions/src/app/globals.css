@@ -1,5 +1,0 @@
-@import "tailwindcss";
-@import "@motchi/brand/tokens.css";
-@import "./spacing.css";
-@import "./surfaces.css";
-@source "../../../../packages/ui/src";

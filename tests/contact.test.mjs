@@ -4,14 +4,14 @@ import {
   createLimiter,
   signToken,
   verifyToken,
-} from "../packages/email/src/abuse.ts";
+} from "../src/lib/email/abuse.ts";
 import {
   acknowledgement,
   escapeHtml,
   notification,
-} from "../packages/email/src/templates.ts";
-import { isEmail, validateContact } from "../packages/email/src/validation.ts";
-import { filterContactCharacters } from "../packages/config/src/validation.ts";
+} from "../src/lib/email/templates.ts";
+import { isEmail, validateContact } from "../src/lib/email/validation.ts";
+import { filterContactCharacters } from "../src/lib/config/validation.ts";
 
 test("character filtering preserves meaningful content and incomplete typing", () => {
   assert.equal(

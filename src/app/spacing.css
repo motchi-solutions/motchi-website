@@ -1,0 +1,52 @@
+/* Solutions-only spacing contract. Use shared semantic tokens; keep Solutions density local. */
+:root[data-branch="solutions"] {
+  --ms-space-section: clamp(2rem, 4vw, 3rem);
+  --ms-space-hero: var(--ms-space-section);
+  --ms-space-exploration: 1.5rem;
+  --space-eyebrow: 1rem;
+  --space-copy: clamp(1rem, 2vw, 1.5rem);
+  --space-action: 1.5rem;
+  --space-related: 0.75rem;
+  --space-control-gap: 0.5rem;
+  --space-section-heading: clamp(1.75rem, 3vw, 2.5rem);
+  --space-layout: clamp(1.5rem, 3vw, 2rem);
+  --space-card: clamp(1.25rem, 2.5vw, 2rem);
+  --space-inset: var(--space-card);
+  --space-preview: 1.25rem;
+}
+
+/* Shared utility markup inherits this app's density without changing shared UI.
+   Explicit rules also cover Tailwind's inline spacing theme values. */
+[data-branch="solutions"] :where(.py-section, .py-content) {
+  padding-block: var(--ms-space-section);
+}
+[data-branch="solutions"] :where(.py-hero) {
+  padding-block: var(--ms-space-hero);
+}
+
+[data-branch="solutions"] [data-single-selection="true"][data-enhanced="true"] {
+  column-gap: var(--space-layout);
+}
+[data-branch="solutions"]
+  [data-single-selection="true"][data-enhanced="true"]
+  .step-journey {
+  gap: var(--space-related);
+}
+[data-branch="solutions"] [data-single-selection="true"] .step-side-detail {
+  padding: 0 0 0 var(--space-copy);
+}
+[data-branch="solutions"] :where(.footer-grid) {
+  gap: var(--space-layout);
+}
+[data-branch="solutions"] .footer-grid + div {
+  margin-top: var(--space-section-heading);
+  padding-top: var(--space-action);
+}
+
+@media (min-width: 1024px) and (max-width: 1919px) {
+  :root[data-branch="solutions"] {
+    --ms-space-section: clamp(2rem, 1.266667rem + 1.444444vw, 3rem);
+    --space-section-heading: clamp(1.5rem, 0.766667rem + 1.444444vw, 2.5rem);
+    --space-copy: clamp(1rem, 0.633333rem + 0.722222vw, 1.5rem);
+  }
+}

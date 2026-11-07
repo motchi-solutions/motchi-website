@@ -40,11 +40,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Monorepo outputs and local configuration
-**/node_modules/
-**/.next/
-**/out/
-**/build/
-**/.vercel/
-.env*
+
 !.env.example

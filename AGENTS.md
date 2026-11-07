@@ -20,7 +20,7 @@
 - Press feedback should respond immediately through `:active`, with short feedback around 80-120ms where a transition is useful. Do not lock out input while animations finish.
 - Exclude disabled and `aria-disabled="true"` controls from interactive hover/press effects, and explain unavailable actions where needed. Respect `prefers-reduced-motion`; remove decorative movement and use immediate state changes when appropriate.
 - Verify actual styles in the browser: inactive/selected hover, pointer exit, keyboard focus, disabled state, touch emulation, and reduced motion. Watch selector specificity so later selected styles do not accidentally erase hover feedback.
-- Use the shared shell-width token for outer containers on all three websites, including navigation and footer. Keep paragraph and legal-copy reading widths bounded independently.
+- Use the shared shell-width token for outer containers on all service branches, including navigation and footer. Keep paragraph and legal-copy reading widths bounded independently.
 
 - Disclosures and expandable sections must open and close smoothly with interruptible 300ms ease-in-out motion; keep collapsed controls out of keyboard navigation, preserve answers, expose expanded state, and respect reduced motion. Do not animate focus indicators or delay input. Avoid abrupt interactive changes; choose restrained feedback rather than adding decorative movement everywhere.
 - Apply the 300ms ease-in-out link contract to underline pseudo-elements and arrow icons as well as link text. Brand lockups are identity elements: preserve their home link and keyboard focus, but do not add ordinary text-link hover underlines to their brand name.
@@ -36,36 +36,57 @@
 
 - Whenever dependencies are added, removed, or updated, refresh `docs/DEPENDENCIES.md` immediately using `npm run dependencies:inventory`. Resolve any discrepancy between the inventory and the current dependency manifests or lockfile as soon as it is found, and report any issue that prevents the inventory or audit from being refreshed.
 
-## Consistency across all three websites
+## Consistency across service branches
 
-- Apply shared design-system changes across Motchi Solutions, Motchi Websites, and Motchi Consulting. This includes responsive behavior, container widths, typography scaling, button format, hover/selected/focus colors and behavior, motion, and overall theme rules. Do not leave these changes on only one website unless the user explicitly limits their scope.
-- Implement shared patterns in packages/brand or packages/ui where practical, using one source of truth rather than copying app-specific overrides. Equivalent controls should follow the same interaction and responsive contracts on all three sites.
-- The four-step Contact wizard lives in packages/ui/src/contact. Keep page layout, controls, review, counter, drafts, validation, and motion shared; customize each site's services and questions through contact-config.ts. Preserve over-limit messages for editing, validate the 2,000-character limit on blur or navigation, and place the counter below the textarea.
+- Apply shared design-system changes across Motchi Solutions, Motchi Websites, and Motchi Consulting. This includes responsive behavior, container widths, typography scaling, button format, hover/selected/focus colors and behavior, motion, and overall theme rules. Do not leave these changes on only one branch unless the user explicitly limits their scope.
+- Implement shared patterns in src/styles or src/components/ui where practical, using one source of truth rather than copying app-specific overrides. Equivalent controls should follow the same interaction and responsive contracts on all service branches.
+- The four-step Contact wizard lives in src/components/ui/contact. Keep page layout, controls, review, counter, drafts, validation, and motion shared; customize each site's services and questions through contact-config.ts. Preserve over-limit messages for editing, validate the 2,000-character limit on blur or navigation, and place the counter below the textarea.
 - Use the shared ContactResultPanel for confirmed submission results and future result states. Show a reference ID only when the backend provides one, keep success copy truthful for partial delivery, and respect reduced motion. Keep the message counter outside the textarea so it cannot overlap text or its resize handle.
 - Preserve intentional brand identities and content. Apply shared rules through existing semantic brand tokens; do not duplicate site-specific features or force unrelated page layouts to match.
 - Treat laptop widths (1280/1366/1440/1536px) separately from large-monitor widths (1920px and up). Scale headings, copy, and spacing proportionally without global zoom or premature monitor-size jumps; preserve approved sizes outside the target range.
-- Check all three websites after a shared change: relevant desktop and mobile sizes, large monitor sizes, zoom/text resizing, keyboard focus, hover/selected states, and reduced motion as applicable. Report which checks actually ran.
-- An explicit user instruction limiting a task to one website takes precedence over this cross-site consistency rule. Existing authorization to update all three is sufficient; do not ask for confirmation again.
+- Check all service branches after a shared change: relevant desktop and mobile sizes, large monitor sizes, zoom/text resizing, keyboard focus, hover/selected states, and reduced motion as applicable. Report which checks actually ran.
+- An explicit user instruction limiting a task to one website takes precedence over this cross-site consistency rule. Existing authorization to update all branches is sufficient; do not ask for confirmation again.
 - Keep help icons immediately beside field names, grouped with their labels but outside the clickable label itself. Preserve the bubble position until its closing transition completes.
 - Mark required inputs with the shared RequiredMark and include RequiredNotice at the start of the form/step. Do not rely on red alone: retain native required semantics and screen-reader text. Leave optional field labels unmarked. Placeholders may provide nonessential format examples, never replace labels or essential instructions, and should not merely repeat a field name.
 
 ## Interface copy
 
 - Use courteous wording for form instructions, such as "Please select..." or "We recommend...". Describe services as help we can offer rather than orders to the user.
-- Keep copy friendly, clean, concise, and actionable across all three websites. Say what the user can do in familiar language, using consistent names for fields, options, and actions.
+- Keep copy friendly, clean, concise, and actionable across all service branches. Say what the user can do in familiar language, using consistent names for fields, options, and actions.
 - State selection rules explicitly: say "Select all" for multiple choices and "Choose one" for a single choice. Explain what the choices are for and offer a clear path when users are unsure.
 - Use short, polite validation messages such as "Please enter your name." Keep detailed guidance near the relevant field or in supplementary help rather than repeating it in errors or summaries.
-- Place inline validation after the field label/legend and any visible helper text, before the input or option list. Apply this order to text fields, selects, textareas, and compound fields across all three sites; preserve aria-describedby associations.
+- Place inline validation after the field label/legend and any visible helper text, before the input or option list. Apply this order to text fields, selects, textareas, and compound fields across all service branches; preserve aria-describedby associations.
 - Filter clearly invalid characters using the shared field-specific contact-input handlers, including paste/autofill and composition completion. Preserve international names, normal punctuation/numbers in free-text descriptions, caret position, and incomplete values while typing. Never replace server validation with input filtering.
 - Show new validation errors on blur or an attempt to continue/submit. Once an error is visible, refresh it while the user edits or autofills, and clear it immediately when valid, including in the focused field. Do not show a new error again until blur or continue/submit.
 
 ## Typography at native zoom
 
-- Use the shared reading, UI, and form-option tokens in packages/brand/src/responsive.css across all three sites. Keep body text steady through laptop widths; grow gradually above 1536px with bounded rem-based values.
+- Use the shared reading, UI, and form-option tokens in src/styles/responsive.css across all service branches. Keep body text steady through laptop widths; grow gradually above 1536px with bounded rem-based values.
 - Treat 100% browser zoom as the default composition. Do not use CSS zoom, shrink the root font size, or scale whole sections to compensate for oversized typography.
 - Selection labels stay subordinate to their question headings. Use --form-option-size, preserve comfortable hit targets, and avoid local viewport formulas that compete with the shared scale.
 - Verify small phones, tablets, 1280/1366/1440/1536px laptops, and 1920/2560px monitors. Check reflow and text enlargement separately; never prevent browser zoom.
 
 ## Design skills
 
-- Refer to `docs/DESIGN_SKILLS.md` for the purpose, limits, and recommended workflow for the repository design and UX skills.
+- Motchi's approved content, original MS/MW/MC vector marks, and palette (#F4F0E6 cream, #5B0202 burgundy, #D4AF7C gold, #171313 charcoal) are the source of truth. Do not invent projects, testimonials, statistics, product availability, or client links.
+- Use skills selectively: Hallmark for requested structural audits; frontend-design for composition; design-systems-frontend-architecture for shared boundaries; ux-writing for clarity; untangle-codebase for evidence-based cleanup; apple-design for restrained motion; web-design-guidelines for browser QA. User scope and existing brand decisions take precedence over skill defaults.
+- Prefer existing controls over Interior.dev. Before copying an external component, inspect its source, dependencies, license and accessibility, and record essential attribution/dependency notes in docs/DEPENDENCIES.md. Do not bulk-install libraries.
+- Keep branch composition distinct and shared patterns in src/styles or src/components/ui. Preserve approved pricing, project media, capabilities, process details and contact behavior when refactoring.
+- Solutions-specific density and surface classes live in src/app/spacing.css and surfaces.css. Use semantic tokens, natural content flow and one owner per gap; do not change shared branch styling to fix a Solutions-only composition.
+
+## Repository hygiene
+
+- Do not commit, push, or deploy unless explicitly asked.
+- Mock contact delivery in UI/CI tests; do not send real mail as routine QA.
+- Keep setup and architecture in README.md, dependency information in docs/DEPENDENCIES.md, and meaningful findings/debt in docs/AUDIT.md. Keep persistent agent constraints here. Do not add task reports, decision logs, parity checklists or migration runbooks.
+- Before keeping documentation, ask whether a developer will need it six months from now to understand, run, maintain or safely change the project. Merge durable information into the existing documents.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

@@ -7,8 +7,8 @@ test("development page and API module copies accept the same temporary form secr
   process.env.NODE_ENV = "development";
   delete process.env.CONTACT_FORM_SECRET;
   try {
-    const pageModule = await import("../packages/email/src/index.ts?page-copy");
-    const apiModule = await import("../packages/email/src/index.ts?api-copy");
+    const pageModule = await import("../src/lib/email/index.ts?page-copy");
+    const apiModule = await import("../src/lib/email/index.ts?api-copy");
     const now = Date.now();
     const clock = t.mock.method(Date, "now", () => now - 3000);
     const token = pageModule.createContactToken();

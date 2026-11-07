@@ -1,16 +1,17 @@
+import { branchHref } from "../src/lib/config/navigation.ts";
 import assert from "node:assert/strict";
 import test from "node:test";
-import { contactContextLimit } from "../packages/config/src/validation.ts";
-import { validateContact as validateSubmission } from "../packages/email/src/validation.ts";
-import { getContactConfiguration } from "../packages/ui/src/contact/contact-config.ts";
+import { contactContextLimit } from "../src/lib/config/validation.ts";
+import { validateContact as validateSubmission } from "../src/lib/email/validation.ts";
+import { getContactConfiguration } from "../src/components/ui/contact/contact-config.ts";
 import {
   initialDraft,
   parseContactDraft,
   getContactDraftKey,
   validateContact,
   canVisitContactStep,
-} from "../packages/ui/src/contact/contact-model.ts";
-import { contactSubmissionFields } from "../packages/ui/src/contact/contact-submission.ts";
+} from "../src/components/ui/contact/contact-model.ts";
+import { contactSubmissionFields } from "../src/components/ui/contact/contact-submission.ts";
 
 function completed(branch) {
   const config = getContactConfiguration(branch);
@@ -123,5 +124,27 @@ test("all selected wizard answers reach existing validated submission payloads",
       Buffer.byteLength(encoded) <= 24000,
       `${branch}: encoded message exceeds transport limit`,
     );
+  }
+});
+
+test("service enquiry links initialize supported contact choices", () => {
+  for (const [topic, service] of [
+    ["Maintenance", "Website"],
+    ["Website redesign", "Website"],
+    ["Databricks", "Data & Analytics"],
+    ["Technology Strategy", "Technology Advice"],
+  ]) {
+    assert.deepEqual(initialDraft(topic, "solutions").services, [service]);
+  }
+  for (const [branch, service] of [
+    ["websites", "Website"],
+    ["consulting", "Technology Advice"],
+  ]) {
+    const topic = new URL(
+      branchHref(branch, "/contact"),
+      "https://motchi.test",
+    ).searchParams.get("topic");
+    const draft = initialDraft(topic, "solutions");
+    assert.ok(draft.services.includes(service));
   }
 });

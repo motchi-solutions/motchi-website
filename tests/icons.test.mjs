@@ -1,21 +1,14 @@
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
-import { createHash } from "node:crypto";
 import test from "node:test";
-import solutionsManifest from "../apps/solutions/src/app/manifest.ts";
-import websitesManifest from "../apps/websites/src/app/manifest.ts";
-import consultingManifest from "../apps/consulting/src/app/manifest.ts";
-import { sites } from "../packages/config/src/sites.ts";
+import solutionsManifest from "../src/app/manifest.ts";
+import { sites } from "../src/lib/config/sites.ts";
 import {
   siteMetadata,
   organizationSchema,
-} from "../packages/config/src/metadata.ts";
+} from "../src/lib/config/metadata.ts";
 
-const manifests = {
-  solutions: solutionsManifest,
-  websites: websitesManifest,
-  consulting: consultingManifest,
-};
+const manifests = { solutions: solutionsManifest };
 test("manifest identities match supplied PNG dimensions and honest icon purposes", () => {
   for (const [branch, makeManifest] of Object.entries(manifests)) {
     const manifest = makeManifest();
@@ -26,10 +19,10 @@ test("manifest identities match supplied PNG dimensions and honest icon purposes
     );
     assert.equal(manifest.start_url, "/");
     assert.equal(manifest.display, "standalone");
-    assert.equal(manifest.background_color, "#F6F2E9");
+    assert.equal(manifest.background_color, "#F4F0E6");
     assert.equal(manifest.theme_color, "#5B0202");
     for (const icon of manifest.icons) {
-      const bytes = readFileSync(`apps/${branch}/public${icon.src}`);
+      const bytes = readFileSync(`public${icon.src}`);
       assert.equal(bytes.subarray(0, 8).toString("hex"), "89504e470d0a1a0a");
       assert.equal(
         icon.sizes,
@@ -38,30 +31,11 @@ test("manifest identities match supplied PNG dimensions and honest icon purposes
       assert.equal(icon.type, "image/png");
       assert.equal(icon.purpose, "any");
     }
-    const apple = readFileSync(`apps/${branch}/src/app/apple-icon.png`);
+    const apple = readFileSync(`src/app/apple-icon.png`);
     assert.equal(apple.readUInt32BE(16), 180);
     assert.equal(apple.readUInt32BE(20), 180);
-    assert.ok(existsSync(`apps/${branch}/src/app/favicon.ico`));
-    assert.match(
-      readFileSync(`apps/${branch}/src/app/icon.svg`, "utf8"),
-      /<svg\b/,
-    );
-  }
-});
-test("each app owns distinct favicon, Apple, scalable, and manifest artwork", () => {
-  for (const suffix of [
-    "src/app/icon.svg",
-    "src/app/favicon.ico",
-    "src/app/apple-icon.png",
-    "public/web-app-manifest-192x192.png",
-    "public/web-app-manifest-512x512.png",
-  ]) {
-    const hashes = Object.keys(manifests).map((branch) =>
-      createHash("sha256")
-        .update(readFileSync(`apps/${branch}/${suffix}`))
-        .digest("hex"),
-    );
-    assert.equal(new Set(hashes).size, 3, suffix);
+    assert.ok(existsSync(`src/app/favicon.ico`));
+    assert.match(readFileSync(`src/app/icon.svg`, "utf8"), /<svg\b/);
   }
 });
 test("metadata keeps domains and schema environment-aware without duplicate file icons", () => {

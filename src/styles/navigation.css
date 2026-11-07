@@ -1,0 +1,169 @@
+/* Stable original marks crossfade without changing header geometry. */
+.header-brand-art,
+.header-brand-label {
+  display: grid;
+}
+.header-brand-art {
+  width: 2.75rem;
+  height: 2.75rem;
+  flex-shrink: 0;
+}
+.header-brand-art img,
+.header-brand-label > span {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transition: opacity var(--motion-hover) var(--ease-hover);
+}
+.header-brand-art img {
+  width: 2.75rem;
+  height: 2.75rem;
+  object-fit: contain;
+}
+.header-brand-art img[data-active="true"],
+.header-brand-label > span[data-active="true"] {
+  opacity: 1;
+}
+.primary-navigation-links {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 2.2vw, 2.25rem);
+  font-size: var(--type-reading-small);
+}
+.primary-navigation-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+}
+.primary-navigation-link.nav-contact {
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--brand-primary);
+  border-radius: var(--radius-control);
+}
+.section-navigation {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  z-index: 35;
+  width: min(17rem, calc(100dvw - 2rem));
+  transform: translate(100%, -50%);
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    transform var(--motion-hover) var(--ease-hover),
+    visibility var(--motion-hover);
+}
+.section-navigation[data-visible="true"] {
+  transform: translate(0, -50%);
+  visibility: visible;
+  pointer-events: auto;
+}
+.section-navigation-drawer {
+  display: flex;
+  align-items: center;
+  color: var(--foreground);
+  transform: translateX(calc(100% - 2.75rem));
+  transition: transform var(--motion-hover) var(--ease-hover);
+}
+.section-navigation[data-open="true"] .section-navigation-drawer {
+  transform: translateX(0);
+}
+.section-navigation-handle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 2.75rem;
+  height: 4.5rem;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-right: 0;
+  border-radius: 0.5rem 0 0 0.5rem;
+  background: var(--surface);
+  color: var(--brand-primary);
+  font-size: 0.7rem;
+}
+.section-navigation-handle svg {
+  transition: transform var(--motion-hover) var(--ease-hover);
+}
+.section-navigation[data-open="true"] .section-navigation-handle svg {
+  transform: rotate(180deg);
+}
+.section-navigation nav {
+  min-width: 0;
+  flex: 1;
+  max-height: min(70dvh, 34rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-right: 0;
+  border-radius: 0.5rem 0 0 0.5rem;
+  background: var(--surface);
+  box-shadow: 0 0.5rem 1.5rem -1rem var(--charcoal);
+}
+.section-navigation nav > p {
+  margin: 0 0 0.5rem;
+  padding: 0.35rem 0.5rem;
+  font-size: var(--type-reading-small);
+  color: var(--muted);
+}
+.section-navigation li + li {
+  margin-top: 0.2rem;
+}
+.section-navigation a {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  font-size: var(--type-reading-small);
+}
+.section-navigation a[aria-current="location"] {
+  border-color: var(--border-selected);
+  background: var(--surface-selected);
+  color: var(--foreground-selected);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+.section-navigation a:focus-visible,
+.section-navigation-handle:focus-visible {
+  outline: 2px solid var(--brand-primary);
+  outline-offset: 3px;
+}
+.section-navigation a:active,
+.section-navigation-handle:active {
+  background: var(--background);
+  transition-duration: 100ms;
+}
+.section-navigation a[aria-current="location"]:active {
+  background: var(--surface-selected-hover);
+}
+@media (hover: hover) and (pointer: fine) {
+  .section-navigation a:hover,
+  .section-navigation-handle:hover {
+    background: var(--background);
+    color: var(--brand-primary);
+  }
+  .section-navigation a[aria-current="location"]:hover {
+    background: var(--surface-selected-hover);
+    color: var(--foreground-selected);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .header-brand-art img,
+  .header-brand-label > span,
+  .section-navigation,
+  .section-navigation-drawer,
+  .section-navigation-handle svg {
+    transition: none;
+  }
+}
+@media (forced-colors: active) {
+  .section-navigation a:focus-visible,
+  .section-navigation-handle:focus-visible {
+    outline-color: Highlight;
+  }
+}

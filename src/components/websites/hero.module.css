@@ -30,7 +30,7 @@
   text-wrap: balance;
 }
 .copy {
-  max-width: 58ch;
+  max-width: 40rem;
   margin-top: 1.5rem;
   color: var(--muted);
   font-size: var(--type-reading-body);

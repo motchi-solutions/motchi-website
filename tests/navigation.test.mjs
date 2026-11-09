@@ -52,7 +52,6 @@ test("company navigation targets valid sitemap pages", () => {
 test("route identity follows service boundaries and defaults to the company", () => {
   for (const [path, expected] of [
     ["/", "solutions"],
-    ["/services", "solutions"],
     ["/about", "solutions"],
     ["/products", "solutions"],
     ["/privacy", "solutions"],

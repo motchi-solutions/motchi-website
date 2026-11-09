@@ -15,7 +15,7 @@ export const contactFieldErrors = {
   company: `Use up to ${contactLimits.company} characters without line breaks.`,
   interest: "Choose an area of interest.",
   budget: "Use up to 100 characters without line breaks.",
-  message: `Enter ${contactLimits.messageMin}–${contactLimits.messageMax.toLocaleString("en-CA")} characters.`,
+  message: `Enter ${contactLimits.messageMin}-${contactLimits.messageMax.toLocaleString("en-CA")} characters.`,
   website: "Enter a complete http or https URL without account credentials.",
 } as const;
 export const interests = {

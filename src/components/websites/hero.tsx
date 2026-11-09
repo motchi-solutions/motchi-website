@@ -27,9 +27,9 @@ export function Hero() {
               maintenance options for support after launch.
             </p>
             <div className={styles.actions}>
-              <ButtonLink href="#work">Explore Our Work</ButtonLink>
-              <ButtonLink href="#enquiry" secondary>
-                Start a Project
+              <ButtonLink href="#enquiry">Start a Project</ButtonLink>
+              <ButtonLink href="#work" secondary>
+                Explore Our Work
               </ButtonLink>
             </div>
           </div>

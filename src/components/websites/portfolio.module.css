@@ -1,0 +1,208 @@
+/* Portfolio: the work leads. Short header with a project index, then one
+   alternating showcase per project on a warm media stage. */
+.header {
+  padding-block: clamp(2rem, 4vw, 3.5rem) clamp(2.5rem, 5vw, 4.5rem);
+  border-bottom: 1px solid var(--border);
+}
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  color: var(--brand-primary);
+  font-weight: 600;
+}
+.intro {
+  display: grid;
+  gap: 2rem 4rem;
+  margin-top: 1.5rem;
+}
+.intro h1 {
+  font-size: clamp(2.75rem, 1.5rem + 4vw, 5.5rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+.intro > div > p {
+  max-width: 40rem;
+  margin-top: 1.25rem;
+  color: var(--muted);
+  font-size: var(--type-reading-large);
+  line-height: var(--type-reading-leading);
+}
+.index ol {
+  display: grid;
+  border-top: 1px solid var(--border);
+}
+.index a {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 3.25rem;
+  padding-inline: 0.5rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--foreground);
+  font-size: var(--type-reading-large);
+  font-weight: 500;
+  transition:
+    color var(--motion-hover) var(--ease-hover),
+    background-color var(--motion-hover) var(--ease-hover);
+}
+.index a span {
+  color: var(--brand-primary);
+  font-size: var(--type-reading-small);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.indexLogo {
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+.index a:focus-visible {
+  outline: 2px solid var(--brand-primary);
+  outline-offset: 2px;
+}
+.index a:active {
+  background: color-mix(in srgb, var(--gold) 20%, transparent);
+  transition-duration: 100ms;
+}
+.projects {
+  display: grid;
+}
+.project {
+  padding-block: var(--space-section);
+  background: var(--background);
+}
+.project[data-flip="true"] {
+  background: var(--surface);
+}
+.showcase {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2rem 4rem;
+  align-items: center;
+}
+.stage {
+  min-width: 0;
+  padding: clamp(1.25rem, 3vw, 2.75rem);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--gold) 16%, var(--background));
+}
+.project[data-flip="true"] .stage {
+  background: color-mix(in srgb, var(--gold) 12%, var(--surface));
+}
+.copy {
+  min-width: 0;
+}
+/* Decorative outline numeral: the page's rhythm marker. */
+.number {
+  color: transparent;
+  font-size: clamp(3.5rem, 2rem + 4vw, 6.5rem);
+  font-weight: 600;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  -webkit-text-stroke: 1.5px var(--gold);
+}
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.logo {
+  width: 3rem;
+  height: 3rem;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+.identity h2 {
+  font-size: var(--type-feature-title);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+.industry {
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: var(--type-reading-small);
+}
+.description {
+  margin-top: 1.25rem;
+  color: var(--muted);
+  font-size: var(--type-reading-body);
+  line-height: var(--type-reading-leading);
+}
+.highlightsTitle {
+  margin-top: 1.5rem;
+  color: var(--foreground);
+  font-size: var(--type-reading-small);
+  font-weight: 600;
+}
+.highlights {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.625rem;
+}
+.highlights li {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: var(--type-reading-body);
+}
+.highlights svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+  color: var(--brand-primary);
+}
+.actions {
+  margin-top: 1.75rem;
+}
+@media (hover: hover) and (pointer: fine) {
+  .index a:hover {
+    color: var(--brand-primary);
+    background: color-mix(in srgb, var(--gold) 12%, transparent);
+  }
+}
+@media (min-width: 1024px) {
+  .intro {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    align-items: start;
+  }
+  .showcase {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    grid-template-areas: "stage copy";
+  }
+  .project[data-flip="true"] .showcase {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-areas: "copy stage";
+  }
+  .stage {
+    grid-area: stage;
+  }
+  .copy {
+    grid-area: copy;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .index a {
+    transition: none;
+  }
+}
+@media (forced-colors: active) {
+  .number {
+    -webkit-text-stroke-color: CanvasText;
+  }
+  .indexLogo {
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+    object-fit: contain;
+  }
+  .index a:focus-visible {
+    outline-color: Highlight;
+  }
+}

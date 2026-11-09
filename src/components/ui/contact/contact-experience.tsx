@@ -22,6 +22,7 @@ import { ContactProgress } from "./contact-progress.tsx";
 import { ContactDecorations } from "./contact-decorations.tsx";
 import { useContactDraft } from "./use-contact-draft.ts";
 import {
+  answered,
   contactStepIndices,
   initialDraft,
   canVisitContactStep,
@@ -209,9 +210,15 @@ export function ContactExperience({
       );
     }
   }
+  // Blur checks what was entered. A required answer that is still empty waits
+  // for Continue or Send, so passing through a field never shows an error.
   function validateField(field: keyof ContactDraft, atStep = 2) {
     const found = validateContact(draft, atStep);
-    setErrors((current) => ({ ...current, [field]: found[field] }));
+    setErrors((current) =>
+      !current[field] && !answered(draft[field])
+        ? current
+        : { ...current, [field]: found[field] },
+    );
   }
   function validatePhone() {
     const found = validateContact(draft, 2);

@@ -1,0 +1,272 @@
+/* What We Build: one website as a cross-section. A single open layer keeps the
+   section light; the diagram lifts the matching plane. */
+.services {
+  padding-block: var(--space-section);
+  background: var(--surface);
+}
+.composition {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2.5rem 4rem;
+}
+.visual {
+  display: none;
+}
+.stack {
+  display: block;
+  width: 100%;
+  max-width: 26rem;
+  height: auto;
+  overflow: visible;
+}
+.layerPlane {
+  cursor: pointer;
+  transform: translateY(0);
+  transition: transform var(--motion-hover) var(--ease-hover);
+}
+.layerPlane[data-active="true"] {
+  transform: translateY(-10px);
+}
+.layerPlane[data-preview="true"] {
+  transform: translateY(-4px);
+}
+.plane {
+  fill: var(--surface);
+  stroke: color-mix(in srgb, var(--gold) 85%, var(--charcoal));
+  stroke-width: 1.25;
+  stroke-linejoin: round;
+  transition:
+    fill var(--motion-hover) var(--ease-hover),
+    stroke var(--motion-hover) var(--ease-hover);
+}
+[data-layer="1"] > .plane {
+  fill: color-mix(in srgb, var(--gold) 12%, var(--surface));
+}
+[data-layer="2"] > .plane {
+  fill: color-mix(in srgb, var(--gold) 22%, var(--surface));
+}
+[data-layer="3"] > .plane {
+  fill: color-mix(in srgb, var(--gold) 30%, var(--surface));
+}
+[data-layer="4"] > .plane {
+  fill: color-mix(in srgb, var(--gold) 38%, var(--surface));
+}
+.layerPlane[data-active="true"] > .plane {
+  fill: var(--brand-primary);
+  stroke: var(--brand-primary);
+}
+.planeDetail,
+.stackLink {
+  fill: none;
+  stroke-linecap: round;
+}
+.planeDetail {
+  stroke: color-mix(in srgb, var(--brand-primary) 55%, transparent);
+  stroke-width: 1.25;
+  transition: stroke var(--motion-hover) var(--ease-hover);
+}
+.layerPlane[data-active="true"] > .planeDetail {
+  stroke: color-mix(in srgb, var(--gold) 75%, transparent);
+}
+.stackLink {
+  stroke: var(--gold);
+  stroke-width: 1;
+  stroke-dasharray: 3 5;
+}
+.planeNumber {
+  fill: var(--brand-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.visualCaption {
+  max-width: 26rem;
+  margin-top: 1.5rem;
+  color: var(--muted);
+  font-size: var(--type-reading-small);
+  line-height: var(--type-reading-leading);
+}
+.layers {
+  display: grid;
+  min-width: 0;
+}
+.layer {
+  min-width: 0;
+  border-top: 1px solid var(--border);
+  transition: background-color var(--motion-hover) var(--ease-hover);
+}
+/* The open layer is one soft region: its header and bullets share a surface. */
+.layer[data-open="true"] {
+  background: color-mix(in srgb, var(--gold) 10%, var(--surface));
+}
+.layer:last-child {
+  border-bottom: 1px solid var(--border);
+}
+.layerHeading {
+  font-weight: inherit;
+}
+/* The whole row is the control; content is just two lines. */
+.layerButton {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 0.25rem 1rem;
+  width: 100%;
+  min-height: 4.5rem;
+  padding: 1.125rem 0.75rem;
+  border: 0;
+  border-radius: 0.375rem;
+  background: transparent;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: background-color var(--motion-hover) var(--ease-hover);
+}
+.layerButton:disabled {
+  cursor: default;
+}
+.layerLabel {
+  grid-column: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  color: var(--muted);
+  font-size: var(--type-reading-small);
+  font-weight: 600;
+}
+.layerLabel span {
+  flex-shrink: 0;
+  color: var(--brand-primary);
+  font-variant-numeric: tabular-nums;
+}
+.layerTitle {
+  grid-column: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.875rem;
+  min-width: 0;
+}
+.layerName {
+  font-size: var(--type-card-title);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  transition: color var(--motion-hover) var(--ease-hover);
+}
+.layer[data-open="true"] .layerName {
+  color: var(--brand-primary);
+}
+/* Matches the pricing "Recommended" label: a static marker, not a control. */
+.coreTag {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-control);
+  background: var(--brand-primary);
+  color: var(--inverse);
+  font-size: var(--type-ui-label);
+  font-weight: 600;
+  line-height: 1.4;
+}
+/* The arrow scales with the layer title so it keeps its weight on large screens. */
+.chevron {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  width: var(--type-card-title);
+  height: var(--type-card-title);
+  color: var(--brand-primary);
+  transition: transform var(--motion-hover) var(--ease-hover);
+}
+.layer[data-open="true"] .chevron {
+  transform: rotate(180deg);
+}
+.layerButton:disabled .chevron {
+  display: none;
+}
+.layerButton:focus-visible {
+  outline: 2px solid var(--brand-primary);
+  outline-offset: 2px;
+}
+.layerButton:active {
+  background: color-mix(in srgb, var(--gold) 20%, transparent);
+  transition-duration: 100ms;
+}
+/* Smooth, interruptible height change without measuring content. */
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--motion-hover) var(--ease-hover);
+}
+.layer[data-open="true"] .panel {
+  grid-template-rows: 1fr;
+}
+.panelClip {
+  min-height: 0;
+  overflow: hidden;
+}
+.items {
+  display: grid;
+  gap: 0.625rem;
+  padding: 0.25rem 0.75rem 1.75rem calc(0.75rem + 2.25rem);
+  font-size: var(--type-reading-body);
+  line-height: 1.45;
+}
+.items li {
+  position: relative;
+  padding-inline-start: 1.125rem;
+}
+.items li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0.55em;
+  width: 0.375rem;
+  height: 0.375rem;
+  background: var(--gold);
+}
+@media (hover: hover) and (pointer: fine) {
+  .layer:not([data-open="true"]) .layerButton:not(:disabled):hover {
+    background: color-mix(in srgb, var(--gold) 12%, transparent);
+  }
+}
+@media (min-width: 1024px) {
+  .composition {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: start;
+  }
+  .visual {
+    display: block;
+    position: sticky;
+    top: 8rem;
+  }
+}
+@media (max-width: 479px) {
+  .items {
+    padding-inline-start: 0.75rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .layer,
+  .layerPlane,
+  .plane,
+  .planeDetail,
+  .layerButton,
+  .layerName,
+  .chevron,
+  .panel {
+    transition: none;
+  }
+}
+@media (forced-colors: active) {
+  .plane {
+    stroke: CanvasText;
+  }
+  .layerPlane[data-active="true"] > .plane {
+    fill: Highlight;
+  }
+  .layerButton:focus-visible {
+    outline-color: Highlight;
+  }
+}

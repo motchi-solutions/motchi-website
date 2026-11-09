@@ -10,14 +10,12 @@ export function Hero() {
           <HeroBrand branch="solutions" />
         </div>
         <h1 id="solutions-title" className={styles.headline}>
-          <span>Technology Built</span> <span>Around Real</span>{" "}
-          <span>Business Needs.</span>
+          <span>Technology Built Around</span> <span>Real Business Needs.</span>
         </h1>
         <div className={styles.explanation}>
           <p>
-            Websites, AI, data, automation, and technology consulting. <br />
-            Designed, implemented, and supported around how your business
-            actually works.
+            Websites, AI, data, and automation, designed and supported around
+            how your business actually works.
           </p>
         </div>
         <CapabilityThread

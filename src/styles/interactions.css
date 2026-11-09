@@ -97,31 +97,6 @@
   filter: none;
 }
 
-/* Shared selection surface: color supports the native check/disclosure indicator. */
-:root [data-steps][data-enhanced] .step-hit-area {
-  transition:
-    background-color var(--motion-hover) var(--ease-hover),
-    border-color var(--motion-hover) var(--ease-hover);
-}
-:root [data-steps] .step-stage[data-selected="true"] .step-hit-area {
-  background: var(--surface-selected);
-  border-color: var(--border-selected);
-  color: var(--foreground-selected);
-}
-@media (hover: hover) and (pointer: fine) {
-  [data-steps]
-    .step-stage[data-selected="true"]
-    .step-hit-area:has(.step-card-control:hover) {
-    background: var(--surface-selected-hover);
-    border-color: var(--border-selected);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  :root [data-steps][data-enhanced] .step-hit-area {
-    transition: none;
-  }
-}
-
 /* Privacy links need actual color feedback as well as the shared tonal hover. */
 @media (hover: hover) and (pointer: fine) {
   :root a[href="/privacy"]:not([aria-disabled="true"]):hover {

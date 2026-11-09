@@ -31,7 +31,9 @@ export function Header({ items }: { items: NavItem[] }) {
                     className={`nav-link primary-navigation-link ${item.href === "/contact" ? "nav-contact" : ""}`}
                     href={item.href}
                   >
-                    {item.label}
+                    <span className="nav-label" data-label={item.label}>
+                      {item.label}
+                    </span>
                   </ContactLink>
                 </li>
               ))}
@@ -68,11 +70,6 @@ export function Footer({ branch }: { branch: Branch }) {
               The Motchi family
             </p>
             <ul>
-              <li>
-                <AnimatedLink href="/services" className="min-h-11 text-sm">
-                  All Services
-                </AnimatedLink>
-              </li>
               {Object.entries(family).map(([key, site]) => (
                 <li key={key}>
                   <AnimatedLink

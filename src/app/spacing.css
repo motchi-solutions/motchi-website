@@ -2,6 +2,7 @@
 :root[data-branch="solutions"] {
   --ms-space-section: clamp(2rem, 4vw, 3rem);
   --ms-space-hero: var(--ms-space-section);
+  --anchor-section-padding: var(--ms-space-section);
   --ms-space-exploration: 1.5rem;
   --space-eyebrow: 1rem;
   --space-copy: clamp(1rem, 2vw, 1.5rem);
@@ -20,21 +21,7 @@
 [data-branch="solutions"] :where(.py-section, .py-content) {
   padding-block: var(--ms-space-section);
 }
-[data-branch="solutions"] :where(.py-hero) {
-  padding-block: var(--ms-space-hero);
-}
 
-[data-branch="solutions"] [data-single-selection="true"][data-enhanced="true"] {
-  column-gap: var(--space-layout);
-}
-[data-branch="solutions"]
-  [data-single-selection="true"][data-enhanced="true"]
-  .step-journey {
-  gap: var(--space-related);
-}
-[data-branch="solutions"] [data-single-selection="true"] .step-side-detail {
-  padding: 0 0 0 var(--space-copy);
-}
 [data-branch="solutions"] :where(.footer-grid) {
   gap: var(--space-layout);
 }

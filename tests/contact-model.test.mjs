@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  answered,
   initialDraft,
   validateContact,
 } from "../src/components/ui/contact/contact-model.ts";
@@ -17,6 +18,17 @@ test("capability links resolve to known services and ignore unknown query values
     assert.deepEqual(initialDraft(topic).services, [service]);
   }
   assert.deepEqual(initialDraft("unknown").services, []);
+});
+
+test("every consulting service on the page preselects a consulting enquiry option", async () => {
+  const { capabilities } =
+    await import("../src/content/consulting/capabilities.ts");
+  for (const capability of capabilities)
+    assert.deepEqual(
+      initialDraft(capability.service, "consulting").services,
+      [capability.service],
+      capability.id,
+    );
 });
 test("each step validates only its required answers", () => {
   const draft = initialDraft();
@@ -327,4 +339,24 @@ test("branch enquiries remain valid for the consolidated contact endpoint", asyn
       assert.ok(fields.get("message").includes("https://example.com"));
     }
   }
+});
+
+test("only entered answers count, so blur never flags an untouched field", () => {
+  assert.equal(answered(""), false);
+  assert.equal(answered("   "), false);
+  assert.equal(answered([]), false);
+  assert.equal(answered({ AI: [] }), false);
+  assert.equal(answered("Mo"), true);
+  assert.equal(answered(["AI Adoption"]), true);
+  assert.equal(answered({ AI: ["Workflow Automation"] }), true);
+});
+
+test("an empty name asks for it; a malformed one asks for a valid one", () => {
+  const draft = initialDraft(undefined, "websites");
+  assert.equal(validateContact(draft, 2).name, "Please enter your name.");
+  assert.equal(
+    validateContact({ ...draft, name: "<>" }, 2).name,
+    "Please enter a valid name.",
+  );
+  assert.equal(validateContact({ ...draft, name: "Mo" }, 2).name, undefined);
 });

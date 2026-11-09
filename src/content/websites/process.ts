@@ -1,4 +1,4 @@
-import type { ProcessStep } from "../../components/ui/index.ts";
+import type { ProcessStep } from "../process-step.ts";
 export const processSteps = [
   {
     id: "discover",

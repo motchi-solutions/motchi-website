@@ -139,7 +139,7 @@ export function ContactCTA({
       <div className="section-layout relative flex flex-col justify-between md:flex-row md:items-end">
         <div className="section-introduction max-w-2xl">
           <h2 className="text-h2 font-medium tracking-tight">{title}</h2>
-          <p className="max-w-xl text-base leading-relaxed text-inverse/80">
+          <p className="max-w-2xl text-base leading-relaxed text-inverse/80">
             Tell us what you're working on. We typically respond with next steps
             or an initial quote within 2-3 business days.
           </p>

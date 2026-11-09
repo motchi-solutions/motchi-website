@@ -3,8 +3,8 @@
     "id": "vee-nails",
     "title": "Vee's Nails Studio",
     "industry": "Beauty / services",
-    "services": ["Website", "Booking Experience"],
-    "description": "We built Vee's a website where clients can explore nail designs and book a visit, with an admin page to manage bookings behind the scenes.",
+    "services": ["Online booking", "Nail design gallery", "Booking admin page"],
+    "description": "A booking-ready studio site. Clients browse nail designs and book a visit, while an admin page lets admins manage appointments behind the scenes.",
     "url": "https://veenailstudio.ca",
     "media": {
       "desktop": {
@@ -35,8 +35,8 @@
     "id": "lai-project",
     "title": "Lai Project",
     "industry": "Drinks / event catering",
-    "services": ["Website Presentation", "Event Enquiries"],
-    "description": "We helped Lai establish an online home for their drinks catering, bringing their story, event photos, and enquiries together so people can get to know them and plan an event.",
+    "services": ["Event enquiries", "Event photo gallery", "Brand story"],
+    "description": "An online home for Lai's drinks catering. Their story, event photos, and enquiries sit together, so guests can get to know them and plan an event.",
     "url": "https://laiproject.org",
     "media": {
       "desktop": {
@@ -67,8 +67,8 @@
     "id": "vietbites",
     "title": "VietBites",
     "industry": "Restaurant / food",
-    "services": ["Brand Presentation", "Customer-Facing Website"],
-    "description": "We brought VietBites' menu, catering, and online ordering into one place, so customers can find their next meal and order with ease.",
+    "services": ["Online menu", "Catering", "Online ordering"],
+    "description": "Menu, catering, and online ordering in one place, so customers can find their next meal and order with ease.",
     "url": "https://vietbites.ca",
     "media": {
       "desktop": {
@@ -99,8 +99,8 @@
     "id": "kamanda",
     "title": "Kamanda",
     "industry": "Professional / corporate",
-    "services": ["Website Design", "Development"],
-    "description": "We gave Kamanda a clear online home for their services and project experience, making it easier for potential clients to understand their work and get in touch.",
+    "services": ["Services overview", "Project showcase", "Contact enquiries"],
+    "description": "A clear home for Kamanda's services and project experience, so potential clients can understand their work and get in touch.",
     "url": "https://kamandagroup.com",
     "media": {
       "desktop": {

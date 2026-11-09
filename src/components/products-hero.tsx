@@ -320,7 +320,7 @@ export function ProductsHero() {
                       {product.status}
                     </p>
                   </div>
-                  <p className="mt-[var(--space-copy)] max-w-lg leading-relaxed text-muted">
+                  <p className="mt-(--space-copy) max-w-lg leading-relaxed text-muted">
                     {product.description}
                   </p>
                 </div>
@@ -432,7 +432,6 @@ export function ProductsHero() {
                       className={styles.gateTrigger}
                       aria-expanded={opened}
                       aria-controls="product-album"
-                      aria-label={`Open ${product.name} preview`}
                       onKeyDown={arrowNavigation}
                       onClick={() => {
                         resetTilt();
@@ -442,7 +441,10 @@ export function ProductsHero() {
                     >
                       <span className={styles.gateHint}>
                         <LuMousePointerClick aria-hidden="true" />
-                        <span>Click to see what's inside</span>
+                        <span>
+                          See what's inside
+                          <span className="sr-only"> {product.name}</span>
+                        </span>
                       </span>
                     </button>
                     <button

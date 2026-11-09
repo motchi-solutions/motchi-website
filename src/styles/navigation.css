@@ -23,6 +23,14 @@
 .header-brand-label > span[data-active="true"] {
   opacity: 1;
 }
+/* Inactive branch names are hidden once faded, so they are not part of the
+   link's visible text (or its accessible name). */
+.header-brand-label > span:not([data-active="true"]) {
+  visibility: hidden;
+  transition:
+    opacity var(--motion-hover) var(--ease-hover),
+    visibility 0s linear var(--motion-hover);
+}
 .primary-navigation-links {
   display: flex;
   align-items: center;
@@ -35,12 +43,95 @@
   justify-content: center;
   min-height: 3rem;
 }
+/* A hidden bold copy reserves the current link's width, so moving between
+   pages never nudges the other links. */
+.nav-label {
+  display: inline-grid;
+}
+.nav-label::after {
+  content: attr(data-label);
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  font-weight: 600;
+  pointer-events: none;
+  user-select: none;
+}
+/* Contact call to action, desktop and mobile. It is the one filled control in
+   the header and stays filled on the Contact page, where it also takes the
+   nav's current-page cue: the underline used by the other links on desktop,
+   and a gold inner ring in the mobile menu. Weight and size never change. */
 .primary-navigation-link.nav-contact {
   min-height: 2.75rem;
   padding: 0.5rem 1.25rem;
   line-height: 1.25;
-  border: 1px solid var(--brand-primary);
+}
+.mobile-panel .mobile-contact-cta {
+  margin-top: 0.75rem;
+  padding-inline: 1rem;
+}
+.site-header :is(.nav-contact, .mobile-contact-cta) {
+  border: 1px solid var(--active);
   border-radius: var(--radius-control);
+  background: var(--active);
+  color: var(--active-foreground);
+  font-weight: 600;
+  transition:
+    background-color var(--motion-hover) var(--ease-hover),
+    color var(--motion-hover) var(--ease-hover);
+}
+.site-header .mobile-contact-cta::after {
+  display: none;
+}
+.site-header .nav-contact::after {
+  bottom: -0.4375rem;
+  height: 2px;
+  background: var(--active);
+}
+.site-header .mobile-contact-cta .mobile-nav-arrow {
+  color: currentColor;
+}
+.site-header :is(.nav-contact, .mobile-contact-cta)[aria-current] {
+  border-color: var(--active);
+  background: var(--active);
+  color: var(--active-foreground);
+}
+/* The underline marks the current page only; hover keeps the button's own feedback. */
+.site-header .nav-contact:not([aria-current])::after {
+  transform: scaleX(0);
+}
+.site-header .mobile-contact-cta[aria-current] {
+  box-shadow: inset 0 0 0 2px var(--active-detail);
+}
+.site-header :is(.nav-contact, .mobile-contact-cta):focus-visible {
+  outline: 2px solid var(--active);
+  outline-offset: 3px;
+}
+/* Mobile menu rows lighten on focus; the call to action keeps its fill. */
+.site-header .mobile-contact-cta:focus-visible {
+  background: var(--active);
+  color: var(--active-foreground);
+}
+.site-header :is(.nav-contact, .mobile-contact-cta):active {
+  background: color-mix(in srgb, var(--active) 82%, var(--charcoal));
+  color: var(--active-foreground);
+  transition-duration: 100ms;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .site-header :is(.nav-contact, .mobile-contact-cta):hover {
+    background: var(--active-hover);
+  }
+}
+@media (forced-colors: active) {
+  .site-header .mobile-contact-cta[aria-current] {
+    outline: 2px solid Highlight;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-header :is(.nav-contact, .mobile-contact-cta) {
+    transition: none;
+  }
 }
 .section-navigation {
   position: fixed;
@@ -149,9 +240,9 @@
     color var(--motion-hover) var(--ease-hover);
 }
 .section-navigation a[aria-current="location"] {
-  border-color: var(--border-selected);
-  background: var(--surface-selected);
-  color: var(--foreground-selected);
+  border-color: var(--active);
+  background: var(--active);
+  color: var(--active-foreground);
   text-decoration: underline;
   text-underline-offset: 0.25em;
 }
@@ -162,21 +253,21 @@
 }
 .section-navigation a:active,
 .section-navigation-handle:active::before {
-  background: var(--background);
+  background: var(--active-tint-strong);
   transition-duration: 100ms;
 }
 .section-navigation a[aria-current="location"]:active {
-  background: var(--surface-selected-hover);
+  background: var(--active-hover);
 }
 @media (hover: hover) and (pointer: fine) {
   .section-navigation a:hover,
   .section-navigation-handle:hover::before {
-    background: var(--background);
-    color: var(--brand-primary);
+    background: var(--active-tint);
+    color: var(--active);
   }
   .section-navigation a[aria-current="location"]:hover {
-    background: var(--surface-selected-hover);
-    color: var(--foreground-selected);
+    background: var(--active-hover);
+    color: var(--active-foreground);
   }
 }
 @media (prefers-reduced-motion: reduce) {

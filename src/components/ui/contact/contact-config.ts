@@ -400,12 +400,14 @@ const configurations: Record<Branch, ContactConfiguration> = {
   },
 };
 export type ContactEnquiryType = "websites" | "consulting" | "products";
-export const websiteTiers = [
-  "Starter",
-  "Business",
-  "Advanced / Enterprise",
-  "I'm not sure",
-];
+export const websiteTiers = ["Starter", "Business", "Advanced", "I'm not sure"];
+/* Earlier links and saved drafts used the combined tier name. */
+const legacyWebsiteTiers: Record<string, string> = {
+  "Advanced / Enterprise": "Advanced",
+};
+export function normalizeWebsiteTier(value: string) {
+  return legacyWebsiteTiers[value] ?? value;
+}
 export const productNames = [
   "Pop Tips",
   "Our Next Chapter",

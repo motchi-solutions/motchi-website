@@ -1,4 +1,3 @@
-import { SiteLink } from "../ui/site-link.tsx";
 import { getProjects } from "../../content/websites/projects.ts";
 import {
   AnimatedLink,
@@ -23,9 +22,7 @@ export async function FeaturedWork() {
               Different businesses. Websites built around the way they work.
             </p>
           </div>
-          <ButtonLink href="/websites/work" secondary>
-            View All Projects
-          </ButtonLink>
+          <ButtonLink href="/websites/work">View All Projects</ButtonLink>
         </header>
         <div className={styles.projects}>
           {projects.map((project) => (
@@ -34,11 +31,7 @@ export async function FeaturedWork() {
               id={`project-${project.id}`}
               className={styles.project}
             >
-              <SiteLink
-                href={`/websites/work#project-${project.id}`}
-                className={styles.projectImage}
-                aria-label={`Explore ${project.title}`}
-              >
+              <div className={styles.projectImage}>
                 {project.media.desktop && (
                   <div className={styles.desktopPreview}>
                     <ProjectMedia
@@ -55,36 +48,38 @@ export async function FeaturedWork() {
                     />
                   </div>
                 )}
-              </SiteLink>
+              </div>
               <div className={styles.projectCopy}>
                 <div className={styles.projectIdentity}>
-                  <div>
+                  <div className="min-w-0">
                     <h3>{project.title}</h3>
                     <p className={styles.projectIndustry}>{project.industry}</p>
                   </div>
-                  {project.url && (
-                    <AnimatedLink
+                  {project.url ? (
+                    <ButtonLink
                       href={project.url}
-                      external
                       target="_blank"
-                      aria-label={`Visit ${project.title} (opens in a new tab)`}
-                      underline="always"
-                      className={styles.textLink}
+                      secondary
+                      className={styles.visitSite}
                     >
                       Visit Site
+                      <span className="sr-only">
+                        , {project.title} (opens in a new tab)
+                      </span>
+                    </ButtonLink>
+                  ) : (
+                    <AnimatedLink
+                      href={`/websites/work#project-${project.id}`}
+                      arrow
+                      className={styles.textLink}
+                    >
+                      Explore the Project
                     </AnimatedLink>
                   )}
                 </div>
-                <p>{project.description}</p>
-                {!project.url && (
-                  <AnimatedLink
-                    href={`/websites/work#project-${project.id}`}
-                    underline="always"
-                    className={styles.textLink}
-                  >
-                    Explore the project
-                  </AnimatedLink>
-                )}
+                <p className={styles.projectDescription}>
+                  {project.description}
+                </p>
               </div>
             </article>
           ))}

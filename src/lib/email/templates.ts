@@ -28,7 +28,7 @@ export function notification(
     ["Existing website", input.website || "Not provided"],
   ];
   return {
-    subject: `New enquiry · ${branchName} · ${input.interest}`,
+    subject: `New enquiry - ${branchName} - ${input.interest}`,
     textContent: `${branchName} enquiry\n\n${rows.map(([key, value]) => `${key}: ${value}`).join("\n")}\n\nMessage:\n${input.message}`,
     htmlContent: shell(
       "A new conversation",
@@ -42,13 +42,13 @@ export function acknowledgement(
   branchName: string,
   homeUrl: string = sites.solutions.url,
 ) {
-  const text = `Hello ${name},\n\nThank you for contacting ${branchName}. We have received your enquiry. We typically respond with next steps or an initial quote within 2–3 business days.\n\nIf you need to add anything, reply to this email.\n\n${organization.displayName}\n${homeUrl}`;
+  const text = `Hello ${name},\n\nThank you for contacting ${branchName}. We have received your enquiry. We typically respond with next steps or an initial quote within 2-3 business days.\n\nIf you need to add anything, reply to this email.\n\n${organization.displayName}\n${homeUrl}`;
   return {
-    subject: `We received your enquiry · ${branchName}`,
+    subject: `We received your enquiry - ${branchName}`,
     textContent: text,
     htmlContent: shell(
       "Thanks for getting in touch",
-      `<p style="line-height:1.7">Hello ${escapeHtml(name)},</p><p style="line-height:1.7">Thank you for contacting ${escapeHtml(branchName)}. We have received your enquiry.</p><p style="line-height:1.7">We typically respond with next steps or an initial quote within <strong>2–3 business days</strong>.</p><p style="line-height:1.7">If you need to add anything, reply to this email.</p>`,
+      `<p style="line-height:1.7">Hello ${escapeHtml(name)},</p><p style="line-height:1.7">Thank you for contacting ${escapeHtml(branchName)}. We have received your enquiry.</p><p style="line-height:1.7">We typically respond with next steps or an initial quote within <strong>2-3 business days</strong>.</p><p style="line-height:1.7">If you need to add anything, reply to this email.</p>`,
       homeUrl,
     ),
   };

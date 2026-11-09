@@ -1,186 +1,177 @@
 "use client";
-import { useRef, useState, type KeyboardEvent } from "react";
-import {
-  LuClock3,
-  LuHandHeart,
-  LuSlidersHorizontal,
-  LuListChecks,
-  LuClipboardCheck,
-  LuWrench,
-  LuCopy,
-  LuWorkflow,
-  LuUsers,
-  LuStore,
-  LuHandshake,
-  LuMessagesSquare,
-} from "react-icons/lu";
-import { ButtonLink, Container, Eyebrow } from "./ui/primitives.tsx";
-import styles from "./about-hero.module.css";
-import hero from "./exploration-hero.module.css";
 
-const beliefs = [
+import { useId } from "react";
+import { LuClock3, LuHandHeart, LuSlidersHorizontal } from "react-icons/lu";
+import { ButtonLink, Container } from "./ui/primitives.tsx";
+import { HeroBrand } from "./ui/hero-brand.tsx";
+import { useTabs } from "./ui/use-tabs.ts";
+import styles from "./about-hero.module.css";
+
+/* Short copy, one idea at a time: each principle gets a small drawing that
+   plays when chosen, so the hero explains itself without paragraphs. */
+const principles = [
   {
-    id: "budget",
-    label: "Spend Wisely",
+    label: "Spend wisely",
     icon: LuSlidersHorizontal,
-    title: "Start With What Fits",
-    example: [
-      ["Set your priorities", "Focus on what helps now", LuListChecks],
-      [
-        "Agree on the cost",
-        "Know what is included before we start",
-        LuClipboardCheck,
-      ],
-      ["Build what you need", "Stay focused on the agreed scope", LuWrench],
-    ],
-    description:
-      "A useful starting point, with clear costs you agree to before work begins.",
+    title: "Start with what fits",
+    description: "Clear costs you agree to before work begins.",
   },
   {
-    id: "time",
-    label: "Save Time",
+    label: "Save time",
     icon: LuClock3,
-    title: "Make Room for Better Work",
-    example: [
-      ["Find the busywork", "The tasks you keep repeating", LuCopy],
-      ["Connect your tools", "Fewer manual steps to manage", LuWorkflow],
-      ["Make time for people", "Customers, ideas, and better work", LuUsers],
-    ],
-    description:
-      "Let technology handle the repetition so your team can focus on work that matters.",
+    title: "Make room for better work",
+    description: "Technology handles the repetition, so your team can focus.",
   },
   {
-    id: "together",
-    label: "Grow Together",
+    label: "Grow together",
     icon: LuHandHeart,
-    title: "Move Forward Together",
-    example: [
-      ["Your goals", "You know your business", LuStore],
-      ["Our expertise", "We work through the options together", LuHandshake],
-      ["Ongoing support", "Review, adapt, and keep in touch", LuMessagesSquare],
-    ],
-    description:
-      "Your business knowledge and our technology support, working toward shared goals.",
+    title: "Move forward together",
+    description: "Your business knowledge and our technology support.",
   },
 ] as const;
 
-export function AboutHero() {
-  const [selected, setSelected] = useState(1);
-  const controls = useRef<HTMLDivElement>(null);
-  const navigate = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
-    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey)
-      return;
-    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
-    event.preventDefault();
-    const next =
-      event.key === "Home"
-        ? 0
-        : event.key === "End"
-          ? beliefs.length - 1
-          : (index + (event.key === "ArrowRight" ? 1 : -1) + beliefs.length) %
-            beliefs.length;
-    setSelected(next);
-    controls.current
-      ?.querySelectorAll("button")
-      [next]?.focus({ preventScroll: true });
-  };
+function Drawing({ index }: { index: number }) {
+  if (index === 0)
+    return (
+      <svg viewBox="0 0 320 180" className={styles.drawing} aria-hidden="true">
+        <line className={styles.ground} x1="40" y1="150" x2="280" y2="150" />
+        <rect
+          className={styles.bar}
+          x="62"
+          y="96"
+          width="44"
+          height="54"
+          rx="4"
+        />
+        <rect
+          className={`${styles.bar} ${styles.barFit}`}
+          x="138"
+          y="70"
+          width="44"
+          height="80"
+          rx="4"
+        />
+        <rect
+          className={styles.bar}
+          x="214"
+          y="40"
+          width="44"
+          height="110"
+          rx="4"
+        />
+        <line className={styles.fitLine} x1="40" y1="70" x2="280" y2="70" />
+        <circle className={styles.pop} cx="160" cy="70" r="6" />
+      </svg>
+    );
+  if (index === 1)
+    return (
+      <svg viewBox="0 0 320 180" className={styles.drawing} aria-hidden="true">
+        <circle className={styles.dial} cx="160" cy="90" r="62" />
+        <circle
+          className={styles.sweep}
+          cx="160"
+          cy="90"
+          r="62"
+          pathLength="100"
+          transform="rotate(-90 160 90)"
+        />
+        <line className={styles.hand} x1="160" y1="90" x2="160" y2="44" />
+        <circle className={styles.hub} cx="160" cy="90" r="5" />
+      </svg>
+    );
   return (
-    <section className={`${styles.hero} ${hero.hero}`}>
+    <svg viewBox="0 0 320 180" className={styles.drawing} aria-hidden="true">
+      {/* Two separate lines (your business, our support) join, then rise as one. */}
+      <path
+        className={`${styles.path} ${styles.pathGold}`}
+        pathLength="100"
+        d="M40 150C90 150 110 112 160 108"
+      />
+      <path
+        className={`${styles.path} ${styles.pathBurgundy}`}
+        pathLength="100"
+        d="M40 72C90 72 112 106 160 110"
+      />
+      <path
+        className={`${styles.path} ${styles.pathGold} ${styles.pathJoined}`}
+        pathLength="100"
+        d="M160 104C210 100 240 66 284 30"
+      />
+      <path
+        className={`${styles.path} ${styles.pathBurgundy} ${styles.pathJoined}`}
+        pathLength="100"
+        d="M160 113C212 109 244 75 288 39"
+      />
+      <circle className={styles.pop} cx="160" cy="108" r="8" />
+    </svg>
+  );
+}
+
+export function AboutHero() {
+  const id = useId();
+  const { selected, tabId, panelId, tabProps } = useTabs(principles.length);
+  return (
+    <section className={styles.hero} aria-labelledby="about-title">
       <Container>
-        <div className={hero.frame}>
-          <header className={`page-introduction ${hero.introduction}`}>
-            <Eyebrow>About Motchi</Eyebrow>
-            <h1>
+        <div className={styles.layout}>
+          <header className={styles.introduction} data-entry-reveal="">
+            <HeroBrand branch="solutions" className={styles.brand} />
+            <h1 id="about-title">
               Technology That Gives You <em>Room to Grow.</em>
             </h1>
             <p>
-              More time for your work. A plan you can afford. People in your
-              corner.
+              Technology built around people, with clear pricing and support
+              after launch.
             </p>
+            <div className={styles.actions}>
+              <ButtonLink href="/contact">
+                Tell Us About Your Business
+              </ButtonLink>
+              <ButtonLink href="/#businesses" secondary>
+                See How We Can Help
+              </ButtonLink>
+            </div>
           </header>
           <div
-            ref={controls}
-            role="tablist"
-            aria-label="Explore what matters to us"
-            className={styles.options}
+            className={`${styles.card} ms-surface-feature`}
             data-entry-reveal=""
           >
-            {beliefs.map((item, index) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.id}
-                  id={`about-tab-${index}`}
-                  type="button"
-                  role="tab"
-                  tabIndex={selected === index ? 0 : -1}
-                  aria-selected={selected === index}
-                  aria-controls="about-belief"
-                  onClick={() => setSelected(index)}
-                  onKeyDown={(event) => navigate(event, index)}
-                >
-                  <Icon aria-hidden="true" />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
-          </div>
-          <div
-            id="about-belief"
-            role="tabpanel"
-            aria-labelledby={`about-tab-${selected}`}
-            // biome-ignore lint/a11y/noNoninteractiveTabindex: A tab panel with introductory text needs keyboard focus.
-            tabIndex={0}
-            className={styles.workspace}
-          >
-            <div className={styles.belief} data-entry-reveal="">
-              {beliefs.map((belief, index) => (
-                <div
-                  key={belief.id}
-                  className={styles.arrival}
-                  data-active={selected === index}
-                  aria-hidden={selected !== index}
-                  inert={selected !== index}
-                >
-                  <ol className={styles.example}>
-                    {belief.example.map(([label, detail, Icon], index) => (
-                      <li key={label} className={styles.exampleStep}>
-                        <span className={styles.exampleIcon} aria-hidden="true">
-                          <Icon />
-                        </span>
-                        <span className={styles.exampleText}>
-                          <span className={styles.exampleTitle}>{label}</span>
-                          <span className={styles.exampleDetail}>{detail}</span>
-                        </span>
-                        <span
-                          className={styles.exampleNumber}
-                          aria-hidden="true"
-                        >
-                          0{index + 1}
-                        </span>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              ))}
+            <p className={styles.cardTitle} id={`${id}-label`}>
+              What we stand for
+            </p>
+            <div
+              role="tablist"
+              aria-labelledby={`${id}-label`}
+              className={styles.tabs}
+            >
+              {principles.map((item, index) => {
+                const Icon = item.icon;
+                return (
+                  <button key={item.label} {...tabProps(index)}>
+                    <Icon aria-hidden="true" />
+                    <span>{item.label}</span>
+                  </button>
+                );
+              })}
             </div>
-            <div className={styles.summary} data-entry-reveal="">
-              {beliefs.map((belief, index) => (
-                <div
-                  key={belief.id}
-                  className={`${styles.arrival} ${styles.caption}`}
-                  data-active={selected === index}
-                  aria-hidden={selected !== index}
-                  inert={selected !== index}
-                >
-                  <h2>{belief.title}</h2>
-                  <p>{belief.description}</p>
-                  <ButtonLink href="/contact" className="content-action">
-                    Tell Us About Your Business
-                  </ButtonLink>
+            {principles.map((item, index) => (
+              <div
+                key={item.label}
+                id={panelId(index)}
+                role="tabpanel"
+                aria-labelledby={tabId(index)}
+                hidden={selected !== index}
+                // biome-ignore lint/a11y/noNoninteractiveTabindex: A tab panel without focusable content needs keyboard focus.
+                tabIndex={0}
+                className={styles.panel}
+              >
+                <div className={styles.stage}>
+                  {selected === index && <Drawing index={index} />}
                 </div>
-              ))}
-            </div>
+                <h2>{item.title}</h2>
+                <p>{item.description}</p>
+              </div>
+            ))}
           </div>
         </div>
       </Container>

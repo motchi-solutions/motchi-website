@@ -40,13 +40,15 @@ export const websiteSections = [
   { id: "services", label: "Services" },
   { id: "pricing", label: "Pricing & Maintenance" },
   { id: "process", label: "How We Work" },
+  { id: "faq", label: "FAQs" },
   { id: "enquiry", label: "Start a Project" },
 ];
 export const consultingSections = [
   { id: "overview", label: "Overview" },
-  { id: "capabilities", label: "Capabilities" },
-  { id: "approach", label: "Our Approach" },
-  { id: "about", label: "About" },
+  { id: "capabilities", label: "Services" },
+  { id: "approach", label: "How We Work" },
+  { id: "about", label: "What to Expect" },
+  { id: "faq", label: "FAQs" },
   { id: "enquiry", label: "Let's Talk" },
 ];
 
@@ -61,7 +63,6 @@ export function branchForPath(
 
 export const publicRoutes = [
   "/",
-  "/services",
   "/products",
   "/about",
   "/contact",

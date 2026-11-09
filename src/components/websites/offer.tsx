@@ -1,12 +1,17 @@
 import { ButtonLink, Section, SectionHeading } from "../ui/primitives.tsx";
 import { websiteStarter, websiteBusiness } from "../../lib/config/sites.ts";
-import { LuWrench } from "react-icons/lu";
+import {
+  LuCalendarClock,
+  LuFileCheck,
+  LuReceipt,
+  LuWrench,
+} from "react-icons/lu";
 import styles from "./landing.module.css";
 
 const tiers = [
   {
     name: "Starter",
-    price: `From ${websiteStarter.price}`,
+    price: websiteStarter.price,
     description:
       "Introduce your business and give visitors a simple way to get in touch.",
     includes: "Built with your supplied text and images.",
@@ -20,7 +25,7 @@ const tiers = [
   },
   {
     name: "Business",
-    price: `From ${websiteBusiness.price}`,
+    price: websiteBusiness.price,
     description:
       "For a growing business ready to connect its website and tools.",
     includes: "Everything in Starter, plus:",
@@ -33,8 +38,8 @@ const tiers = [
     action: "Discuss Your Website",
   },
   {
-    name: "Advanced / Enterprise",
-    price: "Custom quote",
+    name: "Advanced",
+    price: null,
     description:
       "For custom applications and the systems behind your business.",
     includes: "Everything in Business, plus custom scope:",
@@ -63,11 +68,25 @@ export function WebsiteOffer() {
             className={styles.pricingCard}
             data-recommended={tier.name === "Business"}
           >
-            {tier.name === "Business" && (
-              <span className={styles.pricingLabel}>Most Popular</span>
-            )}
-            <h3>{tier.name}</h3>
-            <p className={styles.pricingPrice}>{tier.price}</p>
+            <div className={styles.pricingName}>
+              <h3>{tier.name}</h3>
+              {tier.name === "Business" && (
+                <span className={styles.pricingLabel}>Recommended</span>
+              )}
+            </div>
+            <p className={styles.pricingPrice}>
+              {tier.price ? (
+                <>
+                  <span className={styles.priceLabel}>From</span>
+                  <span className={styles.priceAmount}>
+                    {tier.price.replace("CAD ", "")}
+                  </span>
+                  <span className={styles.priceLabel}>CAD</span>
+                </>
+              ) : (
+                <span className={styles.priceAmount}>Custom quote</span>
+              )}
+            </p>
             <p className={styles.pricingDescription}>{tier.description}</p>
             <p className={styles.pricingIncludes}>{tier.includes}</p>
             <ul>
@@ -76,7 +95,9 @@ export function WebsiteOffer() {
               ))}
             </ul>
             <ButtonLink
-              href={`/contact?branch=websites&tier=${encodeURIComponent(tier.name)}`}
+              // The enquiry below picks up the tier; see ServiceEnquiry.
+              href="#enquiry"
+              data-enquiry-tier={tier.name}
               secondary={tier.name !== "Business"}
             >
               {tier.action}
@@ -84,49 +105,47 @@ export function WebsiteOffer() {
           </article>
         ))}
       </div>
-      <aside
-        aria-labelledby="maintenance-heading"
-        className="mt-4 grid gap-5 rounded-lg border border-border bg-surface p-5 sm:p-6 lg:grid-cols-3 lg:items-center"
-      >
-        <div className="min-w-0 lg:col-span-2">
-          <div className="flex items-center gap-3">
-            <LuWrench
-              aria-hidden="true"
-              className="h-6 w-6 shrink-0 text-primary"
-            />
-            <h3
-              id="maintenance-heading"
-              className="text-xl font-medium tracking-tight"
-            >
-              Support After Launch
-            </h3>
+      <aside aria-labelledby="maintenance-heading" className={styles.support}>
+        <div className={styles.supportIntro}>
+          <div className={styles.supportHeading}>
+            <LuWrench aria-hidden="true" />
+            <h3 id="maintenance-heading">Support After Launch</h3>
           </div>
-          <p className="mt-2 text-body leading-relaxed text-muted">
-            Maintenance includes small content and layout changes, minor fixes,
-            package upgrades, backups, domain and hosting upkeep, routine
-            website checks, and more.
-          </p>
-          <p className="mt-2 text-small font-medium leading-relaxed text-primary">
-            Every tier includes {websiteStarter.includedSecurityUpdateYears}{" "}
-            year of free security updates.
-          </p>
+          <p>Content changes, fixes, upgrades, backups, and more.</p>
         </div>
-        <div className="border-t border-border pt-6 lg:border-t-0 lg:border-s lg:pt-0 lg:ps-8">
-          <p className="text-3xl font-medium tracking-tight text-primary">
-            {websiteBusiness.includedCareMonths} months free
-          </p>
-          <p className="mt-2 text-body leading-relaxed text-muted">
-            For Business / Advanced tiers.
-          </p>
-        </div>
+        <dl className={styles.supportOffers}>
+          <div className={styles.supportOffer}>
+            <dt>
+              <strong>
+                {websiteStarter.includedSecurityUpdateYears} year free
+              </strong>
+              Security updates
+            </dt>
+            <dd>Every tier</dd>
+          </div>
+          <div className={styles.supportOffer}>
+            <dt>
+              <strong>{websiteBusiness.includedCareMonths} months free</strong>
+              Maintenance
+            </dt>
+            <dd>Business and Advanced</dd>
+          </div>
+        </dl>
       </aside>
-      <div className={styles.pricingTerms}>
-        <p>{websiteStarter.terms}</p>
-        <p>
-          Prices are in CAD. Taxes, domain registration, and hosting fees are
-          extra. Maintenance after the included periods is quoted separately.
-        </p>
-      </div>
+      <ul className={styles.pricingNotes}>
+        <li>
+          <LuReceipt aria-hidden="true" />
+          Prices in CAD. Taxes, domain, and hosting fees are extra.
+        </li>
+        <li>
+          <LuCalendarClock aria-hidden="true" />
+          Maintenance after the included period is quoted separately.
+        </li>
+        <li>
+          <LuFileCheck aria-hidden="true" />
+          {websiteStarter.terms}
+        </li>
+      </ul>
     </Section>
   );
 }

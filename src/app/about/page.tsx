@@ -130,17 +130,12 @@ export default function AboutPage() {
             className={`${styles.prose} text-lg leading-relaxed text-inverse/85`}
           >
             <p>
-              We want to support businesses we believe in and people who care
-              about what they do. We take time to understand what you're
-              building, what gets in your way, and where we can help.
+              We work with businesses and people who care about what they do.
+              You bring knowledge of your business; we bring practical
+              technology support, and aim to earn a place in your corner for the
+              long run.
             </p>
-            <p>
-              We see a partnership as a chance to grow together. You bring
-              knowledge of your business; we bring practical technology support.
-              Through useful work, honest conversations, and shared goals, we
-              want to earn a place in your corner for the long run.
-            </p>
-            <AnimatedLink href="/services" arrow className="text-accent">
+            <AnimatedLink href="/#businesses" arrow className="text-accent">
               See How We Can Help
             </AnimatedLink>
           </div>

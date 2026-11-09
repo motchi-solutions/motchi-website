@@ -7,6 +7,7 @@ import type { Branch } from "../../../lib/brand.ts";
 import { contactContextLimit } from "../../../lib/config/validation.ts";
 import {
   websiteTiers,
+  normalizeWebsiteTier,
   productNames,
   getContactConfiguration,
 } from "./contact-config.ts";
@@ -36,6 +37,12 @@ export type ContactDraft = {
   context: string;
 };
 export type ContactErrors = Partial<Record<keyof ContactDraft, string>>;
+/** True once a draft value holds an answer the user entered or chose. */
+export function answered(value: ContactDraft[keyof ContactDraft]) {
+  if (typeof value === "string") return value.trim() !== "";
+  if (Array.isArray(value)) return value.length > 0;
+  return Object.values(value).some((entries) => entries.length > 0);
+}
 export function initialDraft(
   topic?: string,
   branch: Branch = "solutions",
@@ -91,7 +98,10 @@ export function validateContact(
       errors.context = "Please tell us about your question or idea.";
     if (draft.context.length > contactContextLimit)
       errors.context = "Please use 2,000 characters or fewer.";
-    if (!isContactName(draft.name)) errors.name = "Please enter a valid name.";
+    if (!isContactName(draft.name))
+      errors.name = draft.name.trim()
+        ? "Please enter a valid name."
+        : "Please enter your name.";
     if (!isEmail(draft.email.trim()))
       errors.email = draft.email.trim()
         ? "Please enter a valid email address."
@@ -213,12 +223,13 @@ export function parseContactDraft(
     const draft = initialDraft(undefined, branch);
     draft.enquiryType = enquiryType;
     if (source.websiteTier !== undefined) {
-      if (
-        source.websiteTier !== "" &&
-        !websiteTiers.includes(source.websiteTier)
-      )
+      const websiteTier =
+        typeof source.websiteTier === "string"
+          ? normalizeWebsiteTier(source.websiteTier)
+          : source.websiteTier;
+      if (websiteTier !== "" && !websiteTiers.includes(websiteTier))
         return null;
-      draft.websiteTier = source.websiteTier;
+      draft.websiteTier = websiteTier;
     }
     if (source.productName !== undefined) {
       if (

@@ -18,7 +18,7 @@
 .stageButton,
 .fallbackHeading {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 1rem;
   width: 100%;
   padding: 1.25rem 0.75rem;
@@ -60,14 +60,11 @@
   font-weight: 500;
   line-height: 1.3;
 }
-.summary {
-  display: block;
-  color: var(--muted);
-  font-size: var(--type-reading-small);
-  line-height: var(--type-reading-leading);
-}
+/* The arrow scales with the stage title so it keeps its weight on large screens. */
 .chevron {
-  flex: 0 0 1.25rem;
+  flex: 0 0 auto;
+  width: calc(var(--type-reading-large) * 1.2);
+  height: calc(var(--type-reading-large) * 1.2);
   align-self: center;
   margin-inline-start: auto;
   color: var(--brand-primary);
@@ -75,7 +72,7 @@
   transition: transform var(--motion-hover) var(--ease-hover);
 }
 .stage[data-selected="true"] .stageButton {
-  background: color-mix(in srgb, var(--gold) 12%, var(--background));
+  background: var(--surface);
 }
 .stage[data-selected="true"] .number {
   background: var(--brand-primary);
@@ -93,7 +90,7 @@
   outline-offset: 3px;
 }
 .stageButton:active {
-  background: var(--surface-selected-hover);
+  background: var(--active-tint-strong);
   transition-duration: 100ms;
 }
 .panel {
@@ -263,10 +260,10 @@
 }
 @media (hover: hover) and (pointer: fine) {
   .stageButton:hover {
-    background: color-mix(in srgb, var(--gold) 7%, var(--background));
+    background: var(--active-tint);
   }
   .stage[data-selected="true"] .stageButton:hover {
-    background: var(--surface-selected-hover);
+    background: var(--active-tint);
   }
 }
 @media (max-width: 479px) {

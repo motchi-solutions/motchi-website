@@ -135,7 +135,7 @@ test("HTML escapes contact content and includes plain-text alternatives", () => 
   assert.equal(escapeHtml(`<>&"'`), "&lt;&gt;&amp;&quot;&#39;");
   assert.ok(
     acknowledgement("Alex", "Motchi Websites").textContent.includes(
-      "2–3 business days",
+      "2-3 business days",
     ),
   );
 });

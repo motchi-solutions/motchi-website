@@ -15,12 +15,6 @@ export {
 export { PrivacyNotice } from "./privacy.tsx";
 export { Reveal } from "./reveal.tsx";
 export { Footer, Header, type NavItem } from "./shell.tsx";
-export { Workflow } from "./workflow.tsx";
-export { SystemGraphic } from "./system-graphic.tsx";
-
-export { PageHero } from "./page-hero.tsx";
-
-export { InteractiveSteps, type ProcessStep } from "./interactive-steps.tsx";
 
 export { RouteLoading } from "./route-loading.tsx";
 

@@ -7,7 +7,7 @@ import { FeaturedWork } from "../../components/websites/featured-work.tsx";
 import { Services } from "../../components/websites/services.tsx";
 import { WebsiteOffer } from "../../components/websites/offer.tsx";
 import { Process } from "../../components/websites/process.tsx";
-import styles from "../../components/websites/landing.module.css";
+import { WebsiteFaq } from "../../components/websites/faq.tsx";
 
 export const metadata = pageMetadata(
   "Motchi Websites",
@@ -23,7 +23,8 @@ export default function Websites() {
       <Services />
       <WebsiteOffer />
       <Process />
-      <ServiceEnquiry branch="websites" className={styles.enquirySection} />
+      <WebsiteFaq />
+      <ServiceEnquiry branch="websites" />
     </>
   );
 }

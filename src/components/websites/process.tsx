@@ -10,27 +10,22 @@ import styles from "./process.module.css";
 const stages = [
   {
     title: "Understand",
-    summary: processSteps[0].summary,
     content: processSteps.slice(0, 1),
   },
   {
     title: "Plan",
-    summary: processSteps[1].summary,
     content: processSteps.slice(1, 2),
   },
   {
     title: "Design & Build",
-    summary: "Design, build, and review a website that reflects your business.",
     content: processSteps.slice(2, 4),
   },
   {
     title: "Review & Launch",
-    summary: processSteps[4].summary,
     content: processSteps.slice(4, 5),
   },
   {
     title: "Support",
-    summary: processSteps[5].summary,
     content: processSteps.slice(5),
   },
 ];
@@ -128,8 +123,6 @@ export function Process() {
                         className={styles.stageButton}
                         aria-expanded={active}
                         aria-controls={`${id}-${index}-panel`}
-                        aria-labelledby={`${id}-${index}-title`}
-                        aria-describedby={`${id}-${index}-summary`}
                         onClick={() => {
                           setDirection(
                             index < (selected ?? 0) ? "back" : "forward",
@@ -149,12 +142,6 @@ export function Process() {
                           >
                             {stage.title}
                           </span>
-                          <span
-                            id={`${id}-${index}-summary`}
-                            className={styles.summary}
-                          >
-                            {stage.summary}
-                          </span>
                         </span>
                         <svg
                           className={styles.chevron}
@@ -163,7 +150,7 @@ export function Process() {
                           height="20"
                           fill="none"
                           stroke="currentColor"
-                          strokeWidth="1.5"
+                          strokeWidth="1.75"
                           aria-hidden="true"
                         >
                           <path d="m7 5 5 5-5 5" />
@@ -177,7 +164,6 @@ export function Process() {
                       </span>
                       <div>
                         <h3 id={`${id}-${index}-title`}>{stage.title}</h3>
-                        <p className={styles.summary}>{stage.summary}</p>
                       </div>
                     </div>
                   )}

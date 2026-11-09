@@ -3,22 +3,22 @@ import { AnimatedLink, ButtonLink, Section } from "./ui/index.ts";
 import { products } from "@/content/products";
 export function Products() {
   return (
-    <Section id="products" className="ms-surface-dark">
+    <Section id="products" className="products-band">
       <div className="section-layout product-overview grid lg:grid-cols-5">
         <div className="section-introduction lg:col-span-2">
           <h2 className="text-h2 font-medium tracking-tight">
             Products We're Building
           </h2>
           <p className="max-w-sm leading-relaxed text-muted">
-            These products are still in development. We will share more about
-            what they do and how to use them when they are ready.
+            Our own products, made with care for the people who use them. We'll
+            share more when they're ready.
           </p>
         </div>
         <div className="lg:col-span-3">
           {products.map((product) => (
             <article
               key={product.name}
-              className="flex items-start gap-4 border-t border-border py-[var(--space-related)]"
+              className="flex items-start gap-4 border-t border-border py-(--space-related)"
             >
               {product.logo ? (
                 <Image
@@ -42,14 +42,14 @@ export function Products() {
                     {product.status}
                   </span>
                 </div>
-                <p className="mt-[var(--space-related)] max-w-lg leading-relaxed text-muted">
+                <p className="mt-(--space-related) max-w-lg leading-relaxed text-muted">
                   {product.description}
                 </p>
                 {product.status === "Available" && (
                   <AnimatedLink
                     href={product.url}
                     external
-                    className="mt-[var(--space-action)] min-h-12 text-accent"
+                    className="mt-(--space-action) min-h-12 text-primary"
                   >
                     Explore {product.name}
                   </AnimatedLink>
@@ -59,7 +59,7 @@ export function Products() {
           ))}
         </div>
         <div className="section-action product-overview-action">
-          <ButtonLink href="/products" light>
+          <ButtonLink href="/products" secondary>
             Explore Our Products
           </ButtonLink>
         </div>

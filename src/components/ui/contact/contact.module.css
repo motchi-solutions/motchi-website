@@ -161,9 +161,6 @@
 .group[data-layout="tiers"] {
   --option-columns: repeat(2, minmax(0, 1fr));
 }
-.enquiry > p {
-  margin-bottom: 0;
-}
 .groupContext {
   --contact-hint-offset: 0;
   margin-top: var(--contact-label-gap);
@@ -206,10 +203,10 @@
 }
 .groupHeading {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: baseline;
+  justify-content: flex-start;
   flex-wrap: wrap;
-  gap: 0 1rem;
+  gap: 0 1.5rem;
   width: 100%;
 }
 .groupLabel {
@@ -264,27 +261,41 @@
 .option input {
   margin-top: var(--option-input-offset, 0);
   scroll-margin-top: 8rem;
-  accent-color: var(--burgundy);
+  accent-color: var(--option-accent, var(--burgundy));
   width: 18px;
   height: 18px;
   flex-shrink: 0;
 }
 .option:has(:checked) {
-  border-color: var(--border-selected);
-  background: var(--surface-selected);
-  color: var(--foreground-selected);
+  border-color: var(--active);
+  background: var(--active);
+  color: var(--active-foreground);
   box-shadow: none;
+  --option-accent: var(--active-detail);
+  --option-title-color: var(--active-foreground);
+  --option-description-color: color-mix(
+    in srgb,
+    var(--active-foreground) 85%,
+    transparent
+  );
 }
 .option:has(:focus-visible) {
   outline: 2px solid var(--burgundy);
   outline-offset: -4px;
+}
+/* Gold keeps keyboard focus visible inside a selected (burgundy) card. */
+.option:has(:checked):has(:focus-visible) {
+  outline-color: var(--active-detail);
 }
 .option input:focus-visible {
   outline: none;
 }
 .option:not(:has(:disabled)):active {
   transition-duration: 80ms;
-  background: color-mix(in srgb, var(--gold) 30%, var(--surface));
+  background: var(--active-tint-strong);
+}
+.option:has(:checked):not(:has(:disabled)):active {
+  background: var(--active-hover);
 }
 .option:has(:disabled) {
   cursor: not-allowed;
@@ -297,7 +308,7 @@
 .optionTitle {
   display: block;
   font-weight: 500;
-  color: var(--charcoal);
+  color: var(--option-title-color, var(--charcoal));
 }
 .optionDescription {
   display: block;
@@ -760,23 +771,25 @@ textarea.input {
 @media (hover: hover) and (pointer: fine) {
   .option:not(:has(:disabled)):hover {
     border-color: color-mix(in srgb, var(--burgundy) 35%, var(--border));
-    background: color-mix(in srgb, var(--gold) 12%, var(--surface));
+    background: var(--active-tint);
   }
   .option:has(:checked):not(:has(:disabled)):hover {
-    border-color: var(--border-selected);
-    background: var(--surface-selected-hover);
+    border-color: var(--active);
+    background: var(--active-hover);
   }
-  .option:has(:checked):not(:has(:disabled)):active,
   .option:not(:has(:disabled)):active {
-    background: color-mix(in srgb, var(--gold) 30%, var(--surface));
+    background: var(--active-tint-strong);
     transition-duration: 80ms;
   }
+  .option:has(:checked):not(:has(:disabled)):active {
+    background: var(--active-hover);
+  }
   .progress button:not(:disabled):not([aria-disabled="true"]):hover {
-    background: color-mix(in srgb, var(--gold) 12%, transparent);
+    background: var(--active-tint);
   }
   .actions button:not(:disabled):not([aria-disabled="true"]):hover,
   .draftActions button:not(:disabled):hover {
-    background: color-mix(in srgb, var(--gold) 14%, var(--surface));
+    background: var(--active-tint);
   }
   .actions .primary:not(:disabled):not([aria-disabled="true"]):hover,
   .draftActions .primary:not(:disabled):hover {
@@ -1283,11 +1296,11 @@ textarea.input {
 }
 @media (hover: hover) and (pointer: fine) {
   .review .reviewHeading button:not(:disabled):hover {
-    background: color-mix(in srgb, var(--gold) 18%, var(--surface));
+    background: var(--active-tint);
   }
 }
 .review .reviewHeading button:not(:disabled):active {
-  background: var(--surface-selected);
+  background: var(--active-tint-strong);
   transition-duration: 100ms;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1344,7 +1357,7 @@ textarea.input {
   height: 4rem;
   border: 1px solid var(--gold);
   border-radius: 50%;
-  background: var(--surface-selected);
+  background: color-mix(in srgb, var(--gold) 40%, var(--cream));
   color: var(--burgundy);
 }
 .resultContent {
@@ -1443,7 +1456,115 @@ textarea.input {
   }
 }
 
-.enquiry {
-  max-width: var(--contact-form-max);
-  margin-inline: auto;
+/* Landing-page enquiry: an editorial split that ends each service page. */
+.enquirySection {
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+.enquiryLayout {
+  display: grid;
+  gap: 0 4rem;
+}
+.enquiryIntro {
+  min-width: 0;
+}
+/* Enquiry headings stay on the form's start edge at every width. */
+.enquiryHeading {
+  max-width: 34rem;
+  margin-bottom: var(--space-section-heading);
+}
+.enquiryTitle {
+  text-wrap: balance;
+}
+.enquiryLead {
+  margin-top: 1rem;
+  color: var(--muted);
+  font-size: var(--type-reading-large);
+  line-height: var(--type-reading-leading);
+}
+.enquirySteps {
+  max-width: 28rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+.enquiryStepsHeading {
+  margin-bottom: 1rem;
+  color: var(--muted);
+  font-size: var(--type-reading-small);
+  font-weight: 600;
+}
+.enquirySteps ol {
+  display: grid;
+  gap: 1rem;
+}
+.enquirySteps li {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  align-items: start;
+  gap: 1rem;
+}
+.enquirySteps li > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--muted);
+  font-size: var(--type-ui-label);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+/* The current step is filled; later steps stay quiet so the list reads as a
+   preview of what follows, not as steps missing from this page. */
+.enquirySteps li[aria-current] > span {
+  border-color: var(--active);
+  background: var(--active);
+  color: var(--active-foreground);
+}
+.enquirySteps strong {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.625rem;
+  padding-top: 0.25rem;
+  font-weight: 600;
+}
+.enquirySteps li:not([aria-current]) strong {
+  color: var(--muted);
+  font-weight: 500;
+}
+.enquiryHere {
+  color: var(--active);
+  font-size: var(--type-ui-label);
+  font-weight: 500;
+}
+.enquiryStepText {
+  margin-top: 0.125rem;
+  color: var(--muted);
+  font-size: var(--type-reading-small);
+  line-height: var(--type-reading-leading);
+}
+.enquiryForm {
+  min-width: 0;
+}
+/* The form grid owns the gap below the notice. */
+.enquiryForm > p:first-child {
+  margin-bottom: 0;
+}
+@media (min-width: 1024px) {
+  .enquiryLayout {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: start;
+  }
+  .enquiryIntro {
+    position: sticky;
+    top: 7rem;
+  }
+}
+@media (max-width: 767px) {
+  .enquirySteps {
+    display: none;
+  }
 }

@@ -59,7 +59,7 @@ export function BranchMark({
       <span className="flex flex-col">
         <span className="text-2xl font-semibold leading-none tracking-tight">
           MOTCHI
-        </span>
+        </span>{" "}
         {transition ? (
           <span className="branch-label header-brand-label mt-1.5 text-sm font-medium tracking-wide">
             {(["solutions", "websites", "consulting"] as const).map(

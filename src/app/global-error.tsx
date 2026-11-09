@@ -27,7 +27,7 @@ export default function GlobalError({ reset }: { reset: () => void }) {
             Try Again
           </button>
           <p>
-            <a href="/">Back to Home</a> ·{" "}
+            <a href="/">Back to Home</a> |{" "}
             <a href={`mailto:${contactEmail}`}>Email Motchi</a>
           </p>
         </main>

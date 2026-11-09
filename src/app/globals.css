@@ -1,5 +1,27 @@
 @import "tailwindcss";
+
 @import "../styles/tokens.css";
 @import "./spacing.css";
 @import "./surfaces.css";
 @import "../styles/navigation.css";
+
+/* Pointer hover only: touch taps must not leave controls in a hover state.
+   Applies to hover:, group-hover: and peer-hover: utilities alike. */
+@custom-variant hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @slot;
+    }
+  }
+}
+
+/* Content swapped in by a tab or step control: a short settle, not a slide. */
+@theme {
+  --animate-panel-in: panel-in 300ms ease-in-out;
+  @keyframes panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.375rem);
+    }
+  }
+}

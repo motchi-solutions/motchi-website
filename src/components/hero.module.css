@@ -27,7 +27,7 @@
   margin-bottom: 0;
 }
 .headline {
-  grid-area: 2 / 1 / 3 / 10;
+  grid-area: 2 / 1 / 3 / 12;
   margin: var(--space-eyebrow) 0 0;
   font-size: clamp(3.5rem, 6.5vw, 6rem);
   font-weight: 500;
@@ -105,13 +105,6 @@
   font-weight: 600;
   color: var(--charcoal);
 }
-.selectionIntro {
-  max-width: 58ch;
-  margin-bottom: var(--space-eyebrow);
-  color: var(--muted);
-  font-size: 1rem;
-  line-height: 1.5;
-}
 .choices {
   border: 0;
   padding: 0;
@@ -143,14 +136,14 @@
     button:not(:disabled):not([aria-disabled="true"]):not(
       [aria-pressed="true"]
     ):hover {
-    background: color-mix(in srgb, var(--gold) 18%, var(--cream));
+    background: var(--active-tint);
     color: var(--burgundy);
   }
   .choices
     button[aria-pressed="true"]:not(:disabled):not(
       [aria-disabled="true"]
     ):hover {
-    background: color-mix(in srgb, var(--burgundy) 85%, var(--charcoal));
+    background: var(--active-hover);
     color: var(--cream);
   }
 }
@@ -210,7 +203,6 @@
 }
 .response p {
   margin-top: var(--space-related);
-  max-width: 58ch;
 }
 .capabilityActions {
   display: flex;
@@ -278,9 +270,6 @@
   .prompt {
     font-size: var(--type-hero-prompt);
   }
-  .selectionIntro {
-    font-size: var(--type-hero-selection-intro);
-  }
   .choices button,
   .response {
     font-size: var(--type-ui-copy);
@@ -297,8 +286,22 @@
   }
 }
 
+/* Two headline lines and a compact panel keep the expertise choices and
+   their answer above the fold on laptop screens. */
 @media (min-width: 1024px) and (max-width: 1919px) {
   .headline {
-    font-size: clamp(3.5rem, 1.2rem + 4vw, 6rem);
+    font-size: clamp(3.25rem, 1rem + 3.6vw, 5.5rem);
+  }
+  .explorer {
+    margin-top: 1.75rem;
+  }
+  .controlSurface {
+    padding-bottom: 1rem;
+  }
+  .response {
+    padding-block: 1.25rem 1.25rem;
+  }
+  .capabilityActions {
+    margin-top: 0.75rem;
   }
 }

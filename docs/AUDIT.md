@@ -24,6 +24,10 @@
 - The shared CSP permits inline scripts/styles for current Next rendering. A stricter nonce policy requires request-specific nonces and compatible dynamic rendering; test hydration/navigation before enforcing it. Keep HTTPS, body limits, timeout limits and least-privilege environment access in hosting configuration. Review every subdomain before HSTS includeSubDomains/preload.
 - Review actual privacy/retention practices, approved product status, asset permissions and monitored security reporting before publication. Do not invent legal facts or product availability. Robots/noindex is not authentication.
 
+## Content still needed from the owner
+
+- Client testimonials or quotes (with permission), a founder or team introduction with a photo on About, and consulting examples or case studies. Service sites in this field usually carry these as trust signals; add only approved, real content.
+
 ## Tooling
 
 Use the locked toolchain and configured CI checks. Keep dependency purposes, runtime constraints and advisory findings in [DEPENDENCIES.md](DEPENDENCIES.md).

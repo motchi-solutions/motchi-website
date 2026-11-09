@@ -46,15 +46,8 @@ export function CapabilityThread({
       </div>
       <div className={`${styles.explorer} ms-surface-feature`}>
         <div className={styles.controlSurface}>
-          <fieldset
-            className={styles.choices}
-            aria-describedby={`${id}-introduction`}
-          >
-            <legend className={styles.prompt}>Our Expertise</legend>
-            <p id={`${id}-introduction`} className={styles.selectionIntro}>
-              Choose an area to see how we help businesses build, connect, and
-              improve their technology.
-            </p>
+          <fieldset className={styles.choices}>
+            <legend className={styles.prompt}>Explore what we do</legend>
             {capabilityContent.map((item, index) => (
               <button
                 key={item.name}
@@ -100,7 +93,7 @@ export function CapabilityThread({
               <p>{item.detail}</p>
               <div className={styles.capabilityActions}>
                 <AnimatedLink
-                  href={`/contact?topic=${encodeURIComponent(item.interest)}`}
+                  href={item.contactHref}
                   arrow
                   className={styles.capabilityAction}
                 >

@@ -47,13 +47,15 @@
 }
 
 .selector button[aria-selected="true"] {
-  color: var(--brand-primary);
-  background: var(--surface);
-  border-color: var(--border);
+  color: var(--active-foreground);
+  background: var(--active);
+  border-color: var(--active);
   font-weight: 600;
+  --number-color: var(--active-detail);
 }
+
 .number {
-  color: var(--accent-ink);
+  color: var(--number-color, var(--accent-ink));
   font-size: 0.75rem;
 }
 .spotlight {
@@ -293,7 +295,7 @@
     display: block;
     margin-top: 0.75rem;
     color: var(--muted);
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
     line-height: 1.5;
     text-align: center;
   }
@@ -998,7 +1000,7 @@
     button:not(:disabled):not([aria-disabled="true"]):not(
       [aria-selected="true"]
     ):hover {
-    background: color-mix(in srgb, var(--gold) 12%, var(--surface));
+    background: var(--active-tint);
     border-color: color-mix(in srgb, var(--brand-primary) 35%, var(--border));
     color: var(--brand-primary);
   }
@@ -1006,8 +1008,8 @@
     button[aria-selected="true"]:not(:disabled):not(
       [aria-disabled="true"]
     ):hover {
-    background: color-mix(in srgb, var(--gold) 18%, var(--surface));
-    border-color: var(--gold);
+    background: var(--active-hover);
+    border-color: var(--active);
   }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -18,10 +18,11 @@
   position: absolute;
   inset: 0;
   background: var(--intro-background, var(--background));
+  /* Keep the feather inside the aperture so a zero radius is fully opaque. */
   mask-image: radial-gradient(
     circle at 50% 50%,
-    transparent var(--intro-aperture),
-    #000 calc(var(--intro-aperture) + 2px)
+    transparent calc(var(--intro-aperture) - 2px),
+    #000 var(--intro-aperture)
   );
 }
 

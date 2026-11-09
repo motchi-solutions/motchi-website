@@ -1,8 +1,8 @@
 // Safe to render in server pages or client feedback; no secrets or provider output.
 export const contactMessages = {
-  sent: "Thank you. Your enquiry has been sent. We typically respond within 2–3 business days.",
+  sent: "Thank you. Your enquiry has been sent. We typically respond within 2-3 business days.",
   partial:
-    "Your enquiry has been sent, but we could not send your confirmation email. There is no need to submit again. We typically respond within 2–3 business days.",
+    "Your enquiry has been sent, but we could not send your confirmation email. There is no need to submit again. We typically respond within 2-3 business days.",
   invalid:
     "Your enquiry was not sent. Check the fields below and re-enter your details. You can also email us directly.",
   expired:

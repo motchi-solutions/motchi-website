@@ -5,8 +5,8 @@ import { SectionNavigation } from "../../components/ui/section-navigation.tsx";
 import { Hero } from "../../components/consulting/hero.tsx";
 import { Capabilities } from "../../components/consulting/capabilities.tsx";
 import { Approach } from "../../components/consulting/approach.tsx";
-import { ConsultingResponsibilities } from "../../components/consulting/responsibilities.tsx";
-import { ConsultingAbout } from "../../components/consulting/about.tsx";
+import { Commitments } from "../../components/consulting/commitments.tsx";
+import { ConsultingFaq } from "../../components/consulting/faq.tsx";
 
 export const metadata = pageMetadata(
   "Motchi Consulting",
@@ -20,8 +20,8 @@ export default function Consulting() {
       <SectionNavigation items={consultingSections} />
       <Capabilities />
       <Approach />
-      <ConsultingResponsibilities />
-      <ConsultingAbout />
+      <Commitments />
+      <ConsultingFaq />
       <ServiceEnquiry branch="consulting" />
     </>
   );

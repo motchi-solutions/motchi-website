@@ -1,4 +1,4 @@
-/** CSS optimizers may serialize milliseconds as seconds (2600ms → 2.6s). */
+/** CSS optimizers may serialize milliseconds as seconds (2600ms -> 2.6s). */
 export function motionMilliseconds(value: string, fallback: number): number {
   const time = value.trim();
   if (!/^(?:\d+(?:\.\d+)?|\.\d+)(?:ms|s)$/.test(time)) return fallback;

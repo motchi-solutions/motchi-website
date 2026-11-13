@@ -110,6 +110,7 @@ function Drawing({ index }: { index: number }) {
 export function AboutHero() {
   const id = useId();
   const { selected, tabId, panelId, tabProps } = useTabs(principles.length);
+
   return (
     <section className={styles.hero} aria-labelledby="about-title">
       <Container>

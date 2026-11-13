@@ -14,12 +14,14 @@ export function SectionNavigation({
   const toggle = useRef<HTMLButtonElement>(null);
   const panelId = useId();
   const restoreFocus = useRef(false);
+
   useLayoutEffect(() => {
     if (!open && restoreFocus.current) {
       restoreFocus.current = false;
       toggle.current?.focus({ preventScroll: true });
     }
   }, [open]);
+
   useEffect(() => {
     setOpen(false);
     const sections = items.map((item) => ({
@@ -54,6 +56,7 @@ export function SectionNavigation({
       window.removeEventListener("resize", schedule);
     };
   }, [items]);
+
   useEffect(() => {
     if (!open) return;
     const dismiss = (event: Event) => {
@@ -77,6 +80,7 @@ export function SectionNavigation({
       document.removeEventListener("keydown", keyboard);
     };
   }, [open]);
+
   return (
     <div
       ref={root}

@@ -5,7 +5,8 @@ import type { Branch } from "../../lib/brand.ts";
 import { ContactExperience } from "./contact/contact-experience.tsx";
 import { ContactNavigation } from "./contact/contact-navigation.tsx";
 import { getContactConfiguration } from "./contact/contact-config.ts";
-import { Eyebrow } from "./primitives.tsx";
+import { AnimatedLink, Eyebrow } from "./primitives.tsx";
+import { firstCall } from "../../lib/config/sites.ts";
 import styles from "./contact/contact.module.css";
 
 export function ContactPageContent({
@@ -52,8 +53,16 @@ export function ContactPageContent({
             <p>{config.introduction}</p>
             <div className={styles.contactMeta}>
               <p className={styles.responseTime}>
+                Your first {firstCall.length} call is free
+              </p>
+              <p className={styles.responseTime}>
                 We usually reply within 2-3 business days
               </p>
+              {firstCall.url && (
+                <AnimatedLink href={firstCall.url} arrow external>
+                  Prefer to talk first? Book a free call
+                </AnimatedLink>
+              )}
             </div>
           </div>
         </header>

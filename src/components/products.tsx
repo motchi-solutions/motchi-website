@@ -3,7 +3,7 @@ import { AnimatedLink, ButtonLink, Section } from "./ui/index.ts";
 import { products } from "@/content/products";
 export function Products() {
   return (
-    <Section id="products" className="products-band">
+    <Section id="products" className="products-band ms-surface-burgundy">
       <div className="section-layout product-overview grid lg:grid-cols-5">
         <div className="section-introduction lg:col-span-2">
           <h2 className="text-h2 font-medium tracking-tight">
@@ -49,7 +49,7 @@ export function Products() {
                   <AnimatedLink
                     href={product.url}
                     external
-                    className="mt-(--space-action) min-h-12 text-primary"
+                    className="mt-(--space-action) min-h-12 text-accent"
                   >
                     Explore {product.name}
                   </AnimatedLink>
@@ -59,7 +59,7 @@ export function Products() {
           ))}
         </div>
         <div className="section-action product-overview-action">
-          <ButtonLink href="/products" secondary>
+          <ButtonLink href="/products" secondary light>
             Explore Our Products
           </ButtonLink>
         </div>

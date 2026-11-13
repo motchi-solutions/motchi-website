@@ -13,6 +13,8 @@
   --color-surface: var(--surface);
   --color-inverse: var(--inverse);
   --font-sans: var(--font-motchi-sans), Arial, Helvetica, system-ui, sans-serif;
+  --font-mono:
+    var(--font-motchi-mono), ui-monospace, "SF Mono", Menlo, monospace;
   --font-display: var(--font-motchi-serif), Georgia, "Times New Roman", serif;
   --container-shell: 100rem;
   --container-reading: 42rem;
@@ -1070,4 +1072,26 @@ button:is(:hover, :focus-visible) > .interaction-arrow {
   margin-inline: 0;
   font-size: var(--type-reading-body);
   line-height: var(--type-reading-leading);
+}
+
+/* Standalone numbers (step and index numbers, counters) share one monospace
+   face so they line up and read the same everywhere. Digits inside sentences
+   and prices stay in the text face. */
+.numeral {
+  font-family: var(--font-mono);
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+/* Short windows (200%+ browser zoom on a laptop, phones in landscape): sticky
+   bars would cover much of the content, so they scroll away instead
+   (WCAG 1.4.10 Reflow). */
+@media (max-height: 540px) {
+  .site-header {
+    position: relative;
+  }
+  html {
+    scroll-padding-top: 1rem;
+  }
 }

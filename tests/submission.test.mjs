@@ -29,8 +29,12 @@ function makeRequest(overrides = {}, headers = {}) {
     body: params.toString(),
   });
 }
+// Rejected origins redirect relatively; accepted ones use the site origin.
 function status(response) {
-  return new URL(response.headers.get("location")).searchParams.get("status");
+  return new URL(
+    response.headers.get("location"),
+    "https://relative.invalid",
+  ).searchParams.get("status");
 }
 
 test("native contact submission handles validation, delivery, partial failure, and replay", async (t) => {
@@ -50,15 +54,13 @@ test("native contact submission handles validation, delivery, partial failure, a
     await t.test(
       "cross-origin and invalid fields never send mail",
       async () => {
-        assert.equal(
-          status(
-            await handleContact(
-              makeRequest({}, { origin: "https://other.example" }),
-              "solutions",
-            ),
-          ),
-          "invalid",
+        const rejected = await handleContact(
+          makeRequest({}, { origin: "https://other.example" }),
+          "solutions",
         );
+        assert.equal(status(rejected), "invalid");
+        // Never send the browser to another origin, which connect-src blocks.
+        assert.match(rejected.headers.get("location"), /^\/contact\?/);
         const response = await handleContact(
           makeRequest({ email: "invalid" }),
           "solutions",

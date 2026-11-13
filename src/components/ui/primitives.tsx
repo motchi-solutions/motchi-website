@@ -129,23 +129,31 @@ export function ContactCTA({
   title = "Talk to Us About Your Project",
   action = "Contact Us",
   href = "/contact",
+  tone = "brand",
 }: {
   title?: string;
   action?: string;
   href?: string;
+  /** "light" closes a page whose previous section is already burgundy. */
+  tone?: "brand" | "light";
 }) {
+  const light = tone === "light";
   return (
-    <Section className="cta-section relative overflow-hidden bg-primary text-inverse">
+    <Section
+      className={`cta-section relative overflow-hidden ${light ? "cta-section-light border-t border-border bg-surface text-foreground" : "bg-primary text-inverse"}`}
+    >
       <div className="section-layout relative flex flex-col justify-between md:flex-row md:items-end">
         <div className="section-introduction max-w-2xl">
           <h2 className="text-h2 font-medium tracking-tight">{title}</h2>
-          <p className="max-w-2xl text-base leading-relaxed text-inverse/80">
+          <p
+            className={`max-w-2xl text-base leading-relaxed ${light ? "text-muted" : "text-inverse/80"}`}
+          >
             Tell us what you're working on. We typically respond with next steps
             or an initial quote within 2-3 business days.
           </p>
         </div>
         <div className="shrink-0">
-          <ButtonLink href={href} light>
+          <ButtonLink href={href} light={!light}>
             {action}
           </ButtonLink>
         </div>

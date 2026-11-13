@@ -12,12 +12,14 @@ import {
 import type { Branch } from "../../../lib/brand.ts";
 import type { ContactEntry } from "./contact-entry.ts";
 type SaveState = "idle" | "saving" | "saved" | "error";
+
 export function useContactDraft(
   topic?: string,
   branch: Branch = "solutions",
   entry?: ContactEntry,
 ) {
   const contactDraftKey = getContactDraftKey(branch);
+
   const [draft, setDraft] = useState(
     () => entry?.draft ?? initialDraft(topic, branch),
   );
@@ -64,6 +66,7 @@ export function useContactDraft(
       return false;
     }
   }, [contactDraftKey, branch]);
+
   useEffect(() => {
     mounted.current = true;
     try {
@@ -80,6 +83,7 @@ export function useContactDraft(
       flush();
     };
   }, [flush, branch, contactDraftKey]);
+
   useEffect(() => {
     if (!ready || pendingDraft) return;
     snapshot.current = { draft, step, edited, savingEnabled };
@@ -90,6 +94,7 @@ export function useContactDraft(
     const timer = window.setTimeout(flush, 500);
     return () => window.clearTimeout(timer);
   }, [draft, step, edited, savingEnabled, pendingDraft, ready, flush]);
+
   useEffect(() => {
     if (!edited || pendingDraft) return;
     const hide = () => {
@@ -141,6 +146,7 @@ export function useContactDraft(
       document.removeEventListener("click", leaving, true);
     };
   }, [edited, pendingDraft, flush]);
+
   useEffect(() => {
     if (!edited || pendingDraft || (savingEnabled && saveState === "saved"))
       return;
@@ -153,6 +159,7 @@ export function useContactDraft(
     window.addEventListener("beforeunload", unload);
     return () => window.removeEventListener("beforeunload", unload);
   }, [edited, pendingDraft, savingEnabled, saveState, flush]);
+
   function updateDraft<K extends keyof ContactDraft>(
     key: K,
     value: ContactDraft[K],
@@ -161,11 +168,13 @@ export function useContactDraft(
     setEdited(true);
     setDraft((current) => ({ ...current, [key]: value }));
   }
+
   function changeStep(value: number) {
     allowLeave.current = false;
     setStep(value);
     setEdited(true);
   }
+
   function resume() {
     if (!pendingDraft) return;
     setSavingEnabled(true);
@@ -174,6 +183,7 @@ export function useContactDraft(
     setPendingDraft(null);
     setEdited(true);
   }
+
   function clear(restartFromEntry = false) {
     try {
       localStorage.removeItem(contactDraftKey);
@@ -199,6 +209,7 @@ export function useContactDraft(
     setSaveState("idle");
     return true;
   }
+
   function toggleSaving(enabled: boolean) {
     if (!enabled) {
       try {

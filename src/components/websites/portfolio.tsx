@@ -41,7 +41,9 @@ export function Portfolio({ projects }: { projects: Project[] }) {
                 {projects.map((project, index) => (
                   <li key={project.id}>
                     <a href={`#project-${project.id}`}>
-                      <span aria-hidden="true">{number(index)}</span>
+                      <span className="numeral" aria-hidden="true">
+                        {number(index)}
+                      </span>
                       {project.media.logo && (
                         <Image
                           src={project.media.logo.src}
@@ -77,7 +79,10 @@ export function Portfolio({ projects }: { projects: Project[] }) {
                     <ProjectPreview project={project} aboveFold={index === 0} />
                   </div>
                   <div className={styles.copy}>
-                    <p className={styles.number} aria-hidden="true">
+                    <p
+                      className={`${styles.number} numeral`}
+                      aria-hidden="true"
+                    >
                       {number(index)}
                     </p>
                     <div className={styles.identity}>

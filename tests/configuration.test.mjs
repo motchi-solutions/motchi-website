@@ -125,3 +125,14 @@ test("contact input normalizes text and rejects ambiguous duplicate fields", () 
   result = validateContact(form, "solutions");
   assert.ok(result.errors.email);
 });
+
+test("the free-call booking link is empty or an https Google Calendar page", async () => {
+  const { firstCall } = await import("../src/lib/config/sites.ts");
+  if (!firstCall.url) return;
+  const url = new URL(firstCall.url);
+  assert.equal(url.protocol, "https:");
+  assert.ok(
+    ["calendar.app.google", "calendar.google.com"].includes(url.hostname),
+    "Use the Google Calendar appointment schedule booking page link.",
+  );
+});

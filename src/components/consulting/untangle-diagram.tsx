@@ -2,7 +2,12 @@
 
 import { type CSSProperties, useLayoutEffect, useRef } from "react";
 
-/* Hero artwork: three tangled problems run through the Motchi Consulting mark
+/* Strokes draw in with the dash-offset technique on pathLength="1", animated
+   with the Web Animations API (MDN: Element.animate) so the sequence can be
+   paused until the intro finishes and skipped under prefers-reduced-motion
+   (WCAG 2.3.3 Animation from Interactions).
+
+   Hero artwork: three tangled problems run through the Motchi Consulting mark
    and leave as clean, parallel lines. One drawing is authored left-to-right;
    phones get the same drawing turned top-to-bottom, so labels stay legible. */
 
@@ -11,6 +16,7 @@ const problems = [
   "An unclear platform decision",
   "Data you can't depend on",
 ];
+
 const outcomes = [
   "Clear decisions",
   "Connected systems",
@@ -24,15 +30,18 @@ const tangled = [
   "M0 170 C36 170 56 255 94 218 S120 100 158 149 S210 234 240 170",
   "M0 283 C48 283 76 186 114 228 S154 324 186 242 S214 149 240 170",
 ];
+
 const clean = [
   "M240 170 C300 170 316 57 376 57 L474 57",
   "M240 170 L474 170",
   "M240 170 C300 170 316 283 376 283 L474 283",
 ];
+
 const ends = [57, 170, 283];
 
 // Phones: x runs down the page; the long axis is shortened to keep the hero compact.
 const SHORTEN = 0.6;
+
 const upright = (path: string) =>
   path.replace(
     /(\d+) (\d+)/g,
@@ -42,6 +51,7 @@ const upright = (path: string) =>
 function Drawing({ vertical }: { vertical: boolean }) {
   const draw = vertical ? upright : (path: string) => path;
   const hub = vertical ? { x: 170, y: 240 * SHORTEN } : { x: 240, y: 170 };
+
   return (
     <svg
       viewBox={vertical ? `0 0 340 ${480 * SHORTEN}` : "0 0 480 340"}

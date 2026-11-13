@@ -47,6 +47,7 @@ export function ContactOptionGroup({
 }) {
   const help = hint ?? (multiple ? "Select all that apply." : "Choose one.");
   const hiddenHelp = !hint && !multiple;
+
   return (
     <fieldset
       id={`${id}-group`}
@@ -159,6 +160,7 @@ export function ContactOptionGroup({
     </fieldset>
   );
 }
+
 export function ContactField({
   field,
   label,
@@ -224,6 +226,7 @@ export function ContactField({
       ),
     className: styles.input,
   };
+
   return (
     <div className={styles.field}>
       <div className={styles.fieldLabelRow}>
@@ -250,7 +253,7 @@ export function ContactField({
       {multiline ? (
         <div className={styles.textareaShell}>
           <textarea {...props} rows={5} />
-          <div className={styles.characterCounter}>
+          <div className={`${styles.characterCounter} numeral`}>
             <span
               id={`${field}-counter`}
               data-limit={value.length >= maxLength}

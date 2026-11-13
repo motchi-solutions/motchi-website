@@ -27,6 +27,7 @@
 ## Content still needed from the owner
 
 - Client testimonials or quotes (with permission), a founder or team introduction with a photo on About, and consulting examples or case studies. Service sites in this field usually carry these as trust signals; add only approved, real content.
+- Privacy policy (src/components/ui/privacy.tsx): have an Ontario privacy lawyer review it before relying on it. It states that Brevo counts opens and clicks only anonymously (account setting Anonymous email tracking = Yes, plus contactPixelTrackingConsent: false on each recipient in src/lib/email/index.ts; full disabling needs a Brevo Enterprise request) and that the inbox and provider accounts use two-step verification; keep both true. Update the policy and its date before adding analytics, changing providers, or changing what the contact form collects.
 
 ## Tooling
 

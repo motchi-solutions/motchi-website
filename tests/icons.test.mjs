@@ -29,7 +29,11 @@ test("manifest identities match supplied PNG dimensions and honest icon purposes
         `${bytes.readUInt32BE(16)}x${bytes.readUInt32BE(20)}`,
       );
       assert.equal(icon.type, "image/png");
-      assert.equal(icon.purpose, "any");
+      // Only the padded icons may be masked; full-bleed ones would be clipped.
+      assert.equal(
+        icon.purpose,
+        icon.src.startsWith("/icons/maskable-") ? "maskable" : "any",
+      );
     }
     const apple = readFileSync(`src/app/apple-icon.png`);
     assert.equal(apple.readUInt32BE(16), 180);
@@ -45,7 +49,7 @@ test("metadata keeps domains and schema environment-aware without duplicate file
     const metadata = siteMetadata("solutions");
     assert.equal(metadata.metadataBase.href, "https://preview.motchi.example/");
     assert.equal(metadata.applicationName, "Motchi Solutions");
-    assert.equal(metadata.title.template, "%s | Motchi Solutions");
+    assert.equal(metadata.title.template, "%s - Motchi Solutions");
     assert.equal(metadata.robots.index, false);
     assert.equal(metadata.icons, undefined);
     assert.equal(metadata.openGraph.images, undefined);

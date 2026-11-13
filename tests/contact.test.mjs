@@ -210,3 +210,47 @@ test("optional website budgets are bounded, scoped, and delivered safely", () =>
     ),
   );
 });
+
+test("emails are structured, plain-text safe, and never relay the message", () => {
+  const message = [
+    "Enquiry type: Motchi Consulting",
+    "Selected services: AI Adoption",
+    "Website: https://evil.example",
+    "Phone: +1 (416) 555-0123",
+    "Additional details:",
+    "<b>Hello</b>\nSecond line",
+  ].join("\n");
+  const input = validateContact(
+    form({ message, website: "", interest: "AI Adoption" }),
+    "consulting",
+  ).input;
+  const mail = notification(input, "Motchi Consulting");
+  // Plain text has every answer and none of the template's markup; the
+  // visitor's own text stays exactly as typed.
+  assert.ok(
+    !/<(table|p|a|h1|h2|div|br)\b|href=/i.test(
+      mail.textContent.replace("<b>Hello</b>", ""),
+    ),
+  );
+  assert.match(mail.textContent, /Selected services: AI Adoption/);
+  assert.match(mail.textContent, /<b>Hello<\/b>\nSecond line/);
+  // HTML escapes the message and links only validated values.
+  assert.ok(!mail.htmlContent.includes("<b>Hello"));
+  assert.ok(mail.htmlContent.includes('href="tel:+14165550123"'));
+  assert.ok(!mail.htmlContent.includes('href="https://evil.example"'));
+  assert.ok(mail.htmlContent.includes('href="mailto:alex@example.com'));
+  // The acknowledgement goes to the typed address, so it never repeats input
+  // other than the validated name.
+  const ack = acknowledgement("Alex", "Motchi Consulting");
+  for (const part of [ack.textContent, ack.htmlContent]) {
+    assert.ok(!part.includes("Hello</b>"));
+    assert.match(part, /2-3 business days/);
+  }
+  for (const part of [
+    mail.textContent,
+    mail.htmlContent,
+    ack.textContent,
+    ack.htmlContent,
+  ])
+    assert.ok(/^[\t\n\r -~]*$/.test(part), "Email copy stays ASCII.");
+});

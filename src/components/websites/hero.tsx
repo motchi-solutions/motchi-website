@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { DrawnMonogram } from "./drawn-monogram.tsx";
-import { ButtonLink, Container, HeroBrand } from "../ui/index.ts";
+import { ButtonLink, Container, HeroBrand, HeroTrust } from "../ui/index.ts";
 import styles from "./hero.module.css";
 
 const captionWords = ["From", "sketch", "to", "finished", "website."].map(
@@ -28,10 +28,11 @@ export function Hero() {
             </p>
             <div className={styles.actions}>
               <ButtonLink href="#enquiry">Start a Project</ButtonLink>
-              <ButtonLink href="#work" secondary>
+              <ButtonLink href="/websites/work" secondary>
                 Explore Our Work
               </ButtonLink>
             </div>
+            <HeroTrust className={styles.trust} />
           </div>
           <div
             className={styles.artwork}

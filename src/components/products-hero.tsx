@@ -6,6 +6,7 @@ import {
   useState,
   type PointerEvent,
   type KeyboardEvent,
+  type MouseEvent,
 } from "react";
 import {
   LuCircleHelp,
@@ -19,6 +20,152 @@ import { ProductAlbum } from "./product-album.tsx";
 import { productGateTiming, useProductGate } from "./use-product-gate.ts";
 import styles from "./products-hero.module.css";
 import hero from "./exploration-hero.module.css";
+
+/* Product changes slide like a carousel: a frozen, inert copy of the current
+   gate leaves while the new one arrives, so both are visible mid-transition.
+   Uses the Web Animations API (MDN: Element.animate). */
+function slideAway(node: HTMLElement, direction: number) {
+  const distance = node.parentElement?.clientWidth ?? node.clientWidth;
+  const outgoing = node.cloneNode(true) as HTMLElement;
+
+  // Freeze each copied element where it is now, mid-animation included.
+  const originals = node.querySelectorAll<HTMLElement>("*");
+  const copies = outgoing.querySelectorAll<HTMLElement>("*");
+  originals.forEach((original, position) => {
+    const computed = getComputedStyle(original);
+    copies[position].style.transform = computed.transform;
+    copies[position].style.opacity = computed.opacity;
+    copies[position].style.animation = "none";
+    copies[position].style.transition = "none";
+  });
+  outgoing.style.setProperty(
+    "--spotlight-color",
+    getComputedStyle(node).getPropertyValue("--spotlight-color"),
+  );
+
+  // The copy is decoration only: no focus, no accessibility tree, no ids.
+  outgoing.inert = true;
+  outgoing.setAttribute("aria-hidden", "true");
+  outgoing.querySelectorAll("[id]").forEach((item) => {
+    item.removeAttribute("id");
+  });
+  node.parentElement?.append(outgoing);
+
+  const timing = { duration: 950, easing: "cubic-bezier(0.4, 0, 0.2, 1)" };
+  const exit = outgoing.animate(
+    [
+      { transform: "translateX(0)" },
+      { transform: `translateX(${-direction * distance}px)` },
+    ],
+    { ...timing, fill: "forwards" },
+  );
+  exit.onfinish = () => outgoing.remove();
+  const arrival = node.animate(
+    [
+      { transform: `translateX(${direction * distance}px)` },
+      { transform: "translateX(0)" },
+    ],
+    timing,
+  );
+  return { outgoing, exit, arrival };
+}
+
+/* A horizontal swipe on the gate or tabs moves between products. Vertical
+   movement is left to page scrolling, and a swipe never counts as a click. */
+function useSwipe(onSwipe: (direction: 1 | -1) => void) {
+  const gesture = useRef<{ id: number; x: number; y: number } | null>(null);
+  const suppressClick = useRef(false);
+
+  const horizontal = (dx: number, dy: number) =>
+    Math.abs(dx) > Math.abs(dy) * 1.5;
+
+  return {
+    onPointerDownCapture(event: PointerEvent<HTMLDivElement>) {
+      suppressClick.current = false;
+      gesture.current = null;
+      if (
+        !event.isPrimary ||
+        event.button !== 0 ||
+        !(event.target instanceof Element)
+      )
+        return;
+      if (
+        !event.target.closest("[data-product-swipe]") ||
+        event.target.closest(
+          "[data-product-album], [data-gate-action=close], [data-product-navigation], a",
+        )
+      )
+        return;
+      gesture.current = {
+        id: event.pointerId,
+        x: event.clientX,
+        y: event.clientY,
+      };
+    },
+    onPointerMoveCapture(event: PointerEvent<HTMLDivElement>) {
+      const start = gesture.current;
+      if (!start || start.id !== event.pointerId) return;
+      const dx = event.clientX - start.x;
+      if (Math.abs(dx) > 12 && horizontal(dx, event.clientY - start.y))
+        event.currentTarget.setPointerCapture(event.pointerId);
+    },
+    onPointerUpCapture(event: PointerEvent<HTMLDivElement>) {
+      const start = gesture.current;
+      gesture.current = null;
+      if (!start || start.id !== event.pointerId) return;
+      const dx = event.clientX - start.x;
+      if (Math.abs(dx) < 64 || !horizontal(dx, event.clientY - start.y)) return;
+      suppressClick.current = true;
+      onSwipe(dx < 0 ? 1 : -1);
+    },
+    onPointerCancel() {
+      gesture.current = null;
+    },
+    onClickCapture(event: MouseEvent<HTMLDivElement>) {
+      if (!suppressClick.current) return;
+      suppressClick.current = false;
+      // Keyboard "clicks" have detail 0 and are never swallowed.
+      if (event.detail > 0) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    },
+  };
+}
+
+// The two closed gate doors: logo on the left, name and status on the right.
+function GateDoors({ product }: { product: (typeof products)[number] }) {
+  return (
+    <>
+      <span className={styles.gateLeft} aria-hidden="true">
+        <span className={styles.doorContent}>
+          {product.logo ? (
+            <Image
+              src={product.logo.src}
+              alt=""
+              width={product.logo.width}
+              height={product.logo.height}
+              sizes="(max-width: 767px) 120px, 160px"
+              loading="eager"
+              draggable={false}
+              className={styles.doorLogo}
+            />
+          ) : (
+            <LuCircleHelp className={styles.doorIcon} />
+          )}
+        </span>
+        <span className={styles.gateHandle} />
+      </span>
+      <span className={styles.gateRight} aria-hidden="true">
+        <span className={styles.doorContent}>
+          <span className={styles.doorTitle}>{product.name}</span>
+          <span className={styles.doorStatus}>{product.status}</span>
+        </span>
+        <span className={styles.gateHandle} />
+      </span>
+    </>
+  );
+}
 
 export function ProductsHero() {
   const [selected, setSelected] = useState(0);
@@ -37,9 +184,8 @@ export function ProductsHero() {
   const selector = useRef<HTMLDivElement>(null);
   const previousOpen = useRef(false);
   const { gate, reset, moveGate, refreshHover } = useProductGate(selected);
-  const gesture = useRef<{ id: number; x: number; y: number } | null>(null);
-  const suppressClick = useRef(false);
   const product = products[selected];
+
   useEffect(() => {
     if (opened) {
       setAlbumVisible(true);
@@ -53,6 +199,7 @@ export function ProductsHero() {
     );
     return () => window.clearTimeout(timer);
   }, [opened]);
+
   useEffect(
     () => () => {
       productTransition.current?.cancel();
@@ -61,6 +208,7 @@ export function ProductsHero() {
     },
     [],
   );
+
   useEffect(() => {
     if (opened) {
       const target =
@@ -72,10 +220,12 @@ export function ProductsHero() {
       trigger.current?.focus({ preventScroll: true });
     previousOpen.current = opened;
   }, [opened]);
+
   const resetTilt = () => {
     display.current?.style.setProperty("--tilt-x", "0deg");
     display.current?.style.setProperty("--tilt-y", "0deg");
   };
+
   const choose = (index: number, direction = index > selected ? 1 : -1) => {
     if (index === selected) return;
     setAlbumUsed(false);
@@ -86,48 +236,9 @@ export function ProductsHero() {
     if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       const node = carouselSlide.current;
       if (!node) return;
-      const distance = node.parentElement?.clientWidth ?? node.clientWidth;
-      const outgoing = node.cloneNode(true) as HTMLElement;
-      const originals = node.querySelectorAll<HTMLElement>("*");
-      const copies = outgoing.querySelectorAll<HTMLElement>("*");
-      originals.forEach((original, position) => {
-        const computed = getComputedStyle(original);
-        copies[position].style.transform = computed.transform;
-        copies[position].style.opacity = computed.opacity;
-        copies[position].style.animation = "none";
-        copies[position].style.transition = "none";
-      });
-      outgoing.style.setProperty(
-        "--spotlight-color",
-        getComputedStyle(node).getPropertyValue("--spotlight-color"),
-      );
-      outgoing.inert = true;
-      outgoing.setAttribute("aria-hidden", "true");
-      outgoing.querySelectorAll("[id]").forEach((item) => {
-        item.removeAttribute("id");
-      });
-      node.parentElement?.append(outgoing);
+      const { outgoing, exit, arrival } = slideAway(node, direction);
       outgoingGate.current = outgoing;
-      const timing = {
-        duration: 950,
-        easing: "cubic-bezier(0.4, 0, 0.2, 1)",
-      };
-      const exit = outgoing.animate(
-        [
-          { transform: "translateX(0)" },
-          { transform: `translateX(${-direction * distance}px)` },
-        ],
-        { ...timing, fill: "forwards" },
-      );
       productExit.current = exit;
-      exit.onfinish = () => outgoing.remove();
-      const arrival = node.animate(
-        [
-          { transform: `translateX(${direction * distance}px)` },
-          { transform: "translateX(0)" },
-        ],
-        timing,
-      );
       productTransition.current = arrival;
       arrival.onfinish = () => {
         if (productTransition.current === arrival) refreshHover.current();
@@ -140,6 +251,7 @@ export function ProductsHero() {
     setAlbumVisible(false);
     setSelected(index);
   };
+
   const tilt = (event: PointerEvent<HTMLDivElement>) => {
     if (event.buttons) {
       resetTilt();
@@ -167,6 +279,7 @@ export function ProductsHero() {
     node.style.setProperty("--tilt-x", `${-y * 3}deg`);
     node.style.setProperty("--tilt-y", `${x * 4}deg`);
   };
+
   const navigateProduct = (direction: number, from = selected) => {
     const next = (from + direction + products.length) % products.length;
     choose(next, direction);
@@ -174,6 +287,7 @@ export function ProductsHero() {
       ?.querySelectorAll("button")
       [next]?.focus({ preventScroll: true });
   };
+
   const arrowNavigation = (
     event: KeyboardEvent<HTMLButtonElement>,
     from = selected,
@@ -190,51 +304,9 @@ export function ProductsHero() {
         [next]?.focus({ preventScroll: true });
     } else navigateProduct(event.key === "ArrowRight" ? 1 : -1, from);
   };
-  const startSwipe = (event: PointerEvent<HTMLDivElement>) => {
-    suppressClick.current = false;
-    gesture.current = null;
-    if (
-      !event.isPrimary ||
-      event.button !== 0 ||
-      !(event.target instanceof Element)
-    )
-      return;
-    if (
-      !event.target.closest("[data-product-swipe]") ||
-      event.target.closest(
-        "[data-product-album], [data-gate-action=close], [data-product-navigation], a",
-      )
-    )
-      return;
-    gesture.current = {
-      id: event.pointerId,
-      x: event.clientX,
-      y: event.clientY,
-    };
-  };
-  const moveSwipe = (event: PointerEvent<HTMLDivElement>) => {
-    const start = gesture.current;
-    if (!start || start.id !== event.pointerId) return;
-    const dx = event.clientX - start.x,
-      dy = event.clientY - start.y;
-    if (Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy) * 1.5)
-      event.currentTarget.setPointerCapture(event.pointerId);
-  };
-  const finishSwipe = (event: PointerEvent<HTMLDivElement>) => {
-    const start = gesture.current;
-    gesture.current = null;
-    if (!start || start.id !== event.pointerId) return;
-    const dx = event.clientX - start.x,
-      dy = event.clientY - start.y;
-    if (Math.abs(dx) < 64 || Math.abs(dx) <= Math.abs(dy) * 1.5) return;
-    suppressClick.current = true;
-    const next =
-      (selected + (dx < 0 ? 1 : -1) + products.length) % products.length;
-    choose(next, dx < 0 ? 1 : -1);
-    selector.current
-      ?.querySelectorAll("button")
-      [next]?.focus({ preventScroll: true });
-  };
+
+  const swipe = useSwipe((direction) => navigateProduct(direction));
+
   return (
     <section className={`${styles.hero} ${hero.hero} border-b border-border`}>
       <Container>
@@ -251,24 +323,7 @@ export function ProductsHero() {
             </p>
           </header>
 
-          <div
-            className={styles.showcase}
-            onPointerDownCapture={startSwipe}
-            onPointerMoveCapture={moveSwipe}
-            onPointerUpCapture={finishSwipe}
-            onPointerCancel={() => {
-              gesture.current = null;
-            }}
-            onClickCapture={(event) => {
-              if (suppressClick.current) {
-                suppressClick.current = false;
-                if (event.detail > 0) {
-                  event.preventDefault();
-                  event.stopPropagation();
-                }
-              }
-            }}
-          >
+          <div className={styles.showcase} {...swipe}>
             <div
               role="tablist"
               aria-label="Choose a product to explore"
@@ -289,7 +344,10 @@ export function ProductsHero() {
                   onKeyDown={(event) => arrowNavigation(event, index)}
                   onClick={() => choose(index)}
                 >
-                  <span className={styles.number} aria-hidden="true">
+                  <span
+                    className={`${styles.number} numeral`}
+                    aria-hidden="true"
+                  >
                     0{index + 1}
                   </span>
                   <span>{item.name}</span>
@@ -396,34 +454,7 @@ export function ProductsHero() {
                     />
                   </div>
                   <div ref={gate} className={styles.gate} data-open={opened}>
-                    <span className={styles.gateLeft} aria-hidden="true">
-                      <span className={styles.doorContent}>
-                        {product.logo ? (
-                          <Image
-                            src={product.logo.src}
-                            alt=""
-                            width={product.logo.width}
-                            height={product.logo.height}
-                            sizes="(max-width: 767px) 120px, 160px"
-                            loading="eager"
-                            draggable={false}
-                            className={styles.doorLogo}
-                          />
-                        ) : (
-                          <LuCircleHelp className={styles.doorIcon} />
-                        )}
-                      </span>
-                      <span className={styles.gateHandle} />
-                    </span>
-                    <span className={styles.gateRight} aria-hidden="true">
-                      <span className={styles.doorContent}>
-                        <span className={styles.doorTitle}>{product.name}</span>
-                        <span className={styles.doorStatus}>
-                          {product.status}
-                        </span>
-                      </span>
-                      <span className={styles.gateHandle} />
-                    </span>
+                    <GateDoors product={product} />
                     <button
                       ref={trigger}
                       type="button"

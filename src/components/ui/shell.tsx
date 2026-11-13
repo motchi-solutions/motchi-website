@@ -21,7 +21,7 @@ export function Header({ items }: { items: NavItem[] }) {
     >
       <HeaderEnhancements />
       <Container>
-        <div className="flex min-h-24 items-center justify-between gap-4">
+        <div className="flex min-h-24 flex-wrap items-center justify-between gap-x-4 gap-y-2">
           <HeaderBrand />
           <nav aria-label="Main navigation" className="hidden lg:block">
             <ul className="primary-navigation-links">

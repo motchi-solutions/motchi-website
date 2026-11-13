@@ -251,7 +251,9 @@
 .intro-skip-keyboard {
   display: none;
 }
-@media (min-width: 768px) and (pointer: fine) {
+/* Choose the hint by input, not width: a zoomed-in laptop still has a
+   keyboard and mouse. */
+@media (hover: hover) and (pointer: fine) {
   .intro-skip-touch {
     display: none;
   }
@@ -271,4 +273,12 @@
   ) {
   animation: none;
   opacity: 0;
+}
+
+/* Short windows (200%+ zoom, phones in landscape): the tagline would collide
+   with the skip hint; the page repeats it right after the intro. */
+@media (max-height: 540px) {
+  .intro-family-caption {
+    display: none;
+  }
 }

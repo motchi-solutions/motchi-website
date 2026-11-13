@@ -19,6 +19,18 @@
   color: var(--cream);
 }
 
+/* Burgundy feature band (home Products). Text and dividers use cream so the
+   band reads clearly; primary stays burgundy for light button ink. */
+.ms-surface-burgundy {
+  --muted: color-mix(in srgb, var(--cream) 82%, var(--burgundy));
+  --border: color-mix(in srgb, var(--cream) 24%, var(--burgundy));
+  --foreground: var(--cream);
+  --background: var(--burgundy);
+  --surface: var(--burgundy);
+  background: var(--burgundy);
+  color: var(--cream);
+}
+
 /* Reusable across Solutions contact sections; shared MW/MC styling is unchanged. */
 [data-branch="solutions"] .cta-section::before {
   content: "";
@@ -29,6 +41,10 @@
   border-radius: 50%;
   transform: none;
   opacity: 0.18;
+}
+/* Light contact close (home): the same circle reads as a beige accent. */
+[data-branch="solutions"] .cta-section-light::before {
+  opacity: 0.32;
 }
 
 /* Optical balance for the approved MS mark, inside an unchanged intro tile. */

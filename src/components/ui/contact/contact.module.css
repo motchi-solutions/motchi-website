@@ -501,7 +501,12 @@ textarea.input {
   line-height: 1.35;
   color: var(--charcoal);
 }
-.reviewHeading button {
+.reviewEdit {
+  grid-area: edit;
+  align-self: start;
+  justify-self: end;
+  /* Keeps the 44px hit target without pushing the answer down. */
+  margin-block: -0.625rem;
   min-width: 44px;
   min-height: 44px;
   color: var(--burgundy);
@@ -513,8 +518,19 @@ textarea.input {
 }
 .reviewRow {
   display: grid;
-  gap: 0.25rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "label edit"
+    "value value";
+  column-gap: 1rem;
+  row-gap: 0.25rem;
   padding-block: 0.875rem;
+}
+.reviewRow dt {
+  grid-area: label;
+}
+.reviewRow dd {
+  grid-area: value;
 }
 .reviewRow + .reviewRow {
   border-top: 1px solid color-mix(in srgb, var(--border) 55%, var(--surface));
@@ -548,8 +564,9 @@ textarea.input {
 }
 @media (min-width: 640px) {
   .reviewRow {
-    grid-template-columns: minmax(9rem, 0.85fr) minmax(0, 2fr);
-    gap: 1.5rem;
+    grid-template-columns: minmax(9rem, 0.85fr) minmax(0, 2fr) auto;
+    grid-template-areas: "label value edit";
+    column-gap: 1.5rem;
     align-items: baseline;
   }
 }
@@ -761,7 +778,7 @@ textarea.input {
 }
 .actionDetails a,
 .actionDetails button,
-.reviewHeading button,
+.reviewEdit,
 .savePreference {
   transition: color var(--motion-hover) var(--ease-hover);
 }
@@ -799,7 +816,7 @@ textarea.input {
   }
   .actionDetails a:hover,
   .actionDetails button:hover,
-  .reviewHeading button:hover,
+  .reviewEdit:not(:disabled):hover,
   .savePreference:not(:has(:disabled)):hover {
     color: var(--burgundy);
   }
@@ -813,7 +830,7 @@ textarea.input {
   .actions button,
   .draftActions button,
   .input,
-  .reviewHeading button,
+  .reviewEdit,
   .savePreference {
     transition: none;
   }
@@ -1289,22 +1306,22 @@ textarea.input {
   }
 }
 
-.review .reviewHeading button {
+.review .reviewEdit {
   transition:
     background-color var(--motion-hover) var(--ease-hover),
     color var(--motion-hover) var(--ease-hover);
 }
 @media (hover: hover) and (pointer: fine) {
-  .review .reviewHeading button:not(:disabled):hover {
+  .review .reviewEdit:not(:disabled):hover {
     background: var(--active-tint);
   }
 }
-.review .reviewHeading button:not(:disabled):active {
+.review .reviewEdit:not(:disabled):active {
   background: var(--active-tint-strong);
   transition-duration: 100ms;
 }
 @media (prefers-reduced-motion: reduce) {
-  .review .reviewHeading button {
+  .review .reviewEdit {
     transition: none;
   }
 }
@@ -1566,5 +1583,12 @@ textarea.input {
 @media (max-width: 767px) {
   .enquirySteps {
     display: none;
+  }
+}
+
+@media (max-height: 540px) {
+  .reminderCard,
+  .enquiryIntro {
+    position: static;
   }
 }

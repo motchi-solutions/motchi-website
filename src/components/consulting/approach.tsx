@@ -22,6 +22,7 @@ const stages = [
 const number = (index: number) => String(index + 1).padStart(2, "0");
 // A mouse drag this far (px) moves to the neighbouring stage.
 const SWIPE = 48;
+
 const slidesOf = (track: HTMLElement | null) =>
   Array.from(track?.querySelectorAll<HTMLElement>("[role=tabpanel]") ?? []);
 // Scroll position that rests a slide at the track's snap edge.
@@ -36,13 +37,18 @@ const leftOf = (track: HTMLElement, slide: HTMLElement) =>
 /* An engagement track: the rail shows progress, and the stages sit in a
    carousel that can be swiped by touch or dragged with a mouse. The rail,
    arrow keys, and Next buttons move the same carousel. Without JavaScript
-   every stage is listed in full. */
+   every stage is listed in full.
+   Sources: WAI-ARIA Authoring Practices, Carousel pattern with tabbed slide
+   picker (https://www.w3.org/WAI/ARIA/apg/patterns/carousel/); hidden slides
+   are inert so only the visible stage is reachable. Native CSS scroll
+   snapping keeps touch swipes smooth (MDN: CSS scroll snap). */
 export function Approach() {
   const { selected, setSelected, tabId, panelId, tabProps } = useTabs(
     stages.length,
   );
   const [enhanced, setEnhanced] = useState(false);
   const track = useRef<HTMLDivElement>(null);
+
   // Stage the carousel is moving to; stages it passes on the way are ignored.
   const target = useRef<number | null>(null);
   const drag = useRef<{
@@ -138,6 +144,7 @@ export function Approach() {
       moved: false,
     };
   }
+
   function onPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
     const state = drag.current;
     if (!state) return;
@@ -150,6 +157,7 @@ export function Approach() {
     }
     event.currentTarget.scrollLeft = state.left - distance;
   }
+
   function onPointerUp(event: ReactPointerEvent<HTMLDivElement>) {
     const state = drag.current;
     drag.current = null;
@@ -247,7 +255,7 @@ export function Approach() {
                 >
                   <span
                     aria-hidden="true"
-                    className="grid size-8 place-items-center rounded-full border border-border bg-background text-small font-semibold text-muted tabular-nums transition-colors duration-(--motion-hover) ease-(--ease-hover) group-data-[state=current]:border-(--active) group-data-[state=current]:bg-(--active) group-data-[state=current]:text-(--active-foreground) group-data-[state=done]:border-(--active-detail) group-data-[state=done]:bg-(--active-detail) group-data-[state=done]:text-foreground motion-reduce:transition-none"
+                    className="grid size-8 place-items-center rounded-full border border-border bg-background numeral text-small font-semibold text-muted transition-colors duration-(--motion-hover) ease-(--ease-hover) group-data-[state=current]:border-(--active) group-data-[state=current]:bg-(--active) group-data-[state=current]:text-(--active-foreground) group-data-[state=done]:border-(--active-detail) group-data-[state=done]:bg-(--active-detail) group-data-[state=done]:text-foreground motion-reduce:transition-none"
                   >
                     {number(index)}
                   </span>

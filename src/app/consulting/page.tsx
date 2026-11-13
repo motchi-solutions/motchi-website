@@ -9,9 +9,10 @@ import { Commitments } from "../../components/consulting/commitments.tsx";
 import { ConsultingFaq } from "../../components/consulting/faq.tsx";
 
 export const metadata = pageMetadata(
-  "Motchi Consulting",
-  "AI, data, platforms, automation, and business systems consulting, with practical implementation and adoption support.",
+  "Technology Consulting in Toronto - Motchi Consulting",
+  "Practical help with AI, data and analytics, Databricks, and business systems: clear advice, hands-on implementation, and support after delivery.",
   "/consulting",
+  { absolute: true },
 );
 export default function Consulting() {
   return (

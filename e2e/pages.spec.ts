@@ -21,6 +21,10 @@ test.describe("Websites", () => {
     await expect(
       actions.filter({ hasText: "Start a Project" }),
     ).toHaveAttribute("href", "#enquiry");
+    // The on-page work section is a preview, so go straight to the portfolio.
+    await expect(
+      actions.filter({ hasText: "Explore Our Work" }),
+    ).toHaveAttribute("href", "/websites/work");
     const labels = await actions.allTextContents();
     expect(
       labels.findIndex((text) => text.includes("Start a Project")),
@@ -138,4 +142,42 @@ test("links to another page's section land on that section", async ({
   await expect(
     page.getByRole("heading", { name: "How We Work Together" }),
   ).toBeInViewport();
+});
+
+test("a client logo opens its project in the portfolio", async ({ page }) => {
+  await open(page, "/");
+  await page
+    .getByRole("link", { name: /^VietBites\b.*see the project/ })
+    .click();
+  await expect(page).toHaveURL(/\/websites\/work#project-vietbites$/);
+  await expect(page.locator("#project-vietbites h2")).toBeInViewport();
+});
+
+test("the privacy policy is dated and its contents links reach each section", async ({
+  page,
+}) => {
+  await open(page, "/privacy");
+  await expect(page.locator("main h1")).toHaveText("Privacy Policy");
+  await expect(page.locator("main time")).toHaveAttribute(
+    "datetime",
+    /^\d{4}-\d{2}-\d{2}$/,
+  );
+  const contents = page.getByRole("navigation", { name: "On this page" });
+  const targets = await contents
+    .getByRole("link")
+    .evaluateAll((links) => links.map((link) => link.getAttribute("href")));
+  expect(targets.length).toBeGreaterThan(8);
+  for (const target of targets)
+    await expect(page.locator(`main ${target} h2`)).toHaveCount(1);
+
+  await contents.getByRole("link", { name: "Your rights" }).click();
+  await expect(page).toHaveURL(/#your-rights$/);
+  await expect(
+    page.getByRole("heading", { name: /Your rights/ }),
+  ).toBeInViewport();
+  await expect(
+    page.getByRole("link", {
+      name: "Office of the Privacy Commissioner of Canada",
+    }),
+  ).toHaveAttribute("href", /^https:\/\/www\.priv\.gc\.ca\//);
 });

@@ -17,7 +17,7 @@ export function BranchMark({
   return (
     <SiteLink
       href={href}
-      className={`brand-mark inline-flex min-h-12 items-center gap-3 ${transition ? "header-brand" : ""}`}
+      className={`brand-mark inline-flex min-h-12 shrink-0 items-center gap-3 whitespace-nowrap ${transition ? "header-brand" : ""}`}
       data-branch={branch}
       aria-label={homeLabel ?? `${family[branch].name} home`}
     >

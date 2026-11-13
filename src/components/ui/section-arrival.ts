@@ -108,6 +108,7 @@ export function prepareSectionArrival(destination: URL) {
       });
     });
   });
+
   // A failed or superseded navigation must not leave a document observer behind.
   const deadline = window.setTimeout(cleanup, 10000);
   observer.observe(document.body, { childList: true, subtree: true });

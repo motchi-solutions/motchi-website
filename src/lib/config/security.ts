@@ -19,6 +19,8 @@ export const securityHeaders = [
       "form-action 'self'",
       "img-src 'self' data: blob:",
       "font-src 'self'",
+      "manifest-src 'self'",
+      "worker-src 'self'",
       `script-src 'self' 'unsafe-inline'${development ? " 'unsafe-eval'" : ""}`,
       "style-src 'self' 'unsafe-inline'",
       `connect-src 'self'${development ? " ws: wss:" : ""}`,

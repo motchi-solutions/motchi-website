@@ -68,7 +68,9 @@ function LayerStack({
   onSelect: (index: number) => void;
 }) {
   const centres = [86, 168, 250, 332];
+
   const plane = (y: number) => `40,${y} 200,${y - 74} 360,${y} 200,${y + 74}`;
+
   return (
     <svg
       className={styles.stack}
@@ -108,7 +110,7 @@ function LayerStack({
                 <line x1="200" y1="208" x2="280" y2="168" />
               </g>
             )}
-            <text className={styles.planeNumber} x="378" y={y + 5}>
+            <text className={`${styles.planeNumber} numeral`} x="378" y={y + 5}>
               {number(index)}
             </text>
           </g>
@@ -123,7 +125,9 @@ export function Services() {
   const [enhanced, setEnhanced] = useState(false);
   const [open, setOpen] = useState<number | null>(null);
   const [preview, setPreview] = useState<number | null>(null);
+
   useEffect(() => setEnhanced(true), []);
+
   const toggle = (index: number) =>
     setOpen((current) => (current === index ? null : index));
 
@@ -175,7 +179,9 @@ export function Services() {
                       onClick={() => toggle(index)}
                     >
                       <span className={styles.layerLabel}>
-                        <span aria-hidden="true">{number(index)}</span>
+                        <span className="numeral" aria-hidden="true">
+                          {number(index)}
+                        </span>
                         {layer.label}
                       </span>
                       <span className={styles.layerTitle}>

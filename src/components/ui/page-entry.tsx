@@ -13,6 +13,7 @@ function prepareEntry(root: HTMLDivElement) {
   }
   const hero = root.querySelector("section") ?? root;
   const decorations: Animation[] = [];
+
   // Assemble the initial artwork before revealing it. Newly mounted tab
   // content is deliberately outside this one-time entrance sequence.
   for (const animation of [
@@ -88,6 +89,7 @@ function prepareEntry(root: HTMLDivElement) {
   let started = false;
   let cancelled = false;
   let timer: number | undefined;
+
   const start = () => {
     if (started || cancelled) return;
     started = true;
@@ -116,6 +118,7 @@ function prepareEntry(root: HTMLDivElement) {
       () => {},
     );
   };
+
   const finish = () => {
     window.clearTimeout(timer);
     for (const animation of entrances) animation.finish();
@@ -126,6 +129,7 @@ function prepareEntry(root: HTMLDivElement) {
     }
     root.dataset.entryPhase = "ready";
   };
+
   const revealControl = (event: Event) => {
     if (!(event.target instanceof Node)) return;
     targets.forEach((target, index) => {
@@ -151,6 +155,7 @@ function prepareEntry(root: HTMLDivElement) {
       Math.max(0, introDuration * 0.77 - elapsed),
     );
   }
+
   return () => {
     cancelled = true;
     window.clearTimeout(timer);
@@ -167,6 +172,7 @@ function prepareEntry(root: HTMLDivElement) {
 
 export function PageEntry({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
+
   useLayoutEffect(() => {
     const root = ref.current;
     if (!root) return;
@@ -187,6 +193,7 @@ export function PageEntry({ children }: { children: ReactNode }) {
       cleanup?.();
     };
   }, []);
+
   return (
     <div ref={ref} className="page-arrival">
       {children}

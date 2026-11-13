@@ -3,7 +3,10 @@
 import { type KeyboardEvent, useId, useRef, useState } from "react";
 
 /* WAI-ARIA tabs with roving focus: arrow keys (both axes), Home and End move
-   between tabs, and the chosen tab scrolls into view in an overflowing list. */
+   between tabs, and the chosen tab scrolls into view in an overflowing list.
+   Selection follows focus, as recommended when panels render instantly.
+   Source: WAI-ARIA Authoring Practices, Tabs pattern
+   (https://www.w3.org/WAI/ARIA/apg/patterns/tabs/). */
 export function useTabs(count: number, initial = 0) {
   const id = useId();
   const [selected, setSelected] = useState(initial);

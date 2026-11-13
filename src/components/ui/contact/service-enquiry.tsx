@@ -91,7 +91,9 @@ export function ServiceEnquiry({
                   key={step.title}
                   aria-current={index === 0 ? "step" : undefined}
                 >
-                  <span aria-hidden="true">{index + 1}</span>
+                  <span className="numeral" aria-hidden="true">
+                    {index + 1}
+                  </span>
                   <div>
                     <strong>
                       {step.title}

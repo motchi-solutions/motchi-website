@@ -119,3 +119,41 @@
     transition: none;
   }
 }
+
+/* Toast: shared fixed notice for results such as a sent or unsent enquiry. */
+.toast-enter {
+  animation: toast-enter var(--motion-hover) var(--ease-hover) both;
+}
+@keyframes toast-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-0.75rem);
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  :root button.toast-close:hover {
+    background: var(--active-tint);
+    color: var(--brand-primary);
+  }
+}
+:root button.toast-close:active {
+  background: var(--active-tint-strong);
+  transition-duration: 100ms;
+}
+:root button.toast-close:focus-visible {
+  outline: 2px solid var(--brand-primary);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .toast-enter {
+    animation: none;
+  }
+}
+@media (forced-colors: active) {
+  [data-toast] {
+    border: 1px solid CanvasText;
+  }
+  :root button.toast-close:focus-visible {
+    outline-color: Highlight;
+  }
+}

@@ -31,10 +31,10 @@
   gap: var(--space-card);
   align-items: stretch;
 }
-/* A soft warm band, so the burgundy contact section stays the one strong close. */
+/* Products is the home page's one strong burgundy band; the contact close
+   below it is light, so the two never compete. */
 .solutions-home .products-band {
-  border-top: 1px solid var(--border);
-  background: color-mix(in srgb, var(--gold) 14%, var(--background));
+  border-top: 0;
 }
 .solutions-home #products .section-layout {
   display: block;

@@ -1025,3 +1025,15 @@
     font-size: var(--type-reading-small);
   }
 }
+
+/* Short windows (200%+ zoom, phones in landscape): the tabs scroll away,
+   and the gate and opened album keep their phone size so nothing overlaps;
+   the page scrolls instead. */
+@media (max-height: 540px) {
+  .selector {
+    position: static;
+  }
+  .stage {
+    height: clamp(25rem, 39vw, 32rem);
+  }
+}

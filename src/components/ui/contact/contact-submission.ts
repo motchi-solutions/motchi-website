@@ -2,7 +2,7 @@ import type { Branch } from "../../../lib/brand.ts";
 import { contactMessage } from "../../../lib/email/feedback.ts";
 import { getContactConfiguration } from "./contact-config.ts";
 import { initialDraft } from "./contact-model.ts";
-import { formatPhone } from "./contact-phone.ts";
+import { formatInternationalPhone } from "./contact-phone.ts";
 import type { ContactDraft } from "./contact-model.ts";
 
 // Existing endpoints accept one routing category; the message retains every choice.
@@ -42,7 +42,7 @@ export function contactSubmissionFields(
       : []),
     ...(draft.phone && branch !== "products"
       ? [
-          `Phone: +${draft.phoneCountryCode} ${formatPhone(draft.phoneCountryCode, draft.phone)}`,
+          `Phone: ${formatInternationalPhone(draft.phoneCountryCode, draft.phone)}`,
         ]
       : []),
     ...(draft.source && branch !== "products"

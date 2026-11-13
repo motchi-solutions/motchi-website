@@ -6,6 +6,7 @@ import {
   type RuntimeMode,
 } from "./resolve-sites.ts";
 import { hasHeaderControls, isEmail } from "./validation.ts";
+import { sites as productionSites } from "./sites.ts";
 export { ConfigurationError } from "./resolve-sites.ts";
 
 function runtimeMode(): RuntimeMode {
@@ -19,6 +20,15 @@ export function getSites() {
   return resolveSites(runtimeMode(), {
     SOLUTIONS_URL: process.env.SOLUTIONS_URL,
   });
+}
+/** Search engines may index the site only on the production origin, and only
+    once ALLOW_INDEXING is "true". Preview deployments also default to the
+    production origin, so the origin alone is not enough. */
+export function indexingAllowed(): boolean {
+  return (
+    process.env.ALLOW_INDEXING === "true" &&
+    getSites().solutions.url === productionSites.solutions.url
+  );
 }
 const developmentState = globalThis as typeof globalThis & {
   __motchiDevelopmentFormSecret?: string;

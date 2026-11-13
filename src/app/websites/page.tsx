@@ -1,4 +1,5 @@
 import { pageMetadata } from "../../lib/config/metadata.ts";
+import { websiteStarter } from "../../lib/config/sites.ts";
 import { websiteSections } from "../../lib/config/navigation.ts";
 import { ServiceEnquiry } from "../../components/ui/contact/service-enquiry.tsx";
 import { SectionNavigation } from "../../components/ui/section-navigation.tsx";
@@ -10,9 +11,10 @@ import { Process } from "../../components/websites/process.tsx";
 import { WebsiteFaq } from "../../components/websites/faq.tsx";
 
 export const metadata = pageMetadata(
-  "Motchi Websites",
-  "Website design, development, booking integrations, pricing, and ongoing maintenance shaped around your business.",
+  "Website Design and Development in Toronto - Motchi Websites",
+  `Websites shaped around your business and customers, from ${websiteStarter.price}. Booking, tool integrations, and maintenance after launch.`,
   "/websites",
+  { absolute: true },
 );
 export default function Websites() {
   return (

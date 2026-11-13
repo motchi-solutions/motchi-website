@@ -1,4 +1,4 @@
-import { ButtonLink, Container, HeroBrand } from "../ui/index.ts";
+import { ButtonLink, Container, HeroBrand, HeroTrust } from "../ui/index.ts";
 import { UntangleDiagram } from "./untangle-diagram.tsx";
 
 export function Hero() {
@@ -32,9 +32,7 @@ export function Hero() {
                 See How We Can Help
               </ButtonLink>
             </div>
-            <p className="mt-8 text-small text-inverse/70">
-              Based in Toronto. Working with businesses globally.
-            </p>
+            <HeroTrust light className="mt-6" />
           </div>
           <div className="min-w-0 xl:ps-[clamp(1rem,2vw,2.5rem)]">
             <UntangleDiagram />

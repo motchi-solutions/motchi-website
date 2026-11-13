@@ -270,3 +270,9 @@
     outline-color: Highlight;
   }
 }
+
+@media (max-height: 540px) {
+  .visual {
+    position: static;
+  }
+}

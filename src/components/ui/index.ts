@@ -16,8 +16,6 @@ export { PrivacyNotice } from "./privacy.tsx";
 export { Reveal } from "./reveal.tsx";
 export { Footer, Header, type NavItem } from "./shell.tsx";
 
-export { RouteLoading } from "./route-loading.tsx";
-
 export { PageEntry } from "./page-entry.tsx";
 
 export { HeroBrand } from "./hero-brand.tsx";
@@ -29,3 +27,5 @@ export { NotFoundPage } from "./not-found.tsx";
 export { InfoTip } from "./info-tip.tsx";
 
 export { RequiredMark, RequiredNotice } from "./required-mark.tsx";
+export { Toast, type ToastMessage } from "./toast.tsx";
+export { HeroTrust } from "./hero-trust.tsx";

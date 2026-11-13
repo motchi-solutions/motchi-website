@@ -73,21 +73,32 @@ async function submitContact(
 ): Promise<Response> {
   const site = getSites()[branch];
   const origin = site.url;
-  const finish = (status: ContactStatus, fields = "") => {
+  const finish = (status: ContactStatus, fields = "", relative = false) => {
     const url = new URL("/contact", origin);
     url.searchParams.set("status", status);
     if (fields) url.searchParams.set("fields", fields);
     url.hash = "contact-form";
+    // A rejected origin gets a relative redirect, so the browser stays on the
+    // origin it came from instead of following a cross-origin Location that
+    // the page's connect-src policy blocks.
+    const location = relative
+      ? `${url.pathname}${url.search}${url.hash}`
+      : url.toString();
     return new Response(null, {
       status: 303,
-      headers: { Location: url.toString(), "Cache-Control": "no-store" },
+      headers: { Location: location, "Cache-Control": "no-store" },
     });
   };
   if (
     request.headers.get("origin") !== origin ||
     request.headers.get("sec-fetch-site") === "cross-site"
-  )
-    return finish("invalid");
+  ) {
+    if (process.env.NODE_ENV === "development")
+      console.warn(
+        `Contact form rejected: request origin ${request.headers.get("origin") ?? "(none)"} does not match the configured site origin ${origin}. Check SOLUTIONS_URL in .env.local.`,
+      );
+    return finish("invalid", "", true);
+  }
   let form: FormData;
   try {
     form = await limitedForm(request);
@@ -140,7 +151,7 @@ async function submitContact(
     await sendMail(
       {
         sender,
-        to: [{ email: to }],
+        to: [{ email: to, contactPixelTrackingConsent: false }],
         replyTo: { email: input.email, name: input.name },
         ...notification(input, site.name, homeUrl),
         headers: { "Idempotency-Key": `enquiry-${id}` },
@@ -161,7 +172,16 @@ async function submitContact(
     await sendMail(
       {
         sender,
-        to: [{ email: input.email, name: input.name }],
+        to: [
+          {
+            email: input.email,
+            name: input.name,
+            // Opens and clicks are counted only anonymously, never tied to the
+            // person (the privacy policy promises this). Source: Brevo API
+            // changelog, 2026-07-21, contactPixelTrackingConsent on POST /smtp/email.
+            contactPixelTrackingConsent: false,
+          },
+        ],
         replyTo: { email: to, name: site.name },
         ...acknowledgement(input.name, site.name, homeUrl),
         headers: { "Idempotency-Key": `ack-${id}` },

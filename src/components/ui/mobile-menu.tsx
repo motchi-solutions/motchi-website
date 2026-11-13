@@ -5,12 +5,14 @@ import { ContactLink } from "./contact-link.tsx";
 import { useEffect, useRef, useState } from "react";
 import { Arrow } from "./icons.tsx";
 export type NavItem = import("../../lib/config/navigation.ts").NavigationItem;
+
 export function MobileMenu({ items }: { items: NavItem[] }) {
   const pathname = usePathname();
   const details = useRef<HTMLDetailsElement>(null);
   const dismissMenu = useRef<() => void>(() => {});
   const [enhanced, setEnhanced] = useState(false);
   const [open, setOpen] = useState(false);
+
   useEffect(() => {
     setEnhanced(true);
     const node = details.current;
@@ -113,6 +115,7 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
       desktop.removeEventListener("change", resize);
     };
   }, []);
+
   useEffect(() => {
     if (!open) return;
     const previous = document.body.style.overflow;
@@ -121,6 +124,7 @@ export function MobileMenu({ items }: { items: NavItem[] }) {
       document.body.style.overflow = previous;
     };
   }, [open]);
+
   return (
     <details
       ref={details}

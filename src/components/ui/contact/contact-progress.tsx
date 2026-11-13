@@ -43,7 +43,7 @@ export function ContactProgress({
                 onClick={() => go(index)}
               >
                 <span aria-hidden="true">
-                  <span className={styles.stepNumberGlyph}>
+                  <span className={`${styles.stepNumberGlyph} numeral`}>
                     {complete && index !== step ? "✓" : position + 1}
                   </span>
                 </span>

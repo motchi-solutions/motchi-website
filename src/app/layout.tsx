@@ -3,7 +3,10 @@ import {
   organizationSchema,
   siteMetadata,
   siteViewport,
+  websiteSchema,
 } from "../lib/config/metadata.ts";
+import { JsonLd } from "../components/ui/json-ld.tsx";
+import { ServiceWorker } from "../components/ui/service-worker.tsx";
 import {
   Footer,
   Header,
@@ -13,10 +16,8 @@ import {
 import { fontVariables } from "../components/ui/fonts.ts";
 import type { ReactNode } from "react";
 import "./globals.css";
-export const metadata = {
-  ...siteMetadata("solutions"),
-  robots: { index: false, follow: false },
-};
+// Indexing follows indexingAllowed(): production origin plus ALLOW_INDEXING.
+export const metadata = siteMetadata("solutions");
 export const viewport = siteViewport;
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body id="page-top">
         <Introduction />
         <MotionEnhancements />
+        <ServiceWorker />
         <a
           href="#main-content"
           className="sr-only fixed top-3 left-3 z-50 bg-primary px-5 py-3 text-inverse focus:not-sr-only"
@@ -40,16 +42,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           {children}
         </main>
         <Footer branch="solutions" />
-        <script
-          type="application/ld+json"
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: Trusted schema is serialized and less-than characters are escaped.
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(organizationSchema("solutions")).replace(
-              /</g,
-              "\\u003c",
-            ),
-          }}
-        />
+        <JsonLd data={organizationSchema("solutions")} />
+        <JsonLd data={websiteSchema()} />
       </body>
     </html>
   );

@@ -37,6 +37,14 @@ export const organization = {
 } as const;
 export const contactEmail = organization.contactEmail;
 
+// The free first conversation. Paste the Google Calendar appointment schedule
+// booking page link (https://calendar.app.google/...) into `url` to show
+// "Book a Free Call" buttons; while it is empty they stay hidden.
+export const firstCall = {
+  url: "" as string,
+  length: "30-minute",
+} as const;
+
 export type SiteConfig = {
   name: string;
   shortName: string;

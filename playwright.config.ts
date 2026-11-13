@@ -59,6 +59,12 @@ export default defineConfig({
       // contact form in CI. It signs nothing outside the test run.
       CONTACT_FORM_SECRET:
         process.env.CONTACT_FORM_SECRET ?? "e2e-only-contact-form-secret-0000",
+      // Production builds reject loopback origins, so a local .env.local
+      // meant for `npm run dev` must not leak into the production test build.
+      // Process variables take precedence over Next's .env files.
+      ...(ci
+        ? { SOLUTIONS_URL: process.env.SOLUTIONS_URL ?? "https://motchi.ca" }
+        : {}),
     },
   },
 });

@@ -1,22 +1,16 @@
 import { ContactPageContent } from "../../components/ui/index.ts";
 import { contactEntryFromParams } from "../../components/ui/contact/contact-entry.ts";
-import type { Metadata } from "next";
+import { pageMetadata } from "../../lib/config/metadata.ts";
 export const dynamic = "force-dynamic";
 type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
-export async function generateMetadata({
-  searchParams,
-}: Props): Promise<Metadata> {
-  await searchParams;
-  return {
-    title: "Contact",
-    description:
-      "Explore how Motchi can support your goals, from websites and software to everyday technology support.",
-    alternates: { canonical: "/contact" },
-    robots: { index: false, follow: false },
-  };
-}
+// Prefilled links (?branch=, ?service=) all share the one canonical page.
+export const metadata = pageMetadata(
+  "Contact",
+  "Tell us about your website or technology project. Your first 30-minute call is free, and we usually reply within 2-3 business days.",
+  "/contact",
+);
 export default async function Contact({ searchParams }: Props) {
   const values = await searchParams;
   const params = new URLSearchParams();

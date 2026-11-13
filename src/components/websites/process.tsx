@@ -36,6 +36,7 @@ export function Process() {
   const [selected, setSelected] = useState<number | null>(0);
   const [direction, setDirection] = useState("forward");
   const id = useId();
+
   useEffect(() => {
     const media = window.matchMedia("(min-width: 1024px)");
     const update = () => {
@@ -47,6 +48,7 @@ export function Process() {
     media.addEventListener("change", update);
     return () => media.removeEventListener("change", update);
   }, []);
+
   function detail(stage: (typeof stages)[number], index: number) {
     const open = !enhanced || selected === index;
     return (
@@ -61,7 +63,7 @@ export function Process() {
         <div className={styles.clip}>
           <div className={styles.detail}>
             <div className={styles.detailHeading}>
-              <span className={styles.position} aria-hidden="true">
+              <span className={`${styles.position} numeral`} aria-hidden="true">
                 {String(index + 1).padStart(2, "0")}
               </span>
               <div>
@@ -93,6 +95,7 @@ export function Process() {
       </section>
     );
   }
+
   return (
     <section id="process" className={styles.process}>
       <Container>
@@ -132,7 +135,10 @@ export function Process() {
                           );
                         }}
                       >
-                        <span className={styles.number} aria-hidden="true">
+                        <span
+                          className={`${styles.number} numeral`}
+                          aria-hidden="true"
+                        >
                           {String(index + 1).padStart(2, "0")}
                         </span>
                         <span className={styles.stageCopy}>
@@ -159,7 +165,10 @@ export function Process() {
                     </h3>
                   ) : (
                     <div className={styles.fallbackHeading}>
-                      <span className={styles.number} aria-hidden="true">
+                      <span
+                        className={`${styles.number} numeral`}
+                        aria-hidden="true"
+                      >
                         {String(index + 1).padStart(2, "0")}
                       </span>
                       <div>

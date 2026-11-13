@@ -26,6 +26,16 @@ const questions = [
     content: `${websiteStarter.terms} You'll know what's included, and anything new is agreed with you first.`,
   },
   {
+    title: "Can you help with the systems behind my business, too?",
+    content: (
+      <>
+        Yes. Motchi Consulting helps with AI, data, and business systems, from
+        choosing a direction to putting it to work.{" "}
+        <a href="/consulting">See how Motchi Consulting can help</a>.
+      </>
+    ),
+  },
+  {
     title: "How quickly will we hear back?",
     content:
       "We typically respond with next steps or an initial quote within 2-3 business days.",

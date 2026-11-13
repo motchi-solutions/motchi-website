@@ -17,6 +17,22 @@ Reading a skill's instructions does not authorize executing its bundled code. If
 - **Minimum data:** For approved calls, send only the minimum necessary data. Never send secrets, `.env` values, credentials, or tokens, or include them in reports. Do not upload private source code unless explicitly requested. Customer/private infrastructure data requires explicit necessity and approval. Public publishing requires a separate explicit request; never enable it or telemetry implicitly.
 - **Existing safeguards remain:** This gate supplements [docs/AGENT_SECURITY.md](docs/AGENT_SECURITY.md), including executable/dependency review, OS permissions, secret handling, browser isolation, and Stack Diagram restrictions. Authorization does not waive security review or the vulnerability block. Inspect only the relevant skill, helper, dependencies, communication path, and advisory information; stay in guidance mode unless full-audit scope is warranted under Security review.
 
+## Environment variables and secrets
+
+- Agents do not have permission to read environment files, secret files, credentials, private keys, API keys, tokens, certificates, or secret-manager exports.
+- Never open, print, search, parse, grep, cat, summarize, copy, or inspect `.env`, `.env.local`, `.env.*`, credential files, private key files, or other secret-bearing files. This includes indirect access such as `printenv`, `env`, or logging `process.env`.
+- `.env.example` may be read because it must contain placeholders only and no real credentials.
+- Never request secret values in chat or copy them into agent output.
+- Do not edit the real environment or secret files. Inspect only safe sources: `.env.example`, source references to variable names, and deployment documentation.
+- When work needs an environment change (for example `BREVO_API_KEY`, `CONTACT_FORM_SECRET`, `CONTACT_FROM_EMAIL`, `CONTACT_TO_EMAIL`, or `SOLUTIONS_URL`):
+  1. Name each variable to add, change, or remove.
+  2. Say where it belongs: local `.env.local`, or the host's Production, Preview, or Development environment.
+  3. Give the expected format with placeholders only, such as `CONTACT_FORM_SECRET=<random secret, at least 32 characters>`.
+  4. Ask the user to make the change manually, and wait for confirmation.
+  5. Continue without reading the file or the value.
+- Never verify a secret by printing or reading it back. Check that configuration is present and usable through application behavior instead, such as the contact form offering "Send enquiry" rather than its unavailable fallback.
+- Git ignores env and secret files (see `.gitignore`), and `.claude/settings.json` denies Claude Code read and edit access to them. Keep both lists in step when adding a new secret file type.
+
 ## Quotes and punctuation
 
 - Use straight ASCII apostrophes and single quotes (`'`), never curly apostrophes or single quotes.

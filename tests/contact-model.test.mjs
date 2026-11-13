@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   answered,
+  draftForBranch,
+  errorsFromServer,
   initialDraft,
   validateContact,
 } from "../src/components/ui/contact/contact-model.ts";
@@ -202,10 +204,17 @@ test("split phone validates both parts without making the field required", () =>
   draft.phone = "4165550123";
   assert.equal(validateContact(draft, 2).phone, undefined);
   assert.equal(validateContact(draft, 2).phoneCountryCode, undefined);
-  for (const phone of ["1".repeat(13), "abc", "416 555 0123", ""]) {
+  for (const phone of ["1".repeat(13), "abc", "416 555 0123"]) {
     draft.phone = phone;
     assert.ok(validateContact(draft, 2).phone);
   }
+  // A country code on its own (such as the +1 default) is not an answer.
+  draft.phone = "";
+  assert.equal(validateContact(draft, 2).phone, undefined);
+  // A number without a code is accepted and sent as +1.
+  draft.phone = "4165550123";
+  draft.phoneCountryCode = "";
+  assert.equal(validateContact(draft, 2).phoneCountryCode, undefined);
   draft.phone = "4165550123";
   draft.phoneCountryCode = "999";
   assert.ok(validateContact(draft, 2).phoneCountryCode);
@@ -232,7 +241,57 @@ test("international phone pastes split actual calling codes", async () => {
     number: "401234567",
   });
   assert.equal(splitInternationalPhone("+999123456"), null);
-  assert.equal(formatPhone("1", "4165550123"), "416 555 0123");
+  assert.equal(formatPhone("1", "4165550123"), "(416) 555-0123");
+  assert.equal(formatPhone("", "4165550123"), "(416) 555-0123");
+  assert.equal(formatPhone("44", "2079460018"), "20 7946 0018");
+});
+
+test("typed and autofilled phones split their country code", async () => {
+  const { readPhoneEntry, formatInternationalPhone } =
+    await import("../src/components/ui/contact/contact-phone.ts");
+  const empty = { countryCode: "", number: "" };
+  // Autofill of a full international number into the number box.
+  assert.deepEqual(readPhoneEntry("+14112223333", empty, "number"), {
+    countryCode: "1",
+    number: "4112223333",
+  });
+  assert.deepEqual(readPhoneEntry("+44 20 7946 0018", empty, "number"), {
+    countryCode: "44",
+    number: "2079460018",
+  });
+  // A national number defaults to +1 once typing starts.
+  assert.deepEqual(readPhoneEntry("4", empty, "number"), {
+    countryCode: "1",
+    number: "4",
+  });
+  // An existing country code is kept while typing.
+  assert.deepEqual(
+    readPhoneEntry("2079", { countryCode: "44", number: "207" }, "number"),
+    { countryCode: "44", number: "2079" },
+  );
+  // Autofill into the country code box: "+1" or a full number.
+  assert.deepEqual(
+    readPhoneEntry(
+      "+1",
+      { countryCode: "", number: "4165550123" },
+      "countryCode",
+    ),
+    { countryCode: "1", number: "4165550123" },
+  );
+  assert.deepEqual(readPhoneEntry("+14165550123", empty, "countryCode"), {
+    countryCode: "1",
+    number: "4165550123",
+  });
+  // A fourth typed digit in the country code box is ignored.
+  assert.deepEqual(
+    readPhoneEntry("4412", { countryCode: "44", number: "" }, "countryCode"),
+    { countryCode: "441", number: "" },
+  );
+  assert.equal(
+    formatInternationalPhone("1", "4112223333"),
+    "+1 (411) 222-3333",
+  );
+  assert.equal(formatInternationalPhone("", "4165550123"), "+1 (416) 555-0123");
 });
 
 test("legacy combined phones migrate without losing the saved draft", async () => {
@@ -359,4 +418,28 @@ test("an empty name asks for it; a malformed one asks for a valid one", () => {
     "Please enter a valid name.",
   );
   assert.equal(validateContact({ ...draft, name: "Mo" }, 2).name, undefined);
+});
+
+test("switching branch keeps compatible answers and restores a revisited branch", () => {
+  const general = {
+    ...initialDraft("Data", "solutions"),
+    stage: "Have a plan",
+  };
+  const consulting = draftForBranch(general, "solutions", "consulting");
+  assert.equal(consulting.enquiryType, "consulting");
+  assert.deepEqual(consulting.services, ["Data & Analytics"]);
+  // Answers that are not options in the new branch are dropped.
+  const websites = draftForBranch(consulting, "consulting", "websites");
+  assert.deepEqual(websites.services, []);
+  // Going back restores what was chosen there before.
+  const back = draftForBranch(websites, "websites", "consulting", consulting);
+  assert.deepEqual(back.services, consulting.services);
+  assert.equal(back.name, websites.name);
+});
+
+test("server field errors map back to form fields", () => {
+  const found = errorsFromServer(["company", "message", "unknown"]);
+  assert.deepEqual(Object.keys(found).sort(), ["context", "organization"]);
+  assert.match(found.organization, /characters/);
+  assert.deepEqual(errorsFromServer([]), {});
 });

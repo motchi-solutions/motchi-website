@@ -7,7 +7,75 @@ import {
   Container,
   ProjectMedia,
 } from "./ui/index.ts";
+import { SiteLink } from "./ui/site-link.tsx";
 import styles from "./home-sections.module.css";
+
+/* "Trusted by" banner under the hero: every portfolio client's real logo and
+   name. Only list businesses we have actually built for. Static rather than a
+   scrolling marquee: four logos fit at every width, and nothing moves. */
+export async function ClientLogos() {
+  const projects = (await getProjects()).filter(
+    (project) => project.media.logo,
+  );
+  if (!projects.length) return null;
+
+  return (
+    <section
+      aria-labelledby="clients-title"
+      className="border-y border-border bg-surface py-[clamp(2rem,4vw,3rem)]"
+    >
+      <Container className="flex flex-col items-center gap-6 text-center">
+        <h2
+          id="clients-title"
+          className="text-eyebrow font-semibold tracking-widest text-muted uppercase"
+        >
+          Trusted by growing businesses
+        </h2>
+        <ul className="grid w-full grid-cols-[repeat(auto-fill,minmax(min(100%,9.5rem),1fr))] justify-items-start gap-x-6 gap-y-5 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-x-12 lg:gap-x-16">
+          {projects.map((project) => {
+            const logo = project.media.logo;
+            return (
+              logo && (
+                <li key={project.id}>
+                  {/* Each logo opens its project in the portfolio, so the
+                      proof is one step away. */}
+                  <SiteLink
+                    href={`/websites/work#project-${project.id}`}
+                    className="group flex min-h-16 cursor-pointer items-center gap-3 rounded-full pe-3"
+                  >
+                    {/* Padding keeps square and wordmark logos inside the
+                      circle, with safe space on every side. */}
+                    <span className="grid size-16 shrink-0 place-items-center overflow-hidden rounded-full border border-border bg-white p-3 transition-colors duration-(--motion-hover) ease-(--ease-hover) group-hover:border-(--active) group-active:border-(--active) group-active:duration-100 motion-reduce:transition-none">
+                      <Image
+                        src={logo.src}
+                        alt=""
+                        width={logo.width}
+                        height={logo.height}
+                        sizes="40px"
+                        className="size-full object-contain"
+                      />
+                    </span>
+                    <span className="text-left text-small font-semibold leading-tight text-foreground transition-colors duration-(--motion-hover) ease-(--ease-hover) group-hover:text-(--active) group-active:text-(--active) motion-reduce:transition-none">
+                      {project.title}
+                      <span className="sr-only">, see the project</span>
+                    </span>
+                  </SiteLink>
+                </li>
+              )
+            );
+          })}
+        </ul>
+        <AnimatedLink
+          href="/websites/work"
+          arrow
+          className="min-h-11 text-small font-semibold text-primary"
+        >
+          See our work
+        </AnimatedLink>
+      </Container>
+    </section>
+  );
+}
 
 /* Homepage proof: real projects, shown simply, with one path to the full portfolio. */
 export async function RecentWork() {

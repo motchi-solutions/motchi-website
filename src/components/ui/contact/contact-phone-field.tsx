@@ -1,7 +1,12 @@
 "use client";
 import { InfoTip } from "../info-tip.tsx";
 import { useState } from "react";
-import { formatPhone, splitInternationalPhone } from "./contact-phone.ts";
+import {
+  defaultPhoneCountryCode,
+  formatPhone,
+  phoneNumberMaxDigits,
+  readPhoneEntry,
+} from "./contact-phone.ts";
 import styles from "./contact.module.css";
 export function ContactPhoneField({
   countryCode,
@@ -30,23 +35,35 @@ export function ContactPhoneField({
       setPasteError("Please enter a valid phone number.");
       return;
     }
-    const international = /^(\+|00)/.test(text);
-    const parsed = international ? splitInternationalPhone(text) : null;
-    if (international && !parsed) {
+    const next = readPhoneEntry(text, { countryCode, number }, target);
+    if (!next) {
       setPasteError("Please enter a valid country code.");
       return;
     }
-    const digits = text.replace(/\D/g, "");
-    const next = parsed ?? {
-      countryCode: target === "countryCode" ? digits : countryCode,
-      number: target === "number" ? digits : number,
-    };
-    if (next.countryCode.length > 3 || next.number.length > 12) {
+    if (
+      next.countryCode.length > 3 ||
+      next.number.length > phoneNumberMaxDigits
+    ) {
       setPasteError("Please enter a valid phone number.");
       return;
     }
     setPasteError("");
     onChange(next);
+  }
+  // Typing and browser autofill both arrive as change events. Autofill often
+  // supplies a full international number such as +14165550123.
+  function change(raw: string, target: "countryCode" | "number") {
+    setPasteError("");
+    const next = readPhoneEntry(raw, { countryCode, number }, target);
+    if (next) onChange(next);
+    else
+      onChange({
+        countryCode:
+          target === "countryCode"
+            ? raw.replace(/\D/g, "").slice(0, 3)
+            : countryCode,
+        number,
+      });
   }
   const message = pasteError || countryCodeError || error;
   return (
@@ -55,6 +72,9 @@ export function ContactPhoneField({
       onBlur={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget)) {
           setEditing(false);
+          // A number without a country code is treated as North American.
+          if (number && !countryCode)
+            onChange({ countryCode: defaultPhoneCountryCode, number });
           onBlur();
         }
       }}
@@ -94,19 +114,12 @@ export function ContactPhoneField({
               type="tel"
               inputMode="numeric"
               autoComplete="tel-country-code"
-              maxLength={3}
               value={countryCode}
               placeholder="1"
               aria-invalid={!!(pasteError || countryCodeError)}
               aria-describedby={`phone-hint${message ? " phone-error" : ""}`}
               onPaste={(event) => paste(event, "countryCode")}
-              onChange={(event) => {
-                setPasteError("");
-                onChange({
-                  countryCode: event.target.value.replace(/\D/g, ""),
-                  number,
-                });
-              }}
+              onChange={(event) => change(event.target.value, "countryCode")}
               className={styles.input}
             />
           </div>
@@ -121,21 +134,14 @@ export function ContactPhoneField({
             type="tel"
             inputMode="numeric"
             autoComplete="tel-national"
-            maxLength={editing ? 12 : undefined}
             value={editing ? number : formatPhone(countryCode, number)}
-            placeholder="416 555 0123"
+            placeholder="(416) 555-0123"
             aria-invalid={!!(pasteError || error)}
             aria-describedby={`phone-hint${message ? " phone-error" : ""}`}
             onFocus={() => setEditing(true)}
             onBlur={() => setEditing(false)}
             onPaste={(event) => paste(event, "number")}
-            onChange={(event) => {
-              setPasteError("");
-              onChange({
-                countryCode,
-                number: event.target.value.replace(/\D/g, ""),
-              });
-            }}
+            onChange={(event) => change(event.target.value, "number")}
             className={styles.input}
           />
         </div>

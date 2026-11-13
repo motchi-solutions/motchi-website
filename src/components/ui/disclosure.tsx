@@ -4,14 +4,19 @@ import { type ReactNode, useEffect, useId, useState } from "react";
 
 /* Shared question-and-answer disclosures. Panels open with an interruptible
    grid-row transition; collapsed answers are inert so keyboard focus skips
-   them. Without JavaScript every answer stays open. */
+   them. Without JavaScript every answer stays open.
+   Sources: WAI-ARIA Authoring Practices, Disclosure pattern
+   (https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/); MDN, the inert
+   attribute (https://developer.mozilla.org/docs/Web/HTML/Global_attributes/inert). */
 export function DisclosureList({
   items,
 }: {
   items: readonly { title: string; content: ReactNode }[];
 }) {
   const [enhanced, setEnhanced] = useState(false);
+
   useEffect(() => setEnhanced(true), []);
+
   return (
     <div className="grid gap-1 border-t border-border pt-1">
       <noscript>
@@ -40,6 +45,7 @@ function Disclosure({
   const id = useId();
   const [open, setOpen] = useState(false);
   const hidden = enhanced && !open;
+
   return (
     <div
       data-open={open}

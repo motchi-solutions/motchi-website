@@ -53,6 +53,7 @@ export function ProductAlbum({
   const suppressClick = useRef(false);
   const settling = useRef<Animation | null>(null);
   const generation = useRef(0);
+
   useEffect(() => {
     const reset = () => {
       generation.current += 1;
@@ -78,9 +79,11 @@ export function ProductAlbum({
       if (resetRef.current === reset) resetRef.current = null;
     };
   }, [resetRef]);
+
   useEffect(() => {
     if (!active) resetRef.current?.();
   }, [active, resetRef]);
+
   useEffect(() => {
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     const settle = () => {
@@ -94,6 +97,7 @@ export function ProductAlbum({
   const sketch = sketches[index];
   const upcoming = sketches[previewIndex % count];
   const previous = sketches[(index - 1 + count) % count];
+
   const previewTransform = (distance: number) => {
     const progress = Math.min(
       1,
@@ -101,6 +105,7 @@ export function ProductAlbum({
     );
     return `translateY(${4 * (1 - progress)}px) scale(${0.98 + progress * 0.02})`;
   };
+
   useLayoutEffect(() => {
     if (page.current?.dataset.albumFrame !== `${index}-${turn}`) return;
     const from = promotion.current;
@@ -119,6 +124,7 @@ export function ProductAlbum({
   const title =
     sketch?.title ??
     (name === "Pop Tips" ? "First designs coming soon" : "More to share soon");
+
   const interruptTurn = () => {
     generation.current += 1;
     leaving.current?.cancel();
@@ -126,6 +132,7 @@ export function ProductAlbum({
     looseCard.current = null;
     browsing.current = false;
   };
+
   const next = async (direction = 1, advance = 1) => {
     if (count < 2) return;
     if (browsing.current) interruptTurn();
@@ -214,6 +221,7 @@ export function ProductAlbum({
     }
     if (sequence === generation.current) browsing.current = false;
   };
+
   const restore = (velocity = 0) => {
     const node = page.current;
     if (!node) return;
@@ -249,6 +257,7 @@ export function ProductAlbum({
       { duration: 760, easing: "linear" },
     );
   };
+
   const startDrag = (event: PointerEvent<HTMLButtonElement>) => {
     if (!event.isPrimary || event.button !== 0) return;
     if (browsing.current) interruptTurn();
@@ -282,6 +291,7 @@ export function ProductAlbum({
       velocity: 0,
     };
   };
+
   const moveDrag = (event: PointerEvent<HTMLButtonElement>) => {
     const start = drag.current;
     const node = page.current;
@@ -322,6 +332,7 @@ export function ProductAlbum({
     event.preventDefault();
     node.style.transform = `translateX(${distance}px) rotate(${Math.max(-10, Math.min(10, distance / 24))}deg)`;
   };
+
   const endDrag = (
     event: PointerEvent<HTMLButtonElement>,
     cancelled = false,
@@ -352,6 +363,7 @@ export function ProductAlbum({
       </div>
     );
   }
+
   return (
     <div className={styles.album} data-active={active} data-used={used}>
       <div className={styles.albumNudge}>
@@ -465,7 +477,7 @@ export function ProductAlbum({
         </button>
       </div>
       {count > 1 && (
-        <span className={styles.albumCount} aria-live="polite">
+        <span className={`${styles.albumCount} numeral`} aria-live="polite">
           {index + 1} / {count}
         </span>
       )}

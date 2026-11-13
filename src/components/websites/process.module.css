@@ -301,3 +301,9 @@
     border-bottom-color: Highlight;
   }
 }
+
+@media (max-height: 540px) {
+  .panelSlot {
+    position: static;
+  }
+}

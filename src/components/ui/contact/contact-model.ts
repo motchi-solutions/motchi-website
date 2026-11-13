@@ -1,4 +1,5 @@
 import { isContactName, isEmail } from "../../../lib/config/validation.ts";
+import { contactFieldErrors } from "../../../lib/email/validation.ts";
 import {
   isPhoneCallingCode,
   splitInternationalPhone,
@@ -106,11 +107,10 @@ export function validateContact(
       errors.email = draft.email.trim()
         ? "Please enter a valid email address."
         : "Please enter your email address.";
-    if (
-      draft.enquiryType !== "products" &&
-      (draft.phone || draft.phoneCountryCode)
-    ) {
-      if (!isPhoneCallingCode(draft.phoneCountryCode))
+    // Phone is optional: a country code on its own (such as the +1 default)
+    // is not an answer. A number without a code is sent as +1.
+    if (draft.enquiryType !== "products" && draft.phone) {
+      if (draft.phoneCountryCode && !isPhoneCallingCode(draft.phoneCountryCode))
         errors.phoneCountryCode = "Please enter a valid country code.";
       if (!/^[0-9]{1,12}$/.test(draft.phone))
         errors.phone = "Please enter a valid phone number.";
@@ -369,4 +369,78 @@ export function parseContactDraft(
   } catch {
     return null;
   }
+}
+
+export type EnquiryBranch = "websites" | "consulting" | "products";
+
+/** The draft after switching to another branch. Services and follow-ups that
+    exist there carry over (from the general form only), as do project answers
+    that are still valid options. A branch visited before gets its own earlier
+    answers back. */
+export function draftForBranch(
+  draft: ContactDraft,
+  from: Branch | "products",
+  to: EnquiryBranch,
+  remembered?: ContactDraft,
+): ContactDraft {
+  const config = getContactConfiguration(to);
+  const base = to === "products" ? "solutions" : to;
+  const compatible =
+    from === "solutions"
+      ? [
+          ...new Set(
+            draft.services.flatMap(
+              (service) => initialDraft(service, base).services,
+            ),
+          ),
+        ]
+      : [];
+  const previous = remembered ?? {
+    ...initialDraft(undefined, base),
+    services: compatible.filter((service) => config.services.includes(service)),
+    details: Object.fromEntries(
+      compatible.map((service) => [
+        service,
+        (draft.details[service] ?? []).filter((detail) =>
+          config.followUps[service]?.includes(detail),
+        ),
+      ]),
+    ),
+    stage: config.questions.stage.options.includes(draft.stage)
+      ? draft.stage
+      : "",
+    budget: config.questions.budget.options.includes(draft.budget)
+      ? draft.budget
+      : "",
+  };
+  return {
+    ...draft,
+    enquiryType: to,
+    services: previous.services,
+    details: previous.details,
+    stage: previous.stage,
+    budget: previous.budget,
+  };
+}
+
+// The contact API names fields as submitted; map them back to the form.
+const serverFields: Record<string, keyof ContactDraft> = {
+  name: "name",
+  email: "email",
+  company: "organization",
+  website: "website",
+  interest: "services",
+  budget: "budget",
+  message: "context",
+};
+
+/** Form errors for the fields the server rejected, with its messages. */
+export function errorsFromServer(fields: readonly string[]): ContactErrors {
+  const found: ContactErrors = {};
+  for (const field of fields) {
+    const key = serverFields[field];
+    if (key)
+      found[key] = contactFieldErrors[field as keyof typeof contactFieldErrors];
+  }
+  return found;
 }

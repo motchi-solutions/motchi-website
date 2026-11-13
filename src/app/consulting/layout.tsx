@@ -4,7 +4,7 @@ import { BranchLayout } from "@/components/branch-layout";
 export const metadata = {
   title: {
     default: sites.consulting.name,
-    template: `%s | ${sites.consulting.name}`,
+    template: `%s - ${sites.consulting.name}`,
   },
   description: sites.consulting.description,
 };

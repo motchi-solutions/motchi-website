@@ -1,17 +1,22 @@
-import { contactOptionLabel } from "./contact-config.ts";
-import { formatPhone } from "./contact-phone.ts";
+import {
+  contactOptionLabel,
+  getContactConfiguration,
+} from "./contact-config.ts";
+import { formatInternationalPhone } from "./contact-phone.ts";
 import type { ContactDraft } from "./contact-model.ts";
 import styles from "./contact.module.css";
-type ReviewRow = readonly [string, string | string[]];
+// Label, answer, and the id of the field that changes it.
+type ReviewRow = readonly [string, string | string[], string];
 export function ContactReview({
   draft,
   edit,
   disabled = false,
 }: {
   draft: ContactDraft;
-  edit: (step: number) => void;
+  edit: (step: number, field: string) => void;
   disabled?: boolean;
 }) {
+  const { services } = getContactConfiguration(draft.enquiryType || undefined);
   const sections: { title: string; step: number; rows: ReviewRow[] }[] = [
     {
       title:
@@ -27,48 +32,53 @@ export function ContactReview({
             : draft.enquiryType === "products"
               ? "Motchi Products"
               : "Motchi Consulting",
+          "enquiryType",
         ],
         ...(draft.enquiryType === "websites"
-          ? [["Website tier", draft.websiteTier] as ReviewRow]
+          ? [["Website tier", draft.websiteTier, "websiteTier"] as ReviewRow]
           : []),
         ...(draft.enquiryType === "products" && draft.productName
-          ? [["Product", draft.productName] as ReviewRow]
+          ? [["Product", draft.productName, "productName"] as ReviewRow]
           : []),
         [
           draft.enquiryType === "products" ? "Questions" : "Areas",
           draft.services,
+          "services",
         ],
         ...draft.services
           .filter((service) => draft.details[service]?.length)
-          .map((service): ReviewRow => [service, draft.details[service]]),
+          .map((service): ReviewRow => [
+            service,
+            draft.details[service],
+            `details-${services.indexOf(service)}`,
+          ]),
       ],
     },
     {
       title: "Your project",
       step: 1,
       rows: [
-        ["Project / organization", draft.business],
-        ["Project stage", draft.stage],
-        ["Timeline", draft.timeline],
-        ["Budget", draft.budget],
+        ["Project / organization", draft.business, "business"],
+        ["Project stage", draft.stage, "stage"],
+        ["Timeline", draft.timeline, "timeline"],
+        ["Budget", draft.budget, "budget"],
       ],
     },
     {
       title: "Contact and context",
       step: 2,
       rows: [
-        ["Name", draft.name],
-        ["Email", draft.email],
-        ["Organization", draft.organization],
-        ["Website", draft.website],
+        ["Name", draft.name, "name"],
+        ["Email", draft.email, "email"],
+        ["Organization", draft.organization, "organization"],
+        ["Website", draft.website, "website"],
         [
           "Phone",
-          draft.phone
-            ? `+${draft.phoneCountryCode} ${formatPhone(draft.phoneCountryCode, draft.phone)}`
-            : "",
+          formatInternationalPhone(draft.phoneCountryCode, draft.phone),
+          "phone",
         ],
-        ["How you found us", draft.source],
-        ["Anything else", draft.context],
+        ["How you found us", draft.source, "source"],
+        ["Anything else", draft.context, "context"],
       ],
     },
   ];
@@ -86,14 +96,6 @@ export function ContactReview({
           >
             <div className={styles.reviewHeading}>
               <h3 id={`review-section-${section.step}`}>{section.title}</h3>
-              <button
-                type="button"
-                disabled={disabled}
-                onClick={() => edit(section.step)}
-                aria-label={`Edit ${section.title.toLowerCase()}`}
-              >
-                Edit
-              </button>
             </div>
             <dl>
               {section.rows
@@ -103,7 +105,7 @@ export function ContactReview({
                     section.step !== 2 ||
                     ["Name", "Email", "Anything else"].includes(label),
                 )
-                .map(([label, value]) => (
+                .map(([label, value, field]) => (
                   <div className={styles.reviewRow} key={label}>
                     <dt>{label}</dt>
                     <dd>
@@ -125,6 +127,15 @@ export function ContactReview({
                         </span>
                       )}
                     </dd>
+                    <button
+                      type="button"
+                      className={styles.reviewEdit}
+                      disabled={disabled}
+                      onClick={() => edit(section.step, field)}
+                      aria-label={`Edit ${label.toLowerCase()}`}
+                    >
+                      Edit
+                    </button>
                   </div>
                 ))}
             </dl>

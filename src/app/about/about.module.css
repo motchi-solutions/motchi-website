@@ -30,6 +30,7 @@
   place-items: center;
   border: 1px solid currentColor;
   border-radius: 999px;
+  font-family: var(--font-mono);
   font-size: 0.7rem;
   font-variant-numeric: tabular-nums;
   content: counter(purpose-point, decimal-leading-zero);

@@ -15,6 +15,7 @@ const contactHref = (service: string) =>
    service is listed in full. */
 export function Capabilities() {
   const { selected, select, tabId, tabProps } = useTabs(capabilities.length);
+
   // A link to one service, such as /consulting#databricks, opens it.
   // biome-ignore lint/correctness/useExhaustiveDependencies: Runs once for the arrival URL.
   useEffect(() => {
@@ -109,7 +110,7 @@ export function Capabilities() {
                     </li>
                   ))}
                 </ul>
-                <div className="mt-8">
+                <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-2">
                   <AnimatedLink
                     href={contactHref(item.service)}
                     arrow
@@ -118,6 +119,15 @@ export function Capabilities() {
                   >
                     Talk to us about {item.title}
                   </AnimatedLink>
+                  {item.id === "website-digital" && (
+                    <AnimatedLink
+                      href="/websites"
+                      arrow
+                      className="min-h-11 font-semibold text-(--active)"
+                    >
+                      See website pricing and work
+                    </AnimatedLink>
+                  )}
                 </div>
               </div>
             ))}

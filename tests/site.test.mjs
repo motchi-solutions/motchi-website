@@ -103,6 +103,7 @@ test("security headers deny framing, sniffing and unexpected origins", () => {
   );
   assert.equal(headers["X-Content-Type-Options"], "nosniff");
   assert.equal(headers["X-Frame-Options"], "DENY");
+  assert.equal(headers["Cross-Origin-Opener-Policy"], "same-origin");
   const policy = headers["Content-Security-Policy"];
   for (const directive of [
     "default-src 'self'",
@@ -110,8 +111,14 @@ test("security headers deny framing, sniffing and unexpected origins", () => {
     "object-src 'none'",
     "form-action 'self'",
     "base-uri 'self'",
+    // Cloudflare Turnstile, and nothing else, may frame or script in.
+    "frame-src https://challenges.cloudflare.com",
   ])
     assert.ok(policy.includes(directive), directive);
+  assert.match(
+    policy,
+    /script-src 'self' 'unsafe-inline' https:\/\/challenges\.cloudflare\.com/,
+  );
   assert.match(headers["Permissions-Policy"], /camera=\(\)/);
 });
 
@@ -189,4 +196,19 @@ test("structured data links the website, services and breadcrumbs to the company
       [2, "/websites/work"],
     ],
   );
+});
+
+test("analytics run only on Vercel Production and send bare page paths", async () => {
+  const { analyticsEnabled, anonymousPageUrl } =
+    await import("../src/lib/config/analytics.ts");
+  assert.equal(analyticsEnabled("production"), true);
+  for (const environment of [undefined, "", "preview", "development"])
+    assert.equal(analyticsEnabled(environment), false);
+  assert.equal(
+    anonymousPageUrl(
+      "https://motchi.ca/websites/contact?status=failed&ref=AB12CD34#contact-form",
+    ),
+    "https://motchi.ca/websites/contact",
+  );
+  assert.equal(anonymousPageUrl("https://motchi.ca/"), "https://motchi.ca/");
 });

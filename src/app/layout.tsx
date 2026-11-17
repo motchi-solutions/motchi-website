@@ -7,6 +7,8 @@ import {
 } from "../lib/config/metadata.ts";
 import { JsonLd } from "../components/ui/json-ld.tsx";
 import { ServiceWorker } from "../components/ui/service-worker.tsx";
+import { SiteAnalytics } from "../components/ui/analytics.tsx";
+import { analyticsEnabled } from "../lib/config/analytics.ts";
 import {
   Footer,
   Header,
@@ -41,9 +43,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <main id="main-content" tabIndex={-1}>
           {children}
         </main>
-        <Footer branch="solutions" />
+        <Footer />
         <JsonLd data={organizationSchema("solutions")} />
         <JsonLd data={websiteSchema()} />
+        {analyticsEnabled() && <SiteAnalytics />}
       </body>
     </html>
   );

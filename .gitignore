@@ -62,3 +62,6 @@ service-account*.json
 *.tsbuildinfo
 next-env.d.ts
 
+
+# Personal local scripts (never committed)
+/scripts/local/

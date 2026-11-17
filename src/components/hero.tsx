@@ -26,8 +26,9 @@ export function Hero() {
           <div className={styles.actions}>
             <ButtonLink href="/contact">Start a Conversation</ButtonLink>
             {firstCall.url ? (
-              <ButtonLink href={firstCall.url} secondary>
+              <ButtonLink href={firstCall.url} target="_blank" secondary>
                 Book a Free Call
+                <span className="sr-only"> (opens in a new tab)</span>
               </ButtonLink>
             ) : (
               <ButtonLink href="/websites/work" secondary>

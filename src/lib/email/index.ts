@@ -1,23 +1,62 @@
 import "server-only";
-import { createHash, randomBytes } from "node:crypto";
+import { createHash, createHmac, randomBytes } from "node:crypto";
 import {
   ConfigurationError,
   getFormSecret,
+  getRedisSettings,
   getServerEnv,
   getSites,
+  getTurnstileSettings,
   type ServerEnv,
 } from "../config/env.ts";
-import type { ContactStatus } from "./feedback.ts";
-import { createLimiter, signToken, verifyToken } from "./abuse.ts";
+import { claim, hit, release, settle } from "../security/rate-limit.ts";
+import { verifyTurnstile } from "../security/turnstile.ts";
+import { type ContactStatus, referencedStatuses } from "./feedback.ts";
+import { signToken, verifyToken } from "./abuse.ts";
 import { acknowledgement, notification } from "./templates.ts";
 import { type ContactBranch, validateContact } from "./validation.ts";
 
-const emailLimit = createLimiter(3, 3_600_000);
-const globalLimit = createLimiter(60, 3_600_000);
-const submissions = new Map<
-  string,
-  { expires: number; state: "pending" | "sent" | "partial" }
->();
+/* Contact pipeline, cheapest checks first:
+   origin -> body size -> honeypot -> signed form token (also a minimum fill
+   time) -> per-IP limits -> field validation -> duplicate guard ->
+   Cloudflare Turnstile -> per-email and site-wide limits -> Brevo.
+
+   Limits (fixed windows): per IP 5 per 10 minutes and 20 per day; per email
+   3 per hour; site-wide 60 per hour and 140 per day, which keeps two emails
+   per enquiry inside Brevo's free daily quota. */
+const minute = 60_000;
+const limits = {
+  ipShort: { limit: 5, window: 10 * minute },
+  ipDay: { limit: 20, window: 24 * 60 * minute },
+  email: { limit: 3, window: 60 * minute },
+  siteHour: { limit: 60, window: 60 * minute },
+  siteDay: { limit: 140, window: 24 * 60 * minute },
+};
+
+/** Checks everything sending needs before the form is shown, so visitors
+    never fill in a form that cannot be sent. Returns null (and logs why)
+    when online sending is unavailable; the form then offers email instead. */
+export function prepareContactForm(
+  branch: ContactBranch,
+): { token: string; siteKey: string } | null {
+  try {
+    getServerEnv();
+    const { siteKey } = getTurnstileSettings();
+    getRedisSettings();
+    return { token: createContactToken(), siteKey };
+  } catch (error) {
+    console.error("Contact form unavailable", {
+      branch,
+      category:
+        error instanceof ConfigurationError ? error.category : "INTERNAL_ERROR",
+      // Variable names only, never their values.
+      variables:
+        error instanceof ConfigurationError ? error.variables : undefined,
+    });
+    return null;
+  }
+}
+
 export function createContactToken(): string {
   return signToken(
     getFormSecret(),
@@ -25,7 +64,13 @@ export function createContactToken(): string {
     randomBytes(16).toString("hex"),
   );
 }
+
+/** Brevo answered with an error: the message was definitely not accepted. */
+class ProviderRejected extends Error {}
+
 async function sendMail(payload: object, key: string): Promise<void> {
+  // A timeout or network failure throws as-is: Brevo may or may not have
+  // accepted the message.
   const result = await fetch("https://api.brevo.com/v3/smtp/email", {
     method: "POST",
     headers: {
@@ -37,8 +82,10 @@ async function sendMail(payload: object, key: string): Promise<void> {
     signal: AbortSignal.timeout(10_000),
     cache: "no-store",
   });
-  if (!result.ok) throw new Error(`Brevo returned status ${result.status}.`);
+  if (!result.ok)
+    throw new ProviderRejected(`Brevo returned status ${result.status}.`);
 }
+
 async function limitedForm(request: Request): Promise<FormData> {
   if (
     !request.headers
@@ -67,16 +114,53 @@ async function limitedForm(request: Request): Promise<FormData> {
   for (const [key, value] of params) form.append(key, value);
   return form;
 }
+
+/** The visitor's IP. On Vercel, x-real-ip is set by the platform and cannot
+    be supplied by the visitor
+    (https://vercel.com/docs/headers/request-headers). */
+function clientIp(request: Request): string {
+  return (
+    request.headers.get("x-real-ip")?.trim() ||
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    "unknown"
+  );
+}
+
+/** A keyed, one-way code, so stored rate-limit keys reveal nothing. */
+function scramble(kind: string, value: string): string {
+  return createHmac("sha256", getFormSecret())
+    .update(`${kind}:${value}`)
+    .digest("hex")
+    .slice(0, 32);
+}
+
+function newReference(): string {
+  return randomBytes(6)
+    .toString("base64")
+    .replace(/[^A-Za-z0-9]/g, "")
+    .toUpperCase()
+    .padEnd(8, "X")
+    .slice(0, 8);
+}
+
 async function submitContact(
   request: Request,
   branch: ContactBranch,
 ): Promise<Response> {
   const site = getSites()[branch];
   const origin = site.url;
-  const finish = (status: ContactStatus, fields = "", relative = false) => {
+  const finish = (
+    status: ContactStatus,
+    extra: { fields?: string; retryMs?: number; reference?: string } = {},
+    relative = false,
+  ) => {
     const url = new URL("/contact", origin);
     url.searchParams.set("status", status);
-    if (fields) url.searchParams.set("fields", fields);
+    if (extra.fields) url.searchParams.set("fields", extra.fields);
+    if (extra.retryMs)
+      url.searchParams.set("retry", String(Math.ceil(extra.retryMs / minute)));
+    if (extra.reference && referencedStatuses.includes(status))
+      url.searchParams.set("ref", extra.reference);
     url.hash = "contact-form";
     // A rejected origin gets a relative redirect, so the browser stays on the
     // origin it came from instead of following a cross-origin Location that
@@ -89,6 +173,10 @@ async function submitContact(
       headers: { Location: location, "Cache-Control": "no-store" },
     });
   };
+  const reference = newReference();
+  const log = (message: string, category: string) =>
+    console.error(message, { branch, category, reference });
+
   if (
     request.headers.get("origin") !== origin ||
     request.headers.get("sec-fetch-site") === "cross-site"
@@ -97,7 +185,7 @@ async function submitContact(
       console.warn(
         `Contact form rejected: request origin ${request.headers.get("origin") ?? "(none)"} does not match the configured site origin ${origin}. Check SOLUTIONS_URL in .env.local.`,
       );
-    return finish("invalid", "", true);
+    return finish("invalid", {}, true);
   }
   let form: FormData;
   try {
@@ -107,45 +195,87 @@ async function submitContact(
   }
   if (form.getAll("token").length !== 1 || form.getAll("fax").length > 1)
     return finish("invalid");
+  // Honeypot: bots that fill every field are told it worked.
   if (form.get("fax")) return finish("sent");
   const token = form.get("token");
   try {
     if (typeof token !== "string" || !verifyToken(getFormSecret(), token))
       return finish("expired");
   } catch {
-    console.error("Contact configuration unavailable", {
-      branch,
-      category: "CONFIGURATION_ERROR",
-    });
-    return finish("configuration");
+    log("Contact configuration unavailable", "CONFIGURATION_ERROR");
+    return finish("configuration", { reference });
   }
+
+  const redis = getRedisSettings();
+  const ip = clientIp(request);
+  const ipKey = scramble("ip", ip);
+
+  for (const [name, rule] of [
+    ["ip10m", limits.ipShort],
+    ["ipday", limits.ipDay],
+  ] as const) {
+    const result = await hit(
+      `contact:${name}:${ipKey}`,
+      rule.limit,
+      rule.window,
+      redis,
+    );
+    if (!result.allowed)
+      return finish("limited", { retryMs: result.retryAfterMs });
+  }
+
   const { input, errors } = validateContact(form, branch);
   if (Object.keys(errors).length)
-    return finish("invalid", Object.keys(errors).join(","));
-  const id = createHash("sha256").update(String(token)).digest("hex");
-  for (const [key, item] of submissions)
-    if (item.expires <= Date.now()) submissions.delete(key);
-  const prior = submissions.get(id);
-  if (prior) return finish(prior.state === "pending" ? "busy" : prior.state);
-  if (submissions.size >= 2000) return finish("busy");
-  const emailHash = createHash("sha256")
-    .update(input.email.toLowerCase())
-    .digest("hex");
-  if (!emailLimit(emailHash) || !globalLimit("all")) return finish("limited");
+    return finish("invalid", { fields: Object.keys(errors).join(",") });
+
   let environment: ServerEnv;
+  let turnstile: ReturnType<typeof getTurnstileSettings>;
   try {
     environment = getServerEnv();
+    turnstile = getTurnstileSettings();
   } catch (error) {
-    console.error("Contact configuration unavailable", {
-      branch,
-      category:
-        error instanceof ConfigurationError ? error.category : "INTERNAL_ERROR",
-    });
-    return finish("configuration");
+    log(
+      "Contact configuration unavailable",
+      error instanceof ConfigurationError ? error.category : "INTERNAL_ERROR",
+    );
+    return finish("configuration", { reference });
   }
+  // One send per signed form token. Checked before Turnstile, whose token
+  // is single-use, so a repeated submission gets its original outcome.
+  const submission = `contact:sent:${createHash("sha256").update(String(token)).digest("hex").slice(0, 32)}`;
+  const previous = await claim(submission, 60 * minute, redis);
+  if (previous === "sent" || previous === "partial") return finish(previous);
+  if (previous) return finish("busy");
+  const human = await verifyTurnstile({
+    token: String(form.get("cf-turnstile-response") ?? ""),
+    secret: turnstile.secretKey,
+    ip: ip === "unknown" ? undefined : ip,
+    hostname: new URL(origin).hostname,
+  });
+  if (!human.ok) {
+    await release(submission, redis);
+    if (human.reason === "failed") return finish("verification");
+    log("Bot check unavailable", "VERIFICATION_PROVIDER_ERROR");
+    return finish("failed", { reference });
+  }
+
+  // Per-email and site-wide limits count only submissions that passed the
+  // bot check, so unverified traffic cannot lock out an address or the form.
+  const emailKey = scramble("email", input.email.toLowerCase());
+  for (const [key, rule] of [
+    [`contact:email:${emailKey}`, limits.email],
+    ["contact:site:hour", limits.siteHour],
+    ["contact:site:day", limits.siteDay],
+  ] as const) {
+    const result = await hit(key, rule.limit, rule.window, redis);
+    if (!result.allowed) {
+      await release(submission, redis);
+      return finish("limited", { retryMs: result.retryAfterMs });
+    }
+  }
+
   const { fromEmail: from, toEmail: to, apiKey } = environment.contact;
   const homeUrl = environment.sites.solutions.url;
-  submissions.set(id, { expires: Date.now() + 3_600_000, state: "pending" });
   const sender = { email: from, name: site.name };
   try {
     await sendMail(
@@ -154,20 +284,20 @@ async function submitContact(
         to: [{ email: to, contactPixelTrackingConsent: false }],
         replyTo: { email: input.email, name: input.name },
         ...notification(input, site.name, homeUrl),
-        headers: { "Idempotency-Key": `enquiry-${id}` },
       },
       apiKey,
     );
-  } catch {
-    submissions.delete(id);
-    console.error("Contact notification failed", {
-      branch,
-      category: "EMAIL_PROVIDER_ERROR",
-      reference: id.slice(0, 12),
-    });
-    return finish("unavailable");
+  } catch (error) {
+    if (error instanceof ProviderRejected) {
+      // Definitely not sent: let the visitor try again with this form.
+      await release(submission, redis);
+      log("Contact notification rejected", "EMAIL_PROVIDER_ERROR");
+      return finish("failed", { reference });
+    }
+    // Unknown outcome: keep the claim so a retry cannot send it twice.
+    log("Contact notification unconfirmed", "EMAIL_PROVIDER_TIMEOUT");
+    return finish("unavailable", { reference });
   }
-  submissions.set(id, { expires: Date.now() + 3_600_000, state: "partial" });
   try {
     await sendMail(
       {
@@ -184,18 +314,14 @@ async function submitContact(
         ],
         replyTo: { email: to, name: site.name },
         ...acknowledgement(input.name, site.name, homeUrl),
-        headers: { "Idempotency-Key": `ack-${id}` },
       },
       apiKey,
     );
-    submissions.set(id, { expires: Date.now() + 3_600_000, state: "sent" });
+    await settle(submission, "sent", 60 * minute, redis);
     return finish("sent");
   } catch {
-    console.error("Contact acknowledgement failed", {
-      branch,
-      category: "EMAIL_PROVIDER_ERROR",
-      reference: id.slice(0, 12),
-    });
+    await settle(submission, "partial", 60 * minute, redis);
+    log("Contact acknowledgement failed", "EMAIL_PROVIDER_ERROR");
     return finish("partial");
   }
 }
@@ -207,19 +333,20 @@ export async function handleContact(
   try {
     return await submitContact(request, branch);
   } catch (error) {
+    const reference = newReference();
     console.error("Contact request failed", {
       branch,
       category:
         error instanceof ConfigurationError ? error.category : "INTERNAL_ERROR",
-      reference: randomBytes(6).toString("hex"),
+      reference,
     });
     // Source-controlled production fallback avoids reflecting an untrusted request Host.
     const { sites } = await import("../config/sites.ts");
     const url = new URL("/contact", sites[branch].url);
-    url.searchParams.set(
-      "status",
-      error instanceof ConfigurationError ? "configuration" : "unavailable",
-    );
+    const status =
+      error instanceof ConfigurationError ? "configuration" : "failed";
+    url.searchParams.set("status", status);
+    url.searchParams.set("ref", reference);
     url.hash = "contact-form";
     return new Response(null, {
       status: 303,

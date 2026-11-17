@@ -204,37 +204,36 @@ export function DetailsStep({
           error={errors.email}
         />
 
+        {/* Optional for every enquiry, product questions included. */}
+        <ContactField
+          field="organization"
+          label="Business / organization"
+          placeholder="Example Studio"
+          value={draft.organization}
+          onChange={(value) => update("organization", value)}
+          autoComplete="organization"
+        />
+        <ContactField
+          field="website"
+          help="A full website address looks like https://example.com. You can leave this blank if you don't have a website."
+          placeholder="https://example.com"
+          onBlur={() => validateField("website")}
+          label="Website"
+          value={draft.website}
+          onChange={(value) => update("website", value)}
+          type="url"
+          autoComplete="url"
+          error={errors.website}
+        />
         {!products && (
-          <>
-            <ContactField
-              field="organization"
-              label="Business / organization"
-              placeholder="Example Studio"
-              value={draft.organization}
-              onChange={(value) => update("organization", value)}
-              autoComplete="organization"
-            />
-            <ContactField
-              field="website"
-              help="A full website address looks like https://example.com. You can leave this blank if you don't have a website."
-              placeholder="https://example.com"
-              onBlur={() => validateField("website")}
-              label="Website"
-              value={draft.website}
-              onChange={(value) => update("website", value)}
-              type="url"
-              autoComplete="url"
-              error={errors.website}
-            />
-            <ContactPhoneField
-              countryCode={draft.phoneCountryCode}
-              number={draft.phone}
-              error={errors.phone}
-              countryCodeError={errors.phoneCountryCode}
-              onBlur={validatePhone}
-              onChange={updatePhone}
-            />
-          </>
+          <ContactPhoneField
+            countryCode={draft.phoneCountryCode}
+            number={draft.phone}
+            error={errors.phone}
+            countryCodeError={errors.phoneCountryCode}
+            onBlur={validatePhone}
+            onChange={updatePhone}
+          />
         )}
       </div>
 

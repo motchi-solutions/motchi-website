@@ -246,11 +246,10 @@ test("product enquiries skip project questions and retain their topic through dr
   assert.equal(canVisitContactStep(draft, 2, 3), true);
   assert.deepEqual(validateContact(draft, 1), {});
   assert.ok(validateContact({ ...draft, context: "" }, 2).context);
-  // Hidden website/phone answers from another enquiry must not block Products.
-  assert.deepEqual(
-    validateContact({ ...draft, website: "incomplete", phone: "1" }, 2),
-    {},
-  );
+  // A hidden phone answer from another enquiry must not block Products...
+  assert.deepEqual(validateContact({ ...draft, phone: "1" }, 2), {});
+  // ...but the website field is shown for products too, so it is checked.
+  assert.ok(validateContact({ ...draft, website: "incomplete" }, 2).website);
   const now = Date.now();
   const restored = parseContactDraft(
     JSON.stringify({
@@ -271,6 +270,18 @@ test("product enquiries skip project questions and retain their topic through dr
     "test-token",
   );
   assert.equal(fields.get("interest"), "Products");
+  // An optional company and website travel with a product enquiry.
+  const withDetails = consolidatedContactSubmissionFields(
+    {
+      ...draft,
+      organization: "Example Studio",
+      website: "https://example.com",
+    },
+    "products",
+    "test-token",
+  );
+  assert.equal(withDetails.get("company"), "Example Studio");
+  assert.match(withDetails.get("message"), /Website: https:\/\/example\.com/);
   assert.match(fields.get("message"), /Product: Pop Tips/);
   assert.match(fields.get("message"), /Report a bug/);
   assert.doesNotMatch(

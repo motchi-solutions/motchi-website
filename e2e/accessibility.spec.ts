@@ -152,6 +152,9 @@ test.describe("structure and keyboard", () => {
         const focus = await page.evaluate(() => {
           const element = document.activeElement as HTMLElement | null;
           if (!element || element === document.body) return null;
+          // Next's development overlay (issue indicator) is not part of the
+          // site and is absent from production builds.
+          if (element.tagName === "NEXTJS-PORTAL") return "development";
           // A radio or checkbox inside an option card may hand its focus
           // ring to the card (AGENTS.md: Interactive controls).
           const shows = (target: Element) => {
@@ -183,6 +186,7 @@ test.describe("structure and keyboard", () => {
           };
         });
         if (!focus) break;
+        if (focus === "development") continue;
         if (seen.has(focus.name)) break;
         seen.add(focus.name);
         if (!focus.visible) problems.push(`hidden: ${focus.name}`);

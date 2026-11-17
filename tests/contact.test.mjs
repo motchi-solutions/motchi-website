@@ -1,10 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import {
-  createLimiter,
-  signToken,
-  verifyToken,
-} from "../src/lib/email/abuse.ts";
+import { signToken, verifyToken } from "../src/lib/email/abuse.ts";
 import {
   acknowledgement,
   escapeHtml,
@@ -148,15 +144,6 @@ test("signed tokens reject tampering, fast submissions, and expiration", () => {
   assert.equal(verifyToken(secret, token, time + 3_600_001), false);
   assert.equal(verifyToken("other", token, time + 2500), false);
 });
-test("rate limiter expires records and bounds memory", () => {
-  const allow = createLimiter(2, 1000, 1);
-  assert.equal(allow("one", 0), true);
-  assert.equal(allow("one", 10), true);
-  assert.equal(allow("one", 20), false);
-  assert.equal(allow("two", 20), false);
-  assert.equal(allow("two", 1001), true);
-});
-
 test("email validation rejects malformed addresses and permits common plus addressing", () => {
   assert.equal(isEmail("alex+project@example.ca"), true);
   for (const email of [
@@ -253,4 +240,37 @@ test("emails are structured, plain-text safe, and never relay the message", () =
     ack.htmlContent,
   ])
     assert.ok(/^[\t\n\r -~]*$/.test(part), "Email copy stays ASCII.");
+});
+
+test("the acknowledgement shows its brand banner, with a clean fallback", () => {
+  for (const [branch, slug] of [
+    ["Motchi Solutions", "solutions"],
+    ["Motchi Websites", "websites"],
+    ["Motchi Consulting", "consulting"],
+  ]) {
+    const { htmlContent } = acknowledgement(
+      "Alex",
+      branch,
+      "https://motchi.ca",
+    );
+    assert.ok(
+      htmlContent.includes(
+        `src="https://motchi.ca/email/ack-${slug}.png" width="600" height="180" alt="${branch}"`,
+      ),
+      branch,
+    );
+    // A burgundy cell behind the image, so a blocked image leaves a brand band.
+    assert.match(htmlContent, /bgcolor="#5B0202"[^>]*><img /i);
+  }
+  const { textContent } = acknowledgement("Alex", "Motchi Websites");
+  assert.match(
+    textContent,
+    /3\. If we both find it useful, we'll set up a free 30-minute intro call, with no commitment\./,
+  );
+});
+
+test("every banner the acknowledgement links to exists", async () => {
+  const { existsSync } = await import("node:fs");
+  for (const slug of ["solutions", "websites", "consulting"])
+    assert.ok(existsSync(`public/email/ack-${slug}.png`), slug);
 });

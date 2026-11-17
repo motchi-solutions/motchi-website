@@ -1,5 +1,5 @@
 import type { Branch } from "../../../lib/brand.ts";
-import { contactMessage } from "../../../lib/email/feedback.ts";
+import { contactMessage, isReference } from "../../../lib/email/feedback.ts";
 import { getContactConfiguration } from "./contact-config.ts";
 import { initialDraft } from "./contact-model.ts";
 import { formatInternationalPhone } from "./contact-phone.ts";
@@ -37,7 +37,7 @@ export function contactSubmissionFields(
           `Timeline: ${draft.timeline}`,
           `Budget (CAD): ${draft.budget || "Not provided"}`,
         ]),
-    ...(draft.website && branch !== "websites" && branch !== "products"
+    ...(draft.website && branch !== "websites"
       ? [`Website: ${draft.website}`]
       : []),
     ...(draft.phone && branch !== "products"
@@ -55,7 +55,7 @@ export function contactSubmissionFields(
     fax,
     name: draft.name,
     email: draft.email,
-    company: branch === "products" ? "" : draft.organization,
+    company: draft.organization,
     website: branch === "websites" ? draft.website : "",
     interest: config.submissionInterests[draft.services[0]],
     budget: branch === "websites" ? draft.budget : "",
@@ -91,10 +91,13 @@ export async function sendContactEnquiry(
   branch: Branch | "products",
   token: string,
   fax = "",
+  turnstileToken = "",
 ) {
+  const body = consolidatedContactSubmissionFields(draft, branch, token, fax);
+  body.set("cf-turnstile-response", turnstileToken);
   const response = await fetch("/api/contact", {
     method: "POST",
-    body: consolidatedContactSubmissionFields(draft, branch, token, fax),
+    body,
     credentials: "same-origin",
     cache: "no-store",
   });
@@ -119,5 +122,9 @@ export async function sendContactEnquiry(
       .split(",")
       .filter(Boolean),
     nextToken,
+    retryMinutes: Number(result.searchParams.get("retry")) || undefined,
+    reference: isReference(result.searchParams.get("ref"))
+      ? (result.searchParams.get("ref") ?? undefined)
+      : undefined,
   };
 }

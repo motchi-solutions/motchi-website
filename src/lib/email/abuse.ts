@@ -19,19 +19,3 @@ export function verifyToken(
   const expected = signToken(secret, Number(time), nonce);
   return timingSafeEqual(Buffer.from(token), Buffer.from(expected));
 }
-export function createLimiter(limit: number, windowMs: number, maxKeys = 2000) {
-  const entries = new Map<string, { count: number; expires: number }>();
-  return (key: string, now = Date.now()): boolean => {
-    for (const [entry, record] of entries)
-      if (record.expires <= now) entries.delete(entry);
-    const existing = entries.get(key);
-    if (existing) {
-      if (existing.count >= limit) return false;
-      existing.count++;
-      return true;
-    }
-    if (entries.size >= maxKeys) return false;
-    entries.set(key, { count: 1, expires: now + windowMs });
-    return true;
-  };
-}

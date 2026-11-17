@@ -59,6 +59,19 @@ export default defineConfig({
       // contact form in CI. It signs nothing outside the test run.
       CONTACT_FORM_SECRET:
         process.env.CONTACT_FORM_SECRET ?? "e2e-only-contact-form-secret-0000",
+      // Cloudflare's public Turnstile test keys (always pass). The widget
+      // itself is stubbed in the tests, so nothing reaches Cloudflare.
+      TURNSTILE_SITE_KEY: "1x00000000000000000000BB",
+      TURNSTILE_SECRET_KEY: "1x0000000000000000000000000000000AA",
+      // Placeholder email settings so the form opens. These override any
+      // real values in .env.local, and every submission is intercepted.
+      ...(ci
+        ? {
+            BREVO_API_KEY: "e2e-placeholder-not-a-key",
+            CONTACT_FROM_EMAIL: "e2e-sender@example.com",
+            CONTACT_TO_EMAIL: "e2e-inbox@example.com",
+          }
+        : {}),
       // Production builds reject loopback origins, so a local .env.local
       // meant for `npm run dev` must not leak into the production test build.
       // Process variables take precedence over Next's .env files.

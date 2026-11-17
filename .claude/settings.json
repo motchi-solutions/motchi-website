@@ -53,7 +53,16 @@
       "Bash(tail .env*)",
       "Bash(grep * .env*)",
       "Bash(printenv*)",
-      "Bash(env)"
+      "Bash(env)",
+      "Bash(npx modern-web-guidance*)",
+      "Bash(npx -y modern-web-guidance*)",
+      "Bash(pnpx modern-web-guidance*)"
+    ],
+    "ask": [
+      "Bash(node .agents/skills/unslop/scripts/snapshot.mjs*)",
+      "Bash(node .agents/skills/unslop/scripts/story.mjs*)",
+      "Bash(node .claude/skills/unslop/scripts/snapshot.mjs*)",
+      "Bash(node .claude/skills/unslop/scripts/story.mjs*)"
     ]
   }
 }

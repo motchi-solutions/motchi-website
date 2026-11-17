@@ -44,7 +44,6 @@
   line-height: 1.08;
   letter-spacing: -0.05em;
   color: var(--burgundy);
-  margin-top: var(--space-eyebrow);
   max-width: 20ch;
   text-wrap: balance;
 }
@@ -53,9 +52,6 @@
   max-width: 42ch;
   line-height: 1.6;
   color: var(--charcoal);
-}
-.responseTime {
-  margin-top: var(--contact-related);
 }
 .email {
   display: inline-flex;
@@ -751,9 +747,6 @@ textarea.input {
   .step h2 {
     font-size: 2.25rem;
   }
-  .hero > :first-child {
-    font-size: var(--contact-meta-size);
-  }
   .option input,
   .savePreference input {
     width: 20px;
@@ -1122,25 +1115,8 @@ textarea.input {
   color: var(--muted);
   font-size: var(--contact-meta-size);
 }
-.contactEyebrow,
-.contactMeta {
-  display: flex;
-  justify-content: center;
-}
-.contactMeta {
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0 1.5rem;
-  margin-top: var(--contact-related);
-}
-.contactMeta .responseTime {
-  margin-top: 0;
-}
 .step h2[tabindex="-1"]:focus-visible {
   outline: none;
-}
-.contactEyebrow > p:after {
-  display: block;
 }
 .formFooter {
   padding-block: var(--contact-related);
@@ -1591,4 +1567,10 @@ textarea.input {
   .enquiryIntro {
     position: static;
   }
+}
+
+/* Cloudflare Turnstile: usually invisible; when Cloudflare asks for a
+   check, the widget sits just above the Send button. */
+.turnstile:has(iframe, p) {
+  margin-top: var(--space-copy);
 }

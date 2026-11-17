@@ -115,7 +115,7 @@ export function validateContact(
       if (!/^[0-9]{1,12}$/.test(draft.phone))
         errors.phone = "Please enter a valid phone number.";
     }
-    if (draft.enquiryType !== "products" && draft.website.trim()) {
+    if (draft.website.trim()) {
       try {
         const url = new URL(draft.website);
         if (

@@ -124,6 +124,23 @@
 .toast-enter {
   animation: toast-enter var(--motion-hover) var(--ease-hover) both;
 }
+.toast-countdown {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--brand-primary);
+  opacity: 0.55;
+  transform-origin: left center;
+  animation-name: toast-countdown;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+@keyframes toast-countdown {
+  to {
+    transform: scaleX(0);
+  }
+}
 @keyframes toast-enter {
   from {
     opacity: 0;
@@ -147,6 +164,10 @@
 @media (prefers-reduced-motion: reduce) {
   .toast-enter {
     animation: none;
+  }
+  /* The timer still closes the notice; a frozen bar would only confuse. */
+  .toast-countdown {
+    display: none;
   }
 }
 @media (forced-colors: active) {

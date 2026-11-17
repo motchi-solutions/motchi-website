@@ -22,7 +22,6 @@ export default async function Contact({ searchParams }: Props) {
     ? (params.get("branch") as "websites" | "consulting")
     : "solutions";
   const status = params.get("status") ?? undefined;
-  const fields = params.get("fields") ?? undefined;
   const topic = params.get("topic") ?? undefined;
   const entry = contactEntryFromParams(params, branch, topic);
   return (
@@ -30,7 +29,6 @@ export default async function Contact({ searchParams }: Props) {
       branch={branch}
       entry={entry}
       status={status}
-      fields={fields}
       topic={topic}
     />
   );

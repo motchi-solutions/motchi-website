@@ -12,7 +12,7 @@ import { Container, Eyebrow } from "./primitives.tsx";
    analytics, or retention change, update the matching section and `updated`.
    Have it reviewed by an Ontario privacy lawyer before relying on it. */
 
-export const privacyUpdated = { iso: "2026-11-12", label: "November 12, 2026" };
+export const privacyUpdated = { iso: "2026-11-16", label: "November 16, 2026" };
 
 const link =
   "text-primary underline decoration-primary/40 underline-offset-4 transition-[text-decoration-color] duration-(--motion-hover) ease-(--ease-hover) hover:decoration-primary motion-reduce:transition-none";
@@ -24,8 +24,8 @@ const email = (
 );
 
 const glance = [
-  "We collect only what you send us through the contact form or by email, and use it to reply and discuss your project.",
-  "No analytics, advertising trackers, or cookies.",
+  "We collect only what you send us through the contact form, by email, or when you book a call, and use it to reply and discuss your project.",
+  "No cookies or advertising trackers; visits are counted only as anonymous totals.",
   "We never sell your information or add you to a mailing list.",
   "Enquiries that don't become projects are deleted within 12 months.",
   "You can ask to see, correct, or delete your information at any time.",
@@ -65,6 +65,16 @@ const sections: { id: string; title: string; body: ReactNode }[] = [
             A budget range, your business or organization, your website, your
             phone number, how you found us, and any extra details you choose to
             share. You can leave all of these blank.
+          </Term>
+          <Term term="When you book a call">
+            Your name and email address, entered on our Google Calendar booking
+            page, and the time you choose. Google then sends you the invitation
+            and video call link.
+          </Term>
+          <Term term="When you send the form">
+            A quick, automatic spam check runs on the form's last step. It looks
+            at your IP address and basic browser details to tell people from
+            bots. Most visitors never see it; a few are asked to tick a box.
           </Term>
           <Term term="When you visit any page">
             Our hosting provider records technical information to deliver and
@@ -127,12 +137,30 @@ const sections: { id: string; title: string; body: ReactNode }[] = [
           </Term>
           <Term term="Google Workspace (Google LLC, United States)">
             Hosts our business inbox, where your enquiry and our replies are
-            kept. Google may store this data in the United States and other
-            countries.
+            kept, and our calendar, where call bookings are kept. Google may
+            store this data in the United States and other countries.
           </Term>
           <Term term="Vercel (Vercel Inc., United States)">
             Hosts this website and runs the contact form. Its server logs are
-            processed in the United States.
+            processed in the United States. It also counts visits to the site
+            anonymously (see Visitor statistics below).
+          </Term>
+          <Term term="Cloudflare (Cloudflare, Inc., United States)">
+            Runs the contact form's spam check (Cloudflare Turnstile). It
+            processes your IP address and browser details only to detect bots,
+            sets no cookies, and isn't used for advertising. See the{" "}
+            <a
+              href="https://www.cloudflare.com/turnstile-privacy-policy/"
+              className={link}
+              rel="noreferrer"
+            >
+              Turnstile privacy addendum
+            </a>
+            .
+          </Term>
+          <Term term="Upstash (Upstash, Inc., United States)">
+            Stores short-lived counters that limit repeated sending. They hold
+            scrambled codes, never your readable IP address or email address.
           </Term>
         </dl>
         <p>
@@ -190,23 +218,33 @@ const sections: { id: string; title: string; body: ReactNode }[] = [
     ),
   },
   {
-    id: "no-tracking",
-    title: "No tracking",
+    id: "visitor-statistics",
+    title: "Visitor statistics, no tracking",
     body: (
       <>
         <p>
-          The website has no analytics, advertising trackers, tracking pixels,
-          social media widgets, or third-party scripts. Our fonts are served
-          from our own site.
+          We count visits with Vercel Web Analytics so we can see which pages
+          are useful. For each visit it records the page address (without
+          anything after a "?" or "#"), the site that linked to it, your
+          approximate location (country and city), and your type of device,
+          browser, and operating system. It sets no cookies and doesn't store
+          your IP address. To tell visits apart, it uses a scrambled code made
+          from your request that is discarded after 24 hours, so it can't follow
+          you from day to day or across other websites. We see only totals.
+        </p>
+        <p>
+          The website has no advertising trackers, tracking pixels, or social
+          media widgets. Our fonts are served from our own site. The only
+          outside script is Cloudflare's spam check, which loads on the contact
+          form's last step and sets no cookies.
         </p>
         <p>
           Like most email services, Brevo counts how many of our emails are
           opened and how many of their links are clicked. We've set it to count
-          these only as anonymous totals, so they're never linked to you.
-        </p>
-        <p>
-          If we ever add visitor statistics, we'll choose a tool that doesn't
-          identify you, and we'll update this policy before we start.
+          these only as anonymous totals, so they're never linked to you. Our
+          confirmation email shows one image from our website; loading it is
+          logged like any page visit, and we don't use it to tell whether you
+          opened the email.
         </p>
       </>
     ),
@@ -217,7 +255,8 @@ const sections: { id: string; title: string; body: ReactNode }[] = [
     body: (
       <dl className="grid gap-4">
         <Term term="Enquiries that don't lead to a project">
-          Deleted from our inbox within 12 months of our last exchange.
+          Deleted from our inbox and calendar within 12 months of our last
+          exchange.
         </Term>
         <Term term="If you become a client">
           We keep project correspondence for as long as we work together.
@@ -229,8 +268,8 @@ const sections: { id: string; title: string; body: ReactNode }[] = [
           deleted.
         </Term>
         <Term term="Spam protection">
-          A scrambled, one-way code made from your email address, kept in the
-          server's memory for up to 1 hour to limit repeated sending.
+          Scrambled, one-way codes made from your IP address and email address,
+          kept for up to 24 hours to limit repeated sending.
         </Term>
         <Term term="Server logs">
           Kept by Vercel for a short time under its retention settings.
@@ -252,7 +291,8 @@ const sections: { id: string; title: string; body: ReactNode }[] = [
           </li>
           <li>
             The contact form checks every submission on our server, uses signed,
-            expiring form codes, and limits repeated sending.
+            expiring form codes and an automatic spam check, and limits repeated
+            sending.
           </li>
           <li>
             The keys for our email service stay on our server and are never sent

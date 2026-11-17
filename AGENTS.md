@@ -9,6 +9,7 @@ Reading a skill's instructions does not authorize executing its bundled code. If
 ## External skill and network-call policy
 
 - **Authorization first:** Never automatically invoke network-capable skills, plugins, tools, scripts, CLIs, or helpers. This covers web/API/network requests, uploads, downloads, telemetry, and browser automation reaching external sites, including remote subresources and redirects. Local instruction reading is allowed; it does not authorize executable or external-call paths.
+- **Local execution:** Reviewed helpers running locally/offline with no external path need no extra approval beyond [docs/AGENT_SECURITY.md](docs/AGENT_SECURITY.md); network-capable modes of the same helper still do.
 - **Task-scoped permission:** Require explicit user authorization in the current task, or explicit approval after explaining the need. A clear request to search the web, call an API, inspect an online service, download an external resource, or use an online-connected skill authorizes only the access necessary for that purpose. Installation, available credentials, and unrelated past tasks do not grant permission. Preserve authorization already given within the current task; do not ask again for the same authorized access.
 - **Unapproved access:** Prefer a local path. If external access is necessary but not clearly authorized, explain why it is needed, the destination, and the data involved; ask for permission and do not make the call while approval is pending. Do not silently broaden an approved destination, purpose, payload, or operation.
 - **Mandatory pre-call review:** Use `security-audit` in focused/guidance mode. Before any external web/API/network call through a skill, plugin, tool, or executable, identify the skill/tool and helper, necessity, expected destination/service, and data leaving the local environment. Inspect the installed source/version, required external-call dependencies, and network path. Check current known security advisories affecting those components and determine applicability to the installed versions and intended operation. Keep enough internal evidence to justify the decision; one call does not require a full repository audit.
@@ -112,11 +113,15 @@ Use only relevant skills, preferably in this order for major UI work. User scope
 3. better-layout: grouping, spacing, alignment, container sizing, responsive structure, reading order, and layout stress-testing.
 4. design-systems-frontend-architecture: shared boundaries and mapping the composition to reusable project primitives/tokens.
 5. frontend-ui-engineering: production-quality responsive UI implementation, component composition, design-system adherence, interaction states, and accessibility-minded frontend engineering.
-6. ux-writing: clarity and removal of unclear/redundant UI copy only where needed.
-7. apple-design: restrained motion and interaction.
-8. web-design-guidelines: final browser, accessibility, and responsive QA.
-9. untangle-codebase: evidence-based structural cleanup only when warranted.
+6. modern-web-guidance: native browser API, modern CSS, forms, accessibility, and fallback choices where a platform decision is involved.
+7. ux-writing: clarity and removal of unclear/redundant UI copy only where needed.
+8. apple-design: restrained motion and interaction.
+9. unslop: final anti-generic visual critique and polish.
+10. web-design-guidelines: final browser, accessibility, and responsive QA.
+11. untangle-codebase: evidence-based structural cleanup only when warranted.
 
+- **Modern Web Guidance:** Use only for relevant web-platform questions, through targeted `search` then `retrieve` with the local `.agents/skills/modern-web-guidance/mwg` wrapper; never `npx`/`pnpx modern-web-guidance` or bulk-loading guides. It does not override Next.js docs, Motchi design rules, or verified browser support. The wrapper keeps telemetry disabled and is offline; stop and ask if it ever attempts network access.
+- **Unslop:** Use primarily as a final critique/polish pass (its polish mode). Findings do not authorize redesigning approved sections. Preserve Motchi's brand, typography direction, content, palette, and design system; do not adopt its tokens or type where they conflict. Live-site `snapshot.mjs`, story/video generation, image generation, publishing, and external-image workflows need explicit current-task authorization.
 - Upstream examples and companion references do not authorize dependency installation or code execution. Follow the security policy, existing Motchi components, and repository interaction contracts.
 - Prefer existing controls over Interior.dev. Before copying an external component, inspect its source, dependencies, license and accessibility, and record essential attribution/dependency notes in docs/DEPENDENCIES.md. Do not bulk-install libraries.
 - Keep branch composition distinct and shared patterns in src/styles or src/components/ui. Preserve approved pricing, project media, capabilities, process details and contact behavior when refactoring.

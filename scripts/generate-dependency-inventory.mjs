@@ -90,6 +90,8 @@ const dependencyPurposes = {
     "Repository linting; pinned tool version keeps local and CI rules aligned.",
   "@floating-ui/react":
     "Accessible viewport-aware InfoTip positioning and dismissal; retain the existing 0.27 API range.",
+  "@vercel/analytics":
+    "Cookie-free Vercel Web Analytics page views; rendered only on Vercel Production, with query strings and fragments stripped (src/lib/config/analytics.ts). No dependencies; pinned exactly.",
   "@tailwindcss/postcss":
     "Compiles Tailwind in Next.js; keep its major aligned with Tailwind 4.",
   "@types/node":

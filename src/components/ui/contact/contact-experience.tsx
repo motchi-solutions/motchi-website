@@ -4,6 +4,7 @@ import { getContactConfiguration } from "./contact-config.ts";
 import { contactEmail } from "../../../lib/config/sites.ts";
 import { contactMessage } from "../../../lib/email/feedback.ts";
 import { sendContactEnquiry } from "./contact-submission.ts";
+import { Turnstile, type TurnstileHandle } from "./turnstile.tsx";
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { RequiredNotice } from "../required-mark.tsx";
 import { Toast, type ToastMessage } from "../toast.tsx";
@@ -59,7 +60,7 @@ export function ContactExperience({
   entry?: ContactEntry;
   branch?: Branch;
   children: ReactNode;
-  submission?: { token: string | null };
+  submission?: { token: string | null; siteKey?: string | null };
   initialFeedback?: string;
 }) {
   const {
@@ -119,6 +120,10 @@ export function ContactExperience({
   // Guards and DOM references used to move focus between steps and errors.
   const submissionInFlight = useRef(false);
   const honeypot = useRef<HTMLInputElement>(null);
+  // Cloudflare Turnstile: a fresh single-use token for each attempt.
+  const turnstile = useRef<TurnstileHandle>(null);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const siteKey = submission?.siteKey ?? null;
   const heading = useRef<HTMLHeadingElement>(null);
   const card = useRef<HTMLDivElement>(null);
   const clearButton = useRef<HTMLButtonElement>(null);
@@ -403,6 +408,17 @@ export function ContactExperience({
       openBlockedStep(3);
       return;
     }
+    if (siteKey && !turnstileToken) {
+      // Usually ready within a second; otherwise Cloudflare is showing a
+      // check above the Send button.
+      setToast({
+        id: Date.now(),
+        tone: "error",
+        title: "One moment, please",
+        body: "We're finishing a quick spam check. If a checkbox appears above the Send button, please complete it, then press Send again.",
+      });
+      return;
+    }
     submissionInFlight.current = true;
     setSending(true);
     setFeedback(undefined);
@@ -413,6 +429,7 @@ export function ContactExperience({
         activeBranch,
         submissionToken,
         honeypot.current?.value ?? "",
+        turnstileToken,
       );
       if (result.status === "sent" || result.status === "partial") {
         clear();
@@ -431,20 +448,33 @@ export function ContactExperience({
               ? "We couldn't send your confirmation email, but your enquiry arrived."
               : "We usually reply within 2-3 business days.",
         });
-        requestAnimationFrame(() => {
+        // Once the result has replaced the form, bring its top into view
+        // (below the sticky header) alongside the notice, and move focus to
+        // its heading for screen readers.
+        afterRender(() => {
           document
             .getElementById("contact-success-heading")
             ?.focus({ preventScroll: true });
           card.current?.scrollIntoView({
             block: "start",
-            behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
-              ? "instant"
-              : "smooth",
+            behavior: scrollBehavior(),
           });
         });
       } else {
         if (result.status === "expired" && result.nextToken)
           setSubmissionToken(result.nextToken);
+        // Sending is switched off, or delivery is unknown: stop further
+        // attempts for this visit so nothing is sent twice.
+        if (
+          result.status === "configuration" ||
+          result.status === "unavailable"
+        )
+          setSubmissionToken("");
+        // The bot-check token is single-use: get a new one for the retry.
+        turnstile.current?.reset();
+        const subject = result.reference
+          ? `?subject=${encodeURIComponent(`Website enquiry (reference ${result.reference})`)}`
+          : "";
         // Shown as a toast so it is visible wherever the user has scrolled.
         setToast({
           id: Date.now(),
@@ -452,10 +482,16 @@ export function ContactExperience({
           title: "Your enquiry wasn't sent",
           body: (
             <>
-              {result.status === "invalid"
-                ? "Please check your answers and try again. Your progress is still here."
-                : contactMessage(result.status)}{" "}
-              <a href={`mailto:${contactEmail}`}>Email Motchi</a>
+              {contactMessage(result.status, {
+                retryMinutes: result.retryMinutes,
+              }) ?? contactMessage("failed")}{" "}
+              {result.reference && (
+                <>
+                  Reference <span className="numeral">{result.reference}</span>
+                  .{" "}
+                </>
+              )}
+              <a href={`mailto:${contactEmail}${subject}`}>Email Motchi</a>
             </>
           ),
         });
@@ -593,6 +629,19 @@ export function ContactExperience({
                     <h2 ref={heading} tabIndex={-1}>
                       {pageTitles[step]}
                     </h2>
+                    {/* Shown from the first step, so nobody fills in a form
+                        that cannot be sent right now. */}
+                    {submission && !submissionToken && (
+                      <p className={`form-error-notice ${styles.progressHint}`}>
+                        {/* One flex item, so the text wraps around the link. */}
+                        <span>
+                          Online enquiries are temporarily unavailable. Please{" "}
+                          <a href={`mailto:${contactEmail}`}>email us</a> at{" "}
+                          {contactEmail} instead, and we'll reply within 2-3
+                          business days.
+                        </span>
+                      </p>
+                    )}
                     {step < 3 && <RequiredNotice />}
 
                     {feedback && (
@@ -600,8 +649,10 @@ export function ContactExperience({
                         role="alert"
                         className={`form-error-notice ${styles.submissionFeedback}`}
                       >
-                        {feedback}{" "}
-                        <a href={`mailto:${contactEmail}`}>Email Motchi</a>
+                        <span>
+                          {feedback}{" "}
+                          <a href={`mailto:${contactEmail}`}>Email Motchi</a>
+                        </span>
                       </p>
                     )}
                     <p
@@ -696,6 +747,13 @@ export function ContactExperience({
                       Our <a href="/privacy">privacy policy</a> explains how we
                       use your information.
                     </p>
+                    {step === 3 && siteKey && submissionToken && (
+                      <Turnstile
+                        ref={turnstile}
+                        siteKey={siteKey}
+                        onToken={setTurnstileToken}
+                      />
+                    )}
                     <FormActions
                       step={step}
                       sending={sending}

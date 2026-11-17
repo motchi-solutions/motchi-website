@@ -191,9 +191,9 @@ const configurations: Record<Branch, ContactConfiguration> = {
       "Product / Software Idea": "Products",
       "Not Sure Yet": "Something else",
     },
-    title: "Let's Explore How We Can Help",
+    title: "Tell Us About Your Project",
     introduction:
-      "Please share what you have in mind. New ideas and organizations are welcome. We can help from planning to delivery.",
+      "Please share what you have in mind. We usually reply within 2-3 business days.",
     projectTitle: "A little about your project",
   },
   websites: {

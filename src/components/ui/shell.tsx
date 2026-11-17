@@ -3,7 +3,6 @@ import { LuArrowUp } from "react-icons/lu";
 import { SiteLink } from "./site-link.tsx";
 import { getSites } from "../../lib/config/env.ts";
 import { contactEmail, organization } from "../../lib/config/sites.ts";
-import type { Branch } from "../../lib/brand.ts";
 import { HeaderBrand } from "./header-brand.tsx";
 import { BranchMark } from "./branch-mark.tsx";
 import { HeaderEnhancements } from "./header-enhancements.tsx";
@@ -45,24 +44,17 @@ export function Header({ items }: { items: NavItem[] }) {
     </header>
   );
 }
-const footerDescriptions: Record<Branch, string> = {
-  solutions:
-    "Websites, connected systems, and practical technology advice for your business.",
-  websites:
-    "Websites that reflect your business and help customers enquire, book, or buy.",
-  consulting:
-    "Practical advice and hands-on support for your data, AI, and business systems.",
-};
-export function Footer({ branch }: { branch: Branch }) {
+export function Footer() {
   const family = getSites();
   return (
     <footer className="site-footer border-t border-border py-section">
       <Container>
         <div className="footer-grid grid gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
           <div className="min-w-0 sm:col-span-2 lg:col-span-1">
-            <BranchMark branch={branch} />
+            <BranchMark branch="solutions" />
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted">
-              {footerDescriptions[branch]}
+              Websites, connected systems, and practical technology advice for
+              your business.
             </p>
           </div>
           <nav aria-label="Motchi family" className="footer-group min-w-0">

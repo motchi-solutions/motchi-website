@@ -103,7 +103,13 @@ export function ContactReview({
                   ([label]) =>
                     draft.enquiryType !== "products" ||
                     section.step !== 2 ||
-                    ["Name", "Email", "Anything else"].includes(label),
+                    [
+                      "Name",
+                      "Email",
+                      "Organization",
+                      "Website",
+                      "Anything else",
+                    ].includes(label),
                 )
                 .map(([label, value, field]) => (
                   <div className={styles.reviewRow} key={label}>

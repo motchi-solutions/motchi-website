@@ -42,6 +42,7 @@ function shell({
   branchName,
   body,
   footer,
+  banner,
 }: {
   title: string;
   preheader: string;
@@ -49,6 +50,8 @@ function shell({
   branchName: string;
   body: string;
   footer: string;
+  /** Optional header image (600x180 shown, served from the site). */
+  banner?: { src: string; alt: string };
 }): string {
   const branch = branchName.replace(/^Motchi\s+/i, "").toUpperCase();
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light"><meta name="supported-color-schemes" content="light"><title>${escapeHtml(title)}</title></head><body style="margin:0;padding:0;background:${colors.cream};font-family:${font};color:${colors.charcoal}">
@@ -59,7 +62,15 @@ function shell({
 <p style="margin:0;font-size:15px;line-height:1.2;font-weight:700;letter-spacing:4px;color:${colors.charcoal}">MOTCHI</p>
 <p style="margin:4px 0 0;font-size:11px;line-height:1.2;font-weight:700;letter-spacing:3px;color:${colors.burgundy}">${escapeHtml(branch)}</p>
 </td></tr>
-<tr><td bgcolor="${colors.surface}" style="background:${colors.surface};border:1px solid ${colors.border};border-top:2px solid ${colors.gold};border-radius:0 24px 0 0;padding:32px 32px 28px;font-family:${font}">
+${
+  banner
+    ? // A burgundy cell behind the image: if an email app blocks or fails to
+      // load it, the reader sees a clean brand band with the alt text instead
+      // of a broken-image box.
+      `<tr><td bgcolor="${colors.burgundy}" style="background:${colors.burgundy};border-radius:0 24px 0 0;padding:0;font-size:0;line-height:0"><img src="${escapeHtml(banner.src)}" width="600" height="180" alt="${escapeHtml(banner.alt)}" style="display:block;width:100%;max-width:600px;height:auto;border:0;outline:none;text-decoration:none;border-radius:0 24px 0 0;background:${colors.burgundy};color:${colors.cream};font-family:${font};font-size:18px;font-weight:700;letter-spacing:2px;line-height:180px;text-align:center"></td></tr>`
+    : ""
+}
+<tr><td bgcolor="${colors.surface}" style="background:${colors.surface};border:1px solid ${colors.border};border-top:${banner ? "0" : `2px solid ${colors.gold}`};border-radius:${banner ? "0" : "0 24px 0 0"};padding:32px 32px 28px;font-family:${font}">
 <p style="margin:0 0 8px;font-size:12px;line-height:1.4;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${colors.burgundy}">${escapeHtml(eyebrow)}</p>
 <h1 style="margin:0 0 20px;font-size:26px;line-height:1.25;font-weight:700;color:${colors.burgundy}">${escapeHtml(title)}</h1>
 ${body}
@@ -169,7 +180,7 @@ export function acknowledgement(
   const steps = [
     "We read your enquiry and think about how we can help.",
     "We reply within 2-3 business days with next steps or an initial quote.",
-    `If it helps, we start with a free ${firstCall.length} intro call. There's no commitment.`,
+    `If we both find it useful, we'll set up a free ${firstCall.length} intro call, with no commitment.`,
   ];
   const text = [
     `Hello ${name},`,
@@ -195,6 +206,10 @@ export function acknowledgement(
       preheader: "We usually reply within 2-3 business days.",
       eyebrow: "Enquiry received",
       branchName,
+      banner: {
+        src: `${homeUrl}/email/ack-${branchName.replace(/^Motchi\s+/i, "").toLowerCase()}.png`,
+        alt: branchName,
+      },
       body: `${paragraph(`Hello ${escapeHtml(name)},`)}${paragraph(`Thank you for contacting ${escapeHtml(branchName)}. Your enquiry has arrived.`)}${heading("What happens next")}<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse">${steps
         .map(
           (step, index) =>

@@ -41,7 +41,7 @@ export const contactEmail = organization.contactEmail;
 // booking page link (https://calendar.app.google/...) into `url` to show
 // "Book a Free Call" buttons; while it is empty they stay hidden.
 export const firstCall = {
-  url: "" as string,
+  url: "https://calendar.app.google/rQ8TtGNnbExc5cgt6" as string,
   length: "30-minute",
 } as const;
 

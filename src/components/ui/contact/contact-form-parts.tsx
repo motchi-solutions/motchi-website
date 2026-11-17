@@ -5,7 +5,6 @@
    only; ContactExperience owns the state. */
 
 import type { Ref } from "react";
-import { contactEmail } from "../../../lib/config/sites.ts";
 import { InfoTip } from "../info-tip.tsx";
 import { Arrow } from "../primitives.tsx";
 import type { ContactDraft, ContactErrors } from "./contact-model.ts";
@@ -272,42 +271,33 @@ export function FormActions({
       : "Continue";
   const sendLabel = sending
     ? "Sending..."
-    : sendingAvailable
+    : sendingAvailable && canSend
       ? "Send enquiry"
-      : "Sending not available yet";
+      : "Sending unavailable";
 
   return (
-    <>
-      <fieldset className={styles.actions} disabled={sending}>
-        <legend className="sr-only">Form navigation</legend>
-        {step > 0 && (
-          <button className={styles.backButton} type="button" onClick={onBack}>
-            Back
-          </button>
-        )}
-        {step < 3 ? (
-          <div className={styles.nextAction}>
-            <button className={styles.primary} type="submit">
-              {primaryLabel} <Arrow />
-            </button>
-          </div>
-        ) : (
-          <button
-            className={styles.primary}
-            type="submit"
-            disabled={!canSend || sending}
-          >
-            {sendLabel}
-          </button>
-        )}
-      </fieldset>
-
-      {step === 3 && sendingAvailable && !canSend && (
-        <p className={styles.hint}>
-          Online sending is temporarily unavailable. Please{" "}
-          <a href={`mailto:${contactEmail}`}>email us</a>.
-        </p>
+    <fieldset className={styles.actions} disabled={sending}>
+      <legend className="sr-only">Form navigation</legend>
+      {step > 0 && (
+        <button className={styles.backButton} type="button" onClick={onBack}>
+          Back
+        </button>
       )}
-    </>
+      {step < 3 ? (
+        <div className={styles.nextAction}>
+          <button className={styles.primary} type="submit">
+            {primaryLabel} <Arrow />
+          </button>
+        </div>
+      ) : (
+        <button
+          className={styles.primary}
+          type="submit"
+          disabled={!canSend || sending}
+        >
+          {sendLabel}
+        </button>
+      )}
+    </fieldset>
   );
 }

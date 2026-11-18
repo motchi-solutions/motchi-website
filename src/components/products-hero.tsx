@@ -308,18 +308,18 @@ export function ProductsHero() {
   const swipe = useSwipe((direction) => navigateProduct(direction));
 
   return (
-    <section className={`${styles.hero} ${hero.hero} border-b border-border`}>
+    <section className={`${hero.hero} border-b border-border`}>
       <Container>
         <div className={`${styles.layout} ${hero.frame}`}>
           <header className={`page-introduction ${hero.introduction}`}>
             <Eyebrow>Motchi Products</Eyebrow>
             <h1 className="text-h2 font-medium tracking-tight">
-              Products We're Building
+              Products we're building
             </h1>
             <p className="max-w-reading leading-relaxed text-muted">
               We're making room for ideas that could bring a little fun to
-              everyday life or do something useful for our community. These are
-              projects we're excited to share with you as they take shape.
+              everyday life or do something useful for our community. We'll
+              share each one here as it takes shape.
             </p>
           </header>
 
@@ -528,7 +528,7 @@ export function ProductsHero() {
                   >
                     {product.logo
                       ? `Ask About ${product.name}`
-                      : "Ask About Our Products"}
+                      : "Ask about our products"}
                   </ButtonLink>
                 </div>
               </div>
@@ -544,7 +544,7 @@ export function ProductsHero() {
               href="/contact?topic=Products"
               className="content-action"
             >
-              Ask About Our Products
+              Ask about our products
             </ButtonLink>
           </div>
         </noscript>

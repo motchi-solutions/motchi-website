@@ -1,6 +1,6 @@
 import type { Branch } from "../../../lib/brand.ts";
 import { contactMessage, isReference } from "../../../lib/email/feedback.ts";
-import { getContactConfiguration } from "./contact-config.ts";
+import { answerLabels, getContactConfiguration } from "./contact-config.ts";
 import { initialDraft } from "./contact-model.ts";
 import { formatInternationalPhone } from "./contact-phone.ts";
 import type { ContactDraft } from "./contact-model.ts";
@@ -11,44 +11,47 @@ export function contactSubmissionFields(
   branch: Branch | "products",
   token: string,
   fax = "",
+  // The Websites endpoint takes the address as its own field; elsewhere it
+  // travels as an answer line.
+  websiteInMessage = branch !== "websites",
 ) {
   const config = getContactConfiguration(branch);
   const lines = [
     ...(draft.enquiryType
       ? [
-          `Enquiry type: Motchi ${draft.enquiryType === "websites" ? "Websites" : draft.enquiryType === "products" ? "Products" : "Consulting"}`,
+          `${answerLabels.enquiryType}: Motchi ${draft.enquiryType === "websites" ? "Websites" : draft.enquiryType === "products" ? "Products" : "Consulting"}`,
         ]
       : []),
     ...(draft.enquiryType === "websites" && draft.websiteTier
-      ? [`Website tier: ${draft.websiteTier}`]
+      ? [`${answerLabels.websiteTier}: ${draft.websiteTier}`]
       : []),
     ...(draft.enquiryType === "products" && draft.productName
-      ? [`Product: ${draft.productName}`]
+      ? [`${answerLabels.product}: ${draft.productName}`]
       : []),
-    `Selected services: ${draft.services.join(", ")}`,
+    `${answerLabels.services}: ${draft.services.join(", ")}`,
     ...draft.services
       .filter((service) => draft.details[service]?.length)
       .map((service) => `${service}: ${draft.details[service].join(", ")}`),
     ...(draft.enquiryType === "products"
       ? []
       : [
-          `Project / organization: ${draft.business}`,
-          `Project stage: ${draft.stage}`,
-          `Timeline: ${draft.timeline}`,
-          `Budget (CAD): ${draft.budget || "Not provided"}`,
+          `${answerLabels.business}: ${draft.business}`,
+          `${answerLabels.stage}: ${draft.stage}`,
+          `${answerLabels.timeline}: ${draft.timeline}`,
+          `${answerLabels.budget}: ${draft.budget || "Not provided"}`,
         ]),
-    ...(draft.website && branch !== "websites"
-      ? [`Website: ${draft.website}`]
+    ...(draft.website && websiteInMessage
+      ? [`${answerLabels.website}: ${draft.website}`]
       : []),
     ...(draft.phone && branch !== "products"
       ? [
-          `Phone: ${formatInternationalPhone(draft.phoneCountryCode, draft.phone)}`,
+          `${answerLabels.phone}: ${formatInternationalPhone(draft.phoneCountryCode, draft.phone)}`,
         ]
       : []),
     ...(draft.source && branch !== "products"
-      ? [`How you found us: ${draft.source}`]
+      ? [`${answerLabels.source}: ${draft.source}`]
       : []),
-    ...(draft.context ? ["Additional details:", draft.context] : []),
+    ...(draft.context ? [`${answerLabels.details}:`, draft.context] : []),
   ];
   return new URLSearchParams({
     token,
@@ -70,7 +73,9 @@ export function consolidatedContactSubmissionFields(
   token: string,
   fax = "",
 ) {
-  const fields = contactSubmissionFields(draft, branch, token, fax);
+  // The consolidated endpoint does not keep a separate website field, so the
+  // address always travels as an answer line.
+  const fields = contactSubmissionFields(draft, branch, token, fax, true);
   if (branch === "products") fields.set("interest", "Products");
   else if (branch !== "solutions") {
     const service = initialDraft(draft.services[0], "solutions").services[0];
@@ -78,11 +83,6 @@ export function consolidatedContactSubmissionFields(
       "interest",
       getContactConfiguration("solutions").submissionInterests[service],
     );
-    if (branch === "websites" && draft.website)
-      fields.set(
-        "message",
-        `${fields.get("message")}\nWebsite: ${draft.website}`,
-      );
   }
   return fields;
 }

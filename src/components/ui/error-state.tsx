@@ -10,10 +10,10 @@ export function ErrorState({
   return (
     <section className="section-introduction mx-auto max-w-shell px-5 py-section sm:px-8 lg:px-12">
       <p className="error-eyebrow text-eyebrow font-semibold uppercase tracking-widest text-primary">
-        Something Went Wrong
+        Something went wrong
       </p>
       <h1 className="max-w-reading text-h1 font-medium tracking-tight">
-        We Couldn't Load This Page
+        We couldn't load this page
       </h1>
       <p className="mt-6 max-w-lg text-body-lg leading-relaxed text-muted">
         Please try again, or email us directly if you need a hand. If you were
@@ -25,13 +25,13 @@ export function ErrorState({
           onClick={reset}
           className="min-h-12 bg-primary px-6 py-3 font-semibold text-inverse"
         >
-          Try Again
+          Try again
         </button>
         <a
           href="/"
           className="inline-flex min-h-12 items-center border border-border px-6 py-3"
         >
-          Back to Home
+          Back to home
         </a>
         <a
           href={`mailto:${contactEmail}`}

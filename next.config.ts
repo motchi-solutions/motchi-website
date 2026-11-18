@@ -5,8 +5,10 @@ import type { NextConfig } from "next";
 const config: NextConfig = {
   poweredByHeader: false,
   allowedDevOrigins: localDevOrigins(),
-  // Retired company pages: the homepage now introduces both services.
   async redirects() {
+    // Addresses visitors may guess for the services overview. The host
+    // redirect (motchi.ca to www.motchi.ca) belongs to Vercel's domain
+    // settings only; a second host rule here could loop against it.
     return ["/services", "/businesses"].map((source) => ({
       source,
       destination: "/#businesses",

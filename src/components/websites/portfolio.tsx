@@ -30,7 +30,7 @@ export function Portfolio({ projects }: { projects: Project[] }) {
           </SiteLink>
           <div className={styles.intro}>
             <div>
-              <h1 id="portfolio-title">Our Portfolio</h1>
+              <h1 id="portfolio-title">Our portfolio</h1>
               <p>
                 Websites we've designed and built for real businesses, each with
                 its own voice.
@@ -117,7 +117,7 @@ export function Portfolio({ projects }: { projects: Project[] }) {
                     {project.url && (
                       <div className={styles.actions}>
                         <ButtonLink href={project.url} target="_blank">
-                          Visit Site
+                          Visit site
                           <span className="sr-only">
                             , {project.title} (opens in a new tab)
                           </span>

@@ -294,20 +294,6 @@ test("typed and autofilled phones split their country code", async () => {
   assert.equal(formatInternationalPhone("", "4165550123"), "+1 (416) 555-0123");
 });
 
-test("legacy combined phones migrate without losing the saved draft", async () => {
-  const { parseContactDraft } =
-    await import("../src/components/ui/contact/contact-model.ts");
-  const now = Date.now();
-  const legacy = { ...initialDraft("AI"), phone: "14165550123" };
-  delete legacy.phoneCountryCode;
-  const restored = parseContactDraft(
-    JSON.stringify({ version: 1, updatedAt: now, step: 2, draft: legacy }),
-    now,
-  );
-  assert.equal(restored.draft.phoneCountryCode, "1");
-  assert.equal(restored.draft.phone, "4165550123");
-});
-
 test("service enquiry links round-trip branch services and optional details into step two", async () => {
   const { contactEntryHref, contactEntryFromParams } =
     await import("../src/components/ui/contact/contact-entry.ts");

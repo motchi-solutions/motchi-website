@@ -119,11 +119,14 @@ test.describe("SEO", () => {
     }
   });
 
-  test("search engines stay out until launch", async ({ request }) => {
+  test("search engines stay out unless indexing is allowed, while link previews still work", async ({
+    request,
+  }) => {
     const html = await (await request.get("/")).text();
     expect(html).toContain('<meta name="robots" content="noindex, nofollow"/>');
     const robots = await (await request.get("/robots.txt")).text();
-    expect(robots).toContain("Disallow: /");
+    expect(robots).toContain("User-Agent: *\nDisallow: /");
+    expect(robots).toMatch(/User-Agent: Twitterbot\n[\s\S]*?Allow: \//);
     const sitemap = await (await request.get("/sitemap.xml")).text();
     const listed = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(
       (match) => new URL(match[1]).pathname,

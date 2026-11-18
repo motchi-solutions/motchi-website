@@ -17,7 +17,7 @@ export function FaqSection({
         <div className="grid gap-x-[clamp(3rem,6vw,7rem)] gap-y-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
           <div className="min-w-0">
             <h2 className="text-h2 font-medium tracking-tight">
-              Frequently Asked Questions
+              Frequently asked questions
             </h2>
             <p className="mt-5 max-w-120 text-body-lg leading-relaxed text-muted">
               Can't find what you're looking for? We're happy to talk it

@@ -36,20 +36,20 @@ export const mainNavigation: NavigationItem[] = [
 
 export const websiteSections = [
   { id: "overview", label: "Overview" },
-  { id: "work", label: "Selected Work" },
+  { id: "work", label: "Selected work" },
   { id: "services", label: "Services" },
-  { id: "pricing", label: "Pricing & Maintenance" },
-  { id: "process", label: "How We Work" },
+  { id: "pricing", label: "Pricing & maintenance" },
+  { id: "process", label: "How we work" },
   { id: "faq", label: "FAQs" },
-  { id: "enquiry", label: "Start a Project" },
+  { id: "enquiry", label: "Start a project" },
 ];
 export const consultingSections = [
   { id: "overview", label: "Overview" },
   { id: "capabilities", label: "Services" },
-  { id: "approach", label: "How We Work" },
-  { id: "about", label: "What to Expect" },
+  { id: "approach", label: "How we work" },
+  { id: "about", label: "What to expect" },
   { id: "faq", label: "FAQs" },
-  { id: "enquiry", label: "Let's Talk" },
+  { id: "enquiry", label: "Let's talk" },
 ];
 
 export function branchForPath(

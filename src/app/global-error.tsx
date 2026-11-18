@@ -14,7 +14,7 @@ export default function GlobalError({ reset }: { reset: () => void }) {
         }}
       >
         <main>
-          <h1>We Couldn't Load This Page</h1>
+          <h1>We couldn't load this page</h1>
           <p>
             Please try again, or email {contactEmail}. If you were sending an
             enquiry, check for confirmation before submitting again.
@@ -24,10 +24,10 @@ export default function GlobalError({ reset }: { reset: () => void }) {
             onClick={reset}
             style={{ minHeight: 44, padding: "0.75rem 1.5rem" }}
           >
-            Try Again
+            Try again
           </button>
           <p>
-            <a href="/">Back to Home</a> |{" "}
+            <a href="/">Back to home</a> |{" "}
             <a href={`mailto:${contactEmail}`}>Email Motchi</a>
           </p>
         </main>

@@ -9,7 +9,7 @@ export function NotFoundPage() {
           address or head back to explore Motchi.
         </p>
         <div className="not-found-actions">
-          <ButtonLink href="/">Back to Home</ButtonLink>
+          <ButtonLink href="/">Back to home</ButtonLink>
           <ButtonLink href="/contact" secondary>
             Contact us
           </ButtonLink>

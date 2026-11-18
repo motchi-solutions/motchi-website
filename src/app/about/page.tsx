@@ -23,9 +23,9 @@ export default function AboutPage() {
             className={`${styles.purposeCard} ms-surface-feature border border-border bg-surface`}
           >
             <div className="section-introduction">
-              <Eyebrow>Our Mission</Eyebrow>
+              <Eyebrow>Our mission</Eyebrow>
               <h2 className="text-h2 font-medium tracking-tight">
-                Make Good Technology Easier to Access
+                Make good technology easier to access
               </h2>
             </div>
             <div
@@ -71,9 +71,9 @@ export default function AboutPage() {
             className={`${styles.purposeCard} ms-surface-feature ms-surface-dark border border-border`}
           >
             <div className="section-introduction">
-              <Eyebrow light>Our Vision</Eyebrow>
+              <Eyebrow light>Our vision</Eyebrow>
               <h2 className="text-h2 font-medium tracking-tight">
-                Technology That Puts People First
+                Technology that puts people first
               </h2>
             </div>
             <div
@@ -120,7 +120,7 @@ export default function AboutPage() {
         <div className="section-layout grid items-start lg:grid-cols-2">
           <div className="section-introduction">
             <h2 className="text-h2 font-medium tracking-tight">
-              Working Together on Your Goals
+              Working together on your goals
             </h2>
             <p className="mt-6 text-sm text-accent">
               Based in Toronto. Working with businesses globally.
@@ -136,12 +136,12 @@ export default function AboutPage() {
               long run.
             </p>
             <AnimatedLink href="/#businesses" arrow className="text-accent">
-              See How We Can Help
+              See how we can help
             </AnimatedLink>
           </div>
         </div>
       </Section>
-      <ContactCTA title="What Would You Like to Make Easier?" />
+      <ContactCTA title="What would you like to make easier?" />
     </>
   );
 }

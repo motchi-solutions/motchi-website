@@ -2,13 +2,6 @@
   display: flex;
   flex-direction: column;
 }
-.hero {
-  background: radial-gradient(
-    ellipse at 15% 70%,
-    color-mix(in srgb, var(--brand-accent) 10%, transparent),
-    transparent 55%
-  );
-}
 .showcase {
   margin-top: 0;
   min-width: 0;

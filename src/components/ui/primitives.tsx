@@ -126,8 +126,8 @@ export function SectionHeading({
   );
 }
 export function ContactCTA({
-  title = "Talk to Us About Your Project",
-  action = "Contact Us",
+  title = "Talk to us about your project",
+  action = "Contact us",
   href = "/contact",
   tone = "brand",
 }: {

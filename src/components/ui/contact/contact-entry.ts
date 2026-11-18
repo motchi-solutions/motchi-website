@@ -1,7 +1,6 @@
 import type { Branch } from "../../../lib/brand.ts";
 import {
   websiteTiers,
-  normalizeWebsiteTier,
   productNames,
   getContactConfiguration,
 } from "./contact-config.ts";
@@ -23,8 +22,7 @@ export function contactEntryFromParams(
     draft.enquiryType = "products";
     draft.services = [];
   }
-  const requestedTier = params.get("tier");
-  const tier = requestedTier && normalizeWebsiteTier(requestedTier);
+  const tier = params.get("tier");
   if (branch === "websites" && tier && websiteTiers.includes(tier))
     draft.websiteTier = tier;
   const product = params.get("product");

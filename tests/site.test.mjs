@@ -14,13 +14,13 @@ import { sites } from "../src/lib/config/sites.ts";
 import { securityHeaders } from "../src/lib/config/security.ts";
 import { localDevOrigins } from "../src/lib/config/dev-origins.ts";
 import sitemap from "../src/app/sitemap.ts";
-import robots from "../src/app/robots.ts";
+import robots, { linkPreviewAgents } from "../src/app/robots.ts";
 import { publicRoutes } from "../src/lib/config/navigation.ts";
 import { contactMessage } from "../src/lib/email/feedback.ts";
 import { contactOptionLabel } from "../src/components/ui/contact/contact-config.ts";
 
 test("page metadata carries the section's social image and optional absolute title", () => {
-  const work = pageMetadata("Our Portfolio", "Work.", "/websites/work");
+  const work = pageMetadata("Our portfolio", "Work.", "/websites/work");
   assert.equal(work.openGraph.images[0].url, "/websites/opengraph-image");
   assert.equal(work.openGraph.images[0].width, 1200);
   assert.deepEqual(work.twitter.images, ["/websites/opengraph-image"]);
@@ -77,24 +77,31 @@ test("the sitemap lists every public route on one origin", () => {
   assert.equal(new Set(urls.map((url) => url.origin)).size, 1);
 });
 
-test("robots blocks crawling unless launched on the production origin", (t) => {
+test("robots blocks search crawling unless indexing is allowed on the production origin", (t) => {
   const restore = { ...process.env };
   t.after(() => {
     process.env = restore;
   });
-  // Off production, or before launch, everything stays out.
-  assert.deepEqual(robots().rules, { userAgent: "*", disallow: "/" });
+  // Search engines stay out; link previews in messages and social posts
+  // still work.
+  const blocked = [
+    { userAgent: linkPreviewAgents, allow: "/", disallow: "/api/" },
+    { userAgent: "*", disallow: "/" },
+  ];
+  assert.deepEqual(robots().rules, blocked);
+  for (const agent of ["Twitterbot", "facebookexternalhit", "LinkedInBot"])
+    assert.ok(linkPreviewAgents.includes(agent), agent);
   process.env.ALLOW_INDEXING = "true";
-  assert.deepEqual(robots().rules, { userAgent: "*", disallow: "/" });
-  // Production origin plus the launch flag allows crawling, except the API.
-  process.env.SOLUTIONS_URL = "https://motchi.ca";
+  assert.deepEqual(robots().rules, blocked);
+  // The production origin with ALLOW_INDEXING allows crawling, except the API.
+  process.env.SOLUTIONS_URL = "https://www.motchi.ca";
   assert.deepEqual(robots().rules, {
     userAgent: "*",
     allow: "/",
     disallow: "/api/",
   });
   assert.equal(siteMetadata("solutions").robots, undefined);
-  assert.match(robots().sitemap, /^https:\/\/motchi\.ca\/sitemap\.xml$/);
+  assert.match(robots().sitemap, /^https:\/\/www\.motchi\.ca\/sitemap\.xml$/);
 });
 
 test("security headers deny framing, sniffing and unexpected origins", () => {
@@ -184,7 +191,7 @@ test("structured data links the website, services and breadcrumbs to the company
 
   const trail = breadcrumbSchema([
     { name: "Home", path: "/" },
-    { name: "Our Portfolio", path: "/websites/work" },
+    { name: "Our portfolio", path: "/websites/work" },
   ]);
   assert.deepEqual(
     trail.itemListElement.map((item) => [
@@ -206,9 +213,35 @@ test("analytics run only on Vercel Production and send bare page paths", async (
     assert.equal(analyticsEnabled(environment), false);
   assert.equal(
     anonymousPageUrl(
-      "https://motchi.ca/websites/contact?status=failed&ref=AB12CD34#contact-form",
+      "https://www.motchi.ca/websites/contact?status=failed&ref=AB12CD34#contact-form",
     ),
-    "https://motchi.ca/websites/contact",
+    "https://www.motchi.ca/websites/contact",
   );
-  assert.equal(anonymousPageUrl("https://motchi.ca/"), "https://motchi.ca/");
+  assert.equal(
+    anonymousPageUrl("https://www.motchi.ca/"),
+    "https://www.motchi.ca/",
+  );
+});
+
+test("the host redirect is left to Vercel, so no app rule can loop against it", async () => {
+  const { default: config } = await import("../next.config.ts");
+  const redirects = await config.redirects();
+  assert.ok(redirects.every((rule) => !rule.has));
+});
+
+test("every public page shares an absolute www preview image on Open Graph and X", () => {
+  for (const route of publicRoutes) {
+    const metadata = pageMetadata("Title", "Description", route);
+    const image = new URL(
+      metadata.openGraph.images[0].url,
+      sites.solutions.url,
+    );
+    assert.equal(image.origin, "https://www.motchi.ca", route);
+    assert.match(
+      image.pathname,
+      /^(\/websites|\/consulting)?\/opengraph-image$/,
+    );
+    assert.equal(metadata.twitter.images[0], metadata.openGraph.images[0].url);
+    assert.equal(metadata.twitter.card, "summary_large_image");
+  }
 });

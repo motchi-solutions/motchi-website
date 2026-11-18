@@ -7,6 +7,7 @@ import {
 } from "./resolve-sites.ts";
 import { hasHeaderControls, isEmail } from "./validation.ts";
 import { sites as productionSites } from "./sites.ts";
+import { turnstileTestSecrets } from "../security/turnstile.ts";
 export { ConfigurationError } from "./resolve-sites.ts";
 
 function runtimeMode(): RuntimeMode {
@@ -64,7 +65,12 @@ export function getTurnstileSettings(): {
     if (
       !/^[\w-]{10,100}$/.test(siteKey) ||
       hasHeaderControls(secretKey) ||
-      secretKey.length > 200
+      secretKey.length > 200 ||
+      // Cloudflare's public test keys always pass; never on the live site.
+      // (Tests and CI builds use NODE_ENV=production with test keys.)
+      (process.env.VERCEL_ENV === "production" &&
+        (turnstileTestSecrets.has(secretKey) ||
+          /^[123]x0{20}[A-F]{2}$/.test(siteKey)))
     )
       throw new ConfigurationError([
         "TURNSTILE_SITE_KEY",

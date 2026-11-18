@@ -16,9 +16,9 @@ export function Hero() {
               className="mb-8 items-start text-start"
             />
             <h1 className="text-[clamp(2.75rem,4.6vw,5rem)] leading-[1.05] font-medium tracking-[-0.04em] wrap-break-word">
-              Technology Advice.
+              Technology advice.
               <br />
-              Hands-On Support.
+              Hands-on support.
             </h1>
             <p className="mt-6 max-w-152 text-body-lg leading-relaxed text-inverse/85">
               We help you untangle AI, data, and business systems, then put the
@@ -26,10 +26,10 @@ export function Hero() {
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <ButtonLink href="#enquiry" light>
-                Start a Conversation
+                Start a conversation
               </ButtonLink>
               <ButtonLink href="#capabilities" light secondary>
-                See How We Can Help
+                See how we can help
               </ButtonLink>
             </div>
             <HeroTrust light className="mt-6" />

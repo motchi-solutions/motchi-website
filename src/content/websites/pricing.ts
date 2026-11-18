@@ -15,7 +15,7 @@ export const tiers = [
       "A simple contact form",
       `${websiteStarter.includedSecurityUpdateYears} year of free security updates`,
     ],
-    action: "Start a Project",
+    action: "Start a project",
   },
   {
     name: "Business",
@@ -29,7 +29,7 @@ export const tiers = [
       `${websiteBusiness.includedCareMonths} months of free maintenance included`,
       "SEO setup",
     ],
-    action: "Discuss Your Website",
+    action: "Discuss your website",
   },
   {
     name: "Advanced",
@@ -44,6 +44,6 @@ export const tiers = [
       "Database design and built-in analytics",
       "AI setup, assistants, and chatbots",
     ],
-    action: "Plan a Custom Build",
+    action: "Plan a custom build",
   },
 ];

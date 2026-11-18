@@ -1,5 +1,9 @@
 import { palette } from "../brand.ts";
 import { firstCall, organization, sites } from "../config/sites.ts";
+import {
+  answerLabels,
+  wizardAnswerLabels,
+} from "../../components/ui/contact/contact-config.ts";
 import type { ContactInput } from "./validation.ts";
 
 /* Transactional email for the contact form. Email clients ignore site CSS, so
@@ -32,6 +36,10 @@ const heading = (text: string) =>
 // Table-based so the burgundy fill survives Outlook and other older clients.
 const button = (href: string, label: string) =>
   `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:24px 0 8px"><tr><td bgcolor="${colors.burgundy}" style="background:${colors.burgundy}"><a href="${escapeHtml(href)}" style="display:inline-block;padding:14px 24px;font-family:${font};font-size:15px;font-weight:700;line-height:1.2;color:${colors.cream};text-decoration:none">${escapeHtml(label)}</a></td></tr></table>`;
+/* An address inside a mailto: URI. Email local parts may legally contain
+   ? & = % #, which would otherwise start or alter mailto fields (bcc, body). */
+const mailtoAddress = (email: string) =>
+  encodeURIComponent(email).replace(/%40/g, "@");
 const link = (href: string, label: string) =>
   `<a href="${escapeHtml(href)}" style="color:${colors.burgundy};text-decoration:underline">${escapeHtml(label)}</a>`;
 
@@ -80,23 +88,30 @@ ${body}
 }
 
 /* The wizard sends one "Label: value" line per answer, then an optional
-   "Additional details:" block of free text. Treat the parsed rows as display
-   formatting only: they are still visitor input. */
+   "Additional details:" block of free text. Only labels the wizard can send
+   become answer rows, each at most once; every other line stays in the
+   visitor's message, so typed lines cannot pose as form answers. */
+const knownLabels = wizardAnswerLabels();
 function splitMessage(message: string) {
   const lines = message.split("\n");
-  const marker = lines.indexOf("Additional details:");
+  const marker = lines.indexOf(`${answerLabels.details}:`);
   const summary = marker === -1 ? lines : lines.slice(0, marker);
-  const rows = summary
-    .map((line) => /^([A-Za-z][A-Za-z /()]{1,40}): (.+)$/.exec(line))
-    .filter((match): match is RegExpExecArray => match !== null)
-    .map((match) => [match[1], match[2]] as const);
-  // Plain messages (not from the wizard) stay whole.
-  if (rows.length !== summary.filter((line) => line.trim()).length)
-    return { rows: [] as (readonly [string, string])[], details: message };
-  return {
-    rows,
-    details: marker === -1 ? "" : lines.slice(marker + 1).join("\n"),
-  };
+  const rows: (readonly [string, string])[] = [];
+  const other: string[] = [];
+  for (const line of summary) {
+    const match = /^([^:\n]{1,60}): (.+)$/.exec(line);
+    if (
+      match &&
+      knownLabels.has(match[1]) &&
+      !rows.some(([label]) => label === match[1])
+    )
+      rows.push([match[1], match[2]]);
+    else if (line.trim()) other.push(line);
+  }
+  // A message with no wizard answers is shown whole, as written.
+  if (!rows.length) return { rows, details: message };
+  const freeText = marker === -1 ? [] : lines.slice(marker + 1);
+  return { rows, details: [...other, ...freeText].join("\n") };
 }
 
 export function notification(
@@ -105,10 +120,12 @@ export function notification(
   homeUrl: string = sites.solutions.url,
 ) {
   const { rows: answers, details } = splitMessage(input.message);
-  const phone = answers.find(([label]) => label === "Phone")?.[1];
+  const answer = (label: string) =>
+    answers.find(([name]) => name === label)?.[1];
+  const phone = answer(answerLabels.phone);
   const contactRows: (readonly [string, string, string?])[] = [
     ["Name", input.name],
-    ["Email", input.email, `mailto:${input.email}`],
+    ["Email", input.email, `mailto:${mailtoAddress(input.email)}`],
     ...(phone
       ? [["Phone", phone, `tel:${phone.replace(/[^\d+]/g, "")}`] as const]
       : []),
@@ -117,18 +134,18 @@ export function notification(
     // in the message stays plain text.
     input.website
       ? (["Website", input.website, input.website] as const)
-      : ([
-          "Website",
-          answers.find(([label]) => label === "Website")?.[1] ?? "Not provided",
-        ] as const),
+      : (["Website", answer(answerLabels.website) ?? "Not provided"] as const),
   ];
   const enquiryRows = [
     ["Interest", input.interest] as const,
     // The wizard repeats the budget in its own answers; show it once.
-    ...(input.budget && !answers.some(([label]) => label.startsWith("Budget"))
+    ...(input.budget && !answer(answerLabels.budget)
       ? [["Website budget (CAD)", input.budget] as const]
       : []),
-    ...answers.filter(([label]) => label !== "Phone" && label !== "Website"),
+    ...answers.filter(
+      ([label]) =>
+        label !== answerLabels.phone && label !== answerLabels.website,
+    ),
   ];
   const table = (rows: readonly (readonly [string, string, string?])[]) =>
     `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed;border-collapse:collapse;font-size:15px;line-height:1.5">${rows
@@ -159,7 +176,7 @@ export function notification(
       preheader: `${input.interest} enquiry from ${input.name}, via ${branchName}.`,
       eyebrow: `${input.interest} enquiry`,
       branchName,
-      body: `${heading("Contact")}${table(contactRows)}${button(`mailto:${input.email}?subject=${encodeURIComponent(`Re: Your ${branchName} enquiry`)}`, `Reply to ${firstName}`)}${heading("Enquiry")}${table(enquiryRows)}${
+      body: `${heading("Contact")}${table(contactRows)}${button(`mailto:${mailtoAddress(input.email)}?subject=${encodeURIComponent(`Re: Your ${branchName} enquiry`)}`, `Reply to ${firstName}`)}${heading("Enquiry")}${table(enquiryRows)}${
         details.trim()
           ? `${heading("Message")}<div style="padding:16px 18px;background:${colors.cream};font-size:15px;line-height:1.65;color:${colors.charcoal};word-break:break-word;overflow-wrap:anywhere">${escapeHtml(details.trim()).replace(/\n/g, "<br>")}</div>`
           : ""
@@ -217,7 +234,7 @@ export function acknowledgement(
         )
         .join(
           "",
-        )}</table>${firstCall.url ? button(firstCall.url, "Book a Free Call") : ""}${paragraph(`Need to add something? Just reply to this email.`)}<p style="margin:24px 0 0;font-size:16px;line-height:1.6;color:${colors.charcoal}">${escapeHtml(organization.displayName)}</p>`,
+        )}</table>${firstCall.url ? button(firstCall.url, "Book a free call") : ""}${paragraph(`Need to add something? Just reply to this email.`)}<p style="margin:24px 0 0;font-size:16px;line-height:1.6;color:${colors.charcoal}">${escapeHtml(organization.displayName)}</p>`,
       footer: `${escapeHtml(organization.displayName)} | ${escapeHtml(organization.locationLabel)} | ${link(homeUrl, host)}<br>You're receiving this because this address was entered on the contact form at ${escapeHtml(host)}. If that wasn't you, you can ignore this email.`,
     }),
   };

@@ -1,14 +1,10 @@
 import { isContactName, isEmail } from "../../../lib/config/validation.ts";
 import { contactFieldErrors } from "../../../lib/email/validation.ts";
-import {
-  isPhoneCallingCode,
-  splitInternationalPhone,
-} from "./contact-phone.ts";
+import { isPhoneCallingCode } from "./contact-phone.ts";
 import type { Branch } from "../../../lib/brand.ts";
 import { contactContextLimit } from "../../../lib/config/validation.ts";
 import {
   websiteTiers,
-  normalizeWebsiteTier,
   productNames,
   getContactConfiguration,
 } from "./contact-config.ts";
@@ -223,10 +219,7 @@ export function parseContactDraft(
     const draft = initialDraft(undefined, branch);
     draft.enquiryType = enquiryType;
     if (source.websiteTier !== undefined) {
-      const websiteTier =
-        typeof source.websiteTier === "string"
-          ? normalizeWebsiteTier(source.websiteTier)
-          : source.websiteTier;
+      const websiteTier = source.websiteTier;
       if (websiteTier !== "" && !websiteTiers.includes(websiteTier))
         return null;
       draft.websiteTier = websiteTier;
@@ -344,12 +337,6 @@ export function parseContactDraft(
       )
         return null;
       draft.phoneCountryCode = source.phoneCountryCode;
-    } else if (draft.phone) {
-      const previous = splitInternationalPhone(`+${draft.phone}`);
-      if (previous) {
-        draft.phoneCountryCode = previous.countryCode;
-        draft.phone = previous.number;
-      }
     }
     if (!hasContactProgress(draft)) return null;
     const firstIncomplete =

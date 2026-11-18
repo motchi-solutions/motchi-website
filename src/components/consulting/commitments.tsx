@@ -47,7 +47,7 @@ export function Commitments() {
               />
             </div>
             <h2 className="text-h2 font-medium tracking-tight">
-              What You Can Count On
+              What you can count on
             </h2>
             <p className="mt-5 max-w-136 text-body-lg leading-relaxed text-inverse/80">
               Good technical work starts with understanding your business.

@@ -9,7 +9,7 @@ import { getProjects } from "../../../content/websites/projects.ts";
 import { Portfolio } from "../../../components/websites/portfolio.tsx";
 
 export const metadata = pageMetadata(
-  "Our Portfolio",
+  "Our portfolio",
   "Websites we've designed and built for real businesses across beauty, food, event catering, and professional services.",
   branchHref("websites", "/work"),
 );
@@ -21,14 +21,14 @@ export default async function Page() {
         data={breadcrumbSchema([
           { name: "Home", path: "/" },
           { name: "Motchi Websites", path: "/websites" },
-          { name: "Our Portfolio", path: "/websites/work" },
+          { name: "Our portfolio", path: "/websites/work" },
         ])}
       />
       <Portfolio projects={projects} />
       <ContactCTA
         href="/contact?branch=websites"
-        action="Start a Project"
-        title="Let's Plan Your Website"
+        action="Start a project"
+        title="Let's plan your website"
       />
     </>
   );

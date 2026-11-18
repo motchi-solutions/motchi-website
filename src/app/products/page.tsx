@@ -10,7 +10,7 @@ export default function Page() {
   return (
     <>
       <ProductsHero />
-      <ContactCTA title="Have a Question About a Product?" />
+      <ContactCTA title="Have a question about a product?" />
     </>
   );
 }

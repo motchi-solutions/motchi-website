@@ -83,9 +83,18 @@ Reading a skill's instructions does not authorize executing its bundled code. If
 - Keep help icons immediately beside field names, grouped with their labels but outside the clickable label itself. Preserve the bubble position until its closing transition completes.
 - Mark required inputs with the shared RequiredMark and include RequiredNotice at the start of the form/step. Do not rely on red alone: retain native required semantics and screen-reader text. Leave optional field labels unmarked. Placeholders may provide nonessential format examples, never replace labels or essential instructions, and should not merely repeat a field name.
 
+## Domain and canonical host
+
+- The canonical origin is `https://www.motchi.ca`, set once in `src/lib/config/sites.ts`. Vercel's domain settings permanently redirect `motchi.ca` to it, keeping the path and query.
+- Anything domain-specific uses the www origin: canonical links, `metadataBase`, Open Graph and X images, the sitemap and robots, JSON-LD, email links and images, the contact form's origin check, Turnstile's hostname check, test fixtures, and examples in documentation. Derive URLs from `getSites()` or `sites.ts`; never hard-code a host in components or content.
+- Keep host redirects in Vercel's domain settings only. A host rule in `next.config.ts` could loop against them.
+- Email addresses stay `@motchi.ca`. Plain-text mentions of the site in prose may say "motchi.ca", because the apex redirects.
+- When the domain changes, update `sites.ts`, Vercel's domains, the Turnstile widget's hostnames and Brevo's sender settings together, then run the unit tests and the SEO browser tests.
+
 ## Interface copy
 
 - Use courteous wording for form instructions, such as "Please select..." or "We recommend...". Describe services as help we can offer rather than orders to the user.
+- Use sentence case for headings, buttons, links, navigation and page titles; capitalize only proper nouns (Motchi and its branch names, product names, AI, Databricks, places). Service and tier names that the contact form sends as values (contact-config.ts) and consulting capability names keep their title case as named offerings. Headings take no end period, except a headline made of two short phrases ("Technology advice. Hands-on support."); questions keep their question mark. Short uppercase eyebrows come from CSS text-transform, never typed capitals.
 - Keep copy friendly, clean, concise, and actionable across all service branches. Say what the user can do in familiar language, using consistent names for fields, options, and actions.
 - State selection rules explicitly: say "Select all" for multiple choices and "Choose one" for a single choice. Explain what the choices are for and offer a clear path when users are unsure.
 - Use short, polite validation messages such as "Please enter your name." Keep detailed guidance near the relevant field or in supplementary help rather than repeating it in errors or summaries.

@@ -11,13 +11,9 @@ export function filterContactCharacters(field: string, value: string): string {
     return value.replace(/\D/g, "");
   const multiline = field === "context" || field === "message";
   return Array.from(value)
-    .filter((character) => {
-      const code = character.charCodeAt(0);
-      return (
-        (code >= 32 && code !== 127) ||
-        (multiline && [9, 10, 13].includes(code))
-      );
-    })
+    .filter(
+      (character) => !isUnsafeCharacter(character.charCodeAt(0), multiline),
+    )
     .join("");
 }
 export function isContactName(value: string): boolean {
@@ -30,10 +26,24 @@ export function isContactName(value: string): boolean {
   );
 }
 
+/** Control and direction-changing characters no contact field needs: C0
+    controls and DEL, C1 controls, line/paragraph separators, and bidi
+    embeddings, overrides and isolates (which can visually reorder text in
+    the notification email). Tab, LF and CR are allowed only when multiline. */
+export function isUnsafeCharacter(code: number, multiline = false): boolean {
+  if (multiline && (code === 9 || code === 10 || code === 13)) return false;
+  return (
+    code < 32 ||
+    (code >= 127 && code <= 159) ||
+    code === 0x2028 ||
+    code === 0x2029 ||
+    (code >= 0x202a && code <= 0x202e) ||
+    (code >= 0x2066 && code <= 0x2069)
+  );
+}
 export function hasHeaderControls(value: string): boolean {
-  return Array.from(value).some(
-    (character) =>
-      character.charCodeAt(0) < 32 || character.charCodeAt(0) === 127,
+  return Array.from(value).some((character) =>
+    isUnsafeCharacter(character.charCodeAt(0)),
   );
 }
 export function isEmail(value: string): boolean {

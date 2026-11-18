@@ -17,11 +17,11 @@ const stages = [
     content: processSteps.slice(1, 2),
   },
   {
-    title: "Design & Build",
+    title: "Design & build",
     content: processSteps.slice(2, 4),
   },
   {
-    title: "Review & Launch",
+    title: "Review & launch",
     content: processSteps.slice(4, 5),
   },
   {
@@ -99,7 +99,7 @@ export function Process() {
   return (
     <section id="process" className={styles.process}>
       <Container>
-        <SectionHeading wide title="How We Build Your Website">
+        <SectionHeading wide title="How we build your website">
           From the first conversation to launch and ongoing support, we work
           through each stage together.
         </SectionHeading>

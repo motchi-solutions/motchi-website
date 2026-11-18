@@ -70,7 +70,9 @@ self.addEventListener("fetch", (event) => {
         const cached = await cache.match(request);
         if (cached) return cached;
         const response = await fetch(request);
-        if (response.ok) cache.put(request, response.clone());
+        // Only plain same-origin responses (not opaque or redirected ones).
+        if (response.ok && response.type === "basic" && !response.redirected)
+          cache.put(request, response.clone());
         return response;
       }),
     );

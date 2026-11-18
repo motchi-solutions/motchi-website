@@ -87,10 +87,10 @@ export async function RecentWork() {
       <Container>
         <header className={styles.heading}>
           <div>
-            <h2 id="work-title">Recent Work</h2>
+            <h2 id="work-title">Recent work</h2>
             <p>Real websites for real businesses.</p>
           </div>
-          <ButtonLink href="/websites/work">View Our Portfolio</ButtonLink>
+          <ButtonLink href="/websites/work">View our portfolio</ButtonLink>
         </header>
         <div className={styles.projects}>
           {projects.map((project) => (
@@ -155,7 +155,7 @@ export function WhyMotchi() {
       <Container>
         <div className={styles.whyLayout}>
           <div className={styles.whyIntro}>
-            <h2 id="why-title">Why Work With Motchi</h2>
+            <h2 id="why-title">Why work with Motchi</h2>
             <p>
               We build technology around people, with clear pricing and support
               after launch.

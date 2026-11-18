@@ -134,7 +134,7 @@ export function Services() {
   return (
     <section id="services" className={styles.services}>
       <Container>
-        <SectionHeading wide title="What We Build">
+        <SectionHeading wide title="What we build">
           A website should look like your business and work for it, too. We
           bring the design, content, and systems together.
         </SectionHeading>

@@ -10,7 +10,7 @@ import {
   type ContactDraft,
 } from "./contact-model.ts";
 import { contactEntryHref } from "./contact-entry.ts";
-import { normalizeWebsiteTier, websiteTiers } from "./contact-config.ts";
+import { websiteTiers } from "./contact-config.ts";
 import styles from "./contact.module.css";
 
 // A preview of the whole enquiry: only the first step is on this page.
@@ -56,7 +56,7 @@ export function ServiceEnquiry({
         event.target instanceof Element
           ? event.target.closest<HTMLElement>("[data-enquiry-tier]")
           : null;
-      const tier = normalizeWebsiteTier(link?.dataset.enquiryTier ?? "");
+      const tier = link?.dataset.enquiryTier ?? "";
       if (!websiteTiers.includes(tier)) return;
       setDraft((current) => ({ ...current, websiteTier: tier }));
       setAnnouncement(`${tier} tier selected.`);
@@ -73,8 +73,8 @@ export function ServiceEnquiry({
               className={`text-h2 font-medium tracking-tight ${styles.enquiryTitle}`}
             >
               {branch === "websites"
-                ? "Let's Plan Your Website"
-                : "Let's Plan Your Next Step"}
+                ? "Let's plan your website"
+                : "Let's plan your next step"}
             </h2>
             <p className={styles.enquiryLead}>
               Please select the help you need. You can share project details

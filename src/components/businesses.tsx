@@ -5,7 +5,7 @@ import { ButtonLink, Reveal, Section, SectionHeading } from "./ui/index.ts";
 export function Businesses() {
   return (
     <Section id="businesses">
-      <SectionHeading title="Websites and Technology Consulting">
+      <SectionHeading title="Websites and technology consulting">
         Reach your customers with a better website. Help your team with better
         systems. Our two branches bring focused expertise and practical support.
       </SectionHeading>

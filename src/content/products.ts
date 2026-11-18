@@ -20,7 +20,7 @@ export const products: Product[] = [
   {
     name: "Our Next Chapter",
     description:
-      "A new idea for our community is taking shape behind the scenes. We're keeping the details close for now, but we can't wait to share more.",
+      "A new idea for our community is taking shape. We'll share the details here when it's ready.",
     status: "Coming soon",
   },
 ];

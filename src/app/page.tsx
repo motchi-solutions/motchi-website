@@ -7,7 +7,7 @@ import { Hero } from "@/components/hero";
 import { ClientLogos, RecentWork, WhyMotchi } from "@/components/home-sections";
 import { Products } from "@/components/products";
 export const metadata: Metadata = pageMetadata(
-  "Websites and Technology Consulting in Toronto - Motchi",
+  "Websites and technology consulting in Toronto - Motchi",
   "Motchi builds websites shaped around your customers and offers practical technology consulting for AI, data, and business systems, from planning to support.",
   "/",
   { absolute: true },

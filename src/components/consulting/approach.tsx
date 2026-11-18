@@ -216,7 +216,7 @@ export function Approach() {
       <Container>
         <div className="max-w-176">
           <h2 className="text-h2 font-medium tracking-tight">
-            How We Work Together
+            How we work together
           </h2>
           <p className="mt-4 max-w-152 text-body-lg leading-relaxed text-muted">
             We stay with your team from the first question through

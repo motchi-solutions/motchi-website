@@ -281,7 +281,15 @@ test("product enquiries skip project questions and retain their topic through dr
     "test-token",
   );
   assert.equal(withDetails.get("company"), "Example Studio");
-  assert.match(withDetails.get("message"), /Website: https:\/\/example\.com/);
+  assert.match(
+    withDetails.get("message"),
+    /Website address: https:\/\/example\.com/,
+  );
+  // Answers come before the free-text details, so the address stays a row.
+  assert.ok(
+    withDetails.get("message").indexOf("Website address:") <
+      withDetails.get("message").indexOf("Additional details:"),
+  );
   assert.match(fields.get("message"), /Product: Pop Tips/);
   assert.match(fields.get("message"), /Report a bug/);
   assert.doesNotMatch(
@@ -329,28 +337,6 @@ test("pricing links prefill an allowlisted tier and keep it in the submission", 
       .draft.websiteTier,
     "",
   );
-  // Earlier links and saved drafts used the combined tier name.
-  const legacy = contactEntryFromParams(
-    new URLSearchParams({ tier: "Advanced / Enterprise" }),
-    "websites",
-  );
-  assert.equal(legacy.draft.websiteTier, "Advanced");
-  const legacyDraft = parseContactDraft(
-    JSON.stringify({
-      version: 1,
-      branch: "websites",
-      updatedAt: Date.now(),
-      step: 0,
-      draft: {
-        ...legacy.draft,
-        services: ["New Website"],
-        websiteTier: "Advanced / Enterprise",
-      },
-    }),
-    Date.now(),
-    "websites",
-  );
-  assert.equal(legacyDraft?.draft.websiteTier, "Advanced");
 });
 
 test("website tiers start unselected and explicit choices remain draft progress", async () => {

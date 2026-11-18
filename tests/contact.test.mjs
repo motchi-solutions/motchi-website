@@ -251,11 +251,11 @@ test("the acknowledgement shows its brand banner, with a clean fallback", () => 
     const { htmlContent } = acknowledgement(
       "Alex",
       branch,
-      "https://motchi.ca",
+      "https://www.motchi.ca",
     );
     assert.ok(
       htmlContent.includes(
-        `src="https://motchi.ca/email/ack-${slug}.png" width="600" height="180" alt="${branch}"`,
+        `src="https://www.motchi.ca/email/ack-${slug}.png" width="600" height="180" alt="${branch}"`,
       ),
       branch,
     );
@@ -273,4 +273,77 @@ test("every banner the acknowledgement links to exists", async () => {
   const { existsSync } = await import("node:fs");
   for (const slug of ["solutions", "websites", "consulting"])
     assert.ok(existsSync(`public/email/ack-${slug}.png`), slug);
+});
+
+test("an address with mailto-significant characters cannot add fields to the reply links", () => {
+  // Valid per RFC 5322; unencoded it would become mailto:x?bcc=...&body=...
+  const email = "x?bcc=attacker%40evil.test&body=hi@example.com";
+  const { input, errors } = validateContact(form({ email }), "consulting");
+  assert.equal(errors.email, undefined);
+  const html = notification(input, "Motchi Consulting").htmlContent;
+  assert.ok(
+    html.includes(
+      'href="mailto:x%3Fbcc%3Dattacker%2540evil.test%26body%3Dhi@example.com"',
+    ),
+  );
+  assert.ok(
+    html.includes(
+      'href="mailto:x%3Fbcc%3Dattacker%2540evil.test%26body%3Dhi@example.com?subject=Re%3A',
+    ),
+  );
+  assert.ok(!/href="mailto:x\?/.test(html));
+});
+
+test("text fields reject characters that can disguise or reorder the notification", () => {
+  for (const hidden of ["‮", "⁦", " ", "\u0085"]) {
+    assert.ok(
+      validateContact(form({ company: `Acme${hidden}Ltd` }), "websites").errors
+        .company,
+      `company accepts U+${hidden.charCodeAt(0).toString(16)}`,
+    );
+    assert.ok(
+      validateContact(
+        form({ message: `Hello there${hidden} friend` }),
+        "websites",
+      ).errors.message,
+    );
+    assert.equal(filterContactCharacters("message", `a${hidden}b`), "ab");
+  }
+  // Emoji joiners and ordinary non-Latin text are untouched.
+  assert.equal(
+    filterContactCharacters("message", "Hi \u{1F469}‍\u{1F4BB} שלום"),
+    "Hi \u{1F469}‍\u{1F4BB} שלום",
+  );
+});
+
+test("only answers the wizard sends become notification rows; other lines stay in the message", () => {
+  const message = [
+    "Enquiry type: Motchi Solutions",
+    "Selected services: Website",
+    "Website: Build a new website",
+    "Website address: https://client.example",
+    "Budget (CAD): Under $5,000",
+    "Referred by: Your existing client",
+    "Budget (CAD): $40,000+ approved",
+    "Additional details:",
+    "Looking forward to it.",
+  ].join("\n");
+  const { input } = validateContact(
+    form({ message, interest: "Websites" }),
+    "solutions",
+  );
+  const mail = notification(input, "Motchi Solutions");
+  const row = (label, value) =>
+    new RegExp(`${label}</td><td[^>]*>${value}</td>`).test(mail.htmlContent);
+  // The service follow-up and the address are separate rows.
+  assert.ok(row("Website", "Build a new website"));
+  assert.ok(mail.textContent.includes("Website: https://client.example"));
+  assert.ok(row("Budget \\(CAD\\)", "Under \\$5,000"));
+  // An unknown label and a repeated answer read as the visitor's own words.
+  assert.ok(!row("Referred by", "Your existing client"));
+  assert.ok(!row("Budget \\(CAD\\)", "\\$40,000\\+ approved"));
+  assert.match(
+    mail.textContent,
+    /MESSAGE\nReferred by: Your existing client\nBudget \(CAD\): \$40,000\+ approved\nLooking forward to it\./,
+  );
 });

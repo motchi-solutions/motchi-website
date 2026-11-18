@@ -76,7 +76,7 @@ export function Footer() {
           </nav>
           <div className="footer-group min-w-0">
             <p className="mb-4 text-xs font-semibold tracking-widest uppercase text-muted">
-              Let&apos;s Talk!
+              Let&apos;s talk
             </p>
             <ContactLink
               appearance="button"
@@ -84,7 +84,7 @@ export function Footer() {
               secondary
               className="mb-3"
             >
-              Contact Us
+              Contact us
             </ContactLink>
             <SiteLink
               className="animated-link flex min-h-12 items-center gap-3 text-sm"

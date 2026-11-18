@@ -53,7 +53,7 @@ export function ContactPageContent({
                   free.
                 </p>
                 <ButtonLink href={firstCall.url} target="_blank" secondary>
-                  Book a Free Call
+                  Book a free call
                   <span className="sr-only"> (opens in a new tab)</span>
                 </ButtonLink>
               </div>

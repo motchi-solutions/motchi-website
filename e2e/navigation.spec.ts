@@ -24,7 +24,9 @@ test.describe("every public page", () => {
   }
 });
 
-test("retired pages redirect to the services overview", async ({ page }) => {
+test("guessed service addresses redirect to the services overview", async ({
+  page,
+}) => {
   for (const path of ["/services", "/businesses"]) {
     await page.goto(path);
     await expect(page).toHaveURL(/\/#businesses$/);
@@ -116,6 +118,6 @@ test("section navigation jumps to a section and marks it", async ({ page }) => {
   await panel.getByRole("link", { name: "FAQs" }).click();
   await expect(page).toHaveURL(/#faq$/);
   await expect(
-    page.getByRole("heading", { name: "Frequently Asked Questions" }),
+    page.getByRole("heading", { name: "Frequently asked questions" }),
   ).toBeInViewport();
 });

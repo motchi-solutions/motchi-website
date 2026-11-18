@@ -13,9 +13,9 @@ export function Hero() {
         <h1 id="solutions-title" className={styles.headline}>
           {/* One run of text with a line break: block-level lines make
               VoiceOver in Safari read the heading as two separate items. */}
-          Websites and Smart Systems
+          Websites and smart systems
           <br />
-          for Growing Businesses.
+          for growing businesses
         </h1>
         <div className={styles.explanation}>
           <p>
@@ -24,15 +24,15 @@ export function Hero() {
           </p>
           {/* One clear next step; the explorer below is for browsing. */}
           <div className={styles.actions}>
-            <ButtonLink href="/contact">Start a Conversation</ButtonLink>
+            <ButtonLink href="/contact">Start a conversation</ButtonLink>
             {firstCall.url ? (
               <ButtonLink href={firstCall.url} target="_blank" secondary>
-                Book a Free Call
+                Book a free call
                 <span className="sr-only"> (opens in a new tab)</span>
               </ButtonLink>
             ) : (
               <ButtonLink href="/websites/work" secondary>
-                See Our Work
+                See our work
               </ButtonLink>
             )}
           </div>

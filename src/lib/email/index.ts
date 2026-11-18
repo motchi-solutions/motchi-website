@@ -22,15 +22,17 @@ import { type ContactBranch, validateContact } from "./validation.ts";
    Cloudflare Turnstile -> per-email and site-wide limits -> Brevo.
 
    Limits (fixed windows): per IP 5 per 10 minutes and 20 per day; per email
-   3 per hour; site-wide 60 per hour and 140 per day, which keeps two emails
-   per enquiry inside Brevo's free daily quota. */
+   3 per hour (plus-tag variants share it); site-wide 40 per hour and 110 per
+   day. Each enquiry sends two emails, so the site uses at most 220 of the
+   Brevo account's 300 free daily emails and leaves about 75 for the other
+   Motchi sites on the same account. Raise siteDay only with the Brevo plan. */
 const minute = 60_000;
 const limits = {
   ipShort: { limit: 5, window: 10 * minute },
   ipDay: { limit: 20, window: 24 * 60 * minute },
   email: { limit: 3, window: 60 * minute },
-  siteHour: { limit: 60, window: 60 * minute },
-  siteDay: { limit: 140, window: 24 * 60 * minute },
+  siteHour: { limit: 40, window: 60 * minute },
+  siteDay: { limit: 110, window: 24 * 60 * minute },
 };
 
 /** Checks everything sending needs before the form is shown, so visitors
@@ -261,7 +263,9 @@ async function submitContact(
 
   // Per-email and site-wide limits count only submissions that passed the
   // bot check, so unverified traffic cannot lock out an address or the form.
-  const emailKey = scramble("email", input.email.toLowerCase());
+  // Plus-tag variants (name+1@...) reach the same mailbox, so share a budget.
+  const [local, domain] = input.email.toLowerCase().split("@");
+  const emailKey = scramble("email", `${local.split("+")[0]}@${domain}`);
   for (const [key, rule] of [
     [`contact:email:${emailKey}`, limits.email],
     ["contact:site:hour", limits.siteHour],

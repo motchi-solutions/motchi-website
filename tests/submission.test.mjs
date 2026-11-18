@@ -26,10 +26,10 @@ function makeRequest(overrides = {}, headers = {}) {
     "cf-turnstile-response": "XXXX.DUMMY.TOKEN.XXXX",
     ...overrides,
   });
-  return new Request("https://motchi.ca/api/contact", {
+  return new Request("https://www.motchi.ca/api/contact", {
     method: "POST",
     headers: {
-      origin: "https://motchi.ca",
+      origin: "https://www.motchi.ca",
       "content-type": "application/x-www-form-urlencoded",
       "x-real-ip": randomIp(),
       ...headers,
@@ -295,8 +295,12 @@ test("native contact submission handles validation, delivery, partial failure, a
             status(await handleContact(makeRequest(email), "solutions")),
             "sent",
           );
-        // The fourth verified enquiry for one address within the hour waits.
-        const limited = await handleContact(makeRequest(email), "solutions");
+        // The fourth verified enquiry for one mailbox within the hour waits,
+        // including a plus-tag variant of the same address.
+        const limited = await handleContact(
+          makeRequest({ email: "Shared+again@example.com" }),
+          "solutions",
+        );
         assert.equal(status(limited), "limited");
         assert.equal(calls.length, 6);
       },

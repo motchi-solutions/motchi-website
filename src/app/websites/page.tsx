@@ -11,7 +11,7 @@ import { Process } from "../../components/websites/process.tsx";
 import { WebsiteFaq } from "../../components/websites/faq.tsx";
 
 export const metadata = pageMetadata(
-  "Website Design and Development in Toronto - Motchi Websites",
+  "Website design and development in Toronto - Motchi Websites",
   `Websites shaped around your business and customers, from ${websiteStarter.price}. Booking, tool integrations, and maintenance after launch.`,
   "/websites",
   { absolute: true },

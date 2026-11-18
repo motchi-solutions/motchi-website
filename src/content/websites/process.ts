@@ -3,7 +3,7 @@ export const processSteps = [
   {
     id: "discover",
     title: "Discover",
-    detailHeading: "Start With Your Business and Customers",
+    detailHeading: "Start with your business and customers",
     summary: "Talk about your customers, goals, and what to build.",
     details: [
       "Talk through your business, brand, existing website, and customer needs.",
@@ -13,7 +13,7 @@ export const processSteps = [
   {
     id: "structure",
     title: "Structure",
-    detailHeading: "Give Every Page a Clear Purpose",
+    detailHeading: "Give every page a clear purpose",
     summary: "Make the pages and customer journey clear.",
     details: [
       "Plan the pages, menus, and steps customers need to take.",
@@ -23,7 +23,7 @@ export const processSteps = [
   {
     id: "design",
     title: "Design",
-    detailHeading: "Make It Feel Like Your Business",
+    detailHeading: "Make it feel like your business",
     summary: "Choose a look that reflects your business.",
     details: [
       "Design responsive layouts for your pages and the steps customers take.",
@@ -33,7 +33,7 @@ export const processSteps = [
   {
     id: "develop",
     title: "Develop",
-    detailHeading: "Turn the Design Into a Working Website",
+    detailHeading: "Turn the design into a working website",
     summary: "Build and review the working website.",
     details: [
       "Build the pages and agreed booking, enquiry, or connected tools.",
@@ -43,7 +43,7 @@ export const processSteps = [
   {
     id: "launch",
     title: "Launch",
-    detailHeading: "Check the Details Before Going Live",
+    detailHeading: "Check the details before going live",
     summary: "Prepare the content, domain, and connected tools.",
     details: [
       "Check the content, forms, search details, links, and domain setup.",
@@ -53,7 +53,7 @@ export const processSteps = [
   {
     id: "support",
     title: "Support",
-    detailHeading: "Keep Your Website Useful After Launch",
+    detailHeading: "Keep your website useful after launch",
     summary: "Keep the site useful after it goes live.",
     details: [
       "Hand over the site and follow the hosting, maintenance, and support plan agreed at the start.",

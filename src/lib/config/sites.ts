@@ -5,7 +5,7 @@ export const sites = {
     name: "Motchi Solutions",
     shortName: "Solutions",
     localUrl: "http://localhost:3000",
-    url: "https://motchi.ca",
+    url: "https://www.motchi.ca",
     description:
       "Accessible, practical technology for businesses worldwide. Websites, consulting, and products in development, with support from planning to delivery.",
   },
@@ -13,7 +13,7 @@ export const sites = {
     name: "Motchi Websites",
     shortName: "Websites",
     localUrl: "http://localhost:3000/websites",
-    url: "https://motchi.ca/websites",
+    url: "https://www.motchi.ca/websites",
     description:
       "Website design and development shaped by your business. Distinct identities, clear customer journeys, booking, and connected digital workflows.",
   },
@@ -21,7 +21,7 @@ export const sites = {
     name: "Motchi Consulting",
     shortName: "Consulting",
     localUrl: "http://localhost:3000/consulting",
-    url: "https://motchi.ca/consulting",
+    url: "https://www.motchi.ca/consulting",
     description:
       "AI, Databricks, data and analytics, and technology strategy. Practical consulting with implementation and adoption support.",
   },
@@ -39,7 +39,7 @@ export const contactEmail = organization.contactEmail;
 
 // The free first conversation. Paste the Google Calendar appointment schedule
 // booking page link (https://calendar.app.google/...) into `url` to show
-// "Book a Free Call" buttons; while it is empty they stay hidden.
+// "Book a free call" buttons; while it is empty they stay hidden.
 export const firstCall = {
   url: "https://calendar.app.google/rQ8TtGNnbExc5cgt6" as string,
   length: "30-minute",

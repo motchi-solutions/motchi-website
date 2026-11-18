@@ -19,21 +19,21 @@ test.describe("Websites", () => {
     await open(page, "/websites");
     const actions = page.locator("#overview").getByRole("link");
     await expect(
-      actions.filter({ hasText: "Start a Project" }),
+      actions.filter({ hasText: "Start a project" }),
     ).toHaveAttribute("href", "#enquiry");
     // The on-page work section is a preview, so go straight to the portfolio.
     await expect(
-      actions.filter({ hasText: "Explore Our Work" }),
+      actions.filter({ hasText: "Explore our work" }),
     ).toHaveAttribute("href", "/websites/work");
     const labels = await actions.allTextContents();
     expect(
-      labels.findIndex((text) => text.includes("Start a Project")),
+      labels.findIndex((text) => text.includes("Start a project")),
     ).toBeLessThan(
-      labels.findIndex((text) => text.includes("Explore Our Work")),
+      labels.findIndex((text) => text.includes("Explore our work")),
     );
   });
 
-  test("What We Build layers open one at a time", async ({ page }) => {
+  test("What we build layers open one at a time", async ({ page }) => {
     await open(page, "/websites");
     const layers = page.locator("#services h3 button[aria-expanded]");
     await layers.nth(1).click();
@@ -55,7 +55,7 @@ test.describe("Websites", () => {
 
   test("project links open the live site in a new tab", async ({ page }) => {
     await open(page, "/websites/work");
-    const visits = page.getByRole("link", { name: /^Visit Site/ });
+    const visits = page.getByRole("link", { name: /^Visit site/ });
     expect(await visits.count()).toBeGreaterThan(0);
     for (const link of await visits.all()) {
       await expect(link).toHaveAttribute("target", "_blank");
@@ -131,6 +131,31 @@ test("Websites FAQ answers pricing and support questions", async ({ page }) => {
   await expect(page.locator("#faq")).toContainText("Prices are in CAD");
 });
 
+test("collapsed FAQ answers stay findable and open on a Find in page match", async ({
+  page,
+  browserName,
+}) => {
+  test.skip(
+    browserName !== "chromium",
+    "hidden=until-found is Chromium and Firefox only.",
+  );
+  await open(page, "/websites");
+  const question = page.getByRole("button", {
+    name: "How much does a website cost?",
+  });
+  const answer = page.locator(
+    `#${await question.getAttribute("aria-controls")} > div`,
+  );
+  await expect(answer).toHaveAttribute("hidden", "until-found");
+  // Find in page and text-fragment links fire beforematch on a match.
+  await answer.evaluate((element) =>
+    element.dispatchEvent(new Event("beforematch", { bubbles: true })),
+  );
+  await expect(question).toHaveAttribute("aria-expanded", "true");
+  await expect(answer).not.toHaveAttribute("hidden");
+  await expect(answer).toBeVisible();
+});
+
 test("links to another page's section land on that section", async ({
   page,
 }) => {
@@ -140,7 +165,7 @@ test("links to another page's section land on that section", async ({
     .click();
   await expect(page).toHaveURL(/\/consulting#approach$/);
   await expect(
-    page.getByRole("heading", { name: "How We Work Together" }),
+    page.getByRole("heading", { name: "How we work together" }),
   ).toBeInViewport();
 });
 
@@ -157,7 +182,7 @@ test("the privacy policy is dated and its contents links reach each section", as
   page,
 }) => {
   await open(page, "/privacy");
-  await expect(page.locator("main h1")).toHaveText("Privacy Policy");
+  await expect(page.locator("main h1")).toHaveText("Privacy policy");
   await expect(page.locator("main time")).toHaveAttribute(
     "datetime",
     /^\d{4}-\d{2}-\d{2}$/,

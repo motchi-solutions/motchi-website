@@ -7,7 +7,7 @@ export function Products() {
       <div className="section-layout product-overview grid lg:grid-cols-5">
         <div className="section-introduction lg:col-span-2">
           <h2 className="text-h2 font-medium tracking-tight">
-            Products We're Building
+            Products we're building
           </h2>
           <p className="max-w-sm leading-relaxed text-muted">
             Our own products, made with care for the people who use them. We'll
@@ -60,7 +60,7 @@ export function Products() {
         </div>
         <div className="section-action product-overview-action">
           <ButtonLink href="/products" secondary light>
-            Explore Our Products
+            Explore our products
           </ButtonLink>
         </div>
       </div>

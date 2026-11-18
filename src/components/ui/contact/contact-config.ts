@@ -191,7 +191,7 @@ const configurations: Record<Branch, ContactConfiguration> = {
       "Product / Software Idea": "Products",
       "Not Sure Yet": "Something else",
     },
-    title: "Tell Us About Your Project",
+    title: "Tell us about your project",
     introduction:
       "Please share what you have in mind. We usually reply within 2-3 business days.",
     projectTitle: "A little about your project",
@@ -288,7 +288,7 @@ const configurations: Record<Branch, ContactConfiguration> = {
       "Maintenance & Support": "Maintenance",
       "Not Sure Yet": "Something else",
     },
-    title: "Let's Plan Your Website",
+    title: "Let's plan your website",
     introduction:
       "Please share what you have in mind for your website. Whether you're starting fresh or improving what you have, we'll help you with the next steps.",
     projectTitle: "A little about your website",
@@ -393,7 +393,7 @@ const configurations: Record<Branch, ContactConfiguration> = {
       "Website & Digital": "Website & digital",
       "Not Sure Yet": "Technology strategy",
     },
-    title: "Let's Talk About Your Next Steps",
+    title: "Let's talk about your next steps",
     introduction:
       "Please share the challenge or idea you have in mind. We can help you explore the options, make a plan, and put it into practice.",
     projectTitle: "A little about your project",
@@ -401,13 +401,6 @@ const configurations: Record<Branch, ContactConfiguration> = {
 };
 export type ContactEnquiryType = "websites" | "consulting" | "products";
 export const websiteTiers = ["Starter", "Business", "Advanced", "I'm not sure"];
-/* Earlier links and saved drafts used the combined tier name. */
-const legacyWebsiteTiers: Record<string, string> = {
-  "Advanced / Enterprise": "Advanced",
-};
-export function normalizeWebsiteTier(value: string) {
-  return legacyWebsiteTiers[value] ?? value;
-}
 export const productNames = [
   "Pop Tips",
   "Our Next Chapter",
@@ -439,6 +432,33 @@ const productConfiguration: ContactConfiguration = {
   ),
   projectTitle: "Your product question",
 };
+/* Labels of the "Label: value" lines the wizard sends in the message. The
+   notification email lists only these (and service names) as answers; any
+   other line is shown with the visitor's own message text. */
+export const answerLabels = {
+  enquiryType: "Enquiry type",
+  websiteTier: "Website tier",
+  product: "Product",
+  services: "Selected services",
+  business: "Project / organization",
+  stage: "Project stage",
+  timeline: "Timeline",
+  budget: "Budget (CAD)",
+  website: "Website address",
+  phone: "Phone",
+  source: "How you found us",
+  details: "Additional details",
+} as const;
+/** Every label the wizard can send: fixed answers plus each service's
+    follow-up line, across all branches. */
+export function wizardAnswerLabels(): Set<string> {
+  return new Set([
+    ...Object.values(answerLabels),
+    ...(["solutions", "websites", "consulting", "products"] as const).flatMap(
+      (branch) => getContactConfiguration(branch).services,
+    ),
+  ]);
+}
 export function getContactConfiguration(
   branch: Branch | "products" = "solutions",
 ): ContactConfiguration {

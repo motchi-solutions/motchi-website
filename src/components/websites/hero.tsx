@@ -21,15 +21,15 @@ export function Hero() {
         <div className={styles.composition}>
           <div className={styles.introduction}>
             <HeroBrand branch="websites" className={styles.identity} />
-            <h1>Websites Built Around Your Business.</h1>
+            <h1>Websites built around your business</h1>
             <p className={styles.copy}>
               We design and build around your customers and budget, with
               maintenance options for support after launch.
             </p>
             <div className={styles.actions}>
-              <ButtonLink href="#enquiry">Start a Project</ButtonLink>
+              <ButtonLink href="#enquiry">Start a project</ButtonLink>
               <ButtonLink href="/websites/work" secondary>
-                Explore Our Work
+                Explore our work
               </ButtonLink>
             </div>
             <HeroTrust className={styles.trust} />

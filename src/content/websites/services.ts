@@ -7,7 +7,7 @@ export type WebsiteService = {
 export const services = [
   {
     id: "design-development",
-    title: "Design & Content",
+    title: "Design & content",
     summary:
       "Design, words, and visuals shaped around your brand. Clear, responsive layouts that work on phones, tablets, and desktops.",
     details: [
@@ -17,7 +17,7 @@ export const services = [
   },
   {
     id: "full-stack-websites",
-    title: "Full-Stack Websites",
+    title: "Full-stack websites",
     summary:
       "We build the pages customers see and the systems behind them, from bookings and reservations to menu management and custom features.",
     details: [
@@ -27,7 +27,7 @@ export const services = [
   },
   {
     id: "booking-integrations",
-    title: "Connected Tools & Workflows",
+    title: "Connected tools & workflows",
     summary:
       "Connect your website to the tools you already use, so enquiries, bookings, and payments reach the right place.",
     details: [
@@ -37,7 +37,7 @@ export const services = [
   },
   {
     id: "continued-support",
-    title: "Maintenance & Support",
+    title: "Maintenance & support",
     summary:
       "Keep your website up to date after launch, with content changes, technical upkeep, and support as your business grows.",
     details: [

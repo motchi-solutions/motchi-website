@@ -393,8 +393,8 @@ export function PrivacyNotice() {
     <Container className="py-section">
       <article className="mx-auto w-full max-w-reading">
         <header className="page-introduction">
-          <Eyebrow>Your Information</Eyebrow>
-          <h1 className="text-h2 font-medium">Privacy Policy</h1>
+          <Eyebrow>Your information</Eyebrow>
+          <h1 className="text-h2 font-medium">Privacy policy</h1>
           <p className="mt-3 text-muted">
             Updated on{" "}
             <time dateTime={privacyUpdated.iso}>{privacyUpdated.label}</time>

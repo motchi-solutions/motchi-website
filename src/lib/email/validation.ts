@@ -1,4 +1,8 @@
-import { isEmail, isContactName } from "../config/validation.ts";
+import {
+  isContactName,
+  isEmail,
+  isUnsafeCharacter,
+} from "../config/validation.ts";
 export { isEmail } from "../config/validation.ts";
 export const contactLimits = {
   name: 100,
@@ -57,12 +61,9 @@ export type ContactInput = {
 };
 export type ContactErrors = Partial<Record<keyof ContactInput, string>>;
 function hasControls(value: string, multiline = false): boolean {
-  return Array.from(value).some((character) => {
-    const code = character.charCodeAt(0);
-    return (
-      (code < 32 || code === 127) && !(multiline && [9, 10, 13].includes(code))
-    );
-  });
+  return Array.from(value).some((character) =>
+    isUnsafeCharacter(character.charCodeAt(0), multiline),
+  );
 }
 export function validateContact(
   form: FormData,

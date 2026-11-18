@@ -17,12 +17,12 @@ export async function FeaturedWork() {
       <Container>
         <header className={styles.workHeading}>
           <div className="min-w-0">
-            <h2>Our Highlights</h2>
+            <h2>Our highlights</h2>
             <p className="mt-4 max-w-xl text-body leading-relaxed text-muted">
               Different businesses. Websites built around the way they work.
             </p>
           </div>
-          <ButtonLink href="/websites/work">View All Projects</ButtonLink>
+          <ButtonLink href="/websites/work">View all projects</ButtonLink>
         </header>
         <div className={styles.projects}>
           {projects.map((project) => (
@@ -62,7 +62,7 @@ export async function FeaturedWork() {
                       secondary
                       className={styles.visitSite}
                     >
-                      Visit Site
+                      Visit site
                       <span className="sr-only">
                         , {project.title} (opens in a new tab)
                       </span>
@@ -73,7 +73,7 @@ export async function FeaturedWork() {
                       arrow
                       className={styles.textLink}
                     >
-                      Explore the Project
+                      Explore the project
                     </AnimatedLink>
                   )}
                 </div>

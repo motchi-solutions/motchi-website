@@ -54,6 +54,8 @@ secrets/
 credentials/
 credentials.json
 service-account*.json
+*.p8
+.npmrc
 
 # vercel
 .vercel

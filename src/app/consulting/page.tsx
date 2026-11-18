@@ -9,7 +9,7 @@ import { Commitments } from "../../components/consulting/commitments.tsx";
 import { ConsultingFaq } from "../../components/consulting/faq.tsx";
 
 export const metadata = pageMetadata(
-  "Technology Consulting in Toronto - Motchi Consulting",
+  "Technology consulting in Toronto - Motchi Consulting",
   "Practical help with AI, data and analytics, Databricks, and business systems: clear advice, hands-on implementation, and support after delivery.",
   "/consulting",
   { absolute: true },

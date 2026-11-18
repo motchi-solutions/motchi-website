@@ -118,7 +118,7 @@ export function AboutHero() {
           <header className={styles.introduction} data-entry-reveal="">
             <HeroBrand branch="solutions" className={styles.brand} />
             <h1 id="about-title">
-              Technology That Gives You <em>Room to Grow.</em>
+              Technology that gives you <em>room to grow</em>
             </h1>
             <p>
               Technology built around people, with clear pricing and support
@@ -126,10 +126,10 @@ export function AboutHero() {
             </p>
             <div className={styles.actions}>
               <ButtonLink href="/contact">
-                Tell Us About Your Business
+                Tell us about your business
               </ButtonLink>
               <ButtonLink href="/#businesses" secondary>
-                See How We Can Help
+                See how we can help
               </ButtonLink>
             </div>
           </header>

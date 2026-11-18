@@ -11,7 +11,7 @@ export type ProductSketch = {
 export const productSketches: Record<string, readonly ProductSketch[]> = {
   "Pop Tips": [
     {
-      title: "A Teaser of What's to Come",
+      title: "A teaser of what's to come",
       src: "/products/pop-tips/logo.png",
       width: 1254,
       height: 1254,

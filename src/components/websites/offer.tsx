@@ -12,7 +12,7 @@ import styles from "./landing.module.css";
 export function WebsiteOffer() {
   return (
     <Section id="pricing" className={styles.offer}>
-      <SectionHeading wide title="Pricing & Maintenance">
+      <SectionHeading wide title="Pricing & maintenance">
         Start with the essentials, then add what your business needs. Each tier
         builds on the one before it.
       </SectionHeading>
@@ -64,7 +64,7 @@ export function WebsiteOffer() {
         <div className={styles.supportIntro}>
           <div className={styles.supportHeading}>
             <LuWrench aria-hidden="true" />
-            <h3 id="maintenance-heading">Support After Launch</h3>
+            <h3 id="maintenance-heading">Support after launch</h3>
           </div>
           <p>Content changes, fixes, upgrades, backups, and more.</p>
         </div>

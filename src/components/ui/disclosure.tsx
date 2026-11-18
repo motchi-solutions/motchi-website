@@ -1,13 +1,19 @@
 "use client";
 
-import { type ReactNode, useEffect, useId, useState } from "react";
+import { type ReactNode, useEffect, useId, useRef, useState } from "react";
 
 /* Shared question-and-answer disclosures. Panels open with an interruptible
-   grid-row transition; collapsed answers are inert so keyboard focus skips
-   them. Without JavaScript every answer stays open.
+   grid-row transition. Collapsed answers use hidden="until-found", so Find in
+   page and text-fragment links open the matching answer (beforematch);
+   browsers without it (Safari) keep collapsed answers inert so keyboard
+   focus skips them. Without JavaScript every answer stays open.
    Sources: WAI-ARIA Authoring Practices, Disclosure pattern
-   (https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/); MDN, the inert
-   attribute (https://developer.mozilla.org/docs/Web/HTML/Global_attributes/inert). */
+   (https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/); MDN, hidden
+   until-found and beforematch
+   (https://developer.mozilla.org/docs/Web/HTML/Global_attributes/hidden). */
+const untilFound = () =>
+  typeof HTMLElement !== "undefined" &&
+  "onbeforematch" in HTMLElement.prototype;
 export function DisclosureList({
   items,
 }: {
@@ -44,7 +50,40 @@ function Disclosure({
 }) {
   const id = useId();
   const [open, setOpen] = useState(false);
-  const hidden = enhanced && !open;
+  const [findable, setFindable] = useState(false);
+  const panel = useRef<HTMLDivElement>(null);
+  const content = useRef<HTMLDivElement>(null);
+  useEffect(() => setFindable(untilFound()), []);
+  // Inert fallback only where hidden="until-found" is unsupported.
+  const hidden = enhanced && !open && !findable;
+
+  useEffect(() => {
+    const element = content.current;
+    if (!enhanced || !findable || !element) return;
+    if (open) {
+      element.removeAttribute("hidden");
+      return;
+    }
+    // Hide after the closing transition, so the answer collapses smoothly.
+    const hide = () => element.setAttribute("hidden", "until-found");
+    const duration = panel.current
+      ? Number.parseFloat(getComputedStyle(panel.current).transitionDuration)
+      : 0;
+    if (!duration) {
+      hide();
+      return;
+    }
+    const timer = window.setTimeout(hide, duration * 1000);
+    return () => window.clearTimeout(timer);
+  }, [enhanced, findable, open]);
+
+  useEffect(() => {
+    const element = content.current;
+    if (!element) return;
+    const reveal = () => setOpen(true);
+    element.addEventListener("beforematch", reveal);
+    return () => element.removeEventListener("beforematch", reveal);
+  }, []);
 
   return (
     <div
@@ -70,12 +109,13 @@ function Disclosure({
       </h3>
       <div
         id={id}
+        ref={panel}
         data-disclosure-panel=""
         inert={hidden}
         aria-hidden={hidden || undefined}
         className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-(--motion-hover) ease-(--ease-hover) group-data-[open=true]:grid-rows-[1fr] motion-reduce:transition-none"
       >
-        <div className="min-h-0 overflow-hidden">
+        <div ref={content} className="min-h-0 overflow-hidden">
           <div className="max-w-[42rem] px-3 pb-6 text-body leading-relaxed text-muted sm:px-5">
             {children}
           </div>

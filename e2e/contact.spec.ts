@@ -369,7 +369,7 @@ test("with full motion, the sent notice stays on screen below the header", async
 test("free-call booking links open Google Calendar in a new tab", async ({
   page,
 }) => {
-  const name = "Book a Free Call (opens in a new tab)";
+  const name = "Book a free call (opens in a new tab)";
   for (const path of ["/", "/contact"]) {
     await page.goto(path);
     const link = page.getByRole("link", { name, exact: true });

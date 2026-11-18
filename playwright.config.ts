@@ -76,7 +76,9 @@ export default defineConfig({
       // meant for `npm run dev` must not leak into the production test build.
       // Process variables take precedence over Next's .env files.
       ...(ci
-        ? { SOLUTIONS_URL: process.env.SOLUTIONS_URL ?? "https://motchi.ca" }
+        ? {
+            SOLUTIONS_URL: process.env.SOLUTIONS_URL ?? "https://www.motchi.ca",
+          }
         : {}),
     },
   },

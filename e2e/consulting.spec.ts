@@ -45,7 +45,7 @@ test.describe("Consulting services", () => {
   });
 });
 
-test.describe("How We Work carousel", () => {
+test.describe("How we work carousel", () => {
   const rail = (page: import("@playwright/test").Page) =>
     page.getByRole("tablist", { name: "Engagement stages" });
 
@@ -121,7 +121,7 @@ test.describe("How We Work carousel", () => {
   });
 });
 
-test("FAQ answers open and close, and closed answers are inert", async ({
+test("FAQ answers open and close, and closed answers are hidden until found", async ({
   page,
 }) => {
   await open(page, "/consulting");
@@ -131,17 +131,19 @@ test("FAQ answers open and close, and closed answers are inert", async ({
   const panel = page.locator(
     `#${await question.getAttribute("aria-controls")}`,
   );
+  // Chrome: hidden="until-found" (searchable, not focusable).
+  const answer = panel.locator(":scope > div");
   const height = () => panel.evaluate((element) => element.clientHeight);
-  await expect(panel).toHaveAttribute("inert", "");
+  await expect(answer).toHaveAttribute("hidden", "until-found");
   expect(await height()).toBe(0);
   await question.click();
   await expect(question).toHaveAttribute("aria-expanded", "true");
-  await expect(panel).not.toHaveAttribute("inert", "");
+  await expect(answer).not.toHaveAttribute("hidden");
   await expect.poll(height).toBeGreaterThan(20);
   await expect(panel).toContainText("We prepare documentation and handover");
   await question.click();
   await expect(question).toHaveAttribute("aria-expanded", "false");
-  await expect(panel).toHaveAttribute("inert", "");
+  await expect(answer).toHaveAttribute("hidden", "until-found");
 });
 
 test.describe("enquiry", () => {
@@ -149,7 +151,7 @@ test.describe("enquiry", () => {
     page,
   }) => {
     await open(page, "/consulting");
-    await page.getByRole("link", { name: "Start a Conversation" }).click();
+    await page.getByRole("link", { name: "Start a conversation" }).click();
     await expect(page).toHaveURL(/#enquiry$/);
     const enquiry = page.locator("#enquiry");
     // Passing through the empty group must not raise an error.

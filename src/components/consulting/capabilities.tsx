@@ -32,7 +32,7 @@ export function Capabilities() {
       <Container>
         <div className="max-w-176">
           <h2 className="text-h2 font-medium tracking-tight">
-            Where Would You Like Help?
+            Where would you like help?
           </h2>
           <p className="mt-4 max-w-152 text-body-lg leading-relaxed text-muted">
             Sometimes the answer is a new system. Sometimes it's a better use of

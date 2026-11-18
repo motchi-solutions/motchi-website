@@ -5,7 +5,7 @@
    exchange. Runs daily in the Google Workspace account that receives
    enquiries and owns the booking calendar; reports go to that account.
 
-   This file is the versioned copy. Edit it here, then paste it over the
+   This file is the versioned copy. Edit it on GitHub, then paste it over the
    Apps Script project "Motchi Enquiries Retention". Setup, labels, filters
    and the trigger are described in README.md under "Enquiry retention".
    Needs the Google Calendar API advanced service, identifier "Calendar". */
@@ -121,7 +121,10 @@ function oldBookings(cutoff, months) {
 }
 
 function keepGuest(email, months) {
-  const withThem = `{from:${email} to:${email} cc:${email}}`;
+  // Calendar guests type their own address; anything unusual cannot reach a
+  // Gmail query, and its booking is kept rather than guessed at.
+  if (!/^[a-z0-9._%+'-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(email)) return true;
+  const withThem = `{from:"${email}" to:"${email}" cc:"${email}"}`;
   if (GmailApp.search(`label:${CONFIG.clientLabel} ${withThem}`, 0, 1).length)
     return true;
   return (

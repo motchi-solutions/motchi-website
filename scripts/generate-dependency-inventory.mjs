@@ -102,12 +102,13 @@ const dependencyPurposes = {
     "React DOM types; keep major 19 aligned with the React runtime and types.",
   "libphonenumber-js":
     "International phone parsing, formatting, and calling-code validation in shared contact fields; uses the smaller min entry.",
-  next: "App Router rendering, routing, metadata, and builds; pinned to Next 16.4.5.",
+  next: "App Router rendering, routing, metadata, and builds; exact pin, reviewed together with React.",
   prettier:
     "Repository formatting and generated dependency documentation; exact version stabilizes output.",
-  react: "Server/client component runtime; pinned to React 19.3.1.",
+  react:
+    "Server/client component runtime; exact pin, kept identical to React DOM.",
   "react-dom":
-    "Browser hydration and DOM rendering; keep its version aligned with React 19.3.1.",
+    "Browser hydration and DOM rendering; exact pin, kept identical to React.",
   "react-icons":
     "Shared Lucide icons for controls and status feedback; exact version preserves the approved icon API.",
   "server-only":
@@ -115,7 +116,7 @@ const dependencyPurposes = {
   tailwindcss:
     "Utility and token-based styling; retain major 4 with its PostCSS plugin.",
   typescript:
-    "Strict TypeScript checking; exact 7.0.2 pin keeps local and CI checks consistent.",
+    "Strict TypeScript checking; exact pin keeps local and CI checks consistent.",
 };
 const counts = audit.metadata.vulnerabilities;
 const lines = [

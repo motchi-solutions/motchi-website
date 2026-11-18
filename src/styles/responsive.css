@@ -1,0 +1,91 @@
+/* One reading scale across all sites. Growth starts above laptop widths (1536px).
+   Rem bounds honor browser text settings; no page zoom or root-size reduction. */
+:root {
+  --type-reading-small: clamp(0.9375rem, 0.65625rem + 0.29296875vw, 1.125rem);
+  --type-reading-body: clamp(1rem, 0.625rem + 0.390625vw, 1.25rem);
+  --type-reading-large: clamp(1.125rem, 0.75rem + 0.390625vw, 1.375rem);
+  --type-reading-xl: clamp(1.25rem, 0.875rem + 0.390625vw, 1.5rem);
+  --type-card-title: clamp(1.5rem, 1.125rem + 0.390625vw, 1.75rem);
+  --type-feature-title: clamp(1.875rem, 1.5rem + 0.390625vw, 2.125rem);
+  --type-reading-leading: 1.6;
+  --type-ui-copy: clamp(1rem, 0.8125rem + 0.1953125vw, 1.125rem);
+  --type-ui-label: clamp(0.8125rem, 0.71875rem + 0.09765625vw, 0.875rem);
+  --type-hero-copy: clamp(1.125rem, 0.75rem + 0.390625vw, 1.375rem);
+  --type-hero-prompt: clamp(1.125rem, 0.9375rem + 0.1953125vw, 1.25rem);
+  --type-hero-selection-intro: var(--type-reading-body);
+  --type-hero-result-title: clamp(1.375rem, 1.1875rem + 0.1953125vw, 1.5rem);
+  --form-option-size: 0.9375rem;
+}
+body {
+  font-size: var(--type-reading-body);
+}
+
+@media (min-width: 1280px) {
+  .site-header nav[aria-label="Main navigation"] {
+    font-size: var(--type-ui-copy);
+  }
+  .site-header nav[aria-label="Main navigation"] ul {
+    font-size: inherit;
+  }
+  .site-footer .text-sm,
+  .button-link,
+  .text-button {
+    font-size: var(--type-ui-copy);
+  }
+  .site-footer .text-xs {
+    font-size: var(--type-ui-label);
+  }
+  .family-hero-intro > p:not(.hero-brand) {
+    font-size: var(--type-hero-copy);
+    max-width: 36rem;
+    line-height: 1.65;
+  }
+  .family-hero-secondary > p.text-xs {
+    font-size: var(--type-ui-label);
+  }
+  .family-hero-secondary > p.text-sm {
+    font-size: var(--type-ui-copy);
+  }
+  .family-hero-secondary a.text-lg {
+    font-size: var(--type-hero-prompt);
+  }
+}
+
+/* Brand marks grow only where the surrounding composition has room. */
+@media (min-width: 1440px) {
+  .branch-link img {
+    width: clamp(4rem, 2.5rem + 1.666667vw, 4.5rem);
+    height: clamp(4rem, 2.5rem + 1.666667vw, 4.5rem);
+  }
+}
+
+@media (min-width: 1440px) {
+  .brand-mark > img {
+    width: clamp(3rem, 1.5rem + 1.666667vw, 3.5rem);
+    height: clamp(3rem, 1.5rem + 1.666667vw, 3.5rem);
+  }
+}
+
+/* Compact laptop compositions grow smoothly into the approved monitor scale. */
+@media (min-width: 1024px) and (max-width: 1919px) {
+  html:root {
+    --type-display: clamp(3.25rem, 0.3rem + 4.333333vw, 5.5rem);
+    --type-heading: clamp(2rem, 0.033333rem + 2.888889vw, 3.5rem);
+    --space-section: clamp(3rem, 8.333333vw - 3.5rem, 6.5rem);
+    --space-hero: clamp(2.5rem, 8.5vw - 4.2rem, 6rem);
+    --space-content: clamp(2.5rem, 6vw - 2.2rem, 5rem);
+    --space-section-heading: clamp(1.5rem, 0.766667rem + 1.444444vw, 2.5rem);
+  }
+}
+
+/* Dense choices use a smaller laptop scale without shrinking touch targets. */
+@media (min-width: 1024px) {
+  :root {
+    --form-option-size: clamp(0.875rem, 0.5625rem + 0.390625vw, 0.9375rem);
+  }
+}
+@media (min-width: 1536px) {
+  :root {
+    --form-option-size: clamp(0.9375rem, 0.84375rem + 0.09765625vw, 1rem);
+  }
+}

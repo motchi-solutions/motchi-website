@@ -1,0 +1,284 @@
+@property --intro-aperture {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+.intro-experience {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  isolation: isolate;
+  overflow: hidden;
+  color: var(--foreground);
+  animation: intro-open var(--motion-intro) linear both;
+}
+/* Only the curtain is masked: the selected identity must stay visible as it zooms. */
+.intro-experience::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--intro-background, var(--background));
+  /* Keep the feather inside the aperture so a zero radius is fully opaque. */
+  mask-image: radial-gradient(
+    circle at 50% 50%,
+    transparent calc(var(--intro-aperture) - 2px),
+    #000 var(--intro-aperture)
+  );
+}
+
+.intro-family {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+  max-width: 54rem;
+  margin-inline: auto;
+  padding-inline: 0.5rem;
+}
+.intro-identity {
+  min-width: 0;
+  text-align: center;
+  animation: intro-identity-recede var(--motion-intro) var(--ease-reveal) both;
+}
+.intro-identity[data-selected="true"] {
+  position: relative;
+  z-index: 2;
+  animation: intro-identity-select var(--motion-intro) var(--ease-reveal) both;
+}
+.intro-monogram-frame {
+  display: block;
+  width: clamp(3.5rem, 8vw, 6rem);
+  margin: 0 auto 1rem;
+  padding: 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--brand-accent);
+  border-radius: 30%;
+}
+.intro-monogram {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.intro-parent-name {
+  display: block;
+  font-size: clamp(0.875rem, 2.2vw, 1.625rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+.intro-branch-name {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: clamp(0.75rem, 1.6vw, 1rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.intro-selection-line {
+  display: block;
+  width: 2rem;
+  height: 2px;
+  margin: 1rem auto 0;
+  background: var(--brand-accent);
+  transform: scaleX(0);
+  animation: intro-selection var(--motion-intro) var(--ease-reveal) both;
+}
+.intro-identity:not([data-selected="true"]) .intro-selection-line {
+  visibility: hidden;
+}
+.intro-family-caption {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 15%;
+  text-align: center;
+  font-size: clamp(0.875rem, 1.5vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  animation: intro-caption var(--motion-intro) var(--ease-reveal) both;
+}
+@keyframes intro-open {
+  0%,
+  77% {
+    --intro-aperture: 0px;
+    opacity: 1;
+    visibility: visible;
+  }
+  99% {
+    --intro-aperture: 150vmax;
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    --intro-aperture: 150vmax;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+@keyframes intro-identity-select {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+  17%,
+  32% {
+    opacity: 1;
+    transform: none;
+  }
+  42%,
+  48% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+  68%,
+  74% {
+    opacity: 1;
+    transform: translateX(calc(var(--identity-offset) * 100%)) scale(1.12);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  88% {
+    opacity: 0;
+    transform: translateX(calc(var(--identity-offset) * 100%)) scale(3);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(calc(var(--identity-offset) * 100%)) scale(6);
+  }
+}
+@keyframes intro-identity-recede {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+  17%,
+  32% {
+    opacity: 1;
+    transform: none;
+  }
+  45%,
+  100% {
+    opacity: 0;
+    transform: translateX(calc(var(--identity-outward) * 12px)) scale(0.96);
+  }
+}
+@keyframes intro-selection {
+  0%,
+  23% {
+    transform: scaleX(0);
+  }
+  38%,
+  100% {
+    transform: scaleX(1);
+  }
+}
+@keyframes intro-caption {
+  0% {
+    opacity: 0;
+  }
+  17%,
+  32% {
+    opacity: 1;
+  }
+  45%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes intro-name-dissolve {
+  0%,
+  60% {
+    opacity: 1;
+  }
+  74%,
+  100% {
+    opacity: 0;
+  }
+}
+.intro-identity[data-selected="true"] .intro-parent-name,
+.intro-identity[data-selected="true"] .intro-branch-name,
+.intro-identity[data-selected="true"] .intro-selection-line {
+  animation: intro-name-dissolve var(--motion-intro) var(--ease-reveal) both;
+}
+.intro-identity[data-selected="true"] .intro-selection-line {
+  animation:
+    intro-selection var(--motion-intro) var(--ease-reveal) both,
+    intro-name-dissolve var(--motion-intro) var(--ease-reveal) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro-experience {
+    display: none;
+  }
+}
+
+.intro-skip-hint {
+  position: absolute;
+  inset-inline: 1rem;
+  bottom: max(2rem, env(safe-area-inset-bottom));
+  margin: 0;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--muted);
+  animation: intro-hint-dismiss var(--motion-intro) var(--ease-reveal) both;
+}
+@keyframes intro-hint-dismiss {
+  0%,
+  60% {
+    opacity: 1;
+    visibility: visible;
+  }
+  72%,
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.intro-skip-hint p {
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+.intro-skip-hint svg {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+}
+.intro-skip-touch {
+  display: flex;
+}
+.intro-skip-keyboard {
+  display: none;
+}
+/* Choose the hint by input, not width: a zoomed-in laptop still has a
+   keyboard and mouse. */
+@media (hover: hover) and (pointer: fine) {
+  .intro-skip-touch {
+    display: none;
+  }
+  .intro-skip-keyboard {
+    display: flex;
+  }
+}
+
+/* Skipping starts the page entrance immediately; its labels must clear first. */
+.intro-experience[data-intro-releasing="true"]
+  :is(
+    .intro-parent-name,
+    .intro-branch-name,
+    .intro-selection-line,
+    .intro-family-caption,
+    .intro-skip-hint
+  ) {
+  animation: none;
+  opacity: 0;
+}
+
+/* Short windows (200%+ zoom, phones in landscape): the tagline would collide
+   with the skip hint; the page repeats it right after the intro. */
+@media (max-height: 540px) {
+  .intro-family-caption {
+    display: none;
+  }
+}

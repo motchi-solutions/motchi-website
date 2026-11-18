@@ -4,22 +4,29 @@ import test from "node:test";
 import {
   ConfigurationError,
   resolveSites,
-} from "../packages/config/src/resolve-sites.ts";
-import { getFormSecret, getServerEnv } from "../packages/config/src/env.ts";
-import { acknowledgement } from "../packages/email/src/templates.ts";
-import { validateContact } from "../packages/email/src/validation.ts";
+} from "../src/lib/config/resolve-sites.ts";
+import {
+  getFormSecret,
+  getServerEnv,
+  getTurnstileSettings,
+} from "../src/lib/config/env.ts";
+import { acknowledgement } from "../src/lib/email/templates.ts";
+import { validateContact } from "../src/lib/email/validation.ts";
 
 test("site origins use local development defaults and canonical production defaults", () => {
   assert.equal(
     resolveSites("development").websites.url,
-    "http://localhost:3001",
+    "http://localhost:3000/websites",
   );
-  assert.equal(resolveSites("production").solutions.url, "https://motchi.ca");
+  assert.equal(
+    resolveSites("production").solutions.url,
+    "https://www.motchi.ca",
+  );
   const sites = resolveSites("production", {
-    WEBSITES_URL: "https://websites.staging.example/",
+    SOLUTIONS_URL: "https://staging.example/",
   });
-  assert.equal(sites.websites.url, "https://websites.staging.example");
-  assert.equal(sites.consulting.url, "https://consulting.motchi.ca");
+  assert.equal(sites.websites.url, "https://staging.example/websites");
+  assert.equal(sites.consulting.url, "https://staging.example/consulting");
 });
 
 test("unsafe origins fail with variable names, without exposing their values", () => {
@@ -90,7 +97,7 @@ test("server environment validation is lazy, rejects missing delivery config and
 test("secret configuration refuses imports outside the server condition", () => {
   const result = spawnSync(
     process.execPath,
-    ["--input-type=module", "-e", "import('@motchi/config/env')"],
+    ["--input-type=module", "-e", "import('./src/lib/config/env.ts')"],
     { encoding: "utf8" },
   );
   assert.notEqual(result.status, 0);
@@ -124,4 +131,44 @@ test("contact input normalizes text and rejects ambiguous duplicate fields", () 
   form.append("email", "other@example.com");
   result = validateContact(form, "solutions");
   assert.ok(result.errors.email);
+});
+
+test("the free-call booking link is empty or an https Google Calendar page", async () => {
+  const { firstCall } = await import("../src/lib/config/sites.ts");
+  if (!firstCall.url) return;
+  const url = new URL(firstCall.url);
+  assert.equal(url.protocol, "https:");
+  assert.ok(
+    ["calendar.app.google", "calendar.google.com"].includes(url.hostname),
+    "Use the Google Calendar appointment schedule booking page link.",
+  );
+});
+
+test("Cloudflare's always-pass Turnstile test keys are refused on the live site only", () => {
+  const keys = [
+    "NODE_ENV",
+    "VERCEL_ENV",
+    "TURNSTILE_SITE_KEY",
+    "TURNSTILE_SECRET_KEY",
+  ];
+  const saved = Object.fromEntries(keys.map((key) => [key, process.env[key]]));
+  try {
+    process.env.NODE_ENV = "production";
+    process.env.TURNSTILE_SITE_KEY = "1x00000000000000000000BB";
+    process.env.TURNSTILE_SECRET_KEY = "1x0000000000000000000000000000000AA";
+    delete process.env.VERCEL_ENV;
+    // Tests and CI production builds use them.
+    assert.equal(getTurnstileSettings().siteKey, "1x00000000000000000000BB");
+    process.env.VERCEL_ENV = "production";
+    assert.throws(getTurnstileSettings, ConfigurationError);
+    process.env.TURNSTILE_SITE_KEY = "0x4AAAAAAAfixtureSiteKey";
+    assert.throws(getTurnstileSettings, ConfigurationError);
+    process.env.TURNSTILE_SECRET_KEY = "0x4AAAAAAAfixtureSecretKey";
+    assert.equal(getTurnstileSettings().siteKey, "0x4AAAAAAAfixtureSiteKey");
+  } finally {
+    for (const key of keys) {
+      if (saved[key] === undefined) delete process.env[key];
+      else process.env[key] = saved[key];
+    }
+  }
 });

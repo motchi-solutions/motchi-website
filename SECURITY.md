@@ -1,11 +1,9 @@
 # Security policy
 
-This repository is an initial platform foundation. Production deployments should track the latest reviewed compatible framework/security updates; no fixed long-term maintenance window is promised here.
+Production tracks the latest reviewed compatible framework and security updates. No long-term maintenance window or response time is guaranteed.
 
 ## Reporting a vulnerability
 
-Do not publish exploitable details, secrets, or submitted personal information in public issues. Use GitHub's private vulnerability reporting feature when enabled, or email contact@motchi.ca with a brief description and safe reproduction steps. Do not include live credentials or customer records.
+Do not publish exploitable details, secrets, or submitted personal information in public issues. Use GitHub's private vulnerability reporting where it is enabled for this repository, or email contact@motchi.ca with a brief description and safe reproduction steps. Do not include live credentials or customer records.
 
-The repository owner must confirm that this inbox is monitored and enable private vulnerability reporting before public launch. No guaranteed response SLA is published at this stage.
-
-See [security engineering](docs/SECURITY.md) for threat boundaries, hosting requirements, and contact-form limitations.
+See [the maintenance audit](docs/AUDIT.md#security-and-contact-reliability) for security boundaries and contact reliability limits, and [the dependency inventory](docs/DEPENDENCIES.md) for advisory findings.

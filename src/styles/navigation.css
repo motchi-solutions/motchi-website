@@ -1,0 +1,314 @@
+/* Stable original marks crossfade without changing header geometry. */
+.header-brand-art,
+.header-brand-label {
+  display: grid;
+}
+.header-brand-art {
+  width: 2.75rem;
+  height: 2.75rem;
+  flex-shrink: 0;
+}
+.header-brand-art img,
+.header-brand-label > span {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transition: opacity var(--motion-hover) var(--ease-hover);
+}
+.header-brand-art img {
+  width: 2.75rem;
+  height: 2.75rem;
+  object-fit: contain;
+}
+.header-brand-art img[data-active="true"],
+.header-brand-label > span[data-active="true"] {
+  opacity: 1;
+}
+/* Inactive branch names are hidden once faded, so they are not part of the
+   link's visible text (or its accessible name). */
+.header-brand-label > span:not([data-active="true"]) {
+  visibility: hidden;
+  transition:
+    opacity var(--motion-hover) var(--ease-hover),
+    visibility 0s linear var(--motion-hover);
+}
+.primary-navigation-links {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 2.2vw, 2.25rem);
+  font-size: var(--type-reading-small);
+}
+.primary-navigation-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+}
+/* A hidden bold copy reserves the current link's width, so moving between
+   pages never nudges the other links. */
+.nav-label {
+  display: inline-grid;
+}
+.nav-label::after {
+  content: attr(data-label);
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  font-weight: 600;
+  pointer-events: none;
+  user-select: none;
+}
+/* Contact call to action, desktop and mobile. It is the one filled control in
+   the header and stays filled on the Contact page, where it also takes the
+   nav's current-page cue: the underline used by the other links on desktop,
+   and a gold inner ring in the mobile menu. Weight and size never change. */
+.primary-navigation-link.nav-contact {
+  min-height: 2.75rem;
+  padding: 0.5rem 1.25rem;
+  line-height: 1.25;
+}
+.mobile-panel .mobile-contact-cta {
+  margin-top: 0.75rem;
+  padding-inline: 1rem;
+}
+.site-header :is(.nav-contact, .mobile-contact-cta) {
+  border: 1px solid var(--active);
+  border-radius: var(--radius-control);
+  background: var(--active);
+  color: var(--active-foreground);
+  font-weight: 600;
+  transition:
+    background-color var(--motion-hover) var(--ease-hover),
+    color var(--motion-hover) var(--ease-hover);
+}
+.site-header .mobile-contact-cta::after {
+  display: none;
+}
+.site-header .nav-contact::after {
+  bottom: -0.4375rem;
+  height: 2px;
+  background: var(--active);
+}
+.site-header .mobile-contact-cta .mobile-nav-arrow {
+  color: currentColor;
+}
+.site-header :is(.nav-contact, .mobile-contact-cta)[aria-current] {
+  border-color: var(--active);
+  background: var(--active);
+  color: var(--active-foreground);
+}
+/* The underline marks the current page only; hover keeps the button's own feedback. */
+.site-header .nav-contact:not([aria-current])::after {
+  transform: scaleX(0);
+}
+.site-header .mobile-contact-cta[aria-current] {
+  box-shadow: inset 0 0 0 2px var(--active-detail);
+}
+.site-header :is(.nav-contact, .mobile-contact-cta):focus-visible {
+  outline: 2px solid var(--active);
+  outline-offset: 3px;
+}
+/* Mobile menu rows lighten on focus; the call to action keeps its fill. */
+.site-header .mobile-contact-cta:focus-visible {
+  background: var(--active);
+  color: var(--active-foreground);
+}
+.site-header :is(.nav-contact, .mobile-contact-cta):active {
+  background: color-mix(in srgb, var(--active) 82%, var(--charcoal));
+  color: var(--active-foreground);
+  transition-duration: 100ms;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .site-header :is(.nav-contact, .mobile-contact-cta):hover {
+    background: var(--active-hover);
+  }
+}
+@media (forced-colors: active) {
+  .site-header .mobile-contact-cta[aria-current] {
+    outline: 2px solid Highlight;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-header :is(.nav-contact, .mobile-contact-cta) {
+    transition: none;
+  }
+}
+.section-navigation {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  z-index: 35;
+  width: min(17rem, calc(100dvw - 2rem));
+  transform: translate(12px, -50%);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    transform var(--motion-hover) var(--ease-hover),
+    opacity var(--motion-hover) var(--ease-hover),
+    visibility 0s var(--motion-hover);
+}
+.section-navigation[data-visible="true"] {
+  transform: translate(0, -50%);
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s;
+}
+.section-navigation-drawer {
+  display: flex;
+  align-items: center;
+  color: var(--foreground);
+  transform: translateX(calc(100% - 2.75rem));
+  transition: transform var(--motion-hover) var(--ease-hover);
+}
+.section-navigation[data-open="true"] .section-navigation-drawer {
+  transform: translateX(0);
+}
+.section-navigation-handle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+  width: 2.75rem;
+  min-height: 6rem;
+  padding: 0;
+  flex-shrink: 0;
+  color: var(--brand-primary);
+  transition: color var(--motion-hover) var(--ease-hover);
+}
+/* A slim visible tab inside a full 44px pointer and keyboard target. */
+.section-navigation-handle::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 0 0.75rem;
+  z-index: -1;
+  border: 1px solid var(--border);
+  border-right: 0;
+  border-radius: 0.5rem 0 0 0.5rem;
+  background: var(--surface);
+  transition:
+    background-color var(--motion-hover) var(--ease-hover),
+    border-color var(--motion-hover) var(--ease-hover);
+}
+.section-navigation-handle .section-navigation-chevron {
+  margin-left: 0.75rem;
+  transition: transform var(--motion-hover) var(--ease-hover);
+}
+.section-navigation[data-open="true"]
+  .section-navigation-handle
+  .section-navigation-chevron {
+  transform: rotate(180deg);
+}
+.section-navigation nav {
+  min-width: 0;
+  flex: 1;
+  max-height: min(70dvh, 34rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-right: 0;
+  border-radius: 0;
+  background: var(--surface);
+}
+.section-navigation[data-visible="true"] .section-navigation-handle,
+.section-navigation[data-visible="true"][data-open="true"] nav {
+  pointer-events: auto;
+}
+.section-navigation-title {
+  margin: 0 0 0.5rem;
+  padding: 0.4rem 0.5rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+  font-size: var(--type-reading-small);
+  font-weight: 600;
+  color: var(--foreground);
+}
+.section-navigation li + li {
+  margin-top: 0.2rem;
+}
+.section-navigation a {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  font-size: var(--type-reading-small);
+  transition:
+    background-color var(--motion-hover) var(--ease-hover),
+    color var(--motion-hover) var(--ease-hover);
+}
+.section-navigation a[aria-current="location"] {
+  border-color: var(--active);
+  background: var(--active);
+  color: var(--active-foreground);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+.section-navigation a:focus-visible,
+.section-navigation-handle:focus-visible {
+  outline: 2px solid var(--brand-primary);
+  outline-offset: 3px;
+}
+.section-navigation a:active,
+.section-navigation-handle:active::before {
+  background: var(--active-tint-strong);
+  transition-duration: 100ms;
+}
+.section-navigation a[aria-current="location"]:active {
+  background: var(--active-hover);
+}
+@media (hover: hover) and (pointer: fine) {
+  .section-navigation a:hover,
+  .section-navigation-handle:hover::before {
+    background: var(--active-tint);
+    color: var(--active);
+  }
+  .section-navigation a[aria-current="location"]:hover {
+    background: var(--active-hover);
+    color: var(--active-foreground);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .header-brand-art img,
+  .header-brand-label > span,
+  .section-navigation,
+  .section-navigation-drawer,
+  .section-navigation a,
+  .section-navigation-handle,
+  .section-navigation-handle::before,
+  .section-navigation-handle .section-navigation-chevron {
+    transition: none;
+  }
+}
+@media (forced-colors: active) {
+  .section-navigation a:focus-visible,
+  .section-navigation-handle:focus-visible {
+    outline-color: Highlight;
+  }
+}
+
+@media (max-width: 639px) {
+  .section-navigation {
+    top: auto;
+    bottom: 1rem;
+    transform: translateX(12px);
+  }
+  .section-navigation[data-visible="true"] {
+    transform: translateX(0);
+  }
+  .section-navigation-drawer {
+    align-items: flex-end;
+  }
+  .section-navigation-handle {
+    min-height: 3.5rem;
+  }
+
+  body:has([data-analytics-context="MW"], [data-analytics-context="MC"])
+    .site-header
+    > div
+    > div {
+    flex-wrap: wrap;
+  }
+}

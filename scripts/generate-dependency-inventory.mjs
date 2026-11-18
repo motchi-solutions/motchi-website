@@ -1,0 +1,204 @@
+import { execFileSync } from "node:child_process";
+import { readFile, writeFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+import { format, resolveConfig } from "prettier";
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const lock = JSON.parse(
+  await readFile(path.join(root, "package-lock.json"), "utf8"),
+);
+
+let audit;
+try {
+  const output = execFileSync(
+    "npm",
+    [
+      "audit",
+      "--json",
+      "--include=dev",
+      "--include=optional",
+      "--include=peer",
+    ],
+    {
+      cwd: root,
+      encoding: "utf8",
+      maxBuffer: 16 * 1024 * 1024,
+      stdio: ["ignore", "pipe", "pipe"],
+    },
+  );
+  audit = JSON.parse(output);
+} catch (error) {
+  // npm exits nonzero for findings as well as network failures. Only a report with
+  // audit metadata counts as a completed audit.
+  try {
+    audit = JSON.parse(error.stdout?.toString() ?? "");
+  } catch {
+    /* Reported below. */
+  }
+}
+if (!audit?.metadata?.vulnerabilities)
+  throw new Error(
+    "npm audit did not produce a complete advisory report; the inventory was not updated.",
+  );
+
+const packages = new Map();
+for (const [location, data] of Object.entries(lock.packages)) {
+  if (!location.includes("node_modules/")) {
+    continue;
+  }
+  if (data.link || !data.version) continue;
+  const name = data.name ?? location.split("node_modules/").at(-1);
+  const key = `${name}@${data.version}`;
+  if (!packages.has(key))
+    packages.set(key, {
+      name,
+      version: data.version,
+    });
+}
+const today = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "America/Toronto",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+}).format(new Date());
+const rows = [...packages.values()];
+const direct = new Map();
+const ownerName = (location) => location || "root";
+for (const location of [""]) {
+  const manifest = lock.packages[location];
+  for (const [type, suffix] of [
+    ["dependencies", ""],
+    ["devDependencies", " (dev)"],
+    ["optionalDependencies", " (optional)"],
+    ["peerDependencies", " (peer)"],
+  ]) {
+    for (const [name, range] of Object.entries(manifest[type] ?? {})) {
+      const entry = direct.get(name) ?? { owners: [], ranges: new Set() };
+      entry.owners.push(`${ownerName(location)}${suffix}`);
+      entry.ranges.add(range);
+      direct.set(name, entry);
+    }
+  }
+}
+const dependencyPurposes = {
+  "@axe-core/playwright":
+    "WCAG accessibility scans in the browser tests (dev only); exact version. Its playwright-core peer is satisfied by the copy @playwright/test pins, so upgrade the two together.",
+  "@playwright/test":
+    "End-to-end, accessibility and responsive browser tests (dev only); runs the installed Google Chrome, so no browser download. Exact version.",
+  "@biomejs/biome":
+    "Repository linting; pinned tool version keeps local and CI rules aligned.",
+  "@floating-ui/react":
+    "Accessible viewport-aware InfoTip positioning and dismissal; retain the existing 0.27 API range.",
+  "@vercel/analytics":
+    "Cookie-free Vercel Web Analytics page views; rendered only on Vercel Production, with query strings and fragments stripped (src/lib/config/analytics.ts). No dependencies; pinned exactly.",
+  "@tailwindcss/postcss":
+    "Compiles Tailwind in Next.js; keep its major aligned with Tailwind 4.",
+  "@types/node":
+    "Node server/tooling types; aligned with the Node 26 runtime in .nvmrc.",
+  "@types/react":
+    "React component types; keep major 19 aligned with React and React DOM.",
+  "@types/react-dom":
+    "React DOM types; keep major 19 aligned with the React runtime and types.",
+  "libphonenumber-js":
+    "International phone parsing, formatting, and calling-code validation in shared contact fields; uses the smaller min entry.",
+  next: "App Router rendering, routing, metadata, and builds; exact pin, reviewed together with React.",
+  prettier:
+    "Repository formatting and generated dependency documentation; exact version stabilizes output.",
+  react:
+    "Server/client component runtime; exact pin, kept identical to React DOM.",
+  "react-dom":
+    "Browser hydration and DOM rendering; exact pin, kept identical to React.",
+  "react-icons":
+    "Shared Lucide icons for controls and status feedback; exact version preserves the approved icon API.",
+  "server-only":
+    "Build-time guard for trusted environment, metadata, and email modules; prevents accidental client imports.",
+  tailwindcss:
+    "Utility and token-based styling; retain major 4 with its PostCSS plugin.",
+  typescript:
+    "Strict TypeScript checking; exact pin keeps local and CI checks consistent.",
+};
+const counts = audit.metadata.vulnerabilities;
+const lines = [
+  "# Dependency inventory and audit",
+  "",
+  `Inventory refreshed and npm advisory audit run: **${today} (America/Toronto)**.`,
+  "",
+  "Direct dependency versions and runtime/tooling classification come from [package-lock.json](../package-lock.json). The lockfile records the complete transitive tree; this document lists only direct dependencies. Use the Node 26 runtime in `.nvmrc` (26.12.1) and npm 11 or newer. The manifest permits Node >=24.22.1 <27; tests use Node native TypeScript support.",
+  "",
+  `The audit covered the locked dependency tree (${audit.metadata.dependencies?.total ?? "unknown"} entries reported by npm, including optional packages). Results: **${counts.total} vulnerabilities** - ${counts.critical} critical, ${counts.high} high, ${counts.moderate} moderate, ${counts.low} low, and ${counts.info} informational. The scan includes transitive dependencies and is not a source-code security review.`,
+  "",
+];
+if (Object.keys(audit.vulnerabilities ?? {}).length) {
+  lines.push("## Reported advisories", "");
+  for (const [name, item] of Object.entries(audit.vulnerabilities)) {
+    const links = (item.via ?? [])
+      .filter(
+        (v) =>
+          typeof v === "object" &&
+          typeof v.url === "string" &&
+          v.url.startsWith("https://"),
+      )
+      .map((v) => `[advisory](${v.url})`);
+    lines.push(
+      `- **${name}** - ${item.severity}, ${item.isDirect ? "direct" : "transitive"}; affected range: \`${String(item.range).replaceAll("`", "")}\`${links.length ? `; ${links.join(", ")}` : ""}.`,
+    );
+  }
+  lines.push("");
+}
+lines.push(
+  "## Direct dependencies",
+  "",
+  "Runtime dependencies support the single Next.js application; owners marked `dev` are development tools.",
+  "",
+  "| Library | Used by | Purpose and notable constraints | Declared range | Locked version(s) |",
+  "| --- | --- | --- | --- | --- |",
+);
+for (const [name, info] of [...direct].sort(([a], [b]) => a.localeCompare(b))) {
+  const versions = rows.filter((item) => item.name === name);
+  const purpose = dependencyPurposes[name];
+  if (!purpose)
+    throw new Error(`Document the purpose and constraints for ${name}.`);
+  lines.push(
+    `| \`${name}\` | ${info.owners.map((owner) => `\`${owner}\``).join(", ")} | ${purpose} | ${[...info.ranges].map((range) => `\`${range.replaceAll("|", "\\|")}\``).join(", ")} | ${versions.map((item) => `\`${item.version}\``).join(", ") || "Not locked"} |`,
+  );
+}
+lines.push(
+  "",
+  "## Maintenance and security notes",
+  "",
+  "No unused direct dependency or deprecated direct API requiring replacement was identified in the source-import review. Existing Motchi controls cover the current micro-interactions; no Interior.dev source or dependencies are installed. Recheck usage and advisories when changing dependencies.",
+  "",
+  "The application pins Next 16 and React 19; review major upgrades together. Multiple PostCSS versions are transitive constraints, not separate applications. Keep server-only guards around trusted configuration and email code.",
+  "",
+);
+lines.push(
+  "",
+  ..."## Local diagram tooling\n\n[Stack Diagram](https://github.com/caru-ini/stack-diagram), MIT, is installed in the local Codex skills directory, outside the application dependency tree. Reviewed source: `1ed53e3e9525364ae5d82e0430f2bb3f7ef4c838`, path `skills/stack-diagram`. Install it with the standard skill installer at this pinned ref and repeat the review before execution. The repository does not require the skill to run or build.\n\nThe [application diagram](diagrams/application.html) uses the skill's geometry/template conventions, a bundled generic visitor SVG pictogram, and official Next.js, React, and Brevo logos embedded as data images, with the MIT notice embedded in the HTML. It uses system fonts; no bundled fonts or font packages are included. Its layout comes from the skill's `scripts/build.py` (standard-library Python with explicit local input, icon and output paths; no network, subprocesses, credentials, or uploads); geometry and logos are maintained by hand. Logo sources are [Next.js](https://nextjs.org/favicon.ico), [React](https://react.dev/images/brand/logo_dark.svg), and [Brevo](https://corp-backend.brevo.com/wp-content/uploads/2025/07/Brevo_logo.svg); brand marks remain their owners' trademarks. The finished HTML has no scripts or external asset requests.\n\nReviewed but unused: `fetch_icons.py` (public logo GETs; arbitrary explicit URLs and redirects need per-use review), `render_png.py` (Playwright/Chromium and a font-detection subprocess; passes `--no-sandbox`, so do not execute unchanged), and `share.py` (gallery requests and a local gallery key store). The diagram needs no Playwright or Python packages. Local browser verification uses an isolated temporary profile and blocks external page requests. The gallery helper remains disabled under [AGENT_SECURITY.md](AGENT_SECURITY.md#stack-diagram).\n\n## Repository agent skills\n\nSee [SKILLS.md](SKILLS.md) for installed skill purposes, modes, provenance, licenses, executable helpers, and network capabilities. Agent skills are outside the application dependency tree; their presence does not authorize execution or external access.".split(
+    "\n",
+  ),
+  "",
+);
+lines.push(
+  "",
+  "## Refreshing this document",
+  "",
+  "After dependency changes, update the root lockfile, then run:",
+  "",
+  "```bash",
+  "npm run dependencies:inventory",
+  "```",
+  "",
+  "The command runs `npm audit` including development, optional, and peer dependencies, and regenerates this direct-dependency inventory. It exits nonzero if the audit cannot complete or vulnerabilities are reported. Review advisory details and dependency changes before upgrading; the command does not install or upgrade packages.",
+  "",
+);
+const outputPath = path.join(root, "docs", "DEPENDENCIES.md");
+const formatterOptions = await resolveConfig(outputPath);
+await writeFile(
+  outputPath,
+  await format(lines.join("\n"), { ...formatterOptions, filepath: outputPath }),
+);
+console.log(
+  `Updated docs/DEPENDENCIES.md: ${direct.size} direct dependencies, ${counts.total} reported vulnerabilities.`,
+);
+if (counts.total) process.exitCode = 1;

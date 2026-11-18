@@ -1,0 +1,7 @@
+.skeleton {
+  background: var(
+    --skeleton-surface,
+    color-mix(in srgb, var(--charcoal) 8%, var(--cream))
+  );
+  border-radius: var(--radius-control);
+}

@@ -6,3 +6,7 @@ coverage/
 package-lock.json
 **/next-env.d.ts
 *.tsbuildinfo
+
+# Imported agent skills retain upstream formatting.
+.agents/
+.claude/

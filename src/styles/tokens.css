@@ -1,0 +1,1097 @@
+@import "./intro.css";
+@import "./responsive.css";
+@import "./interactions.css";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--brand-primary);
+  --color-secondary: var(--brand-secondary);
+  --color-accent: var(--brand-accent);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-surface: var(--surface);
+  --color-inverse: var(--inverse);
+  --font-sans: var(--font-motchi-sans), Arial, Helvetica, system-ui, sans-serif;
+  --font-mono:
+    var(--font-motchi-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-display: var(--font-motchi-serif), Georgia, "Times New Roman", serif;
+  --container-shell: 100rem;
+  --container-reading: 42rem;
+  --spacing-section: var(--space-section);
+  --text-hero: var(--type-display);
+  --text-hero--line-height: 1.04;
+  --text-section: var(--type-heading);
+  --text-section--line-height: 1.12;
+  --spacing-hero: var(--space-hero);
+  --spacing-content: var(--space-content);
+  --text-display: var(--type-display);
+  --text-display--line-height: 1.04;
+  --text-h1: clamp(2.5rem, 4.5vw, 4.75rem);
+  --text-h1--line-height: 1.08;
+  --text-h2: var(--type-heading);
+  --text-h2--line-height: 1.12;
+  --text-h3: clamp(1.25rem, 2vw, 1.5rem);
+  --text-h3--line-height: 1.3;
+  --text-sm: var(--type-reading-small, 0.875rem);
+  --text-sm--line-height: var(--type-reading-leading, calc(1.25 / 0.875));
+  --text-base: var(--type-reading-body, 1rem);
+  --text-base--line-height: var(--type-reading-leading, 1.5);
+  --text-lg: var(--type-reading-large, 1.125rem);
+  --text-lg--line-height: var(--type-reading-leading, calc(1.75 / 1.125));
+  --text-xl: var(--type-reading-xl, 1.25rem);
+  --text-2xl: var(--type-card-title, 1.5rem);
+  --text-3xl: var(--type-feature-title, 1.875rem);
+  --text-body-lg: var(--type-reading-large, 1.125rem);
+  --text-body-lg--line-height: 1.65;
+  --text-body: var(--type-reading-body, 1rem);
+  --text-body--line-height: 1.65;
+  --text-small: var(--type-reading-small, 0.9375rem);
+  --text-small--line-height: 1.5;
+  --text-eyebrow: 0.875rem;
+  --text-eyebrow--line-height: 1.5;
+  --text-button: 0.875rem;
+  --text-button--line-height: 1.5;
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1.5;
+}
+:root {
+  --space-section: clamp(3.5rem, 6vw, 6.5rem);
+  --space-hero: clamp(3rem, 6vw, 6rem);
+  --space-content: clamp(3rem, 5vw, 5rem);
+  --type-display: clamp(2.625rem, 5.5vw, 5.5rem);
+  --type-heading: clamp(2rem, 3.5vw, 3.5rem);
+  --type-caption: 0.75rem;
+  --gold: #d4af7c;
+  --burgundy: #5b0202;
+  --cream: #f4f0e6;
+  --charcoal: #171313;
+  --brand-primary: var(--burgundy);
+  --brand-secondary: var(--charcoal);
+  --brand-accent: var(--gold);
+  --background: var(--cream);
+  --foreground: var(--charcoal);
+  --inverse: var(--cream);
+  --muted: #514b45;
+  --placeholder: #8c8882;
+  --accent-ink: #805722;
+  --border: #d7cfc1;
+  --surface: #fcfaf5;
+  /* Active (selected/open) states: the brand's deepest hue as a fill, with
+     cream text and gold details, with light burgundy tints for hover and press. */
+  --active: var(--burgundy);
+  --active-foreground: var(--cream);
+  --active-detail: var(--gold);
+  --active-hover: color-mix(in srgb, var(--burgundy) 88%, var(--cream));
+  --active-tint: color-mix(in srgb, var(--burgundy) 5%, var(--surface));
+  --active-tint-strong: color-mix(in srgb, var(--burgundy) 11%, var(--surface));
+  --space-eyebrow: 1rem;
+  --space-copy: clamp(1rem, 2vw, 1.5rem);
+  --space-action: 1.5rem;
+  --space-layout: clamp(1.75rem, 4vw, 3rem);
+  --space-card: clamp(1.25rem, 2.5vw, 2rem);
+  --space-preview: 1.25rem;
+  --motion-toolkit: 800ms;
+  --capability-control-width: 9.5rem;
+  --space-section-heading: clamp(1.75rem, 3vw, 2.5rem);
+  --space-project: clamp(3rem, 6vw, 6rem);
+  --radius-control: 4px;
+  --radius-panel: 6px;
+  --motion-fast: 140ms;
+  --motion-base: 240ms;
+  --motion-menu: 280ms;
+  --motion-reveal: 600ms;
+  --motion-page-reveal: 560ms;
+  --motion-page-stagger: 60ms;
+  --ease-page-reveal: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-reveal: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --motion-slow: 750ms;
+  --motion-entrance: 640ms;
+  --motion-intro: 2600ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
+  --shadow-lift: 0 18px 45px -30px
+    color-mix(in srgb, var(--charcoal) 35%, transparent);
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  scrollbar-gutter: stable;
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+  /* Preserve platform momentum and elastic document boundaries. */
+  overscroll-behavior-y: auto;
+}
+body {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--font-sans);
+  background: var(--background);
+  color: var(--foreground);
+}
+::selection {
+  background: var(--brand-accent);
+  color: var(--charcoal);
+}
+:focus-visible {
+  outline: 3px solid var(--brand-primary);
+  outline-offset: 5px;
+}
+.bg-primary :focus-visible,
+.bg-secondary :focus-visible {
+  outline-color: var(--brand-accent);
+}
+input,
+select,
+textarea {
+  font: inherit;
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--placeholder);
+  opacity: 1;
+}
+textarea {
+  resize: vertical;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    /* biome-ignore lint/complexity/noImportantStyles: Reduced-motion preferences override every enhancement. */
+    animation: none !important;
+    /* biome-ignore lint/complexity/noImportantStyles: Reduced-motion preferences override every enhancement. */
+    transition: none !important;
+  }
+}
+
+[data-branch="consulting"] {
+  --background: #f0ebdf;
+  --surface: #f8f5ed;
+}
+[data-branch="websites"] {
+  --background: #f8f5ee;
+  --surface: #ffffff;
+}
+
+/* Shared interaction and motion primitives; content is visible without enhancement. */
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+p {
+  text-wrap: pretty;
+}
+.eyebrow::before,
+.eyebrow::after {
+  content: "";
+  width: 1.5rem;
+  height: 1px;
+  flex-shrink: 0;
+  background: currentColor;
+}
+.eyebrow::after {
+  display: none;
+}
+@media (max-width: 1023px) {
+  .solutions-hero-intro .eyebrow::after,
+  .family-hero-intro .eyebrow::after,
+  .section-heading .eyebrow::after {
+    display: block;
+  }
+}
+.button-link,
+.branch-link,
+.media-image {
+  transition:
+    background-color var(--motion-base) var(--ease-standard),
+    border-color var(--motion-base) var(--ease-standard),
+    color var(--motion-base) var(--ease-standard),
+    transform var(--motion-base) var(--ease-standard),
+    box-shadow var(--motion-base) var(--ease-standard);
+}
+.interaction-arrow {
+  transition: transform var(--motion-base) var(--ease-emphasized);
+}
+.animated-link > span:first-child,
+.nav-link {
+  position: relative;
+}
+.animated-link > span:first-child::after,
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0.15rem;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--motion-hover) var(--ease-hover);
+}
+.animated-link[data-underline="always"] > span:first-child::after {
+  transform: scaleX(1);
+}
+.animated-link:is(:hover, :focus-visible) > span:first-child::after,
+.nav-link:is(:hover, :focus-visible)::after,
+.nav-link[aria-current]::after {
+  transform: scaleX(1);
+}
+.site-header {
+  transition:
+    box-shadow var(--motion-base) var(--ease-standard),
+    background-color var(--motion-base) var(--ease-standard);
+}
+.site-header[data-scrolled="true"] {
+  box-shadow: 0 8px 24px -20px var(--charcoal);
+  background: var(--surface);
+}
+.mobile-menu summary::-webkit-details-marker {
+  display: none;
+}
+.hamburger {
+  position: relative;
+  display: block;
+  width: 24px;
+  height: 20px;
+}
+.hamburger span {
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 24px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+  transition:
+    transform var(--motion-hover) var(--ease-hover),
+    opacity var(--motion-hover) var(--ease-hover);
+}
+.hamburger span:nth-child(2) {
+  top: 9px;
+}
+.hamburger span:nth-child(3) {
+  top: 16px;
+}
+.mobile-menu:is([data-expanded="true"], [open]:not([data-animated="true"]))
+  .hamburger
+  span:first-child {
+  transform: translateY(7px) rotate(45deg);
+}
+.mobile-menu:is([data-expanded="true"], [open]:not([data-animated="true"]))
+  .hamburger
+  span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0.5);
+}
+.mobile-menu:is([data-expanded="true"], [open]:not([data-animated="true"]))
+  .hamburger
+  span:last-child {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.mobile-panel {
+  overscroll-behavior: contain;
+  max-height: calc(100dvh - 8rem);
+  overflow-y: auto;
+  transform-origin: top right;
+  box-shadow: 0 16px 40px -26px var(--charcoal);
+  position: fixed;
+  top: 6rem;
+  right: max(1.25rem, env(safe-area-inset-right));
+  margin-top: 0;
+  z-index: 40;
+  border-radius: var(--radius-panel);
+}
+.mobile-panel {
+  width: min(30rem, calc(100vw - 2rem));
+  right: max(1rem, env(safe-area-inset-right));
+  top: 6.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: 0 16px 40px -24px var(--charcoal);
+}
+.mobile-menu[open]:not([data-animated="true"]) .mobile-panel {
+  animation: mobile-menu-reveal var(--motion-menu) var(--ease-reveal) both;
+}
+.mobile-panel .nav-link::after {
+  left: 0.75rem;
+  width: calc(100% - 1.5rem);
+}
+[data-reveal] {
+  transition:
+    opacity var(--motion-page-reveal) var(--ease-page-reveal),
+    transform var(--motion-page-reveal) var(--ease-page-reveal);
+}
+[data-reveal="pending"] {
+  opacity: 0;
+  transform: translateY(6px);
+}
+[data-reveal="visible"] {
+  opacity: 1;
+  transform: none;
+}
+.path-trace {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+[data-reveal="visible"] .path-trace {
+  animation: path-trace var(--motion-slow) var(--ease-standard) both;
+}
+.branch-label {
+  color: var(--brand-primary);
+  border-left: 2px solid var(--brand-accent);
+  padding-left: 0.5rem;
+}
+:where(.button-link, .nav-contact) > :where(*) {
+  pointer-events: none;
+  cursor: inherit;
+}
+.branch-link:hover {
+  border-color: var(--brand-primary);
+  box-shadow: var(--shadow-lift);
+}
+.branch-link:focus-within {
+  border-color: var(--brand-primary);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .branch-link:hover {
+    transform: translateY(-3px);
+  }
+}
+.project-stage {
+  background: var(--project-background, var(--surface));
+  color: var(--project-foreground, var(--foreground));
+}
+.lifecycle {
+  position: relative;
+}
+.lifecycle::before {
+  content: "";
+  position: absolute;
+  left: 1.125rem;
+  top: 1.5rem;
+  bottom: 2.5rem;
+  width: 1px;
+  background: var(--border);
+}
+.cta-section::before {
+  content: "";
+  position: absolute;
+  top: -40%;
+  right: -8%;
+  width: 45%;
+  height: 180%;
+  border: 1px solid color-mix(in srgb, var(--gold) 18%, transparent);
+  transform: rotate(28deg);
+  pointer-events: none;
+}
+@keyframes path-trace {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal="pending"] {
+    opacity: 1;
+    transform: none;
+  }
+  .intro-experience {
+    display: none;
+  }
+}
+
+/* html scroll-padding already clears the sticky header. Anchored sections
+   skip their own top padding so the heading lands just below the header. */
+[id] {
+  scroll-margin-top: 1rem;
+}
+main section[id] {
+  scroll-margin-top: calc(
+    1.5rem - var(--anchor-section-padding, var(--space-section))
+  );
+}
+
+/* Route content settles immediately; the brand intermission exists only while a route loads. */
+@keyframes page-arrive {
+  from {
+    opacity: 0.85;
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .page-arrival {
+    animation: page-arrive var(--motion-slow) var(--ease-reveal) both;
+  }
+}
+
+@keyframes mobile-menu-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.mobile-panel .nav-link {
+  transition:
+    background-color var(--motion-base) var(--ease-standard),
+    color var(--motion-base) var(--ease-standard);
+}
+.mobile-panel .nav-link[aria-current] {
+  background: var(--background);
+  color: var(--brand-primary);
+  font-weight: 600;
+}
+.mobile-panel .nav-link:focus-visible {
+  background: var(--active-tint);
+  color: var(--active);
+}
+@media (hover: hover) and (pointer: fine) {
+  .mobile-panel .nav-link:hover {
+    background: var(--active-tint);
+    color: var(--active);
+  }
+}
+.mobile-panel .nav-link:active {
+  background: var(--active-tint-strong);
+  transition-duration: 100ms;
+}
+
+/* The disclosure is an overlay: opening never changes header or document geometry. */
+.mobile-menu {
+  height: 3rem;
+  flex-shrink: 0;
+}
+
+/* Shared soft corners and responsive grouping preserve the family geometry. */
+.button-link {
+  border-radius: var(--radius-control);
+}
+.media-frame,
+.branch-link,
+#contact-form {
+  border-radius: var(--radius-panel);
+}
+.footer-group {
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+}
+@media (min-width: 640px) {
+  .footer-group {
+    border-top: 0;
+    padding-top: 0;
+  }
+}
+
+.interaction-arrow[data-direction="right"] {
+  --arrow-x: 3px;
+  --arrow-y: 0px;
+}
+.interaction-arrow[data-direction="up-right"] {
+  --arrow-x: 3px;
+  --arrow-y: -3px;
+}
+.interaction-arrow[data-direction="left"] {
+  --arrow-x: -3px;
+  --arrow-y: 0px;
+}
+
+/* Give the stacked hero a centred introduction and a distinct exploration area. */
+@media (max-width: 1023px) {
+  .solutions-hero-intro {
+    width: 100%;
+    max-width: 42rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+  .solutions-hero-intro .eyebrow {
+    justify-content: center;
+  }
+  .solutions-hero-intro > p:not(.eyebrow) {
+    margin-inline: auto;
+    max-width: 34rem;
+    text-wrap: pretty;
+  }
+}
+
+/* Keep the outgoing scene below the copy and links while it dissolves. */
+.solutions-hero-intro {
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  .service-card-reveal:nth-child(2)[data-reveal="visible"] {
+    transition-delay: 140ms;
+  }
+}
+
+.site-footer {
+  padding-bottom: clamp(1rem, 2vw, 1.5rem);
+}
+
+@keyframes page-introduction-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .page-arrival[data-inner-page="true"] {
+    animation: none;
+  }
+  .page-arrival[data-inner-page="true"] .page-introduction > * {
+    animation: page-introduction-arrive var(--motion-slow) var(--ease-reveal)
+      both;
+  }
+  .page-arrival[data-inner-page="true"] .page-introduction > :nth-child(2) {
+    animation-delay: 90ms;
+  }
+  .page-arrival[data-inner-page="true"] .page-introduction > :nth-child(n + 3) {
+    animation-delay: 180ms;
+  }
+  .page-arrival[data-inner-page="true"] #contact-form {
+    animation: page-introduction-arrive var(--motion-slow) var(--ease-reveal)
+      180ms both;
+  }
+}
+
+/* The sister sites use the same entry pacing and responsive hierarchy. */
+@media (prefers-reduced-motion: no-preference) {
+  .family-hero-intro > * {
+    animation: page-introduction-arrive var(--motion-entrance)
+      var(--ease-reveal) both;
+  }
+  .family-hero-intro > :nth-child(2) {
+    animation-delay: 100ms;
+  }
+  .family-hero-intro > :nth-child(3) {
+    animation-delay: 200ms;
+  }
+  .family-hero-intro > :nth-child(4) {
+    animation-delay: 300ms;
+  }
+  .family-hero-secondary {
+    animation: page-introduction-arrive var(--motion-entrance)
+      var(--ease-reveal) 300ms both;
+  }
+}
+@media (max-width: 1023px) {
+  .family-hero-intro {
+    width: 100%;
+    max-width: 42rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+  .family-hero-intro .eyebrow {
+    justify-content: center;
+  }
+  .family-hero-intro > p {
+    margin-inline: auto;
+    text-wrap: pretty;
+  }
+  .family-hero-secondary {
+    padding: 2rem 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--border);
+  }
+}
+
+/* Active navigation uses colour, weight, and a persistent location cue. */
+.site-header .nav-link[aria-current] {
+  color: var(--brand-primary);
+  font-weight: 600;
+}
+.site-header .nav-link[aria-current]::after {
+  height: 2px;
+}
+
+/* Centre stacked introductions, while paragraphs retain a natural reading edge. */
+@media (max-width: 1023px) {
+  .section-heading {
+    width: 100%;
+    max-width: 42rem;
+    margin-inline: auto;
+  }
+  .section-heading h2 {
+    text-align: center;
+    text-wrap: balance;
+  }
+  .section-heading .eyebrow {
+    justify-content: center;
+  }
+  .section-heading > p {
+    margin-inline: auto;
+    max-width: 34rem;
+  }
+}
+
+/* Tablet heroes use the available width; line breaks are reserved for split layouts. */
+@media (max-width: 1023px) {
+  .solutions-hero-intro,
+  .family-hero-intro {
+    max-width: 48rem;
+  }
+  .solutions-hero-intro h1,
+  .family-hero-intro h1 {
+    width: 100%;
+    max-width: none;
+    font-size: clamp(2.25rem, 6vw, 4.5rem);
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+  .solutions-hero-intro > p:not(.eyebrow),
+  .family-hero-intro > p:not(.eyebrow) {
+    width: 100%;
+    max-width: 42rem;
+    margin-inline: auto;
+    text-wrap: pretty;
+  }
+}
+
+/* Authentic project screenshots provide the visual identity, without device chrome. */
+.project-composition {
+  position: relative;
+  padding: 0;
+}
+.project-composition:has(.project-mobile) {
+  padding-right: 8%;
+  padding-bottom: 8%;
+}
+.project-desktop {
+  box-shadow: 0 12px 28px -20px var(--charcoal);
+}
+.project-mobile {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 25%;
+  max-width: 10rem;
+  box-shadow: 0 12px 24px -16px var(--charcoal);
+}
+@media (min-width: 640px) {
+  .project-mobile {
+    width: 23%;
+    max-width: 11rem;
+  }
+}
+
+.hero-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.125rem;
+  line-height: 1.25;
+}
+.hero-brand-parent {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+.hero-brand-branch {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+@media (max-width: 1023px) {
+  .hero-brand {
+    align-items: center;
+  }
+}
+
+.interaction-arrow[data-direction="up"] {
+  --arrow-x: 0px;
+  --arrow-y: -3px;
+}
+
+.button-light:is(:hover, :focus-visible) {
+  box-shadow:
+    0 0 0 2px var(--brand-primary),
+    0 0 0 4px var(--inverse);
+}
+
+/* Shared rhythm; project imagery and branch content supply the variation. */
+.section-heading {
+  margin-bottom: var(--space-section-heading);
+}
+.project-list {
+  display: grid;
+  gap: var(--space-project);
+}
+.project-list > * + * {
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-project);
+}
+.project-description {
+  min-width: 0;
+}
+.button-link:active {
+  transform: translateY(0) scale(0.975);
+  transition-duration: 80ms;
+}
+a:is(:hover, :focus-visible) > .interaction-arrow,
+button:is(:hover, :focus-visible) > .interaction-arrow {
+  transform: translate(var(--arrow-x, 3px), var(--arrow-y, 0px));
+}
+[data-branch="consulting"] {
+  --motion-page-reveal: 420ms;
+  --motion-page-stagger: 40ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button-link:active,
+  a:is(:hover, :focus-visible) > .interaction-arrow,
+  button:is(:hover, :focus-visible) > .interaction-arrow {
+    transform: none;
+  }
+}
+
+.solutions-hero-intro > p:not(.hero-brand),
+.family-hero-intro > p:not(.hero-brand) {
+  margin-top: var(--space-copy);
+}
+.button-link {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  transition:
+    transform 360ms var(--ease-emphasized),
+    box-shadow 360ms var(--ease-emphasized),
+    background-color 240ms var(--ease-standard),
+    border-color 240ms var(--ease-standard),
+    color 240ms var(--ease-standard);
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .button-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px -8px
+      color-mix(in srgb, var(--charcoal) 45%, transparent);
+  }
+  .button-link:active {
+    transform: translateY(0) scale(0.975);
+    box-shadow: none;
+  }
+}
+
+/* The menu is a comfortable navigation surface, aligned with the header. */
+.mobile-menu summary {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+}
+.mobile-menu summary:focus-visible {
+  outline: 2px solid var(--brand-primary);
+  outline-offset: 3px;
+}
+
+.mobile-nav-heading {
+  margin: 0 0 0.5rem;
+  padding: 0.25rem 0.75rem 0.875rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.mobile-panel ul {
+  display: grid;
+  gap: 0.25rem;
+}
+.mobile-panel .nav-link {
+  min-height: 3.25rem;
+  padding: 0.75rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  font-size: 1.0625rem;
+  line-height: 1.4;
+  transition:
+    background-color 240ms ease,
+    color 240ms ease;
+}
+.mobile-panel .nav-link::after {
+  display: none;
+}
+.mobile-panel .nav-link[aria-current]:not(.mobile-contact-cta) {
+  border-color: var(--border);
+  background: color-mix(in srgb, var(--brand-primary) 6%, var(--surface));
+}
+.mobile-nav-arrow {
+  width: 1rem;
+  height: 1rem;
+  color: var(--muted);
+}
+
+.menu-trigger-label {
+  display: grid;
+  width: 2.75rem;
+  text-align: center;
+}
+.menu-trigger-label > span {
+  grid-area: 1 / 1;
+  opacity: 0;
+}
+.menu-trigger-label > [data-visible="true"] {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .menu-trigger-label > span {
+    transition: opacity 180ms ease-in-out;
+  }
+}
+
+/* Proximity: copy stays with its heading; the next content group gets more air.
+   Split layouts own this gap once, rather than adding a heading margin too. */
+.eyebrow,
+.hero-brand,
+.error-eyebrow {
+  margin-bottom: var(--space-eyebrow);
+}
+.section-introduction > h1 + p,
+.section-introduction > h2 + p,
+.section-introduction > h3 + p {
+  margin-top: var(--space-copy);
+}
+.section-layout {
+  row-gap: var(--space-section-heading);
+  column-gap: var(--space-layout);
+}
+.section-cards {
+  gap: var(--space-card);
+}
+.content-action {
+  margin-top: var(--space-action);
+}
+.section-action {
+  margin-top: var(--space-section-heading);
+}
+.privacy-content {
+  margin-top: var(--space-section-heading);
+  display: grid;
+  gap: var(--space-section-heading);
+}
+
+/* Shared, calm recovery composition for missing routes on every branch. */
+.not-found-layout {
+  display: grid;
+  align-items: center;
+  gap: clamp(2rem, 5vw, 5rem);
+  min-height: min(42rem, 75svh);
+  padding-block: var(--spacing-section);
+}
+.not-found-copy {
+  position: relative;
+  z-index: 1;
+}
+.not-found-copy > :where(p) {
+  max-width: 42ch;
+  margin-top: var(--space-copy);
+}
+.not-found-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: var(--space-action);
+}
+.not-found-art {
+  color: var(--gold);
+  width: 100%;
+  max-width: 30rem;
+  justify-self: center;
+}
+@media (min-width: 768px) {
+  .not-found-layout {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  }
+}
+@media (max-width: 767px) {
+  .not-found-art {
+    order: -1;
+    max-width: 15rem;
+  }
+  .not-found-layout {
+    gap: 1.5rem;
+  }
+}
+
+/* Small visual icon, comfortable hit target, and viewport-constrained help. */
+:root button.info-tip-trigger {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
+  min-height: 2rem;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  text-decoration: none;
+  vertical-align: middle;
+}
+.info-tip-positioner {
+  z-index: 100;
+  width: max-content;
+  max-width: min(18rem, calc(100vw - 24px));
+}
+.info-tip-content {
+  max-height: inherit;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+  border: 1px solid var(--gold);
+  border-radius: var(--radius-panel);
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.6;
+  box-shadow: 0 8px 24px -12px #17131338;
+}
+@media (hover: hover) and (pointer: fine) {
+  :root button.info-tip-trigger:hover {
+    color: var(--brand-primary);
+    background: var(--active-tint);
+  }
+}
+@media (pointer: coarse) {
+  :root button.info-tip-trigger {
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
+  }
+}
+
+:root .required-mark {
+  color: var(--burgundy);
+  font-size: 1em;
+  font-weight: 700;
+}
+.required-notice {
+  color: var(--muted);
+  font-size: var(--type-reading-small, 0.875rem);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+.info-tip-trigger > svg {
+  display: block;
+}
+
+/* Shared contact controls stay subordinate to questions at every viewport size. */
+#contact-form select {
+  font-size: var(--form-option-size);
+}
+.form-error-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: 0.875rem 1rem;
+  border: 1px solid #5b0202;
+  border-radius: 0.375rem;
+  background: #f9ede8;
+  color: #5b0202;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+.form-error-notice::before {
+  content: "!";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.0625rem;
+  border-radius: 50%;
+  background: #5b0202;
+  color: #f4f0e6;
+  font-weight: 700;
+}
+@media (forced-colors: active) {
+  .form-error-notice {
+    border-color: CanvasText;
+  }
+}
+
+/* Native mobile selects stay at 16px to avoid automatic focus zoom. */
+@media (max-width: 1023px) {
+  #contact-form select {
+    font-size: 1rem;
+  }
+}
+
+/* Branch composition shares the existing rhythm while keeping Solutions density local. */
+:is([data-analytics-context="MW"], [data-analytics-context="MC"]) {
+  --space-section: clamp(2.5rem, 4vw, 4rem);
+}
+@media (min-width: 1024px) {
+  :is([data-branch="websites"], [data-branch="consulting"])
+    .section-layout.lg\:grid-cols-2 {
+    grid-template-columns: minmax(0, 0.38fr) minmax(0, 0.62fr);
+  }
+}
+
+/* Short service introductions use the section width; body copy has its own reading limits. */
+.service-section-heading {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+}
+.service-section-heading h2 {
+  text-align: left;
+}
+.service-section-heading.section-introduction > p {
+  max-width: none;
+  margin-top: 1rem;
+  margin-inline: 0;
+  font-size: var(--type-reading-body);
+  line-height: var(--type-reading-leading);
+}
+
+/* Standalone numbers (step and index numbers, counters) share one monospace
+   face so they line up and read the same everywhere. Digits inside sentences
+   and prices stay in the text face. */
+.numeral {
+  font-family: var(--font-mono);
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+/* Short windows (200%+ browser zoom on a laptop, phones in landscape): sticky
+   bars would cover much of the content, so they scroll away instead
+   (WCAG 1.4.10 Reflow). */
+@media (max-height: 540px) {
+  .site-header {
+    position: relative;
+  }
+  html {
+    scroll-padding-top: 1rem;
+  }
+}

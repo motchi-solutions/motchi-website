@@ -1,0 +1,70 @@
+.prose > p + p {
+  margin-top: var(--space-copy);
+}
+.prose > p + ul,
+.prose > p + dl {
+  margin-top: var(--space-copy);
+}
+.points {
+  counter-reset: purpose-point;
+  display: grid;
+  gap: var(--space-related);
+  max-width: 38rem;
+  padding: 0;
+}
+.point {
+  position: relative;
+  padding-left: 2rem;
+}
+.point dt {
+  counter-increment: purpose-point;
+  line-height: 1.25;
+}
+.point dt::before {
+  position: absolute;
+  top: -0.1rem;
+  left: 0;
+  display: grid;
+  width: 1.25rem;
+  height: 1.25rem;
+  place-items: center;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+  content: counter(purpose-point, decimal-leading-zero);
+}
+.point dd {
+  margin-top: 0.5rem;
+  line-height: 1.6;
+}
+.prose > a {
+  min-height: 2.75rem;
+  margin-top: var(--space-action);
+}
+
+.purposeGrid {
+  display: grid;
+  gap: var(--space-card);
+}
+.purposeCard {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: var(--space-inset);
+}
+.purposeCard h2 {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  line-height: 1.15;
+  text-wrap: pretty;
+}
+.purposeCard .prose {
+  margin-top: var(--space-copy);
+}
+@media (min-width: 768px) {
+  .purposeGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+  }
+}

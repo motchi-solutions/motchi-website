@@ -1,6 +1,6 @@
 # Dependency inventory and audit
 
-Inventory refreshed and npm advisory audit run: **2026-11-18 (America/Toronto)**.
+Inventory refreshed and npm advisory audit run: **2026-11-19 (America/Toronto)**.
 
 Direct dependency versions and runtime/tooling classification come from [package-lock.json](../package-lock.json). The lockfile records the complete transitive tree; this document lists only direct dependencies. Use the Node 26 runtime in `.nvmrc` (26.12.1) and npm 11 or newer. The manifest permits Node >=24.22.1 <27; tests use Node native TypeScript support.
 
@@ -36,6 +36,10 @@ Runtime dependencies support the single Next.js application; owners marked `dev`
 No unused direct dependency or deprecated direct API requiring replacement was identified in the source-import review. Existing Motchi controls cover the current micro-interactions; no Interior.dev source or dependencies are installed. Recheck usage and advisories when changing dependencies.
 
 The application pins Next 16 and React 19; review major upgrades together. Multiple PostCSS versions are transitive constraints, not separate applications. Keep server-only guards around trusted configuration and email code.
+
+## Bundled font files
+
+Social preview images (`src/lib/og/social-image.tsx`) render with static Source Sans 3 Medium and Semibold TTFs in `src/lib/og/fonts`, because next/og needs TTF/OTF data and cannot use the site's next/font web fonts. They are the official release files from [adobe-fonts/source-sans](https://github.com/adobe-fonts/source-sans) (`release` branch, `TTF/`), licensed under the SIL Open Font License 1.1 (free for commercial use; the fonts may not be sold on their own). The license is kept verbatim in `src/lib/og/fonts/OFL.md`. They are image-rendering assets only, not npm packages.
 
 ## Local diagram tooling
 

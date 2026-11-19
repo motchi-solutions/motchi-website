@@ -10,3 +10,6 @@ package-lock.json
 # Imported agent skills retain upstream formatting.
 .agents/
 .claude/
+
+# Third-party license text stays verbatim.
+src/lib/og/fonts/

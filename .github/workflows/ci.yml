@@ -1,9 +1,12 @@
 name: CI
+# Pull requests run the required checks ("quality", "browser") on the merge
+# result. Pushes run only on main, to verify what was merged. A push to a PR
+# branch would otherwise run every job a second time on the same commit.
 on:
   pull_request:
     branches: [main, develop]
   push:
-    branches: [main, develop]
+    branches: [main]
 permissions:
   contents: read
 concurrency:

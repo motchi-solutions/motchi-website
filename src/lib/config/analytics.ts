@@ -12,9 +12,27 @@ export function analyticsEnabled(
   return environment === "production";
 }
 
-/** Keeps only the page path. Query strings and fragments can carry contact
-    results and references (?status=...&ref=...), so they are never sent. */
+/** Campaign tags kept for source tracking, such as client-site footer links
+    (utm_source=<client>&utm_medium=referral&utm_campaign=client-footer). */
+export const campaignParams = [
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_content",
+  "utm_term",
+] as const;
+
+/** Keeps the page path and any campaign tags. Every other query parameter and
+    the fragment are dropped, because they can carry contact results and
+    references (?status=...&ref=...). Tag values are trimmed and capped at 64
+    characters so they cannot smuggle in longer data. */
 export function anonymousPageUrl(url: string): string {
   const parsed = new URL(url);
-  return `${parsed.origin}${parsed.pathname}`;
+  const kept = new URLSearchParams();
+  for (const key of campaignParams) {
+    const value = parsed.searchParams.get(key)?.trim();
+    if (value) kept.set(key, value.slice(0, 64));
+  }
+  const query = kept.toString();
+  return `${parsed.origin}${parsed.pathname}${query ? `?${query}` : ""}`;
 }

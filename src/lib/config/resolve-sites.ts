@@ -1,7 +1,7 @@
 import { sites, type Sites } from "./sites.ts";
 
 export type RuntimeMode = "production" | "development" | "test";
-export type SiteOverrides = { SOLUTIONS_URL?: string };
+export type SiteOverrides = { SITE_URL?: string };
 export class ConfigurationError extends Error {
   readonly category = "CONFIGURATION_ERROR";
   readonly variables: readonly string[];
@@ -26,7 +26,7 @@ export function resolveSites(
   overrides: SiteOverrides = {},
 ): Sites {
   const input =
-    overrides.SOLUTIONS_URL?.trim() ||
+    overrides.SITE_URL?.trim() ||
     (mode === "development" ? sites.solutions.localUrl : sites.solutions.url);
   let origin: string;
   try {
@@ -44,7 +44,7 @@ export function resolveSites(
       throw new Error("Invalid site origin");
     origin = url.origin;
   } catch {
-    throw new ConfigurationError(["SOLUTIONS_URL"]);
+    throw new ConfigurationError(["SITE_URL"]);
   }
   return Object.fromEntries(
     Object.entries(sites).map(([branch, site]) => [

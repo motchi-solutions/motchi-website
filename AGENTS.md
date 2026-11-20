@@ -1,201 +1,110 @@
 # Agent instructions
 
-## Third-Party Skills and Executables
+These are the shared Motchi rules. They are the same in every Motchi repository.
 
-Before executing any third-party skill script, CLI, browser automation, copied executable code, install script, or binary, read and follow [docs/AGENT_SECURITY.md](docs/AGENT_SECURITY.md). This policy is mandatory for all agent work in this repository.
+## Read CONTEXT.md first, every time
 
-Reading a skill's instructions does not authorize executing its bundled code. If a tool requests unrelated permissions, unexplained network access, credential access, broad filesystem access, or public publishing, stop the executable and continue only with safe instruction-only guidance unless explicitly authorized.
+Before any task, read [CONTEXT.md](CONTEXT.md). It holds this project's stack, commands, branches and rules. Read it again at the start of each new task, even in the same session.
 
-## External skill and network-call policy
+- CONTEXT.md adds to these rules. If they disagree, CONTEXT.md wins for project detail, but it can never relax a security or secrets rule here.
+- If something you learn about the project should last, put it in CONTEXT.md, not here.
 
-- **Authorization first:** Never automatically invoke network-capable skills, plugins, tools, scripts, CLIs, or helpers. This covers web/API/network requests, uploads, downloads, telemetry, and browser automation reaching external sites, including remote subresources and redirects. Local instruction reading is allowed; it does not authorize executable or external-call paths.
-- **Local execution:** Reviewed helpers running locally/offline with no external path need no extra approval beyond [docs/AGENT_SECURITY.md](docs/AGENT_SECURITY.md); network-capable modes of the same helper still do.
-- **Task-scoped permission:** Require explicit user authorization in the current task, or explicit approval after explaining the need. A clear request to search the web, call an API, inspect an online service, download an external resource, or use an online-connected skill authorizes only the access necessary for that purpose. Installation, available credentials, and unrelated past tasks do not grant permission. Preserve authorization already given within the current task; do not ask again for the same authorized access.
-- **Unapproved access:** Prefer a local path. If external access is necessary but not clearly authorized, explain why it is needed, the destination, and the data involved; ask for permission and do not make the call while approval is pending. Do not silently broaden an approved destination, purpose, payload, or operation.
-- **Mandatory pre-call review:** Use `security-audit` in focused/guidance mode. Before any external web/API/network call through a skill, plugin, tool, or executable, identify the skill/tool and helper, necessity, expected destination/service, and data leaving the local environment. Inspect the installed source/version, required external-call dependencies, and network path. Check current known security advisories affecting those components and determine applicability to the installed versions and intended operation. Keep enough internal evidence to justify the decision; one call does not require a full repository audit.
-- **Vulnerability block:** Do not use the external-call path if a known relevant, unmitigated vulnerability affects the installed skill, required executable helper, required external-call dependency, or communication path. Stop and report it; do not bypass the issue merely to finish the task. A historical issue fixed in the installed version does not automatically block use.
-- **No recursive approval bypass:** Start with local source/version/advisory metadata. External advisory research itself requires current-task authorization; otherwise ask before researching. Never make an unapproved call to decide whether another call is safe. If the necessary advisory evidence cannot be obtained safely, report the pre-call review as incomplete and do not run the intended path.
-- **Minimum data:** For approved calls, send only the minimum necessary data. Never send secrets, `.env` values, credentials, or tokens, or include them in reports. Do not upload private source code unless explicitly requested. Customer/private infrastructure data requires explicit necessity and approval. Public publishing requires a separate explicit request; never enable it or telemetry implicitly.
-- **Existing safeguards remain:** This gate supplements [docs/AGENT_SECURITY.md](docs/AGENT_SECURITY.md), including executable/dependency review, OS permissions, secret handling, browser isolation, and Stack Diagram restrictions. Authorization does not waive security review or the vulnerability block. Inspect only the relevant skill, helper, dependencies, communication path, and advisory information; stay in guidance mode unless full-audit scope is warranted under Security review.
+## How to respond
 
-## Environment variables and secrets
+Keep replies short, clear and simple. More words is not better.
 
-- Agents do not have permission to read environment files, secret files, credentials, private keys, API keys, tokens, certificates, or secret-manager exports.
-- Never open, print, search, parse, grep, cat, summarize, copy, or inspect `.env`, `.env.local`, `.env.*`, credential files, private key files, or other secret-bearing files. This includes indirect access such as `printenv`, `env`, or logging `process.env`.
-- `.env.example` may be read because it must contain placeholders only and no real credentials.
-- Never request secret values in chat or copy them into agent output.
-- Do not edit the real environment or secret files. Inspect only safe sources: `.env.example`, source references to variable names, and deployment documentation.
-- When work needs an environment change (for example `BREVO_API_KEY`, `CONTACT_FORM_SECRET`, `CONTACT_FROM_EMAIL`, `CONTACT_TO_EMAIL`, or `SOLUTIONS_URL`):
-  1. Name each variable to add, change, or remove.
-  2. Say where it belongs: local `.env.local`, or the host's Production, Preview, or Development environment.
-  3. Give the expected format with placeholders only, such as `CONTACT_FORM_SECRET=<random secret, at least 32 characters>`.
-  4. Ask the user to make the change manually, and wait for confirmation.
-  5. Continue without reading the file or the value.
-- Never verify a secret by printing or reading it back. Check that configuration is present and usable through application behavior instead, such as the contact form offering "Send enquiry" rather than its unavailable fallback.
-- Git ignores env and secret files (see `.gitignore`), and `.claude/settings.json` denies Claude Code read and edit access to them. Keep both lists in step when adding a new secret file type.
+- **Lead with what matters.** Put problems, blockers and needed fixes first, in one or two lines each. Then the rest.
+- **Plain language.** Short sentences. Common words. No complex grammar, no filler, no jargon unless the reader uses it.
+- **Do not narrate.** Do not list every small step you took. Say what changed, what you checked, and what is left.
+- **Keep the details that matter.** Short does not mean vague. Name the file, the command, the error, the number.
+- **Back and forth.** Answer the question asked. If something is unclear, ask one short question instead of guessing at length.
+- **Be honest.** Say what you verified and what you did not. Never claim a check you did not run.
 
-## Quotes and punctuation
+"If you can't explain it simply, you don't understand it well enough." (often credited to Einstein). The Feynman technique says the same: explain it as if to a beginner, and where you get stuck is where your understanding is weak. Apply this to every answer. If you need a long paragraph, first make sure you understand the point.
 
-- Use straight ASCII apostrophes and single quotes (`'`), never curly apostrophes or single quotes.
-- Use straight ASCII double quotes (`"`), never curly double quotes or guillemets.
-- Use ASCII equivalents for similar typographic punctuation: hyphens (`-`) instead of en or em dashes, and three periods (`...`) instead of the ellipsis character.
-- Apply this rule to text you write or edit, including UI copy, documentation, comments, commit messages, and responses about this repo.
-- Preserve characters when required for accurate source quotations, external data, or functional code behavior.
+## Workflow
 
-## Interactive controls
+1. Read CONTEXT.md, then the code and docs that the task touches.
+2. Make a short plan. For anything large or risky, share it before you start.
+3. Make the smallest change that solves the task. Follow existing patterns.
+4. Check your work: lint, type check, tests, build (the commands are in CONTEXT.md). For UI, look at it in a browser when you can.
+5. Report briefly: issues first, then what changed, then what was checked.
 
-- Every enabled clickable control, including native checkboxes/radios and their labels, must show a pointer cursor. Preserve text cursors for editable fields and unavailable cursors for disabled controls.
-- Every enabled selectable control needs intentional rest, hover, pressed, selected, keyboard-focus, and disabled states. Use native controls and existing Motchi components/tokens before introducing a new treatment.
-- Keep text/icon contrast readable in every state, preserve comfortable hit targets (normally at least 44px for buttons and clickable option labels), and do not make static content look selectable.
-- Keep hover subtle: a small surface/border/color change, 300ms ease-in-out using the shared --motion-hover and --ease-hover tokens. Never use `transition: all`, change dimensions/border thickness, or introduce layout shift on hover.
-- Apply pointer hover treatments within `@media (hover: hover) and (pointer: fine)`. Touch and keyboard users must be able to understand and operate the control without hover.
-- Preserve selected state during hover and after pointer exit. Use native checked state or `aria-selected`, `aria-pressed`, or `aria-current` as appropriate; communicate selection beyond color. Do not replace selected fills with an unselected hover treatment.
-- Provide one immediate, persistent, high-contrast `:focus-visible` indicator. Prefer a 2px solid outline with spacing from the control, sufficient contrast, and forced-colors support. For a native input inside a selectable label/card, suppress its separate outline only when the whole card supplies an equally visible replacement.
-- Press feedback should respond immediately through `:active`, with short feedback around 80-120ms where a transition is useful. Do not lock out input while animations finish.
-- Exclude disabled and `aria-disabled="true"` controls from interactive hover/press effects, and explain unavailable actions where needed. Respect `prefers-reduced-motion`; remove decorative movement and use immediate state changes when appropriate.
-- Verify actual styles in the browser: inactive/selected hover, pointer exit, keyboard focus, disabled state, touch emulation, and reduced motion. Watch selector specificity so later selected styles do not accidentally erase hover feedback.
+## Git and branches
 
-- Disclosures and expandable sections must open and close smoothly with interruptible 300ms ease-in-out motion; keep collapsed controls out of keyboard navigation, preserve answers, expose expanded state, and respect reduced motion. Do not animate focus indicators or delay input. Avoid abrupt interactive changes; choose restrained feedback rather than adding decorative movement everywhere.
-- Apply the 300ms ease-in-out link contract to underline pseudo-elements and arrow icons as well as link text. Brand lockups are identity elements: preserve their home link and keyboard focus, but do not add ordinary text-link hover underlines to their brand name.
-- Render logos from original vector assets at their intended CSS dimensions. Avoid rasterizing filters/transforms on brand marks; inspect monitor sizes, browser zoom, and pixel density before changing artwork.
+- CONTEXT.md says which branch model the repo uses:
+  - **develop flow** (websites, apps): `main` is production, `develop` is integration. Branch from `develop` and merge back into it. Only release or hotfix work goes to `main`. Dependabot targets `develop`.
+  - **trunk-based** (Motchi Verify repos): `main` is the only long-lived branch. Short-lived branches from `main`. Environments are not branches.
+- Branch names: `feature/<short-name>`, `fix/<short-name>`, `chore/<short-name>`, `hotfix/<short-name>`, `release/<version>`. Add a ticket ID when there is one, for example `feature/MOTCHI-126-runtime-secrets`. Dependabot uses `dependabot/...` on its own. No personal or long-lived extra branches (`dev`, `staging`, `backup/...`).
+- Do not commit, push, open pull requests, merge or deploy unless the user asks.
+- Never force-push or rewrite shared history without explicit approval.
 
-- Selected and open states use the shared active tokens in src/styles/tokens.css (--active, --active-foreground, --active-detail, --active-hover, --active-tint, --active-tint-strong). Selected tabs, options, and selectable cards take a burgundy #5B0202 fill with cream text and gold #D4AF7C details; open disclosures become a raised light surface with a burgundy title and a filled burgundy indicator; unselected controls use subtle 5-11% burgundy tints for hover and press. Do not use pale tan or other low-contrast tints that barely differ from the cream page as the selected state. Avoid thick edge stripes and heavy outlines. Keep selection recognizable beyond color through native checkmarks, arrows, or disclosure indicators, with keyboard focus visually distinct from selection.
+## Secrets and environment files
 
-- Validate compound fields as one logical group. Moving between their inputs must not trigger missing-part errors. Defer incomplete optional groups until the user tries to continue; validate malformed entered values on group blur, keep errors stable while editing, and clear them after valid blur. Use concise field-specific error text.
+- Never read, print, search, copy or summarize `.env`, `.env.*`, keys, certificates, credentials or secret-manager output. This includes `printenv`, `env` and logging `process.env`.
+- `.env.example` may be read and edited. It holds placeholders only.
+- When a variable needs to change: name it, say where it goes (local file or host environment), give the format with a placeholder, and ask the user to set it. Do not check it by reading it back.
+- Never put secrets in code, logs, reports, commits or chat.
 
-- Reuse the shared InfoTip for supplementary field help. Use labeled buttons outside form labels, support hover/focus/tap and Escape/outside dismissal, allow hovering the help bubble, honor reduced motion, and constrain/reposition help within the viewport. Keep essential instructions and validation messages visible.
-- Native Popover API: prefer core `popover="auto"` or `popover="manual"` only when they simplify behavior without reducing accessibility or browser reliability. Treat `popover="hint"` as progressive enhancement, with a fallback for essential content and interactions.
-- Before replacing InfoTip or another overlay, verify current Chrome, Firefox, Edge, Safari, and mobile Safari support. Preserve keyboard/touch access, accessible names, focus, positioning, and essential help without hover; retain the existing component if native behavior regresses these.
+## Skills, tools and network calls
 
-## Dependency inventory
+- Skills live in `.agents/skills/` and are recorded in `skills-lock.json`. The skill tracker is [docs/SKILLS.md](docs/SKILLS.md): what each skill does, its source, and whether it runs scripts or uses the network. Refresh it with `node scripts/skill-inventory.mjs` after adding, removing or updating a skill, unless CONTEXT.md says otherwise.
+- Use only the skills that fit the task. CONTEXT.md may give an order of use.
+- Reading a skill's instructions does not allow running its scripts. Before running any third-party script, CLI, installer or binary, read its source and check what it touches: network, files, credentials, subprocesses.
+- Do not make network calls (web, APIs, downloads, uploads, browser automation, telemetry) unless the user asked for that kind of access in this task. If you need it, say why, where and what data, then wait.
+- Do not use a tool or path that has a known, unfixed vulnerability. Stop and report it.
+- Send the least data needed. Never upload private code, secrets or customer data without explicit approval. Never publish anything unless asked.
 
-- Whenever dependencies are added, removed, or updated, refresh `docs/DEPENDENCIES.md` immediately using `npm run dependencies:inventory`. Resolve any discrepancy between the inventory and the current dependency manifests or lockfile as soon as it is found, and report any issue that prevents the inventory or audit from being refreshed.
+## Dependencies
 
-## Consistency across service branches
-
-- Apply shared design-system changes across Motchi Solutions, Motchi Websites, and Motchi Consulting. This includes responsive behavior, container widths, typography scaling, button format, hover/selected/focus colors and behavior, motion, and overall theme rules. Do not leave these changes on only one branch unless the user explicitly limits their scope.
-- Implement shared patterns in src/styles or src/components/ui where practical, using one source of truth rather than copying app-specific overrides. Equivalent controls should follow the same interaction and responsive contracts on all service branches.
-- The four-step Contact wizard lives in src/components/ui/contact. Keep page layout, controls, review, counter, drafts, validation, and motion shared; customize each site's services and questions through contact-config.ts. Preserve over-limit messages for editing, validate the 2,000-character limit on blur or navigation, and place the counter below the textarea.
-- Use the shared ContactResultPanel for confirmed submission results and future result states. Show a reference ID only when the backend provides one, keep success copy truthful for partial delivery, and respect reduced motion. Keep the message counter outside the textarea so it cannot overlap text or its resize handle.
-- Preserve intentional brand identities and content. Apply shared rules through existing semantic brand tokens; do not duplicate site-specific features or force unrelated page layouts to match.
-- Check all service branches after a shared change: relevant desktop and mobile sizes, large monitor sizes, zoom/text resizing, keyboard focus, hover/selected states, and reduced motion as applicable. Report which checks actually ran.
-- An explicit user instruction limiting a task to one website takes precedence over this cross-site consistency rule. Existing authorization to update all branches is sufficient; do not ask for confirmation again.
-- Keep help icons immediately beside field names, grouped with their labels but outside the clickable label itself. Preserve the bubble position until its closing transition completes.
-- Mark required inputs with the shared RequiredMark and include RequiredNotice at the start of the form/step. Do not rely on red alone: retain native required semantics and screen-reader text. Leave optional field labels unmarked. Placeholders may provide nonessential format examples, never replace labels or essential instructions, and should not merely repeat a field name.
-
-## Domain and canonical host
-
-- The canonical origin is `https://www.motchi.ca`, set once in `src/lib/config/sites.ts`. Vercel's domain settings permanently redirect `motchi.ca` to it, keeping the path and query.
-- Anything domain-specific uses the www origin: canonical links, `metadataBase`, Open Graph and X images, the sitemap and robots, JSON-LD, email links and images, the contact form's origin check, Turnstile's hostname check, test fixtures, and examples in documentation. Derive URLs from `getSites()` or `sites.ts`; never hard-code a host in components or content.
-- Keep host redirects in Vercel's domain settings only. A host rule in `next.config.ts` could loop against them.
-- Email addresses stay `@motchi.ca`. Plain-text mentions of the site in prose may say "motchi.ca", because the apex redirects.
-- When the domain changes, update `sites.ts`, Vercel's domains, the Turnstile widget's hostnames and Brevo's sender settings together, then run the unit tests and the SEO browser tests.
-
-## Interface copy
-
-- Use courteous wording for form instructions, such as "Please select..." or "We recommend...". Describe services as help we can offer rather than orders to the user.
-- Use sentence case for headings, buttons, links, navigation and page titles; capitalize only proper nouns (Motchi and its branch names, product names, AI, Databricks, places). Service and tier names that the contact form sends as values (contact-config.ts) and consulting capability names keep their title case as named offerings. Headings take no end period, except a headline made of two short phrases ("Technology advice. Hands-on support."); questions keep their question mark. Short uppercase eyebrows come from CSS text-transform, never typed capitals.
-- Keep copy friendly, clean, concise, and actionable across all service branches. Say what the user can do in familiar language, using consistent names for fields, options, and actions.
-- State selection rules explicitly: say "Select all" for multiple choices and "Choose one" for a single choice. Explain what the choices are for and offer a clear path when users are unsure.
-- Use short, polite validation messages such as "Please enter your name." Keep detailed guidance near the relevant field or in supplementary help rather than repeating it in errors or summaries.
-- Place inline validation after the field label/legend and any visible helper text, before the input or option list. Apply this order to text fields, selects, textareas, and compound fields across all service branches; preserve aria-describedby associations.
-- Filter clearly invalid characters using the shared field-specific contact-input handlers, including paste/autofill and composition completion. Preserve international names, normal punctuation/numbers in free-text descriptions, caret position, and incomplete values while typing. Never replace server validation with input filtering.
-- Show new validation errors for entered values on blur, and for missing required answers only when the user tries to continue/submit. Never flag an untouched field because focus passed through it, a link scrolled to the form, or the page loaded. Once an error is visible, refresh it while the user edits or autofills, and clear it immediately when valid, including in the focused field. Do not show a new error again until blur or continue/submit.
-- Keep Continue and Submit buttons enabled. Do not disable them until required fields are filled or hide the reason in a tooltip; on activation, show the errors inline and move focus to the first field that needs attention or to an error summary that links to it.
-
-## Typography at native zoom
-
-- Use the shared reading, UI, and form-option tokens in src/styles/responsive.css across all service branches. Keep body text steady through laptop widths; grow gradually above 1536px with bounded rem-based values.
-- Treat 100% browser zoom as the default composition. Do not use CSS zoom, shrink the root font size, or scale whole sections to compensate for oversized typography.
-- Selection labels stay subordinate to their question headings. Use --form-option-size, preserve comfortable hit targets, and avoid local viewport formulas that compete with the shared scale.
-- Check reflow and text enlargement separately; never prevent browser zoom. Use the viewport coverage in Visual Design Quality Gate.
-
-## Design skills
-
-- Installed skill purposes, modes, provenance, executable helpers, and network capabilities are listed in [docs/SKILLS.md](docs/SKILLS.md). Refresh that document whenever skills are added, removed, replaced, or materially changed.
-- Motchi's approved content, original MS/MW/MC vector marks, and palette (#F4F0E6 cream, #5B0202 burgundy, #D4AF7C gold, #171313 charcoal) are the source of truth. Do not invent projects, testimonials, statistics, product availability, or client links.
-
-Use only relevant skills, preferably in this order for major UI work. User scope and Motchi's approved brand/content take precedence over skill defaults; do not invoke every skill mechanically.
-
-1. Hallmark: requested structural audits to identify generic/template-like structures; respect its restrictions on existing designs.
-2. frontend-design: composition, art direction, and hierarchy.
-3. better-layout: grouping, spacing, alignment, container sizing, responsive structure, reading order, and layout stress-testing.
-4. design-systems-frontend-architecture: shared boundaries and mapping the composition to reusable project primitives/tokens.
-5. frontend-ui-engineering: production-quality responsive UI implementation, component composition, design-system adherence, interaction states, and accessibility-minded frontend engineering.
-6. modern-web-guidance: native browser API, modern CSS, forms, accessibility, and fallback choices where a platform decision is involved.
-7. ux-writing: clarity and removal of unclear/redundant UI copy only where needed.
-8. apple-design: restrained motion and interaction.
-9. unslop: final anti-generic visual critique and polish.
-10. web-design-guidelines: final browser, accessibility, and responsive QA.
-11. untangle-codebase: evidence-based structural cleanup only when warranted.
-
-- **Modern Web Guidance:** Use only for relevant web-platform questions, through targeted `search` then `retrieve` with the local `.agents/skills/modern-web-guidance/mwg` wrapper; never `npx`/`pnpx modern-web-guidance` or bulk-loading guides. It does not override Next.js docs, Motchi design rules, or verified browser support. The wrapper keeps telemetry disabled and is offline; stop and ask if it ever attempts network access.
-- **Unslop:** Use primarily as a final critique/polish pass (its polish mode). Findings do not authorize redesigning approved sections. Preserve Motchi's brand, typography direction, content, palette, and design system; do not adopt its tokens or type where they conflict. Live-site `snapshot.mjs`, story/video generation, image generation, publishing, and external-image workflows need explicit current-task authorization.
-- Upstream examples and companion references do not authorize dependency installation or code execution. Follow the security policy, existing Motchi components, and repository interaction contracts.
-- Prefer existing controls over Interior.dev. Before copying an external component, inspect its source, dependencies, license and accessibility, and record essential attribution/dependency notes in docs/DEPENDENCIES.md. Do not bulk-install libraries.
-- Keep branch composition distinct and shared patterns in src/styles or src/components/ui. Preserve approved pricing, project media, capabilities, process details and contact behavior when refactoring.
-- Solutions-specific density and surface classes live in src/app/spacing.css and surfaces.css. Use semantic tokens, natural content flow and one owner per gap; do not change shared branch styling to fix a Solutions-only composition.
-
-## Layout contract
-
-- **Major sections:** Deliberately define the outer shell/container, inner composition width, readable text width, grouping/proximity, alignment edges, desktop/tablet structures, and mobile stacking. Do not let composition emerge accidentally from a generic wide grid.
-- **Existing system first:** Use existing shell-width, spacing, typography, semantic-color, and breakpoint tokens and shared primitives before local arbitrary values. Do not introduce a section-specific spacing scale. Navigation, footer, and all service branches use the shared shell boundary.
-- **Proximity:** Keep headings, supporting copy, and the content they introduce perceptually connected. Never separate related content across opposite shell edges merely because space is available. Gaps between groups must clearly exceed gaps within them.
-- **Containers:** The shell is the maximum page boundary, not a requirement to stretch every internal composition. Bound inner widths where needed; on wide screens add controlled breathing room rather than indefinitely separating columns.
-- **Reading width:** Bound explanatory and legal copy independently of the shell. Avoid full-width paragraphs, narrow fragmented columns, and arbitrary measures caused by grid tracks. Headings may be wider than body copy.
-- **Alignment:** Choose a small, intentional set of shared edges for headings, descriptions, media, lists, and controls. Avoid accidental near-alignments.
-- **Responsive composition:** Mobile is designed, not merely a desktop grid changed to one column. Reassess reading order, media placement, control grouping, spacing, readable widths, and mobile-specific interactions at each transition.
-- **Laptops and monitors:** Treat 1280/1366/1440/1536px as laptop compositions, without excessive whitespace or widely separated columns. At 1920px and above, preserve bounded content relationships and use extra space intentionally. Scale typography/spacing proportionally, without global zoom or premature monitor-size jumps; preserve approved sizes outside the target range.
-- **Section rhythm:** Vary adjacent sections' density, composition, visual emphasis, and media/text balance. Avoid repeating heading-copy-three-card layouts. Shared design rules do not require identical section layouts.
-- **Grouping and cards:** Group with whitespace first, surfaces/backgrounds second, separator lines last. Do not use borders everywhere. Cards suit genuinely bounded, selectable, or comparable units; consider lists, editorial groups, timelines, split compositions, or media-led layouts otherwise.
-- **Hierarchy:** Give each major section one primary focal point; headings, descriptions, metadata, images, labels, and controls must not have equal weight. Let real content and project media carry emphasis; avoid excessive eyebrows, arbitrary gradients, floating decorative cards, and large undifferentiated rectangles.
-- **Interaction:** Define rest, hover, pressed, focus, selected/open, disabled where applicable, and reduced-motion states using the Interactive controls contract. Interaction supports hierarchy rather than compensating for weak layout.
-
-### Section build workflow
-
-For significant new or redesigned sections:
-
-1. Identify the section's job.
-2. Establish the content hierarchy.
-3. Choose the outer container.
-4. Choose internal composition and readable widths.
-5. Define alignment and grouping.
-6. Define desktop, tablet, and mobile compositions.
-7. Define interaction states where applicable.
-8. Implement with existing tokens and components.
-9. Render and inspect in the browser where supported.
-10. Refine at least once if the result remains generic, awkward, or poorly grouped.
-
-## Visual Design Quality Gate
-
-- Compilation alone is insufficient. For significant layout work, actual browser/render review is required when the environment supports it, at native 100% zoom. If unavailable, state that explicitly; never claim visual verification without rendering.
-- Inspect representative sizes: 375, 430, 768, 1024, 1280 or 1366, 1440, and 1920px at minimum. Include 1536px laptops, 2560px monitors, and smaller supported phones where relevant. Check grouping, whitespace, text wrapping, alignment, overflow, hierarchy, interaction states, focus, touch behavior, reduced motion, and separate zoom/text resizing. Report checks actually run.
-- Recommended pricing needs deliberate hierarchy, CTA emphasis, and restrained depth rather than only a different background. A technically correct but visually weak page is unfinished.
-
-## Repository hygiene
-
-- Do not commit, push, or deploy unless explicitly asked.
-- Mock contact delivery in UI/CI tests; do not send real mail as routine QA.
-- Keep setup and architecture in README.md, dependency information in docs/DEPENDENCIES.md, the skill inventory in docs/SKILLS.md, and meaningful findings/debt in docs/AUDIT.md. Keep persistent agent constraints here. Do not add task reports, decision logs, parity checklists or migration runbooks.
-- Before keeping documentation, ask whether a developer will need it six months from now to understand, run, maintain or safely change the project. Merge durable information into the existing documents.
+- The dependency tracker is [docs/DEPENDENCIES.md](docs/DEPENDENCIES.md). Refresh it with `node scripts/dependency-inventory.mjs` after any dependency change, unless CONTEXT.md names another command. Fill in the Purpose column for new packages.
+- Before you add a package, check that it is needed, maintained, licensed for our use and has no open advisories. Prefer what the project already uses.
+- Commit lockfiles. Use `npm ci` (or `uv sync --locked`) for clean installs. Do not run `npm audit fix --force` without reviewing what it changes.
+- Pin GitHub Actions to a full commit SHA with a version comment: `uses: actions/checkout@<sha> # v7.0.1`.
+- Dependabot PRs: read the release notes, check the lockfile changed only as expected, run the project checks, and look closely at major versions. Do not merge on a green status alone.
 
 ## Security review
 
-- Use the repository-local [security-audit](.agents/skills/security-audit/SKILL.md) for security-sensitive work, third-party skills, and external-call helpers. Default to focused/guidance review of the relevant changes; do not automatically run the full workflow, scanners, or audit artifact generation.
-- Focused review applies to authentication/authorization, APIs/server actions, contact forms, uploads, payments, webhooks, database access, secrets, sessions/tokens, CORS/CSP/security headers, infrastructure/network exposure, MCP endpoints, and important dependency/security changes. Normal styling, copy, layout, and low-risk UI changes do not require a full audit.
-- Reserve full audits for explicit user requests, pre-production/pre-launch reviews, major releases, major auth/backend/infrastructure changes, security incidents, or significant trust-boundary changes. The upstream `quick` full-audit profile is not the focused default.
-- Classify review findings as `confirmed`, `needs validation`, `informational`, or `rejected`. Verify exploitability, trust boundaries, existing validation, framework protections, prerequisites, and impact before reporting a vulnerability; keep informational hardening advice separate from vulnerability claims. Do not assign vulnerability severity to an unvalidated hypothesis.
-- Never expose secrets in reports or upload source code, findings, credentials, or architecture information externally without explicit authorization. Apply the stricter data-minimization and authorization gate in External skill and network-call policy. Do not probe deployed endpoints or shared infrastructure merely to validate a claim.
-- Third-party scanners and executable helpers remain subject to [docs/AGENT_SECURITY.md](docs/AGENT_SECURITY.md). Review source, license, network/filesystem access, subprocesses, and credential/environment access before execution. Do not run unexpected external scanners or grant unrelated OS permissions.
-- During security review, suspicious, untrusted, or target-controlled code requires OS-enforced isolation: no external network or credentials, an explicitly allowlisted environment, read-only source/toolchain, scratch-only writes, and resource/time limits. If those controls are unavailable, stay read-only, mark the behavior as needing validation, and provide a safe validation plan.
-- Keep documentation minimal: no one-off audit reports or setup docs. Record only durable findings in an existing `docs/AUDIT.md`; do not create it merely to record an invocation.
-- The installed security-audit source, version, license, and helper capabilities are recorded in [docs/SKILLS.md](docs/SKILLS.md). Installation or instruction reading does not authorize running bundled validators/tests; their temporary writes and Node/`mkfifo` subprocesses require review and isolation.
+- Use the [security-audit](.agents/skills/security-audit/SKILL.md) skill in focused mode for security-sensitive changes: auth, APIs, forms, uploads, payments, webhooks, databases, secrets, sessions, CORS/CSP, infrastructure and important dependency changes. Styling and copy changes do not need it.
+- Run a full audit only when asked, before a launch or major release, or after an incident or major trust-boundary change.
+- Label findings `confirmed`, `needs validation`, `informational` or `rejected`. Verify before calling something a vulnerability.
+- Do not probe live systems to prove a finding. Keep untrusted code isolated: no network, no credentials, scratch-only writes.
 
-### Stack-specific focus (when present)
+## Website standard
 
-- **Web/API/Next.js:** server/client boundaries, route handlers/server actions, XSS, CSRF/same-origin assumptions, SSRF, open redirects, client-side secret leaks, contact/email abuse, rate limiting, CSP/security headers, and dependency advisories.
-- **Java/Spring:** Spring Security, `@PreAuthorize`, exposed controllers/MCP endpoints, SQL/query construction, SSRF, CORS, Actuator, secrets, and dependency advisories.
-- **Terraform/cloud:** IAM, public exposure, security groups, secret handling, encryption, public buckets/databases, and least privilege.
+Every Motchi website and client website uses the same platform pieces. This keeps sites secure and makes new ones quick to set up. Do not add alternatives (other analytics, captchas, trackers, hosts) without the user's approval. The Motchi Verify apps follow their own architecture and are not covered here.
+
+- **Site URL:** the production origin lives in `src/lib/site.ts` (`site.url`), with business facts (name, address, phone, social links). Use `siteUrl()`, `absoluteUrl()` and `indexingAllowed()` from there; never read a URL from an environment variable. `siteUrl()` gives localhost in development, the branch URL on Vercel Previews and `site.url` in Production. `SITE_URL` is an optional override (for example another local port).
+- **SEO:** every public page sets its own title, description and `alternates.canonical` (never rely on a canonical inherited from the root layout). `metadataBase` comes from `siteUrl()`. Pages are noindex unless `indexingAllowed()` (Vercel Production only). `robots.ts` allows crawling only in Production and disallows APIs and private pages; `sitemap.ts` lists public routes only, without invented `lastModified` or `priority`. Add schema.org JSON-LD for the business through `JsonLd` (`src/components/seo/json-ld.tsx`), using only facts shown on the site. Private, signed-in and admin pages are noindex and disallowed.
+- **Environment variable names:** UPPER_SNAKE_CASE. Use `NEXT_PUBLIC_` only for values the browser must read. Provider credentials keep the provider's prefix (`BREVO_API_KEY`, `TURNSTILE_SECRET_KEY`, `NOTION_TOKEN`). App settings use a feature prefix: `CONTACT_FROM_EMAIL`, `CONTACT_TO_EMAIL`, `CONTACT_CC_EMAIL` for contact forms, `EMAIL_FROM_ADDRESS`/`EMAIL_FROM_NAME` for app email. IDs end in `_ID`; secrets end in `_SECRET`, `_KEY` or `_TOKEN`. Facts the code can know (URLs, address, phone) belong in `src/lib/site.ts`, not in environment variables.
+- **Vercel variable types:** secrets (API keys, tokens, passwords, salts, signing keys) are **Sensitive** in Production and Preview. Configuration (email addresses, names, IDs, hostnames, URLs, postal addresses) is a regular, readable variable. `NEXT_PUBLIC_*` values are public, so never Sensitive. Leave integration-managed variables (`KV_*`) as Vercel creates them. Development cannot hold Sensitive values; use `.env.local`.
+- **Redis:** one shared Upstash store in Vercel Storage (`motchi-contact-limits`), connected to each project that needs it. Code reads `KV_REST_API_URL` and `KV_REST_API_TOKEN`, which Vercel adds on connection, and prefixes every key with the site name (`kamanda:`, `lai:`, `vietbites:`). Hash IPs and emails before using them in keys.
+- **Hosting and CDN:** Vercel. Pages and assets are served from Vercel's global CDN. `main` deploys to Production; `develop` and pull requests deploy to Preview. Domains and host redirects live in Vercel's domain settings, not in `next.config`.
+- **Analytics:** Vercel Web Analytics (`@vercel/analytics`), loaded on Vercel Production only. It is cookie-free and anonymous. Send only the page path plus `utm_*` tags; strip every other query string and fragment, since they can hold personal data. No Google Analytics, tag managers, ad pixels or session replay.
+- **Bot protection:** Cloudflare Turnstile on every public form, with action `contact` (or the form's own action). The server must verify every token with Cloudflare's siteverify API and check `success`, `action` and `hostname`. Never trust the widget alone. No Google reCAPTCHA. Variables: `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (public) and `TURNSTILE_SECRET_KEY` (server only). Cloudflare test keys work for local development.
+- **Security headers:** if the site sets a Content Security Policy, allow `https://challenges.cloudflare.com` for scripts and frames. Vercel Analytics loads from the same origin (`/_vercel/insights`).
+- **Privacy policy:** every site with a form or analytics needs one. It must name Vercel (hosting, CDN and analytics), Cloudflare Turnstile, and each form, email or database provider. Update it in the same change that adds or removes a provider.
+- **Motchi credit:** client footers link to `https://www.motchi.ca/websites?utm_source=<client>&utm_medium=referral&utm_campaign=client-footer` with `rel="noopener"`, not `noreferrer`, so the referrer still shows in Motchi's analytics.
+
+New website checklist:
+
+1. Create the repo with `main` and `develop`, and set the default branch to `develop`.
+2. Copy `AGENTS.md`, `CLAUDE.md`, `.gitignore`, `.claude/settings.json`, `.github/dependabot.yml`, `.github/workflows/ci.yml`, `scripts/`, `.agents/skills/` and `skills-lock.json` from an existing site. Write a new `CONTEXT.md` and a `.env.example` in motchi-website's format: every variable the code reads, placeholders only, and where each is set (local, Preview, Production).
+3. Import the repo into Vercel with the production branch set to `main`. Enable Web Analytics in the project's Analytics tab.
+4. Create a Turnstile widget in Cloudflare for the production and preview hostnames. Set the two Turnstile variables in Vercel.
+5. Add the privacy policy and the Motchi credit link.
+6. Run `node scripts/dependency-inventory.mjs` and `node scripts/skill-inventory.mjs`.
+
+## Writing style in files
+
+- Use straight ASCII quotes (`'` and `"`), hyphens instead of en or em dashes, and `...` instead of the ellipsis character, unless a quote or data needs the original.
+- Comments explain why, not what.
+
+## Repository hygiene
+
+- Keep docs few and useful: README.md (setup), CONTEXT.md (project rules for agents), docs/DEPENDENCIES.md, docs/SKILLS.md, and docs/AUDIT.md only for lasting findings.
+- Do not add task reports, one-off audit files or decision logs. Before keeping a doc, ask: will someone need this in six months? If not, delete it or merge it into an existing doc.
+- Do not commit build output, caches, archives, local plans, logs or OS files.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

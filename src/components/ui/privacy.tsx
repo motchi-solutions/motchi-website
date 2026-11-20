@@ -12,7 +12,7 @@ import { Container, Eyebrow } from "./primitives.tsx";
    analytics, or retention change, update the matching section and `updated`.
    Have it reviewed by an Ontario privacy lawyer before relying on it. */
 
-export const privacyUpdated = { iso: "2026-11-16", label: "November 16, 2026" };
+export const privacyUpdated = { iso: "2026-11-19", label: "November 19, 2026" };
 
 const link =
   "text-primary underline decoration-primary/40 underline-offset-4 transition-[text-decoration-color] duration-(--motion-hover) ease-(--ease-hover) hover:decoration-primary motion-reduce:transition-none";
@@ -225,12 +225,14 @@ const sections: { id: string; title: string; body: ReactNode }[] = [
         <p>
           We count visits with Vercel Web Analytics so we can see which pages
           are useful. For each visit it records the page address (without
-          anything after a "?" or "#"), the site that linked to it, your
-          approximate location (country and city), and your type of device,
-          browser, and operating system. It sets no cookies and doesn't store
-          your IP address. To tell visits apart, it uses a scrambled code made
-          from your request that is discarded after 24 hours, so it can't follow
-          you from day to day or across other websites. We see only totals.
+          anything after a "?" or "#", except campaign tags such as "utm_source"
+          that show which website or campaign sent you here), the site that
+          linked to it, your approximate location (country and city), and your
+          type of device, browser, and operating system. It sets no cookies and
+          doesn't store your IP address. To tell visits apart, it uses a
+          scrambled code made from your request that is discarded after 24
+          hours, so it can't follow you from day to day or across other
+          websites. We see only totals.
         </p>
         <p>
           The website has no advertising trackers, tracking pixels, or social

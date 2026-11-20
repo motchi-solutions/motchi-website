@@ -91,10 +91,11 @@ test("robots blocks search crawling unless indexing is allowed on the production
   assert.deepEqual(robots().rules, blocked);
   for (const agent of ["Twitterbot", "facebookexternalhit", "LinkedInBot"])
     assert.ok(linkPreviewAgents.includes(agent), agent);
-  process.env.ALLOW_INDEXING = "true";
+  process.env.VERCEL_ENV = "production";
+  process.env.SITE_URL = "https://staging.motchi.example";
   assert.deepEqual(robots().rules, blocked);
-  // The production origin with ALLOW_INDEXING allows crawling, except the API.
-  process.env.SOLUTIONS_URL = "https://www.motchi.ca";
+  // Vercel Production on the production origin allows crawling, except the API.
+  process.env.SITE_URL = "https://www.motchi.ca";
   assert.deepEqual(robots().rules, {
     userAgent: "*",
     allow: "/",
@@ -205,7 +206,7 @@ test("structured data links the website, services and breadcrumbs to the company
   );
 });
 
-test("analytics run only on Vercel Production and send bare page paths", async () => {
+test("analytics run only on Vercel Production and send page paths with campaign tags only", async () => {
   const { analyticsEnabled, anonymousPageUrl } =
     await import("../src/lib/config/analytics.ts");
   assert.equal(analyticsEnabled("production"), true);
@@ -220,6 +221,18 @@ test("analytics run only on Vercel Production and send bare page paths", async (
   assert.equal(
     anonymousPageUrl("https://www.motchi.ca/"),
     "https://www.motchi.ca/",
+  );
+  assert.equal(
+    anonymousPageUrl(
+      "https://www.motchi.ca/websites?utm_source=vietbites&utm_medium=referral&utm_campaign=client-footer&email=a%40b.c&ref=X#top",
+    ),
+    "https://www.motchi.ca/websites?utm_source=vietbites&utm_medium=referral&utm_campaign=client-footer",
+  );
+  assert.equal(
+    anonymousPageUrl(
+      `https://www.motchi.ca/?utm_source=${"x".repeat(100)}&utm_term=`,
+    ),
+    `https://www.motchi.ca/?utm_source=${"x".repeat(64)}`,
   );
 });
 

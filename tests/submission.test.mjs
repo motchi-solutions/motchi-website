@@ -156,7 +156,7 @@ test("native contact submission handles validation, delivery, partial failure, a
       async () => {
         calls = [];
         globalThis.fetch = fakeServices(calls);
-        process.env.SOLUTIONS_URL = "https://motchi.staging.example";
+        process.env.SITE_URL = "https://motchi.staging.example";
         try {
           assert.equal(
             status(await handleContact(makeRequest(), "solutions")),
@@ -192,7 +192,7 @@ test("native contact submission handles validation, delivery, partial failure, a
             calls[1].textContent.includes("https://motchi.staging.example"),
           );
         } finally {
-          delete process.env.SOLUTIONS_URL;
+          delete process.env.SITE_URL;
         }
       },
     );

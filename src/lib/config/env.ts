@@ -19,15 +19,15 @@ function runtimeMode(): RuntimeMode {
 }
 export function getSites() {
   return resolveSites(runtimeMode(), {
-    SOLUTIONS_URL: process.env.SOLUTIONS_URL,
+    SITE_URL: process.env.SITE_URL,
   });
 }
-/** Search engines may index the site only on the production origin, and only
-    once ALLOW_INDEXING is "true". Preview deployments also default to the
-    production origin, so the origin alone is not enough. */
+/** Search engines may index only Vercel Production on the production origin.
+    Previews also default to the production origin, so the origin alone is not
+    enough; VERCEL_ENV, set by Vercel, tells them apart. */
 export function indexingAllowed(): boolean {
   return (
-    process.env.ALLOW_INDEXING === "true" &&
+    process.env.VERCEL_ENV === "production" &&
     getSites().solutions.url === productionSites.solutions.url
   );
 }

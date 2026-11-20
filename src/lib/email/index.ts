@@ -185,7 +185,7 @@ async function submitContact(
   ) {
     if (process.env.NODE_ENV === "development")
       console.warn(
-        `Contact form rejected: request origin ${request.headers.get("origin") ?? "(none)"} does not match the configured site origin ${origin}. Check SOLUTIONS_URL in .env.local.`,
+        `Contact form rejected: request origin ${request.headers.get("origin") ?? "(none)"} does not match the configured site origin ${origin}. Check SITE_URL in .env.local.`,
       );
     return finish("invalid", {}, true);
   }

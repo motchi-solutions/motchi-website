@@ -23,7 +23,7 @@ test("site origins use local development defaults and canonical production defau
     "https://www.motchi.ca",
   );
   const sites = resolveSites("production", {
-    SOLUTIONS_URL: "https://staging.example/",
+    SITE_URL: "https://staging.example/",
   });
   assert.equal(sites.websites.url, "https://staging.example/websites");
   assert.equal(sites.consulting.url, "https://staging.example/consulting");
@@ -42,18 +42,18 @@ test("unsafe origins fail with variable names, without exposing their values", (
     "not-a-url",
   ]) {
     assert.throws(
-      () => resolveSites("production", { SOLUTIONS_URL: value }),
+      () => resolveSites("production", { SITE_URL: value }),
       (error) => {
         assert.ok(error instanceof ConfigurationError);
-        assert.deepEqual(error.variables, ["SOLUTIONS_URL"]);
+        assert.deepEqual(error.variables, ["SITE_URL"]);
         assert.ok(!error.message.includes(value));
         return true;
       },
     );
   }
   assert.equal(
-    resolveSites("development", { SOLUTIONS_URL: "http://localhost:3100" })
-      .solutions.url,
+    resolveSites("development", { SITE_URL: "http://localhost:3100" }).solutions
+      .url,
     "http://localhost:3100",
   );
 });

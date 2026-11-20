@@ -18,7 +18,7 @@ import {
 import { fontVariables } from "../components/ui/fonts.ts";
 import type { ReactNode } from "react";
 import "./globals.css";
-// Indexing follows indexingAllowed(): production origin plus ALLOW_INDEXING.
+// Indexing follows indexingAllowed(): Vercel Production on the production origin.
 export const metadata = siteMetadata("solutions");
 export const viewport = siteViewport;
 export default function RootLayout({ children }: { children: ReactNode }) {

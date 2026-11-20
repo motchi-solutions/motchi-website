@@ -43,9 +43,9 @@ test("manifest identities match supplied PNG dimensions and honest icon purposes
   }
 });
 test("metadata keeps domains and schema environment-aware without duplicate file icons", () => {
-  const original = process.env.SOLUTIONS_URL;
+  const original = process.env.SITE_URL;
   try {
-    process.env.SOLUTIONS_URL = "https://preview.motchi.example";
+    process.env.SITE_URL = "https://preview.motchi.example";
     const metadata = siteMetadata("solutions");
     assert.equal(metadata.metadataBase.href, "https://preview.motchi.example/");
     assert.equal(metadata.applicationName, "Motchi Solutions");
@@ -58,7 +58,7 @@ test("metadata keeps domains and schema environment-aware without duplicate file
       "https://preview.motchi.example",
     );
   } finally {
-    if (original === undefined) delete process.env.SOLUTIONS_URL;
-    else process.env.SOLUTIONS_URL = original;
+    if (original === undefined) delete process.env.SITE_URL;
+    else process.env.SITE_URL = original;
   }
 });

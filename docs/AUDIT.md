@@ -3,8 +3,8 @@
 ## Code and system boundaries
 
 - One Next.js application owns company and service routes in src/app. Keep reusable controls, styles and server utilities separate from branch-specific page composition without introducing workspace/package indirection.
-- Keep navigation, real route lists, canonical metadata and sitemap coverage aligned when adding pages. Search engines may index the site only on the production origin with ALLOW_INDEXING=true (indexingAllowed in src/lib/config/env.ts).
-- The canonical host is https://www.motchi.ca; README.md (Domain) describes the apex redirect and what derives from it. Keep host redirects in Vercel only, the Turnstile widget's hostname list aligned with the canonical host, and SOLUTIONS_URL unset in production.
+- Keep navigation, real route lists, canonical metadata and sitemap coverage aligned when adding pages. Search engines may index the site only on Vercel Production on the production origin (indexingAllowed in src/lib/config/env.ts).
+- The canonical host is https://www.motchi.ca; README.md (Domain) describes the apex redirect and what derives from it. Keep host redirects in Vercel only, the Turnstile widget's hostname list aligned with the canonical host, and SITE_URL unset in production.
 - Project media has one owner in public/media/projects. Update the typed records in src/content/websites with actual dimensions and approved content.
 
 ## Design, accessibility, and performance

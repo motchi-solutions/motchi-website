@@ -77,7 +77,7 @@ export default defineConfig({
       // Process variables take precedence over Next's .env files.
       ...(ci
         ? {
-            SOLUTIONS_URL: process.env.SOLUTIONS_URL ?? "https://www.motchi.ca",
+            SITE_URL: process.env.SITE_URL ?? "https://www.motchi.ca",
           }
         : {}),
     },

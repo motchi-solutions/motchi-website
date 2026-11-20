@@ -26,7 +26,7 @@ Read this with [AGENTS.md](AGENTS.md) before every task. This file holds the rul
 
 - Third-party executables and skill helpers follow [docs/AGENT_SECURITY.md](docs/AGENT_SECURITY.md), which is stricter than AGENTS.md. Read it before running any of them.
 - The skill tracker is the hand-written [docs/SKILLS.md](docs/SKILLS.md). Update it by hand when skills change.
-- Environment variables used here include `BREVO_API_KEY`, `CONTACT_FORM_SECRET`, `CONTACT_FROM_EMAIL`, `CONTACT_TO_EMAIL` and `SOLUTIONS_URL`. Follow the secrets rules in AGENTS.md. Check that config works through app behavior, such as the contact form showing "Send enquiry" rather than its fallback.
+- Environment variables used here include `BREVO_API_KEY`, `CONTACT_FORM_SECRET`, `CONTACT_FROM_EMAIL`, `CONTACT_TO_EMAIL` and `SITE_URL`. Follow the secrets rules in AGENTS.md. Check that config works through app behavior, such as the contact form showing "Send enquiry" rather than its fallback.
 - `.claude/settings.json` denies Claude Code access to secret files, and `.gitignore` ignores them. Keep both lists in step.
 - Mock contact delivery in UI and CI tests. Never send real mail as routine QA.
 - Inbound links from client sites use `utm_source=<client>&utm_medium=referral&utm_campaign=client-footer`. `src/lib/config/analytics.ts` strips all query strings before sending page views, so these tags are not counted yet. To track them, allow the `utm_*` keys through there and update the privacy policy.

@@ -175,6 +175,8 @@ test("source copy uses ASCII punctuation", () => {
 test("structured data links the website, services and breadcrumbs to the company", () => {
   const site = websiteSchema();
   assert.equal(site["@type"], "WebSite");
+  assert.equal(site.name, "Motchi");
+  assert.equal(site.alternateName, "Motchi Solutions");
   assert.equal(site.publisher["@id"], organizationSchema("solutions")["@id"]);
   const company = organizationSchema("solutions");
   assert.equal(company.address.addressLocality, "Toronto");

@@ -76,7 +76,10 @@ export function websiteSchema() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "@id": `${solutions.url}/#website`,
-    name: solutions.name,
+    // Google's site name: the short brand shown in results, with the full
+    // company name as the alternate.
+    name: "Motchi",
+    alternateName: solutions.name,
     url: solutions.url,
     inLanguage: "en-CA",
     publisher: { "@id": `${solutions.url}/#organization` },
